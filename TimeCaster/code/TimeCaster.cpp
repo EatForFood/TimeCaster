@@ -16,7 +16,7 @@ using namespace sf;
 
 int main()
 {
-	// Here is the instabce of TextureHolder
+	// Here is the instance of TextureHolder
 	TextureHolder holder;
 
 	// The game will always be in one of four states
