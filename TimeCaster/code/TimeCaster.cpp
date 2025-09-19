@@ -11,6 +11,7 @@
 #include "Decal.h"
 #include "Windows.h"
 #include "CreateBackground.h"
+#include "SoundManager.h"
 
 using namespace sf;
 
