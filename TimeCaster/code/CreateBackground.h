@@ -9,13 +9,32 @@ private:
 
 	const int TILE_SIZE = 64;
 	const int VERTS_IN_QUAD = 4;
+	int currentVertex = 0;
+	VertexArray rVA;
+
+	bool debug;
+	Font debugFont;
+	std::vector<Text> debugText;
 
 public:
 
 	CreateBackground();
 
-	void placeTile(sf::VertexArray& rVA, int& currentVertex, int w, int h, int texX, int texY);
+	void placeTile(int x, int y, int texX, int texY);
 
-	int createLandscape(VertexArray& rVA);
+	VertexArray getLandscape();
+
+	std::vector<Text> getDebugText();
+
+	int createLandscape();
+
+	void placeTree1(int x, int y);
+	void placeTree2(int x, int y);
+	void placeTree3(int x, int y);
+	void placeTree4(int x, int y);
+	void placeTree5(int x, int y);
+	void placeTree6(int x, int y);
+	void placeTree7(int x, int y);
+	void placeTree8(int x, int y);
 
 };

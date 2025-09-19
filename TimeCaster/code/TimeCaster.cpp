@@ -60,7 +60,7 @@ int main()
 	CreateBackground landscape;
 
 	// Create the background
-	VertexArray background;
+	//VertexArray background;
 	// Load the texture for our background vertex array
 	Texture textureBackground = TextureHolder::GetTexture(
 		"graphics/landscape.png");
@@ -552,7 +552,7 @@ int main()
 
 				// Pass the vertex array by reference 
 				// to the createBackground function
-				int tileSize = landscape.createLandscape(background);
+				int tileSize = landscape.createLandscape();
 
 				// Spawn the player in the middle of the arena
 				player.spawn(arena, resolution, tileSize);
@@ -708,7 +708,11 @@ int main()
 			window.setView(mainView);
 
 			// Draw the background
-    		window.draw(background, &textureBackground);
+    		window.draw(landscape.getLandscape(), &textureBackground);
+
+			for (auto& txt : landscape.getDebugText()) {
+				window.draw(txt);
+			}
 
 			// DRAW EFFECTS
 			for (int i = 0; i < 249; i++) // draw decals
