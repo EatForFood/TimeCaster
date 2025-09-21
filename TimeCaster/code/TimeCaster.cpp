@@ -19,7 +19,7 @@ int main()
 {
 	// Here is the instance of TextureHolder
 	TextureHolder holder;
-
+	
 	// The game will always be in one of four states
 	enum class State { PAUSED, LEVELING_UP, GAME_OVER, PLAYING };
 	// Start with the GAME_OVER state
@@ -99,7 +99,7 @@ int main()
 
 	// For the home/game over screen
 	Sprite spriteGameOver;
-	Texture textureGameOver = TextureHolder::GetTexture("graphics/background.png");
+	Texture textureGameOver = TextureHolder::GetTexture("graphics/Castle.jpg");
 	spriteGameOver.setTexture(textureGameOver);
 	spriteGameOver.setPosition(0, 0);
 
@@ -127,9 +127,9 @@ int main()
 	// Game Over
 	Text gameOverText;
 	gameOverText.setFont(font);
-	gameOverText.setCharacterSize(125);
+	gameOverText.setCharacterSize(100);
 	gameOverText.setFillColor(Color::White);
-	gameOverText.setPosition(250, 850);
+	gameOverText.setPosition(50, 850);
 	gameOverText.setString("Press Enter to play");
 
 	// Levelling up

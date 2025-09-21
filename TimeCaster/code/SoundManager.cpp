@@ -16,13 +16,13 @@ SoundManager::SoundManager() {
 
 	// Seeding randomiser
 	srand(time(0));
-}
+} // End of SoundManager constructor
 
 // Function for placing songs within the soundtrack list
 void SoundManager::populateSoundtrack() {
 	//soundtrack[0] = soundtrack1;
 	//soundtrack[1] = soundtrack2;
-}
+} // End of populateSoundtrack function
 
 // Function for checking whether soundtrack is currently playing or not
 bool SoundManager::isSoundtrackPlaying() {
@@ -33,9 +33,9 @@ bool SoundManager::isSoundtrackPlaying() {
 		}
 	}
 	return false;
-}
+} // End of isSoundtrackPlaying function
 
 // Function to play a random song from the soundtrack
 void SoundManager::playSoundtrack() {
 	soundtrack[rand() % sizeof(soundtrack) / sizeof(Sound)].play();
-}
+} // End of playSoundtrack function
