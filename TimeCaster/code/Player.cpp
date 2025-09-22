@@ -10,7 +10,7 @@ Player::Player()
 	m_MaxMana = START_MANA;
 	m_Stamina = START_STAMINA;
 	m_MaxStamina = START_STAMINA;
-	m_PlayerDodging = false;
+	m_StaminaRecharge = START_STAMINA_RECHARGE;
 	
 
 	// Associate a texture with the sprite
@@ -34,6 +34,7 @@ void Player::resetPlayerStats()
 	m_MaxHealth = START_HEALTH;
 	m_MaxMana = START_MANA;
 	m_MaxStamina = START_STAMINA;
+	m_StaminaRecharge = START_STAMINA_RECHARGE;
 }
 
 void Player::spawn(IntRect arena, Vector2f resolution, int tileSize)
@@ -69,8 +70,9 @@ Time Player::getLastHitTime()
 
 bool Player::hit(Time timeHit)
 {
-	if (timeHit.asMilliseconds() - m_LastHit.asMilliseconds() > 200 && !m_PlayerDodging)// 2 tenths of second
+	if (timeHit.asMilliseconds() - m_LastHit.asMilliseconds() > 200)// 2 tenths of second
 	{
+		//Also perhaps add i frames when dodging
 		m_LastHit = timeHit;
 		m_Health -= 10/*Change this to be varible?*/;
 		return true;
@@ -198,7 +200,6 @@ void Player::startDodge() {
 void Player::stopDodge() {
 
 		m_Speed = m_Speed / 2;
-		m_PlayerDodging = false;
 }
 
 void Player::update(float elapsedTime, Vector2i mousePosition)
@@ -235,6 +236,12 @@ void Player::update(float elapsedTime, Vector2i mousePosition)
 		* 180) / 3.141;
 
 	m_Sprite.setRotation(angle);
+	
+	if (m_Stamina < m_MaxStamina)
+	{
+		m_Stamina += m_StaminaRecharge;
+	}
+
 }
 
 void Player::upgradeSpeed()
@@ -249,6 +256,18 @@ void Player::upgradeHealth()
 	m_MaxHealth += (START_HEALTH * .2);
 }
 
+void Player::upgradeStamina()
+{
+	// 50% max Stamina upgrade
+	//50% because dodging takes 50 stamina so you'd get one more dodge
+	m_MaxStamina += (START_STAMINA * .5);
+}
+
+void Player::upgradeMana()
+{
+	// 20% max Mana upgrade
+	m_MaxMana += (START_MANA * .2);
+}
 void Player::increaseHealthLevel(int amount)
 {
 	m_Health += amount;
@@ -257,6 +276,28 @@ void Player::increaseHealthLevel(int amount)
 	if (m_Health > m_MaxHealth)
 	{
 		m_Health = m_MaxHealth;
+	}
+}
+
+void Player::increaseStaminaLevel(int amount)
+{
+	m_Stamina += amount;
+
+	// But not beyond the maximum
+	if (m_Stamina > m_MaxStamina)
+	{
+		m_Stamina = m_MaxStamina;
+	}
+}
+
+void Player::increaseManaLevel(int amount)
+{
+	m_Mana += amount;
+
+	// But not beyond the maximum
+	if (m_Mana > m_MaxMana)
+	{
+		m_Mana = m_MaxMana;
 	}
 }
 

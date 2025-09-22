@@ -102,6 +102,8 @@ int main()
 	// Create a couple of pickups
 	Pickup healthPickup(1);
 	Pickup ammoPickup(2);
+	Pickup staminaPickup(3);
+	Pickup manaPickup(4);
 
 	// About the game
 	int goldCount = 0;
@@ -557,6 +559,13 @@ int main()
 				state = State::PLAYING;
 			}
 
+			if (event.key.code == Keyboard::Num7)
+			{
+				// Increase stamina
+				player.upgradeStamina();
+				state = State::PLAYING;
+			}
+
 			if (state == State::PLAYING)
 			{
 				// Increase the wave number
@@ -580,6 +589,8 @@ int main()
 				// Configure the pick-ups
 				healthPickup.setArena(arena);
 				ammoPickup.setArena(arena);
+				staminaPickup.setArena(arena);
+				manaPickup.setArena(arena);
 
 				// Reset the clock so there isn't a frame jump
 				clock.restart();
@@ -636,6 +647,8 @@ int main()
 			// Update the pickups
 			healthPickup.update(dtAsSeconds);
 			ammoPickup.update(dtAsSeconds);
+			staminaPickup.update(dtAsSeconds);
+			manaPickup.update(dtAsSeconds);
 
 			// Has the player touched health pickup
 			if (player.getPosition().intersects(healthPickup.getPosition()) && healthPickup.isSpawned())
@@ -647,6 +660,24 @@ int main()
 			if (player.getPosition().intersects(ammoPickup.getPosition()) && ammoPickup.isSpawned()) 
 			{
 				bulletsSpare += ammoPickup.gotIt();
+			}
+
+
+			// Has the player touched stamina pickup
+			if (player.getPosition().intersects(staminaPickup.getPosition()) && staminaPickup.isSpawned())
+			{
+				player.increaseStaminaLevel(staminaPickup.gotIt()); 
+				// Play a sound
+	
+			}
+
+
+			// Has the player touched mana pickup
+			if (player.getPosition().intersects(manaPickup.getPosition()) && manaPickup.isSpawned())
+			{
+				player.increaseManaLevel(manaPickup.gotIt());
+				// Play a sound
+
 			}
 
 			if (currentDecal > 248)
@@ -731,6 +762,14 @@ int main()
 			if (healthPickup.isSpawned())
 			{
 				window.draw(healthPickup.getSprite());
+			}
+			if (staminaPickup.isSpawned())
+			{
+				window.draw(staminaPickup.getSprite());
+			}
+			if (manaPickup.isSpawned())
+			{
+				window.draw(manaPickup.getSprite());
 			}
 
 			//Draw the crosshair

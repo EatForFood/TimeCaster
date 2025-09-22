@@ -10,6 +10,7 @@ private:
 	const float START_HEALTH = 100;
 	const float START_MANA = 100;
 	const float START_STAMINA = 100;
+	const float START_STAMINA_RECHARGE = 0.33;
 
 	IntRect m_Hitbox;
 
@@ -59,7 +60,6 @@ private:
 	// What is the maximum health the player can have?
 	int m_MaxHealth;
 
-	
 
 	// How much mana has the player got?
 	int m_Mana;
@@ -68,12 +68,14 @@ private:
 	int m_MaxMana;
 
 	// How much stamina has the player got?
-	int m_Stamina;
+	float m_Stamina;
 
 	// What is the maximum stamina the player can have?
-	int m_MaxStamina;
+	float m_MaxStamina;
 
-	bool m_PlayerDodging;	
+	//How fast does the player's stamina recharge?
+	float m_StaminaRecharge;
+
 
 	// When was the player last hit
 	Time m_LastHit;
@@ -169,11 +171,23 @@ public:
 	// Give player a speed boost
 	void upgradeSpeed();
 
-	// Give the player some health
+	// Give the player a health upgrade
 	void upgradeHealth();
+
+	// Give the player a Stamina upgrade
+	void upgradeStamina();
+
+	// Give the player a Mana upgrades
+	void upgradeMana();
 
 	// Increase the maximum amount of health the player can have
 	void increaseHealthLevel(int amount);
+
+	// Increase the maximum amount of health the player can have
+	void increaseStaminaLevel(int amount);
+
+	// Increase the maximum amount of health the player can have
+	void increaseManaLevel(int amount);
 
 	// Player starts a dodge
 	void startDodge();
