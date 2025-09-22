@@ -59,7 +59,6 @@ private:
 	// What is the maximum health the player can have?
 	int m_MaxHealth;
 
-	
 
 	// How much mana has the player got?
 	int m_Mana;
@@ -73,7 +72,6 @@ private:
 	// What is the maximum stamina the player can have?
 	int m_MaxStamina;
 
-	bool m_PlayerDodging;	
 
 	// When was the player last hit
 	Time m_LastHit;
@@ -169,11 +167,23 @@ public:
 	// Give player a speed boost
 	void upgradeSpeed();
 
-	// Give the player some health
+	// Give the player a health upgrade
 	void upgradeHealth();
+
+	// Give the player a Stamina upgrade
+	void upgradeStamina();
+
+	// Give the player a Mana upgrades
+	void upgradeMana();
 
 	// Increase the maximum amount of health the player can have
 	void increaseHealthLevel(int amount);
+
+	// Increase the maximum amount of health the player can have
+	void increaseStaminaLevel(int amount);
+
+	// Increase the maximum amount of health the player can have
+	void increaseManaLevel(int amount);
 
 	// Player starts a dodge
 	void startDodge();
