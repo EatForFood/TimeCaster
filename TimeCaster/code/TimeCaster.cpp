@@ -63,6 +63,9 @@ int main()
 	// The boundaries of the arena
 	IntRect arena;
 
+	// Create an instance of the SoundManager class
+	SoundManager sound;
+
 	CreateBackground landscape;
 
 	// Create the background
@@ -105,7 +108,7 @@ int main()
 
 	// For the home/game over screen
 	Sprite spriteGameOver;
-	Texture textureGameOver = TextureHolder::GetTexture("graphics/Castle.jpg");
+	Texture textureGameOver = TextureHolder::GetTexture("graphics/Castle (edited).jpg");
 	spriteGameOver.setTexture(textureGameOver);
 	spriteGameOver.setPosition(0, 0);
 
@@ -139,7 +142,7 @@ int main()
 	gameOverText.setFont(pixelFont);
 	gameOverText.setCharacterSize(90);
 	gameOverText.setFillColor(Color::White);
-	gameOverText.setPosition(50, 850);
+	gameOverText.setPosition(50, 950);
 	gameOverText.setString("Press enter to play");
 
 	// Levelling up
@@ -189,7 +192,6 @@ int main()
 	stringstream s;
 	s << "Hi Score:" << hiScore;
 	hiScoreText.setString(s.str());
-
 
 	// Buy Shotgun Text
 	Text buyShotgunText;
@@ -253,10 +255,20 @@ int main()
 		
 	// When did we last update the HUD?
 	int framesSinceLastHUDUpdate = 0;
+
 	// What time was the last update
 	Time timeSinceLastUpdate;
+
 	// How often (in frames) should we update the HUD
 	int fpsMeasurementFrameInterval = 1000;
+
+	// Dodge variables
+	bool isDodging = false;
+	bool canDodge = true;
+	Clock dodgeClock;
+	Clock cooldownClock;
+	float dodgeDuration = 0.2f; // 200ms dodge
+	float dodgeCooldown = 1.0f; // 1 second cooldown on dodge
 
 	// Prepare the hit sound
 	SoundBuffer hitBuffer;
@@ -382,10 +394,8 @@ int main()
 						}
 					}
 				}
-
 			}
-		}// End event polling
-
+		} // End event polling
 
 		 // Handle the player quitting
 		if (Keyboard::isKeyPressed(Keyboard::Escape))
@@ -506,11 +516,8 @@ int main()
 
 				if (player.getGun() == 2) // rifle
 				{
-					if (gameTimeTotal.asMilliseconds()
-						- lastPressed.asMilliseconds()
-					> 1000 / fireRate && bulletsInClip > 0)
+					if (gameTimeTotal.asMilliseconds() - lastPressed.asMilliseconds() > 1000 / fireRate && bulletsInClip > 0)
 					{
-
 						// Pass the centre of the player and the centre of the crosshair
 						// to the shoot function
 						bullets[currentBullet].shoot(
@@ -527,8 +534,27 @@ int main()
 						bulletsInClip--;
 					}
 				}
+			} // End fire a bullet
 
-			}// End fire a bullet
+			// Dodging enemies using the space key
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && canDodge) {
+				isDodging = true;
+				canDodge = false;
+				dodgeClock.restart();
+				cooldownClock.restart();
+				player.startDodge();
+			}
+
+			// After 200ms stop dodge
+			if (isDodging && dodgeClock.getElapsedTime().asSeconds() > dodgeDuration) {
+				isDodging = false;
+				player.stopDodge();
+			}
+
+			// Allows the player to dodge again
+			if (!canDodge && cooldownClock.getElapsedTime().asSeconds() > dodgeCooldown) {
+				canDodge = true;
+			}
 
 		}// End WASD while playing
 
@@ -621,8 +647,10 @@ int main()
 
 			// Update the delta time
 			Time dt = clock.restart();
+
 			// Update the total game time
 			gameTimeTotal += dt;
+
 			// Make a decimal fraction of 1 from the delta time
 			float dtAsSeconds = dt.asSeconds();
 			
@@ -630,8 +658,7 @@ int main()
 			mouseScreenPosition = Mouse::getPosition();
 
 			// Convert mouse position to world coordinates of mainView
-			mouseWorldPosition = window.mapPixelToCoords(
-				Mouse::getPosition(), mainView);
+			mouseWorldPosition = window.mapPixelToCoords(Mouse::getPosition(), mainView);
 
 			// Set the crosshair to the mouse world location
 			spriteCrosshair.setPosition(mouseWorldPosition);
@@ -653,7 +680,6 @@ int main()
 				if (bullets[i].isInFlight())
 				{
 					bullets[i].update(dtAsSeconds);
-
 				}
 			}
 
@@ -665,23 +691,19 @@ int main()
 			// Have any zombies been shot?
 
 			// Has the player touched health pickup
-			if (player.getPosition().intersects
-				(healthPickup.getPosition()) && healthPickup.isSpawned())
+			if (player.getPosition().intersects(healthPickup.getPosition()) && healthPickup.isSpawned())
 			{
 				player.increaseHealthLevel(healthPickup.gotIt());
 				// Play a sound
 				pickup.play();
-				
 			}
 
 			// Has the player touched ammo pickup
-			if (player.getPosition().intersects
-				(ammoPickup.getPosition()) && ammoPickup.isSpawned())
+			if (player.getPosition().intersects(ammoPickup.getPosition()) && ammoPickup.isSpawned()) 
 			{
 				bulletsSpare += ammoPickup.gotIt();
 				// Play a sound
 				reload.play();
-				
 			}
 
 			if (currentDecal > 248)
@@ -703,39 +725,38 @@ int main()
 			framesSinceLastHUDUpdate++;
 			// Calculate FPS every fpsMeasurementFrameInterval frames
 			
+			// Update game HUD text
+			stringstream ssAmmo;
+			stringstream ssScore;
+			stringstream ssHiScore;
+			stringstream ssWave;
+			stringstream ssZombiesAlive;
 
-				// Update game HUD text
-				stringstream ssAmmo;
-				stringstream ssScore;
-				stringstream ssHiScore;
-				stringstream ssWave;
-				stringstream ssZombiesAlive;
+			// Update the ammo text
+			ssAmmo << bulletsInClip << "/" << bulletsSpare;
+			ammoText.setString(ssAmmo.str());
 
-				// Update the ammo text
-				ssAmmo << bulletsInClip << "/" << bulletsSpare;
-				ammoText.setString(ssAmmo.str());
+			// Update the score text
+			ssScore << "Points:" << score;
+			scoreText.setString(ssScore.str());
 
-				// Update the score text
-				ssScore << "Points:" << score;
-				scoreText.setString(ssScore.str());
+			// Update the high score text
+			ssHiScore << "Hi Score:" << hiScore;
+			hiScoreText.setString(ssHiScore.str());
 
-				// Update the high score text
-				ssHiScore << "Hi Score:" << hiScore;
-				hiScoreText.setString(ssHiScore.str());
+			// Update the wave
+			ssWave << "Round:" << round;
+			waveNumberText.setString(ssWave.str());
 
-				// Update the wave
-				ssWave << "Round:" << round;
-				waveNumberText.setString(ssWave.str());
+			// Update the high score text
+			ssZombiesAlive << "Zombies:" << 1;
+			zombiesRemainingText.setString(ssZombiesAlive.str());
 
-				// Update the high score text
-				ssZombiesAlive << "Zombies:" << 1;
-				zombiesRemainingText.setString(ssZombiesAlive.str());
-
-				framesSinceLastHUDUpdate = 0;
-				timeSinceLastUpdate = Time::Zero;
+			framesSinceLastHUDUpdate = 0;
+			timeSinceLastUpdate = Time::Zero;
 			// End HUD update
 
-		}// End updating the scene
+		} // End updating the scene
 
 		 /*
 		 **************
@@ -761,9 +782,7 @@ int main()
 			// DRAW EFFECTS
 			for (int i = 0; i < 249; i++) // draw decals
 			{
-
 				window.draw(decal[i].getSprite());
-
 			}
 
 			// Draw the zombies
@@ -788,7 +807,6 @@ int main()
 			{
 				window.draw(healthPickup.getSprite());
 			}
-
 
 			//Draw the crosshair
 			window.draw(spriteCrosshair);

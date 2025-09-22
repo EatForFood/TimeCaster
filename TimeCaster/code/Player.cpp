@@ -20,7 +20,6 @@ Player::Player()
 
 	m_Room = 1; // set start room
 	m_Gun = 0;
-
 }
 
 void Player::resetPlayerStats()
@@ -74,7 +73,6 @@ bool Player::hit(Time timeHit)
 	{
 		return false;
 	}
-
 }
 
 FloatRect Player::getPosition()
@@ -165,10 +163,18 @@ void Player::stopDown()
 	m_DownPressed = false;
 }
 
+// Multiplies the player's speed to simulate dodging
+void Player::startDodge() {
+	m_Speed = m_Speed * 2;
+}
+
+// Returns player's speed to original value to stop dodge
+void Player::stopDodge() {
+	m_Speed = m_Speed / 2;
+}
+
 void Player::update(float elapsedTime, Vector2i mousePosition)
 {
-	
-
 	if (m_UpPressed)
 	{
 		m_PositionLast = m_Position;
@@ -213,7 +219,6 @@ void Player::upgradeHealth()
 {
 	// 20% max health upgrade
 	m_MaxHealth += (START_HEALTH * .2);
-
 }
 
 void Player::increaseHealthLevel(int amount)

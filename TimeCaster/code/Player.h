@@ -158,7 +158,11 @@ public:
 	// Increase the maximum amount of health the player can have
 	void increaseHealthLevel(int amount);
 
+	// Player starts a dodge
+	void startDodge();
 
+	// Player stops a dodge
+	void stopDodge();
 };
 
 
