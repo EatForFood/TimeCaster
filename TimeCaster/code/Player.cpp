@@ -8,6 +8,8 @@ Player::Player()
 	m_MaxHealth = START_HEALTH;
 	m_Mana = START_MANA;
 	m_MaxMana = START_MANA;
+	m_Stamina = START_STAMINA;
+	m_MaxStamina = START_STAMINA;
 
 	// Associate a texture with the sprite
 	// !!Watch this space!!
@@ -26,8 +28,10 @@ void Player::resetPlayerStats()
 {
 	m_Speed = START_SPEED;
 	m_Health = START_HEALTH;
+	m_Stamina = START_STAMINA;
 	m_MaxHealth = START_HEALTH;
 	m_MaxMana = START_MANA;
+	m_MaxStamina = START_STAMINA;
 }
 
 void Player::spawn(IntRect arena, Vector2f resolution, int tileSize)
@@ -66,7 +70,7 @@ bool Player::hit(Time timeHit)
 	if (timeHit.asMilliseconds() - m_LastHit.asMilliseconds() > 200)// 2 tenths of second
 	{
 		m_LastHit = timeHit;
-		m_Health -= 10;
+		m_Health -= 10/*Change this to be varible?*/;
 		return true;
 	}
 	else
@@ -109,6 +113,7 @@ int Player::getMaxHealth() {
 	return m_MaxHealth;
 }
 
+
 int Player::getMana()
 {
 	return m_Mana;
@@ -116,6 +121,15 @@ int Player::getMana()
 
 int Player::getMaxMana() {
 	return m_MaxMana;
+}
+
+int Player::getStamina()
+{
+	return m_Stamina;
+}
+
+int Player::getMaxStamina() {
+	return m_MaxStamina;
 }
 
 int Player::getRoom()
@@ -163,9 +177,14 @@ void Player::stopDown()
 	m_DownPressed = false;
 }
 
+
+
 // Multiplies the player's speed to simulate dodging
 void Player::startDodge() {
 	m_Speed = m_Speed * 2;
+	//add stamina cost / i frames later
+	//Also a cooldown so the player doesn't accidentally use their dodges all at once 
+	// / chain them together to become completely invincible for an extended period of time
 }
 
 // Returns player's speed to original value to stop dodge
@@ -234,6 +253,7 @@ void Player::increaseHealthLevel(int amount)
 
 void Player::changeGun(String gun)
 {
+	//We can use this code for swords / wands later
 	if (gun == "shotgun")
 	{
 		m_Sprite = Sprite(TextureHolder::GetTexture(

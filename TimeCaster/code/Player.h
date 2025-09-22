@@ -9,6 +9,7 @@ private:
 	const float START_SPEED = 200;
 	const float START_HEALTH = 100;
 	const float START_MANA = 100;
+	const float START_STAMINA = 100;
 
 	IntRect m_Hitbox;
 
@@ -58,11 +59,19 @@ private:
 	// What is the maximum health the player can have?
 	int m_MaxHealth;
 
+	
+
 	// How much mana has the player got?
 	int m_Mana;
 
 	// WHat is the maximum mana the player can have?
 	int m_MaxMana;
+
+	// How much stamina has the player got?
+	int m_Stamina;
+
+	// What is the maximum stamina the player can have?
+	int m_MaxStamina;
 
 	// When was the player last hit
 	Time m_LastHit;
@@ -115,6 +124,12 @@ public:
 
 	// What is the player's max health?
 	int getMaxHealth();
+	
+	// What is the player's max stamina?
+	int getMaxStamina();
+
+	// How much stamina has the player currently got?
+	int getStamina();
 
 	// How much mana has the player currently got?
 	int getMana();

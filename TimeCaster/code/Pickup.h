@@ -8,7 +8,7 @@ class Pickup
 private:
 	//Start value for health pickups
 	const int HEALTH_START_VALUE = 50;
-	const int AMMO_START_VALUE = 12;
+	const int AMMO_START_VALUE = 12; //either turn this to mana or make a new pickup for mana
 	const int START_WAIT_TIME = 10;
 	const int START_SECONDS_TO_LIVE = 15;
 
