@@ -10,6 +10,7 @@ Player::Player()
 	m_MaxMana = START_MANA;
 	m_Stamina = START_STAMINA;
 	m_MaxStamina = START_STAMINA;
+	m_StaminaRecharge = START_STAMINA_RECHARGE;
 	
 
 	// Associate a texture with the sprite
@@ -33,6 +34,7 @@ void Player::resetPlayerStats()
 	m_MaxHealth = START_HEALTH;
 	m_MaxMana = START_MANA;
 	m_MaxStamina = START_STAMINA;
+	m_StaminaRecharge = START_STAMINA_RECHARGE;
 }
 
 void Player::spawn(IntRect arena, Vector2f resolution, int tileSize)
@@ -234,6 +236,12 @@ void Player::update(float elapsedTime, Vector2i mousePosition)
 		* 180) / 3.141;
 
 	m_Sprite.setRotation(angle);
+	
+	if (m_Stamina < m_MaxStamina)
+	{
+		m_Stamina += m_StaminaRecharge;
+	}
+
 }
 
 void Player::upgradeSpeed()

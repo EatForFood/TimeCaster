@@ -10,6 +10,7 @@ private:
 	const float START_HEALTH = 100;
 	const float START_MANA = 100;
 	const float START_STAMINA = 100;
+	const float START_STAMINA_RECHARGE = 0.33;
 
 	IntRect m_Hitbox;
 
@@ -67,10 +68,13 @@ private:
 	int m_MaxMana;
 
 	// How much stamina has the player got?
-	int m_Stamina;
+	float m_Stamina;
 
 	// What is the maximum stamina the player can have?
-	int m_MaxStamina;
+	float m_MaxStamina;
+
+	//How fast does the player's stamina recharge?
+	float m_StaminaRecharge;
 
 
 	// When was the player last hit
