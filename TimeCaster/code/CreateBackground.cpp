@@ -48,14 +48,14 @@ void CreateBackground::placeTile(int x, int y, int texX, int texY)
 
 int CreateBackground::createLandscape()
 {
-	debug = true;
+	debug = false;
 	debugFont.loadFromFile("fonts/dogica.ttf");
 
 	// What type of primitive are we using?
 	rVA.setPrimitiveType(Quads);
 
 	// Set the size of the vertex array
-	rVA.resize(800 * 800 * VERTS_IN_QUAD);
+	rVA.resize(600 * 600 * VERTS_IN_QUAD);
 
 	// Start at the beginning of the vertex array
 

@@ -10,9 +10,9 @@ using namespace sf;
 
 // SoundManager constructor
 SoundManager::SoundManager() {
-	// Loads hit sound file into buffer
-	//hitBuffer.loadFromFile("sound/hit.wav");
-	//hit.setBuffer(hitBuffer);
+	// Loads hurt sound file into buffer
+	// hurtBuffer.loadFromFile("sound/hit.wav");
+	// hurt.setBuffer(hurtBuffer);
 
 	// Seeding randomiser
 	srand(time(0));

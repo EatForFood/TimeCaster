@@ -22,9 +22,10 @@ int main()
 	TextureHolder holder;
 	
 	// The game will always be in one of four states
-	enum class State { PAUSED, LEVELING_UP, GAME_OVER, PLAYING };
-	// Start with the GAME_OVER state
-	State state = State::GAME_OVER;
+	enum class State { MAIN_MENU, OPTIONS, PLAYING, PAUSED, LEVELING_UP, GAME_OVER };
+	
+	// Start with the MAIN_MENU state
+	State state = State::MAIN_MENU;
 
 
 	// Get the screen resolution and create an SFML window
@@ -105,7 +106,7 @@ int main()
 	Pickup manaPickup(4);
 
 	// About the game
-	int score = 0;
+	int goldCount = 0;
 	int hiScore = 0;
 
 	// For the home/game over screen
@@ -163,19 +164,12 @@ int main()
 		"\n6- More and better ammo pickups";
 	levelUpText.setString(levelUpStream.str());
 
-	// Ammo
-	Text ammoText;
-	ammoText.setFont(font);
-	ammoText.setCharacterSize(55);
-	ammoText.setFillColor(Color::White);
-	ammoText.setPosition(200, 980);
-
-	// Score
-	Text scoreText;
-	scoreText.setFont(font);
-	scoreText.setCharacterSize(55);
-	scoreText.setFillColor(Color::White);
-	scoreText.setPosition(20, 100);
+	// Gold text
+	Text goldCountText;
+	goldCountText.setFont(pixelFont);
+	goldCountText.setCharacterSize(55);
+	goldCountText.setFillColor(Color::White);
+	goldCountText.setPosition(1400, 0);
 
 	// Load the high score from a text file/
 	ifstream inputFile("gamedata/scores.txt");
@@ -184,16 +178,6 @@ int main()
 		inputFile >> hiScore;
 		inputFile.close();
 	}
-
-	// Hi Score
-	Text hiScoreText;
-	hiScoreText.setFont(font);
-	hiScoreText.setCharacterSize(55);
-	hiScoreText.setFillColor(Color::White);
-	hiScoreText.setPosition(1400, 0);
-	stringstream s;
-	s << "Hi Score:" << hiScore;
-	hiScoreText.setString(s.str());
 
 	// Buy Shotgun Text
 	Text buyShotgunText;
@@ -211,23 +195,6 @@ int main()
 	buyRifleText.setPosition(960, 540);
 	buyRifleText.setString("E: Buy Assault Rifle 100 pts");
 
-	// Zombies remaining
-	Text zombiesRemainingText;
-	zombiesRemainingText.setFont(font);
-	zombiesRemainingText.setCharacterSize(55);
-	zombiesRemainingText.setFillColor(Color::White);
-	zombiesRemainingText.setPosition(1500, 980);
-	zombiesRemainingText.setString("Zombies: 100");
-
-	// Wave number
-	int round = 1;
-	Text waveNumberText;
-	waveNumberText.setFont(font);
-	waveNumberText.setCharacterSize(55);
-	waveNumberText.setFillColor(Color::White);
-	waveNumberText.setPosition(1250, 980);
-	waveNumberText.setString("Wave: 0");
-
 	// FPS text
 	Text fpsText;
 	fpsText.setFont(pixelFont);
@@ -244,8 +211,6 @@ int main()
 	RectangleShape emptyHealthBar;
 	emptyHealthBar.setFillColor(Color::Black);
 	emptyHealthBar.setPosition(10, 10);
-
-
 
 	// Stamina bar
 	RectangleShape staminaBar;
@@ -266,10 +231,7 @@ int main()
 	RectangleShape emptyManaBar;
 	emptyManaBar.setFillColor(Color::Black);
 	emptyManaBar.setPosition(10, 110);
-
-
-
-		
+	
 	// When did we last update the HUD?
 	int framesSinceLastHUDUpdate = 0;
 
@@ -286,48 +248,6 @@ int main()
 	Clock cooldownClock;
 	float dodgeDuration = 0.2f; // 200ms dodge
 	float dodgeCooldown = 1.0f; // 1 second cooldown on dodge
-
-	// Prepare the hit sound
-	SoundBuffer hitBuffer;
-	hitBuffer.loadFromFile("sound/hit.wav");
-	Sound hit;
-	hit.setBuffer(hitBuffer);
-
-	// Prepare the splat sound
-	SoundBuffer splatBuffer;
-	splatBuffer.loadFromFile("sound/splat.wav");
-	sf::Sound splat;
-	splat.setBuffer(splatBuffer);
-
-	// Prepare the shoot sound
-	SoundBuffer shootBuffer;
-	shootBuffer.loadFromFile("sound/shoot.wav");
-	Sound shoot;
-	shoot.setBuffer(shootBuffer);
-
-	// Prepare the reload sound
-	SoundBuffer reloadBuffer;
-	reloadBuffer.loadFromFile("sound/reload.wav");
-	Sound reload;
-	reload.setBuffer(reloadBuffer);
-
-	// Prepare the failed sound
-	SoundBuffer reloadFailedBuffer;
-	reloadFailedBuffer.loadFromFile("sound/reload_failed.wav");
-	Sound reloadFailed;
-	reloadFailed.setBuffer(reloadFailedBuffer);
-
-	// Prepare the powerup sound
-	SoundBuffer powerupBuffer;
-	powerupBuffer.loadFromFile("sound/powerup.wav");
-	Sound powerup;
-	powerup.setBuffer(powerupBuffer);
-
-	// Prepare the pickup sound
-	SoundBuffer pickupBuffer;
-	pickupBuffer.loadFromFile("sound/pickup.wav");
-	Sound pickup;
-	pickup.setBuffer(pickupBuffer);
 
 	// The main game loop
 	while (window.isOpen())
@@ -366,20 +286,12 @@ int main()
 					clock.restart();
 				}
 
-				// Start a new game while in GAME_OVER state
+				// Start a new game while in MAIN_MENU state
 				else if (event.key.code == Keyboard::Return &&
-					state == State::GAME_OVER)
+					state == State::MAIN_MENU)
 				{
 					state = State::LEVELING_UP;
-					round = 1;
-					score = 0;
-
-					// Prepare the gun and ammo for next game
-					currentBullet = 0;
-					bulletsSpare = 24;
-					bulletsInClip = 6;
-					clipSize = 6;
-					fireRate = 1;
+					goldCount = 0;
 
 					// Reset the player's stats
 					player.resetPlayerStats();
@@ -395,19 +307,16 @@ int main()
 							// Plenty of bullets. Reload.
 							bulletsInClip = clipSize;
 							bulletsSpare -= clipSize;		
-							reload.play();
 						}
 						else if (bulletsSpare > 0)
 						{
 							// Only few bullets left
 							bulletsInClip = bulletsSpare;
 							bulletsSpare = 0;				
-							reload.play();
 						}
 						else
 						{
 							// More here soon?!
-							reloadFailed.play();
 						}
 					}
 				}
@@ -482,7 +391,6 @@ int main()
 							currentBullet = 0;
 						}
 						lastPressed = gameTimeTotal;
-						shoot.play();
 						bulletsInClip--;
 					}
 				}
@@ -526,7 +434,6 @@ int main()
 							currentBullet = 0;
 						}
 						lastPressed = gameTimeTotal;
-						shoot.play();
 						bulletsInClip--;
 					}
 				}
@@ -547,7 +454,6 @@ int main()
 							currentBullet = 0;
 						}
 						lastPressed = gameTimeTotal;
-						shoot.play();
 						bulletsInClip--;
 					}
 				}
@@ -653,9 +559,6 @@ int main()
 				staminaPickup.setArena(arena);
 				manaPickup.setArena(arena);
 
-				// Play the powerup sound
-				powerup.play();
-
 				// Reset the clock so there isn't a frame jump
 				clock.restart();
 			}
@@ -668,8 +571,6 @@ int main()
 		 */
 		if (state == State::PLAYING)
 		{
-			// if all zombies are dead create new round with more zombies
-
 			ShowCursor(false); // hide the windows cursor
 
 			// Update the delta time
@@ -716,23 +617,16 @@ int main()
 			staminaPickup.update(dtAsSeconds);
 			manaPickup.update(dtAsSeconds);
 
-			// Collision detection
-			// Have any zombies been shot?
-
 			// Has the player touched health pickup
 			if (player.getPosition().intersects(healthPickup.getPosition()) && healthPickup.isSpawned())
 			{
 				player.increaseHealthLevel(healthPickup.gotIt());
-				// Play a sound
-				pickup.play();
 			}
 
 			// Has the player touched ammo pickup
 			if (player.getPosition().intersects(ammoPickup.getPosition()) && ammoPickup.isSpawned()) 
 			{
 				bulletsSpare += ammoPickup.gotIt();
-				// Play a sound
-				reload.play();
 			}
 
 
@@ -777,31 +671,11 @@ int main()
 			// Calculate FPS every fpsMeasurementFrameInterval frames
 			
 			// Update game HUD text
-			stringstream ssAmmo;
-			stringstream ssScore;
-			stringstream ssHiScore;
-			stringstream ssWave;
-			stringstream ssZombiesAlive;
+			stringstream ssGoldCount;
 
-			// Update the ammo text
-			ssAmmo << bulletsInClip << "/" << bulletsSpare;
-			ammoText.setString(ssAmmo.str());
-
-			// Update the score text
-			ssScore << "Points:" << score;
-			scoreText.setString(ssScore.str());
-
-			// Update the high score text
-			ssHiScore << "Hi Score:" << hiScore;
-			hiScoreText.setString(ssHiScore.str());
-
-			// Update the wave
-			ssWave << "Round:" << round;
-			waveNumberText.setString(ssWave.str());
-
-			// Update the high score text
-			ssZombiesAlive << "Zombies:" << 1;
-			zombiesRemainingText.setString(ssZombiesAlive.str());
+			// Update the gold text
+			ssGoldCount << "Gold:" << goldCount;
+			goldCountText.setString(ssGoldCount.str());
 
 			framesSinceLastHUDUpdate = 0;
 			timeSinceLastUpdate = Time::Zero;
@@ -835,8 +709,6 @@ int main()
 			{
 				window.draw(decal[i].getSprite());
 			}
-
-			// Draw the zombies
 
 			for (int i = 0; i < 100; i++)
 			{
@@ -875,17 +747,13 @@ int main()
 			
 			// Draw all the HUD elements
 			window.draw(spriteAmmoIcon);
-			window.draw(ammoText);
-			window.draw(scoreText);
-			window.draw(hiScoreText);
+			window.draw(goldCountText);
 			window.draw(emptyHealthBar);
 			window.draw(healthBar);
 			window.draw(emptyManaBar);
 			window.draw(manaBar);
 			window.draw(emptyStaminaBar);
 			window.draw(staminaBar);
-			window.draw(waveNumberText);
-			window.draw(zombiesRemainingText);
 			window.draw(fpsText);
 		}
 
@@ -900,12 +768,11 @@ int main()
 			window.draw(pausedText);
 		}
 
-		if (state == State::GAME_OVER)
+		if (state == State::MAIN_MENU)
 		{
 			window.draw(spriteGameOver);
 			window.draw(gameOverText);
-			window.draw(scoreText);
-			window.draw(hiScoreText);
+			window.draw(goldCountText);
 		}
 
 		window.display();
