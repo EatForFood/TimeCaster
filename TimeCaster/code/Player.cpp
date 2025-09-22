@@ -184,15 +184,9 @@ void Player::stopDown()
 // Multiplies the player's speed to simulate dodging
 void Player::startDodge() {
 
-	if (m_Stamina >=50) 
-	{
+
 	m_Speed = m_Speed * 2; 
 	m_Stamina -= 50;  //maybe make dodge cost variable later
-	m_PlayerDodging = true;
-	}
-	else {
-		//not enough stamina, make stamina bar flash red or something
-	}
 	
 	
 
@@ -202,11 +196,9 @@ void Player::startDodge() {
 
 // Returns player's speed to original value to stop dodge
 void Player::stopDodge() {
-	if (m_PlayerDodging)
-	{
+
 		m_Speed = m_Speed / 2;
 		m_PlayerDodging = false;
-	}
 }
 
 void Player::update(float elapsedTime, Vector2i mousePosition)

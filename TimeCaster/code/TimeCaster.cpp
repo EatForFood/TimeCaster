@@ -279,7 +279,7 @@ int main()
 
 	// Dodge variables
 	bool isDodging = false;
-	bool canDodge = true;
+	bool canDodge = false;
 	Clock dodgeClock;
 	Clock cooldownClock;
 	float dodgeDuration = 0.2f; // 200ms dodge
@@ -566,9 +566,9 @@ int main()
 				isDodging = false;
 				player.stopDodge();
 			}
-
+		
 			// Allows the player to dodge again
-			if (!canDodge && cooldownClock.getElapsedTime().asSeconds() > dodgeCooldown) {
+			if (!canDodge && cooldownClock.getElapsedTime().asSeconds() > dodgeCooldown && player.getStamina() >= 50) {
 				canDodge = true;
 			}
 
