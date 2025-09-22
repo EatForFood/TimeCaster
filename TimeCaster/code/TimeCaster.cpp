@@ -22,9 +22,10 @@ int main()
 	TextureHolder holder;
 	
 	// The game will always be in one of four states
-	enum class State { PAUSED, LEVELING_UP, GAME_OVER, PLAYING };
-	// Start with the GAME_OVER state
-	State state = State::GAME_OVER;
+	enum class State { MAIN_MENU, OPTIONS, PLAYING, PAUSED, LEVELING_UP, GAME_OVER };
+	
+	// Start with the MAIN_MENU state
+	State state = State::MAIN_MENU;
 
 
 	// Get the screen resolution and create an SFML window
@@ -349,9 +350,9 @@ int main()
 					clock.restart();
 				}
 
-				// Start a new game while in GAME_OVER state
+				// Start a new game while in MAIN_MENU state
 				else if (event.key.code == Keyboard::Return &&
-					state == State::GAME_OVER)
+					state == State::MAIN_MENU)
 				{
 					state = State::LEVELING_UP;
 					round = 1;
@@ -839,7 +840,7 @@ int main()
 			window.draw(pausedText);
 		}
 
-		if (state == State::GAME_OVER)
+		if (state == State::MAIN_MENU)
 		{
 			window.draw(spriteGameOver);
 			window.draw(gameOverText);

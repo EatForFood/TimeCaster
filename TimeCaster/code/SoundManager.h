@@ -14,8 +14,8 @@ private:
 	Sound soundtrack[2];
 
 	// Prepare the hit sound
-	//SoundBuffer hitBuffer;
-	//Sound hit;
+	SoundBuffer hurtBuffer;
+	Sound hurt;
 
 public:
 	// SoundManager constructor
