@@ -10,6 +10,8 @@ Player::Player()
 	m_MaxMana = START_MANA;
 	m_Stamina = START_STAMINA;
 	m_MaxStamina = START_STAMINA;
+	m_PlayerDodging = false;
+	
 
 	// Associate a texture with the sprite
 	// !!Watch this space!!
@@ -67,7 +69,7 @@ Time Player::getLastHitTime()
 
 bool Player::hit(Time timeHit)
 {
-	if (timeHit.asMilliseconds() - m_LastHit.asMilliseconds() > 200)// 2 tenths of second
+	if (timeHit.asMilliseconds() - m_LastHit.asMilliseconds() > 200 && !m_PlayerDodging)// 2 tenths of second
 	{
 		m_LastHit = timeHit;
 		m_Health -= 10/*Change this to be varible?*/;
@@ -181,15 +183,22 @@ void Player::stopDown()
 
 // Multiplies the player's speed to simulate dodging
 void Player::startDodge() {
-	m_Speed = m_Speed * 2;
-	//add stamina cost / i frames later
-	//Also a cooldown so the player doesn't accidentally use their dodges all at once 
-	// / chain them together to become completely invincible for an extended period of time
+
+
+	m_Speed = m_Speed * 2; 
+	m_Stamina -= 50;  //maybe make dodge cost variable later
+	
+	
+
+	//maybe add i frames later
+
 }
 
 // Returns player's speed to original value to stop dodge
 void Player::stopDodge() {
-	m_Speed = m_Speed / 2;
+
+		m_Speed = m_Speed / 2;
+		m_PlayerDodging = false;
 }
 
 void Player::update(float elapsedTime, Vector2i mousePosition)
