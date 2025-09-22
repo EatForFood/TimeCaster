@@ -138,14 +138,6 @@ int main()
 	pausedText.setPosition(400, 400);
 	pausedText.setString("Press enter \nto continue");
 
-	// Game Over
-	Text gameOverText;
-	gameOverText.setFont(pixelFont);
-	gameOverText.setCharacterSize(90);
-	gameOverText.setFillColor(Color::White);
-	gameOverText.setPosition(50, 950);
-	gameOverText.setString("Press enter to play");
-
 	// Levelling up
 	Text levelUpText;
 	levelUpText.setFont(font);
@@ -229,7 +221,49 @@ int main()
 	RectangleShape emptyManaBar;
 	emptyManaBar.setFillColor(Color::Black);
 	emptyManaBar.setPosition(10, 110);
-	
+
+	// Play button
+	RectangleShape playButton;
+	playButton.setFillColor(Color::Green);
+	playButton.setPosition(10, 10);
+	playButton.setSize(Vector2f(100, 40));
+
+	// Play button text
+	Text playButtonText;
+	playButtonText.setFont(pixelFont);
+	playButtonText.setCharacterSize(20);
+	playButtonText.setFillColor(Color::Black);
+	playButtonText.setPosition(10, 20);
+	playButtonText.setString("Play Game");
+
+	// Options button
+	RectangleShape optionsButton;
+	optionsButton.setFillColor(Color::Green);
+	optionsButton.setPosition(10, 60);
+	optionsButton.setSize(Vector2f(100, 40));
+
+	// options button text
+	Text optionsButtonText;
+	optionsButtonText.setFont(pixelFont);
+	optionsButtonText.setCharacterSize(20);
+	optionsButtonText.setFillColor(Color::Black);
+	optionsButtonText.setPosition(10, 70);
+	optionsButtonText.setString("Options");
+
+	// Quit game button
+	RectangleShape quitGameButton;
+	quitGameButton.setFillColor(Color::Green);
+	quitGameButton.setPosition(10, 110);
+	quitGameButton.setSize(Vector2f(100, 40));
+
+	// options button text
+	Text quitGameButtonText;
+	quitGameButtonText.setFont(pixelFont);
+	quitGameButtonText.setCharacterSize(20);
+	quitGameButtonText.setFillColor(Color::Black);
+	quitGameButtonText.setPosition(10, 120);
+	quitGameButtonText.setString("Quit Game");
+
 	// When did we last update the HUD?
 	int framesSinceLastHUDUpdate = 0;
 
@@ -266,18 +300,20 @@ int main()
 		Event event;
 		while (window.pollEvent(event))
 		{
-			if (event.type == Event::KeyPressed)
+			// Getting the mouse position and mapping those pixels to coordinates
+			Vector2i mousePos = Mouse::getPosition(window);
+			Vector2f worldPos = window.mapPixelToCoords(mousePos);
+
+			if (event.type == Event::KeyPressed || Mouse::isButtonPressed(Mouse::Left))
 			{
 				// Pause a game while playing
-				if (event.key.code == Keyboard::Return &&
-					state == State::PLAYING)
+				if (event.key.code == Keyboard::Return && state == State::PLAYING)
 				{
 					state = State::PAUSED;
 				}
 
 				// Restart while paused
-				else if (event.key.code == Keyboard::Return &&
-					state == State::PAUSED)
+				else if (event.key.code == Keyboard::Return && state == State::PAUSED)
 				{
 					state = State::PLAYING;
 					// Reset the clock so there isn't a frame jump
@@ -285,8 +321,7 @@ int main()
 				}
 
 				// Start a new game while in MAIN_MENU state
-				else if (event.key.code == Keyboard::Return &&
-					state == State::MAIN_MENU)
+				else if (event.key.code == Keyboard::Return && state == State::MAIN_MENU)
 				{
 					state = State::LEVELING_UP;
 					goldCount = 0;
@@ -295,28 +330,26 @@ int main()
 					player.resetPlayerStats();
 				}
 
-				if (state == State::PLAYING)
+				// Player hit the play game button
+				else if (playButton.getGlobalBounds().contains(worldPos))
 				{
-					// Reloading
-					if (event.key.code == Keyboard::R)
-					{
-						if (bulletsSpare >= clipSize)
-						{
-							// Plenty of bullets. Reload.
-							bulletsInClip = clipSize;
-							bulletsSpare -= clipSize;		
-						}
-						else if (bulletsSpare > 0)
-						{
-							// Only few bullets left
-							bulletsInClip = bulletsSpare;
-							bulletsSpare = 0;				
-						}
-						else
-						{
-							// More here soon?!
-						}
-					}
+					state = State::LEVELING_UP;
+					goldCount = 0;
+
+					// Reset the player's stats
+					player.resetPlayerStats();
+				}
+
+				// Player hit the options button
+				else if (optionsButton.getGlobalBounds().contains(worldPos))
+				{
+					state = State::OPTIONS;
+				}
+
+				// Player hit the quit game button
+				else if (quitGameButton.getGlobalBounds().contains(worldPos))
+				{
+					window.close();
 				}
 			}
 		} // End event polling
@@ -368,7 +401,7 @@ int main()
 			}
 
 			// Fire a bullet
-			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			if (Mouse::isButtonPressed(Mouse::Left))
 			{
 				if (player.getGun() == 0) // pistol
 				{
@@ -732,8 +765,13 @@ int main()
 		if (state == State::MAIN_MENU)
 		{
 			window.draw(spriteGameOver);
-			window.draw(gameOverText);
 			window.draw(goldCountText);
+			window.draw(playButton);
+			window.draw(playButtonText);
+			window.draw(optionsButton);
+			window.draw(optionsButtonText);
+			window.draw(quitGameButton);
+			window.draw(quitGameButtonText);
 		}
 
 		window.display();
