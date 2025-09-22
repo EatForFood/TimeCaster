@@ -635,7 +635,7 @@ int main()
 			{
 				player.increaseStaminaLevel(staminaPickup.gotIt()); 
 				// Play a sound
-				pickup.play();
+	
 			}
 
 
@@ -644,7 +644,7 @@ int main()
 			{
 				player.increaseManaLevel(manaPickup.gotIt());
 				// Play a sound
-				pickup.play();
+
 			}
 
 			if (currentDecal > 248)
