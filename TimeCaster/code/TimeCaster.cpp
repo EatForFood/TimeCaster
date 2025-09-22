@@ -243,15 +243,30 @@ int main()
 	emptyHealthBar.setFillColor(Color::Black);
 	emptyHealthBar.setPosition(10, 10);
 
+
+
+	// Stamina bar
+	RectangleShape staminaBar;
+	staminaBar.setFillColor(Color::Green);
+	staminaBar.setPosition(10, 60);
+
+	// Empty Stamina bar
+	RectangleShape emptyStaminaBar;
+	emptyStaminaBar.setFillColor(Color::Black);
+	emptyStaminaBar.setPosition(10, 60);
+
 	// Mana bar
 	RectangleShape manaBar;
 	manaBar.setFillColor(Color::Magenta);
-	manaBar.setPosition(10, 60);
+	manaBar.setPosition(10, 110);
 
 	// Empty mana bar
 	RectangleShape emptyManaBar;
 	emptyManaBar.setFillColor(Color::Black);
-	emptyManaBar.setPosition(10, 60);
+	emptyManaBar.setPosition(10, 110);
+
+
+
 		
 	// When did we last update the HUD?
 	int framesSinceLastHUDUpdate = 0;
@@ -540,6 +555,7 @@ int main()
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && canDodge) {
 				isDodging = true;
 				canDodge = false;
+				
 				dodgeClock.restart();
 				cooldownClock.restart();
 				player.startDodge();
@@ -719,6 +735,10 @@ int main()
 			manaBar.setSize(Vector2f(player.getMana() * 3, 35));
 			emptyManaBar.setSize(Vector2f(player.getMaxMana() * 3, 35));
 
+			// Set size of the Stamina bar
+			staminaBar.setSize(Vector2f(player.getStamina() * 3, 35));
+			emptyStaminaBar.setSize(Vector2f(player.getMaxStamina() * 3, 35));
+
 			// Increment the amount of time since the last HUD update
 			timeSinceLastUpdate += dt;
 			// Increment the number of frames since the last HUD calculation
@@ -823,6 +843,8 @@ int main()
 			window.draw(healthBar);
 			window.draw(emptyManaBar);
 			window.draw(manaBar);
+			window.draw(emptyStaminaBar);
+			window.draw(staminaBar);
 			window.draw(waveNumberText);
 			window.draw(zombiesRemainingText);
 			window.draw(fpsText);

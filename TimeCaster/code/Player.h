@@ -73,6 +73,8 @@ private:
 	// What is the maximum stamina the player can have?
 	int m_MaxStamina;
 
+	bool m_PlayerDodging;	
+
 	// When was the player last hit
 	Time m_LastHit;
 
