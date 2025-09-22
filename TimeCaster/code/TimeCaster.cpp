@@ -14,6 +14,7 @@
 #include "SoundManager.h"
 
 using namespace sf;
+using namespace std;
 
 int main()
 {
@@ -34,7 +35,7 @@ int main()
 	resolution.y = 1080;
 
 	RenderWindow window(VideoMode(resolution.x, resolution.y),
-		"Zombie Arena", Style::Fullscreen);
+		"TimeCaster", Style::Fullscreen);
 
 	// Create a an SFML View for the main action
 	View mainView(sf::FloatRect(0, 0, resolution.x, resolution.y));
@@ -44,6 +45,10 @@ int main()
 
 	// Here is our clock for timing everything
 	Clock clock;
+
+	// Clock used for tracking and displaying fps
+	Clock fpsClock;
+
 	// How long has the PLAYING state been active
 	Time gameTimeTotal;
 
@@ -63,9 +68,7 @@ int main()
 	// Create the background
 	//VertexArray background;
 	// Load the texture for our background vertex array
-	Texture textureBackground = TextureHolder::GetTexture(
-		"graphics/landscape.png");
-
+	Texture textureBackground = TextureHolder::GetTexture("graphics/landscape.png");
 
 	// 100 bullets should do
 	Bullet bullets[100];
@@ -74,13 +77,16 @@ int main()
 	int bulletsInClip = 6;
 	int clipSize = 6;
 	float fireRate = 1;
+
+	// FPS float number
+	float fps = 0.f;
+	
 	// When was the fire button last pressed?
 	Time lastPressed;
 
 	//Decals 
 	Decal decal[250];
 	int currentDecal = 0;
-
 
 	// Hide the mouse pointer and replace it with crosshair
 	window.setMouseCursorVisible(true);
@@ -116,21 +122,25 @@ int main()
 	Font font;
 	font.loadFromFile("fonts/zombiecontrol.ttf");
 
+	// Main menu font
+	Font pixelFont;
+	pixelFont.loadFromFile("fonts/PixelifySans-Bold.ttf");
+
 	// Paused
 	Text pausedText;
 	pausedText.setFont(font);
 	pausedText.setCharacterSize(155);
 	pausedText.setFillColor(Color::White);
 	pausedText.setPosition(400, 400);
-	pausedText.setString("Press Enter \nto continue");
+	pausedText.setString("Press enter \nto continue");
 
 	// Game Over
 	Text gameOverText;
-	gameOverText.setFont(font);
-	gameOverText.setCharacterSize(100);
+	gameOverText.setFont(pixelFont);
+	gameOverText.setCharacterSize(90);
 	gameOverText.setFillColor(Color::White);
 	gameOverText.setPosition(50, 850);
-	gameOverText.setString("Press Enter to play");
+	gameOverText.setString("Press enter to play");
 
 	// Levelling up
 	Text levelUpText;
@@ -138,7 +148,7 @@ int main()
 	levelUpText.setCharacterSize(80);
 	levelUpText.setFillColor(Color::White);
 	levelUpText.setPosition(150, 250);
-	std::stringstream levelUpStream;
+	stringstream levelUpStream;
 	levelUpStream <<
 		"1- Increased rate of fire" <<
 		"\n2- Increased clip size(next reload)" <<
@@ -160,10 +170,10 @@ int main()
 	scoreText.setFont(font);
 	scoreText.setCharacterSize(55);
 	scoreText.setFillColor(Color::White);
-	scoreText.setPosition(20, 0);
+	scoreText.setPosition(20, 100);
 
 	// Load the high score from a text file/
-	std::ifstream inputFile("gamedata/scores.txt");
+	ifstream inputFile("gamedata/scores.txt");
 	if (inputFile.is_open())
 	{
 		inputFile >> hiScore;
@@ -176,7 +186,7 @@ int main()
 	hiScoreText.setCharacterSize(55);
 	hiScoreText.setFillColor(Color::White);
 	hiScoreText.setPosition(1400, 0);
-	std::stringstream s;
+	stringstream s;
 	s << "Hi Score:" << hiScore;
 	hiScoreText.setString(s.str());
 
@@ -214,10 +224,32 @@ int main()
 	waveNumberText.setPosition(1250, 980);
 	waveNumberText.setString("Wave: 0");
 
+	// FPS text
+	Text fpsText;
+	fpsText.setFont(pixelFont);
+	fpsText.setCharacterSize(20);
+	fpsText.setFillColor(Color::White);
+	fpsText.setPosition(1850, 5);
+
 	// Health bar
 	RectangleShape healthBar;
 	healthBar.setFillColor(Color::Red);
-	healthBar.setPosition(450, 980);
+	healthBar.setPosition(10, 10);
+
+	// Empty health bar
+	RectangleShape emptyHealthBar;
+	emptyHealthBar.setFillColor(Color::Black);
+	emptyHealthBar.setPosition(10, 10);
+
+	// Mana bar
+	RectangleShape manaBar;
+	manaBar.setFillColor(Color::Magenta);
+	manaBar.setPosition(10, 60);
+
+	// Empty mana bar
+	RectangleShape emptyManaBar;
+	emptyManaBar.setFillColor(Color::Black);
+	emptyManaBar.setPosition(10, 60);
 		
 	// When did we last update the HUD?
 	int framesSinceLastHUDUpdate = 0;
@@ -271,6 +303,12 @@ int main()
 	// The main game loop
 	while (window.isOpen())
 	{
+		// Calculating fps
+		float deltaTime = fpsClock.restart().asSeconds();
+		fps = 1.f / deltaTime;
+
+		fpsText.setString("FPS: " + to_string((int)fps));
+		
 		/*
 		************
 		Handle input
@@ -652,7 +690,12 @@ int main()
 			}
 
 			// size up the health bar
-			healthBar.setSize(Vector2f(player.getHealth() * 3, 70));
+			healthBar.setSize(Vector2f(player.getHealth() * 3, 35));
+			emptyHealthBar.setSize(Vector2f(player.getMaxHealth() * 3, 35));
+
+			// Set size of the mana bar
+			manaBar.setSize(Vector2f(player.getMana() * 3, 35));
+			emptyManaBar.setSize(Vector2f(player.getMaxMana() * 3, 35));
 
 			// Increment the amount of time since the last HUD update
 			timeSinceLastUpdate += dt;
@@ -662,11 +705,11 @@ int main()
 			
 
 				// Update game HUD text
-				std::stringstream ssAmmo;
-				std::stringstream ssScore;
-				std::stringstream ssHiScore;
-				std::stringstream ssWave;
-				std::stringstream ssZombiesAlive;
+				stringstream ssAmmo;
+				stringstream ssScore;
+				stringstream ssHiScore;
+				stringstream ssWave;
+				stringstream ssZombiesAlive;
 
 				// Update the ammo text
 				ssAmmo << bulletsInClip << "/" << bulletsSpare;
@@ -758,9 +801,13 @@ int main()
 			window.draw(ammoText);
 			window.draw(scoreText);
 			window.draw(hiScoreText);
+			window.draw(emptyHealthBar);
 			window.draw(healthBar);
+			window.draw(emptyManaBar);
+			window.draw(manaBar);
 			window.draw(waveNumberText);
 			window.draw(zombiesRemainingText);
+			window.draw(fpsText);
 		}
 
 		if (state == State::LEVELING_UP)

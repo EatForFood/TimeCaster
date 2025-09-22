@@ -6,6 +6,8 @@ Player::Player()
 	m_Speed = START_SPEED;
 	m_Health = START_HEALTH;
 	m_MaxHealth = START_HEALTH;
+	m_Mana = START_MANA;
+	m_MaxMana = START_MANA;
 
 	// Associate a texture with the sprite
 	// !!Watch this space!!
@@ -26,6 +28,7 @@ void Player::resetPlayerStats()
 	m_Speed = START_SPEED;
 	m_Health = START_HEALTH;
 	m_MaxHealth = START_HEALTH;
+	m_MaxMana = START_MANA;
 }
 
 void Player::spawn(IntRect arena, Vector2f resolution, int tileSize)
@@ -102,6 +105,19 @@ Sprite Player::getSprite()
 int Player::getHealth()
 {
 	return m_Health;
+}
+
+int Player::getMaxHealth() {
+	return m_MaxHealth;
+}
+
+int Player::getMana()
+{
+	return m_Mana;
+}
+
+int Player::getMaxMana() {
+	return m_MaxMana;
 }
 
 int Player::getRoom()
