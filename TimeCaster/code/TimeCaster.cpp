@@ -275,14 +275,6 @@ int main()
 	// How often (in frames) should we update the HUD
 	int fpsMeasurementFrameInterval = 1000;
 
-	// Dodge variables
-	bool isDodging = false;
-	bool canDodge = false;
-	Clock dodgeClock;
-	Clock cooldownClock;
-	float dodgeDuration = 0.2f; // 200ms dodge
-	float dodgeCooldown = 1.0f; // 1 second cooldown on dodge
-
 	// The main game loop
 	while (window.isOpen())
 	{
@@ -408,27 +400,6 @@ int main()
 
 
 			} // End fire a bullet
-
-			// Dodging enemies using the space key
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && canDodge) {
-				isDodging = true;
-				canDodge = false;
-				
-				dodgeClock.restart();
-				cooldownClock.restart();
-				player.startDodge();
-			}
-
-			// After 200ms stop dodge
-			if (isDodging && dodgeClock.getElapsedTime().asSeconds() > dodgeDuration) {
-				isDodging = false;
-				player.stopDodge();
-			}
-		
-			// Allows the player to dodge again
-			if (!canDodge && cooldownClock.getElapsedTime().asSeconds() > dodgeCooldown && player.getStamina() >= 50) {
-				canDodge = true;
-			}
 
 		}// End WASD while playing
 

@@ -25,6 +25,14 @@ private:
 	float m_MaxStamina;
 	float m_StaminaRecharge;
 
+	// Dodge variables
+	bool isDodging = false;
+	bool canDodge = false;
+	Clock dodgeClock;
+	Clock cooldownClock;
+	float dodgeDuration = 0.2f; // 200ms dodge
+	float dodgeCooldown = 1.0f; // 1 second cooldown on dodge
+
 	// When was the player last hit
 	Time m_LastHit;
 
@@ -73,6 +81,7 @@ public:
 	// Increase the maximum amount of health the player can have
 	void increaseHealthLevel(int amount);
 
+	void dodge(); // check for dodge input and handle dodge timer
 
 	// Player starts a dodge
 	void startDodge();

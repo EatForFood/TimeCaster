@@ -127,7 +127,7 @@ void Player::update(float elapsedTime, Vector2i mousePosition)
 {
 
 	timeElapsed = elapsedTime;
-	
+
 	if (!m_UpPressed || !m_DownPressed || !m_LeftPressed || !m_RightPressed) // if player is not moving set sprite to standing frame in last direction faced
 	{
 		if (direction == Vector2f(1, 0))
@@ -183,18 +183,26 @@ void Player::update(float elapsedTime, Vector2i mousePosition)
 		direction = Vector2f(0, 1);
 	}
 
-	m_Speed = START_SPEED;
+	if (!isDodging)
+	{
+		m_Speed = START_SPEED;
+	}
 
-	if (m_UpPressed && m_RightPressed || m_UpPressed && m_LeftPressed || 
+	if (m_UpPressed && m_RightPressed || m_UpPressed && m_LeftPressed ||
 		m_DownPressed && m_RightPressed || m_DownPressed && m_LeftPressed) // player moved too fast diagonally
 	{
-		m_Speed = m_Speed * 0.75;
+		if (!isDodging)
+		{
+			m_Speed = m_Speed * 0.75;
+		}
 	}
 
 	if (m_UpPressed || m_DownPressed || m_LeftPressed || m_RightPressed) // animate sprite if player is moving
 	{
 		moveTextureRect();
 	}
+
+	dodge();
 	
 	m_Sprite.setPosition(m_Position);
 
@@ -280,6 +288,30 @@ float Player::getStamina()
 float Player::getMaxStamina()
 {
 	return m_MaxStamina;
+}
+
+void Player::dodge()
+{
+	// Dodging enemies using the space key
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && canDodge) {
+		isDodging = true;
+		canDodge = false;
+
+		dodgeClock.restart();
+		cooldownClock.restart();
+		startDodge();
+	}
+
+	// After 200ms stop dodge
+	if (isDodging && dodgeClock.getElapsedTime().asSeconds() > dodgeDuration) {
+		isDodging = false;
+		stopDodge();
+	}
+
+	// Allows the player to dodge again
+	if (!canDodge && cooldownClock.getElapsedTime().asSeconds() > dodgeCooldown && m_Stamina >= 50) {
+		canDodge = true;
+	}
 }
 
 // Multiplies the player's speed to simulate dodging
