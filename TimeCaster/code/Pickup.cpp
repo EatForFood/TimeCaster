@@ -16,6 +16,24 @@ Pickup::Pickup(int type)
 		m_Value = HEALTH_START_VALUE;
 
 	}
+	/*if (m_Type == 2)
+	{
+		m_Sprite = Sprite(TextureHolder::GetTexture(
+			"graphics/mana_pickup.png"));
+
+		// How much is pickup worth
+		m_Value = MANA_START_VALUE;
+
+	} */
+	/*if (m_Type == 3)
+{
+	m_Sprite = Sprite(TextureHolder::GetTexture(
+		"graphics/stamina_pickup.png"));
+
+	// How much is pickup worth
+	m_Value = STAMINA_START_VALUE;
+
+} */
 	else
 	{
 		m_Sprite = Sprite(TextureHolder::GetTexture(

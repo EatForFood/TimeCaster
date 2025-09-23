@@ -10,19 +10,19 @@ using namespace sf;
 
 // SoundManager constructor
 SoundManager::SoundManager() {
-	// Loads hit sound file into buffer
-	//hitBuffer.loadFromFile("sound/hit.wav");
-	//hit.setBuffer(hitBuffer);
+	// Loads hurt sound file into buffer
+	// hurtBuffer.loadFromFile("sound/hit.wav");
+	// hurt.setBuffer(hurtBuffer);
 
 	// Seeding randomiser
 	srand(time(0));
-}
+} // End of SoundManager constructor
 
 // Function for placing songs within the soundtrack list
 void SoundManager::populateSoundtrack() {
 	//soundtrack[0] = soundtrack1;
 	//soundtrack[1] = soundtrack2;
-}
+} // End of populateSoundtrack function
 
 // Function for checking whether soundtrack is currently playing or not
 bool SoundManager::isSoundtrackPlaying() {
@@ -33,9 +33,9 @@ bool SoundManager::isSoundtrackPlaying() {
 		}
 	}
 	return false;
-}
+} // End of isSoundtrackPlaying function
 
 // Function to play a random song from the soundtrack
 void SoundManager::playSoundtrack() {
 	soundtrack[rand() % sizeof(soundtrack) / sizeof(Sound)].play();
-}
+} // End of playSoundtrack function

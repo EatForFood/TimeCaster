@@ -6,6 +6,12 @@ Player::Player()
 	m_Speed = START_SPEED;
 	m_Health = START_HEALTH;
 	m_MaxHealth = START_HEALTH;
+	m_Mana = START_MANA;
+	m_MaxMana = START_MANA;
+	m_Stamina = START_STAMINA;
+	m_MaxStamina = START_STAMINA;
+	m_StaminaRecharge = START_STAMINA_RECHARGE;
+	
 
 	// Associate a texture with the sprite
 	// !!Watch this space!!
@@ -18,14 +24,17 @@ Player::Player()
 	m_Sprite.setOrigin(18, 18);
 
 	m_Gun = 0;
-
 }
 
 void Player::resetPlayerStats()
 {
 	m_Speed = START_SPEED;
 	m_Health = START_HEALTH;
+	m_Stamina = START_STAMINA;
 	m_MaxHealth = START_HEALTH;
+	m_MaxMana = START_MANA;
+	m_MaxStamina = START_STAMINA;
+	m_StaminaRecharge = START_STAMINA_RECHARGE;
 }
 
 void Player::spawn(IntRect arena, Vector2f resolution, int tileSize)
@@ -63,8 +72,9 @@ bool Player::hit(Time timeHit)
 {
 	if (timeHit.asMilliseconds() - m_LastHit.asMilliseconds() > 200)// 2 tenths of second
 	{
+		//Also perhaps add i frames when dodging
 		m_LastHit = timeHit;
-		m_Health -= 10;
+		m_Health -= 10/*Change this to be varible?*/;
 		return true;
 	}
 	else
@@ -72,6 +82,41 @@ bool Player::hit(Time timeHit)
 		return false;
 	}
 
+}
+
+FloatRect Player::getPosition()
+{
+	return m_Sprite.getGlobalBounds();
+}
+
+Vector2f Player::getCenter()
+{
+	return m_Position;
+}
+
+Vector2f Player::getOrigin()
+{
+	return m_Sprite.getOrigin();
+}
+
+float Player::getRotation()
+{
+	return m_Sprite.getRotation();
+}
+
+Sprite Player::getSprite()
+{
+	return m_Sprite;
+}
+
+int Player::getHealth()
+{
+	return m_Health;
+}
+
+int Player::getRoom()
+{
+	return m_Room;
 }
 
 void Player::moveLeft()
@@ -117,30 +162,6 @@ void Player::stopDown()
 void Player::update(float elapsedTime, Vector2i mousePosition)
 {
 	
-	timeElapsed = elapsedTime;
-
-	if (!m_UpPressed || !m_DownPressed || !m_LeftPressed || !m_RightPressed) // if player is not moving set sprite to standing frame in last direction faced
-	{
-		if (direction == Vector2f(1, 0))
-		{
-			setSpriteFromSheet(IntRect(0, 0, 576, 64));
-		}
-
-		if (direction == Vector2f(-1, 0))
-		{
-			setSpriteFromSheet(IntRect(0, 128, 576, 64));
-		}
-
-		if (direction == Vector2f(0, -1))
-		{
-			setSpriteFromSheet(IntRect(0, 192, 576, 64));
-		}
-
-		if (direction == Vector2f(0, 1))
-		{
-			setSpriteFromSheet(IntRect(0, 64, 576, 64));
-		}
-	}
 
 	if (m_UpPressed)
 	{
@@ -185,13 +206,8 @@ void Player::update(float elapsedTime, Vector2i mousePosition)
 		mousePosition.x - m_Resolution.x / 2)
 		* 180) / 3.141;
 
-	m_Speed = START_SPEED;
-
-	if (m_LeftPressed && m_DownPressed || m_LeftPressed && m_UpPressed || // player was moving too quick diagonally
-		m_RightPressed && m_DownPressed || m_RightPressed && m_UpPressed)
-	{
-		m_Speed = m_Speed * 0.75;
-	}
+	m_Sprite.setRotation(angle);
+}
 
 }
 
@@ -205,9 +221,20 @@ void Player::upgradeHealth()
 {
 	// 20% max health upgrade
 	m_MaxHealth += (START_HEALTH * .2);
-
 }
 
+void Player::upgradeStamina()
+{
+	// 50% max Stamina upgrade
+	//50% because dodging takes 50 stamina so you'd get one more dodge
+	m_MaxStamina += (START_STAMINA * .5);
+}
+
+void Player::upgradeMana()
+{
+	// 20% max Mana upgrade
+	m_MaxMana += (START_MANA * .2);
+}
 void Player::increaseHealthLevel(int amount)
 {
 	m_Health += amount;
@@ -219,8 +246,31 @@ void Player::increaseHealthLevel(int amount)
 	}
 }
 
+void Player::increaseStaminaLevel(int amount)
+{
+	m_Stamina += amount;
+
+	// But not beyond the maximum
+	if (m_Stamina > m_MaxStamina)
+	{
+		m_Stamina = m_MaxStamina;
+	}
+}
+
+void Player::increaseManaLevel(int amount)
+{
+	m_Mana += amount;
+
+	// But not beyond the maximum
+	if (m_Mana > m_MaxMana)
+	{
+		m_Mana = m_MaxMana;
+	}
+}
+
 void Player::changeGun(String gun)
 {
+	//We can use this code for swords / wands later
 	if (gun == "shotgun")
 	{
 		m_Sprite = Sprite(TextureHolder::GetTexture(
