@@ -130,22 +130,22 @@ void Player::update(float elapsedTime, Vector2i mousePosition)
 
 	if (!m_UpPressed || !m_DownPressed || !m_LeftPressed || !m_RightPressed) // if player is not moving set sprite to standing frame in last direction faced
 	{
-		if (direction == Vector2f(1, 0))
+		if (direction == Vector2f(0, 1)) // up
 		{
 			setSpriteFromSheet(IntRect(0, 0, 576, 64));
 		}
 
-		if (direction == Vector2f(-1, 0))
+		if (direction == Vector2f(0, -1)) // down
 		{
 			setSpriteFromSheet(IntRect(0, 128, 576, 64));
 		}
 
-		if (direction == Vector2f(0, -1))
+		if (direction == Vector2f(-1, 0)) // right
 		{
 			setSpriteFromSheet(IntRect(0, 192, 576, 64));
 		}
 
-		if (direction == Vector2f(0, 1))
+		if (direction == Vector2f(1, 0)) // left
 		{
 			setSpriteFromSheet(IntRect(0, 64, 576, 64));
 		}
@@ -197,19 +197,45 @@ void Player::update(float elapsedTime, Vector2i mousePosition)
 		}
 	}
 
-	if (m_UpPressed || m_DownPressed || m_LeftPressed || m_RightPressed) // animate sprite if player is moving
-	{
-		moveTextureRect();
-	}
-
 	dodge();
 	
 	m_Sprite.setPosition(m_Position);
 
-	// Calculate the angle the player is facing
+	// Calculate the angle between mouse and center of screen
 	float angle = (atan2(mousePosition.y - m_Resolution.y / 2,
 		mousePosition.x - m_Resolution.x / 2)
 		* 180) / 3.141;
+
+	if (angle < 0) angle += 360;
+
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Right)) // make player face mouse when holding righ click
+	{
+		if (angle >= 45 && angle < 135)
+		{
+			// facing down
+			setSpriteFromSheet({ 0, 128, 576, 64 });
+		}
+		else if (angle >= 135 && angle < 225)
+		{
+			// facing left
+			setSpriteFromSheet({ 0, 64, 576, 64 });
+		}
+		else if (angle >= 225 && angle < 315)
+		{
+			// facing up
+			setSpriteFromSheet({ 0, 0, 576, 64 });
+		}
+		else
+		{
+			// facing right
+			setSpriteFromSheet({ 0, 192, 576, 64 });
+		}
+	}
+
+	if (m_UpPressed || m_DownPressed || m_LeftPressed || m_RightPressed) // animate sprite if player is moving
+	{
+		moveTextureRect();
+	}
 
 }
 

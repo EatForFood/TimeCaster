@@ -55,14 +55,14 @@ int CreateBackground::createLandscape()
 	rVA.setPrimitiveType(Quads);
 
 	// Set the size of the vertex array
-	rVA.resize(600 * 600 * VERTS_IN_QUAD);
+	rVA.resize(100 * 100 * VERTS_IN_QUAD);
 
 	// Start at the beginning of the vertex array
 
 	// Grass and cliffs
-	for (int x = 0; x < 400; x++)
+	for (int x = 0; x < (rVA.getVertexCount() / 500) - 10; x++)
 	{
-		for (int y = 0; y < 400; y++)
+		for (int y = 0; y < (rVA.getVertexCount() / 500) - 10; y++)
 		{
 			if (y <= 1 || x <= 1) // place cliffs at edges of map
 			{
