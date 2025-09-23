@@ -72,14 +72,9 @@ Sprite Entity::getSprite()
 	return m_Sprite;
 }
 
-void Entity::setSpriteFromSheet(int row, int col, int frameWidth, int frameHeight)
+void Entity::setSpriteFromSheet(int x, int y, int spriteWidth, int spriteHeight)
 {
-    m_Sprite.setTextureRect(sf::IntRect(
-        col,   // x offset
-        row,  // y offset
-        frameWidth,         // width
-        frameHeight         // height
-    ));
+    m_Sprite.setTextureRect(sf::IntRect(x, y, spriteWidth, spriteHeight));
 }
 
 void Entity::update(float elapsedTime, Player player, Vector2i mousePosition)

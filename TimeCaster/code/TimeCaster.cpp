@@ -648,15 +648,15 @@ int main()
 				}
 			}
 
-			// Draw the player and entities in order of y values
+			// Add entities to drawables vector
 			for (auto& entity : landscape.getEntities()) {
 				drawables.push_back({ entity.getPosition().y, entity.getSprite() });
 			}
 
-			// Add player
+			// Add player to drawables vector
 			drawables.push_back({ player.getY(), player.getSpriteFromSheet()});
 
-			// Sort by y value (ascending = top to bottom)
+			// Sort by y value using lambda function (ascending = top to bottom)
 			std::sort(drawables.begin(), drawables.end(),
 				[](const DrawableItem& a, const DrawableItem& b) {
 					return a.y < b.y;

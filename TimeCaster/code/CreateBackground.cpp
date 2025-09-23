@@ -112,17 +112,6 @@ int CreateBackground::createLandscape()
 		placeTile(x, 15, 64, 1076);
 	}
 
-	/*
-	placeTree1(5,5);
-	placeTree2(8, 5);
-	placeTree3(5, 8); 
-	placeTree4(5, 14);
-	placeTree5(14, 7);
-	placeTree6(18, 7);
-	placeTree7(22, 7);
-	placeTree8(29, 7);
-	*/
-
 	if (setUp)
 	{
 		CreateEntity("tree1", 5, 5);
@@ -139,6 +128,7 @@ int CreateBackground::createLandscape()
 	return TILE_SIZE;
 }
 
+// These trees can be placed in places the player cannot reach for background scenary
 void CreateBackground::placeTree1(int x, int y) {
 
 	placeTile(x, y, 128, 832);
