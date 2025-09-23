@@ -11,7 +11,7 @@ private:
 	const float START_HEALTH = 100;
 	const float START_MANA = 100;
 	const float START_STAMINA = 100;
-	const float START_STAMINA_RECHARGE = 0.33;
+	const float START_STAMINA_RECHARGE = 0.05;
 
 	// Which directions is the player currently moving in
 	bool m_UpPressed;

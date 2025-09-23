@@ -69,11 +69,16 @@ Time Player::getLastHitTime()
 
 bool Player::hit(Time timeHit)
 {
-	if (timeHit.asMilliseconds() - m_LastHit.asMilliseconds() > 200)// 2 tenths of second
+	if (isDodging) // can't be hit while dodging
 	{
-		//Also perhaps add i frames when dodging
+		 m_LastHit = timeHit; // if you successfully dodge an attack it resets the hit timer so you can't be hit again straight away
+		return false;
+	}
+	else if (timeHit.asMilliseconds() - m_LastHit.asMilliseconds() > 200)// 2 tenths of second
+	{
+		
 		m_LastHit = timeHit;
-		m_Health -= 10/*Change this to be varible?*/;
+		m_Health -= 10; //Change this to be varible?
 		return true;
 	}
 	else
@@ -150,6 +155,15 @@ void Player::update(float elapsedTime, Vector2i mousePosition)
 			setSpriteFromSheet(IntRect(0, 64, 576, 64));
 		}
 	}
+	
+	if (!m_UpPressed && !m_DownPressed && !m_LeftPressed && !m_RightPressed && m_Stamina < m_MaxStamina  )
+	{
+		m_Stamina += m_StaminaRecharge; //recharge stamina faster when not moving
+	}
+	else if (m_Stamina < m_MaxStamina) {
+		m_Stamina += m_StaminaRecharge * 0.33; //recharge stamina slower when moving
+	}
+	
 
 	if (m_UpPressed)
 	{
@@ -253,9 +267,9 @@ void Player::upgradeHealth()
 
 void Player::upgradeStamina()
 {
-	// 50% max Stamina upgrade
-	//50% because dodging takes 50 stamina so you'd get one more dodge
-	m_MaxStamina += (START_STAMINA * .5);
+	// 25% max Stamina upgrade
+	//25% because dodging takes 50 stamina so you'd get half of one more dodge
+	m_MaxStamina += (START_STAMINA * .25);
 }
 
 void Player::upgradeMana()
@@ -345,9 +359,9 @@ void Player::startDodge() {
 
 
 	m_Speed = m_Speed * 2;
-	m_Stamina -= 50;  //maybe make dodge cost variable later
+	m_Stamina -= 50;  
 
-	//maybe add i frames later
+
 
 }
 
