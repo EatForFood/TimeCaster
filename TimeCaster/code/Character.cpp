@@ -41,6 +41,11 @@ float Character::getMaxHealth()
 	return m_MaxHealth;
 }
 
+float Character::getY()
+{
+	return m_Position.y - 64;
+}
+
 void Character::setSpriteFromSheet(sf::IntRect textureBox) // set sprite
 {
 	int tile_size = 64;

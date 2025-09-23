@@ -23,6 +23,7 @@
     <ClInclude Include="code\Character.h" />
     <ClInclude Include="code\CreateBackground.h" />
     <ClInclude Include="code\Decal.h" />
+    <ClInclude Include="code\Entity.h" />
     <ClInclude Include="code\Gun.h" />
     <ClInclude Include="code\Pickup.h" />
     <ClInclude Include="code\Player.h" />
@@ -35,6 +36,7 @@
     <ClCompile Include="code\Character.cpp" />
     <ClCompile Include="code\CreateBackground.cpp" />
     <ClCompile Include="code\Decal.cpp" />
+    <ClCompile Include="code\Entity.cpp" />
     <ClCompile Include="code\Gun.cpp" />
     <ClCompile Include="code\Pickup.cpp" />
     <ClCompile Include="code\Player.cpp" />

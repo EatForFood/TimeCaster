@@ -98,6 +98,8 @@ public:
 	// Where is the character
 	FloatRect getPosition();
 
+	float getY();
+
 	// Where is the center of the character
 	Vector2f getCenter();
 

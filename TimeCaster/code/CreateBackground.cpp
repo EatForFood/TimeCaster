@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include "TimeCaster.h"
+#include "Entity.h"
 #include "CreateBackground.h"
 
 CreateBackground::CreateBackground()
@@ -111,6 +112,7 @@ int CreateBackground::createLandscape()
 		placeTile(x, 15, 64, 1076);
 	}
 
+	/*
 	placeTree1(5,5);
 	placeTree2(8, 5);
 	placeTree3(5, 8); 
@@ -119,6 +121,20 @@ int CreateBackground::createLandscape()
 	placeTree6(18, 7);
 	placeTree7(22, 7);
 	placeTree8(29, 7);
+	*/
+
+	if (setUp)
+	{
+		CreateEntity("tree1", 5, 5);
+		CreateEntity("tree2", 8, 5);
+		CreateEntity("tree3", 5, 8);
+		CreateEntity("tree4", 5, 14);
+		CreateEntity("tree5", 14, 7);
+		CreateEntity("tree6", 18, 7);
+		CreateEntity("tree7", 22, 7);
+		CreateEntity("tree8", 29, 7);
+		setUp = false;
+	}
 
 	return TILE_SIZE;
 }
@@ -180,6 +196,14 @@ void CreateBackground::placeTree8(int x, int y) {
 	placeTile(x, y - 4, 576, 884);
 }
 
+void CreateBackground::CreateEntity(String type, int x, int y) {
+	Entity entity;
+	float ix = (x - y) * (TILE_SIZE / 2);
+	float iy = (x + y) * (TILE_SIZE / 4);
+	entity.spawn(type, ix, iy);
+	entities.push_back(entity);
+}
+
 
 VertexArray CreateBackground::getLandscape() {
 	
@@ -189,4 +213,9 @@ VertexArray CreateBackground::getLandscape() {
 std::vector<Text> CreateBackground::getDebugText() {
 
 	return debugText;
+}
+
+std::vector<Entity> CreateBackground::getEntities() {
+
+	return entities;
 }

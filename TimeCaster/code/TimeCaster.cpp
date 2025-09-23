@@ -12,6 +12,7 @@
 #include "Windows.h"
 #include "CreateBackground.h"
 #include "SoundManager.h"
+#include "Entity.h"
 
 using namespace sf;
 using namespace std;
@@ -274,6 +275,14 @@ int main()
 
 	// How often (in frames) should we update the HUD
 	int fpsMeasurementFrameInterval = 1000;
+
+	// struct to store y values and sprites together
+	struct DrawableItem {
+		float y;
+		sf::Sprite sprite;
+	};
+
+	std::vector<DrawableItem> drawables;
 
 	// The main game loop
 	while (window.isOpen())
@@ -639,8 +648,27 @@ int main()
 				}
 			}
 
-			// Draw the player
-			window.draw(player.getSpriteFromSheet());
+			// Draw the player and entities in order of y values
+			for (auto& entity : landscape.getEntities()) {
+				drawables.push_back({ entity.getPosition().y, entity.getSprite() });
+			}
+
+			// Add player
+			drawables.push_back({ player.getY(), player.getSpriteFromSheet()});
+
+			// Sort by y value (ascending = top to bottom)
+			std::sort(drawables.begin(), drawables.end(),
+				[](const DrawableItem& a, const DrawableItem& b) {
+					return a.y < b.y;
+				}
+			);
+
+			// Draw in sorted order
+			for (auto& item : drawables) {
+				window.draw(item.sprite);
+			}
+
+			drawables.clear();
 
 			// Draw the pickups is currently spawned
 			if (ammoPickup.isSpawned())

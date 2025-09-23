@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include "Entity.h"
 
 using namespace sf;
 
@@ -16,6 +17,10 @@ private:
 	Font debugFont;
 	std::vector<Text> debugText;
 
+	std::vector<Entity> entities;
+
+	bool setUp = true;
+
 public:
 
 	CreateBackground();
@@ -25,6 +30,10 @@ public:
 	VertexArray getLandscape();
 
 	std::vector<Text> getDebugText();
+
+	void CreateEntity(String type, int x, int y);
+
+	std::vector<Entity> getEntities();
 
 	int createLandscape();
 

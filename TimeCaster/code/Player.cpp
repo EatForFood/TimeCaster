@@ -21,7 +21,7 @@ Player::Player()
 
 	// Set the origin of the sprite to the centre, 
 	// for smooth rotation
-	m_Sprite.setOrigin(18, 18);
+	m_Sprite.setOrigin(32, 64);
 
 }
 
@@ -156,7 +156,7 @@ void Player::update(float elapsedTime, Vector2i mousePosition)
 		m_PositionLast = m_Position;
 		m_Position.y -= m_Speed * elapsedTime;
 		setSpriteFromSheet(IntRect(0, 0, 576, 64)); // set sprite depending on direction
-		direction = Vector2f(1, 0);
+		direction = Vector2f(0, 1);
 	}
 
 	if (m_DownPressed)
@@ -164,7 +164,7 @@ void Player::update(float elapsedTime, Vector2i mousePosition)
 		m_PositionLast = m_Position;
 		m_Position.y += m_Speed * elapsedTime;
 		setSpriteFromSheet(IntRect(0, 128, 576, 64));
-		direction = Vector2f(-1, 0);
+		direction = Vector2f(0, -1);
 	}
 
 	if (m_RightPressed)
@@ -172,7 +172,7 @@ void Player::update(float elapsedTime, Vector2i mousePosition)
 		m_PositionLast = m_Position;
 		m_Position.x += m_Speed * elapsedTime;
 		setSpriteFromSheet(IntRect(0, 192, 576, 64));
-		direction = Vector2f(0, -1);
+		direction = Vector2f(1, 0);
 	}
 
 	if (m_LeftPressed)
@@ -180,7 +180,7 @@ void Player::update(float elapsedTime, Vector2i mousePosition)
 		m_PositionLast = m_Position;
 		m_Position.x -= m_Speed * elapsedTime;
 		setSpriteFromSheet(IntRect(0, 64, 576, 64));
-		direction = Vector2f(0, 1);
+		direction = Vector2f(-1, 0);
 	}
 
 	if (!isDodging)
