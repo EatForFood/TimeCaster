@@ -36,8 +36,8 @@ protected:
 	float m_Speed;
 
 	// How much health the character can have & does have
-	int m_Health;
-	int m_MaxHealth;
+	float m_Health;
+	float m_MaxHealth;
 
 	// Where is & was the character
 	Vector2f m_Position;
@@ -108,7 +108,8 @@ public:
 	float getRotation();
 
 	// How much health has the character currently got?
-	int getHealth();
+	float getHealth();
+	float getMaxHealth();
 
 
 };

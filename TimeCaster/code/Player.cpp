@@ -23,7 +23,6 @@ Player::Player()
 	// for smooth rotation
 	m_Sprite.setOrigin(18, 18);
 
-	m_Gun = 0;
 }
 
 void Player::resetPlayerStats()
@@ -84,41 +83,6 @@ bool Player::hit(Time timeHit)
 
 }
 
-FloatRect Player::getPosition()
-{
-	return m_Sprite.getGlobalBounds();
-}
-
-Vector2f Player::getCenter()
-{
-	return m_Position;
-}
-
-Vector2f Player::getOrigin()
-{
-	return m_Sprite.getOrigin();
-}
-
-float Player::getRotation()
-{
-	return m_Sprite.getRotation();
-}
-
-Sprite Player::getSprite()
-{
-	return m_Sprite;
-}
-
-int Player::getHealth()
-{
-	return m_Health;
-}
-
-int Player::getRoom()
-{
-	return m_Room;
-}
-
 void Player::moveLeft()
 {
 	m_LeftPressed = true;
@@ -161,14 +125,37 @@ void Player::stopDown()
 
 void Player::update(float elapsedTime, Vector2i mousePosition)
 {
+
+	timeElapsed = elapsedTime;
 	
+	if (!m_UpPressed || !m_DownPressed || !m_LeftPressed || !m_RightPressed) // if player is not moving set sprite to standing frame in last direction faced
+	{
+		if (direction == Vector2f(1, 0))
+		{
+			setSpriteFromSheet(IntRect(0, 0, 576, 64));
+		}
+
+		if (direction == Vector2f(-1, 0))
+		{
+			setSpriteFromSheet(IntRect(0, 128, 576, 64));
+		}
+
+		if (direction == Vector2f(0, -1))
+		{
+			setSpriteFromSheet(IntRect(0, 192, 576, 64));
+		}
+
+		if (direction == Vector2f(0, 1))
+		{
+			setSpriteFromSheet(IntRect(0, 64, 576, 64));
+		}
+	}
 
 	if (m_UpPressed)
 	{
 		m_PositionLast = m_Position;
 		m_Position.y -= m_Speed * elapsedTime;
 		setSpriteFromSheet(IntRect(0, 0, 576, 64)); // set sprite depending on direction
-		moveTextureRect(); // move to next frame
 		direction = Vector2f(1, 0);
 	}
 
@@ -177,7 +164,6 @@ void Player::update(float elapsedTime, Vector2i mousePosition)
 		m_PositionLast = m_Position;
 		m_Position.y += m_Speed * elapsedTime;
 		setSpriteFromSheet(IntRect(0, 128, 576, 64));
-		moveTextureRect();
 		direction = Vector2f(-1, 0);
 	}
 
@@ -186,7 +172,6 @@ void Player::update(float elapsedTime, Vector2i mousePosition)
 		m_PositionLast = m_Position;
 		m_Position.x += m_Speed * elapsedTime;
 		setSpriteFromSheet(IntRect(0, 192, 576, 64));
-		moveTextureRect();
 		direction = Vector2f(0, -1);
 	}
 
@@ -195,19 +180,28 @@ void Player::update(float elapsedTime, Vector2i mousePosition)
 		m_PositionLast = m_Position;
 		m_Position.x -= m_Speed * elapsedTime;
 		setSpriteFromSheet(IntRect(0, 64, 576, 64));
-		moveTextureRect();
 		direction = Vector2f(0, 1);
 	}
 
+	m_Speed = START_SPEED;
+
+	if (m_UpPressed && m_RightPressed || m_UpPressed && m_LeftPressed || 
+		m_DownPressed && m_RightPressed || m_DownPressed && m_LeftPressed) // player moved too fast diagonally
+	{
+		m_Speed = m_Speed * 0.75;
+	}
+
+	if (m_UpPressed || m_DownPressed || m_LeftPressed || m_RightPressed) // animate sprite if player is moving
+	{
+		moveTextureRect();
+	}
+	
 	m_Sprite.setPosition(m_Position);
 
 	// Calculate the angle the player is facing
 	float angle = (atan2(mousePosition.y - m_Resolution.y / 2,
 		mousePosition.x - m_Resolution.x / 2)
 		* 180) / 3.141;
-
-	m_Sprite.setRotation(angle);
-}
 
 }
 
@@ -268,39 +262,40 @@ void Player::increaseManaLevel(int amount)
 	}
 }
 
-void Player::changeGun(String gun)
+float Player::getMana()
 {
-	//We can use this code for swords / wands later
-	if (gun == "shotgun")
-	{
-		m_Sprite = Sprite(TextureHolder::GetTexture(
-			"graphics/player_shotgun.png"));
-		m_Sprite.setOrigin(31, 18);
-		m_Gun = 1;
-	}
-	else if (gun == "rifle")
-	{
-		m_Sprite = Sprite(TextureHolder::GetTexture(
-			"graphics/player_rifle.png"));
-		m_Sprite.setOrigin(27, 18);
-		m_Gun = 2;
-	}
-	else
-	{
-		m_Sprite = Sprite(TextureHolder::GetTexture(
-			"graphics/player_pistol.png"));
-		m_Sprite.setOrigin(18, 18);
-		m_Gun = 0;
-	}
+	return m_Mana;
 }
 
-int Player::getGun()
+float Player::getMaxMana()
 {
-	return m_Gun;
+	return m_MaxMana;
 }
 
-void Player::updateSprite()
+float Player::getStamina()
 {
+	return m_Stamina;
+}
 
+float Player::getMaxStamina()
+{
+	return m_MaxStamina;
+}
+
+// Multiplies the player's speed to simulate dodging
+void Player::startDodge() {
+
+
+	m_Speed = m_Speed * 2;
+	m_Stamina -= 50;  //maybe make dodge cost variable later
+
+	//maybe add i frames later
+
+}
+
+// Returns player's speed to original value to stop dodge
+void Player::stopDodge() {
+
+	m_Speed = m_Speed / 2;
 }
 

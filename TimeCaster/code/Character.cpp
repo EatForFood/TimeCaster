@@ -21,11 +21,6 @@ float Character::getRotation()
 	return m_Sprite.getRotation();
 }
 
-int Character::getHealth()
-{
-	return m_Health;
-}
-
 Sprite Character::getSprite()
 {
 	return m_Sprite;
@@ -34,6 +29,16 @@ Sprite Character::getSprite()
 Sprite Character::getSpriteFromSheet()
 {
 	return m_Sprite;
+}
+
+float Character::getHealth()
+{
+	return m_Health;
+}
+
+float Character::getMaxHealth()
+{
+	return m_MaxHealth;
 }
 
 void Character::setSpriteFromSheet(sf::IntRect textureBox) // set sprite
