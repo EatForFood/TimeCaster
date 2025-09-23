@@ -9,14 +9,14 @@ Player::Player()
 
 	// Associate a texture with the sprite
 	// !!Watch this space!!
-	m_Sprite = Sprite(TextureHolder::GetTexture(
-		"graphics/player_pistol.png"));
+	//m_Sprite = Sprite(TextureHolder::GetTexture("graphics/player_pistol.png"));
+
+	m_Sprite = Sprite(TextureHolder::GetTexture("graphics/player/playerWalk.png"));
 
 	// Set the origin of the sprite to the centre, 
 	// for smooth rotation
 	m_Sprite.setOrigin(18, 18);
 
-	m_Room = 1; // set start room
 	m_Gun = 0;
 
 }
@@ -74,41 +74,6 @@ bool Player::hit(Time timeHit)
 
 }
 
-FloatRect Player::getPosition()
-{
-	return m_Sprite.getGlobalBounds();
-}
-
-Vector2f Player::getCenter()
-{
-	return m_Position;
-}
-
-Vector2f Player::getOrigin()
-{
-	return m_Sprite.getOrigin();
-}
-
-float Player::getRotation()
-{
-	return m_Sprite.getRotation();
-}
-
-Sprite Player::getSprite()
-{
-	return m_Sprite;
-}
-
-int Player::getHealth()
-{
-	return m_Health;
-}
-
-int Player::getRoom()
-{
-	return m_Room;
-}
-
 void Player::moveLeft()
 {
 	m_LeftPressed = true;
@@ -152,29 +117,65 @@ void Player::stopDown()
 void Player::update(float elapsedTime, Vector2i mousePosition)
 {
 	
+	timeElapsed = elapsedTime;
+
+	if (!m_UpPressed || !m_DownPressed || !m_LeftPressed || !m_RightPressed) // if player is not moving set sprite to standing frame in last direction faced
+	{
+		if (direction == Vector2f(1, 0))
+		{
+			setSpriteFromSheet(IntRect(0, 0, 576, 64));
+		}
+
+		if (direction == Vector2f(-1, 0))
+		{
+			setSpriteFromSheet(IntRect(0, 128, 576, 64));
+		}
+
+		if (direction == Vector2f(0, -1))
+		{
+			setSpriteFromSheet(IntRect(0, 192, 576, 64));
+		}
+
+		if (direction == Vector2f(0, 1))
+		{
+			setSpriteFromSheet(IntRect(0, 64, 576, 64));
+		}
+	}
 
 	if (m_UpPressed)
 	{
 		m_PositionLast = m_Position;
 		m_Position.y -= m_Speed * elapsedTime;
+		setSpriteFromSheet(IntRect(0, 0, 576, 64)); // set sprite depending on direction
+		moveTextureRect(); // move to next frame
+		direction = Vector2f(1, 0);
 	}
 
 	if (m_DownPressed)
 	{
 		m_PositionLast = m_Position;
 		m_Position.y += m_Speed * elapsedTime;
+		setSpriteFromSheet(IntRect(0, 128, 576, 64));
+		moveTextureRect();
+		direction = Vector2f(-1, 0);
 	}
 
 	if (m_RightPressed)
 	{
 		m_PositionLast = m_Position;
 		m_Position.x += m_Speed * elapsedTime;
+		setSpriteFromSheet(IntRect(0, 192, 576, 64));
+		moveTextureRect();
+		direction = Vector2f(0, -1);
 	}
 
 	if (m_LeftPressed)
 	{
 		m_PositionLast = m_Position;
 		m_Position.x -= m_Speed * elapsedTime;
+		setSpriteFromSheet(IntRect(0, 64, 576, 64));
+		moveTextureRect();
+		direction = Vector2f(0, 1);
 	}
 
 	m_Sprite.setPosition(m_Position);
@@ -184,7 +185,14 @@ void Player::update(float elapsedTime, Vector2i mousePosition)
 		mousePosition.x - m_Resolution.x / 2)
 		* 180) / 3.141;
 
-	m_Sprite.setRotation(angle);
+	m_Speed = START_SPEED;
+
+	if (m_LeftPressed && m_DownPressed || m_LeftPressed && m_UpPressed || // player was moving too quick diagonally
+		m_RightPressed && m_DownPressed || m_RightPressed && m_UpPressed)
+	{
+		m_Speed = m_Speed * 0.75;
+	}
+
 }
 
 void Player::upgradeSpeed()
@@ -239,5 +247,10 @@ void Player::changeGun(String gun)
 int Player::getGun()
 {
 	return m_Gun;
+}
+
+void Player::updateSprite()
+{
+
 }
 

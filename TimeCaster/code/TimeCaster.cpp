@@ -734,7 +734,7 @@ int main()
 			}
 
 			// Draw the player
-			window.draw(player.getSprite());
+			window.draw(player.getSpriteFromSheet());
 
 			// Draw the pickups is currently spawned
 			if (ammoPickup.isSpawned())
