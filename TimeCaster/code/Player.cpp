@@ -133,7 +133,16 @@ void Player::stopDown()
 void Player::update(float elapsedTime, Vector2i mousePosition)
 {
 
-	timeElapsed = elapsedTime;
+	timeElapsed = elapsedTime; 
+
+	if (!m_UpPressed && !m_DownPressed && !m_LeftPressed && !m_RightPressed)
+	{
+		m_IsMoving = false;
+	}
+	else {
+		m_IsMoving = true;
+	}
+
 
 	if (!m_UpPressed || !m_DownPressed || !m_LeftPressed || !m_RightPressed) // if player is not moving set sprite to standing frame in last direction faced
 	{
@@ -158,7 +167,9 @@ void Player::update(float elapsedTime, Vector2i mousePosition)
 		}
 	}
 	
-	if (!m_UpPressed && !m_DownPressed && !m_LeftPressed && !m_RightPressed && m_Stamina < m_MaxStamina  )
+
+
+	if (!m_IsMoving && m_Stamina < m_MaxStamina  )
 	{
 		m_Stamina += m_StaminaRecharge; //recharge stamina faster when not moving
 	}
@@ -167,12 +178,15 @@ void Player::update(float elapsedTime, Vector2i mousePosition)
 	}
 	
 
+		
+
 	if (m_UpPressed)
 	{
 		m_PositionLast = m_Position;
 		m_Position.y -= m_Speed * elapsedTime;
 		setSpriteFromSheet(IntRect(0, 0, 576, 64)); // set sprite depending on direction
 		direction = Vector2f(0, 1);
+	
 	}
 
 	if (m_DownPressed)
@@ -335,7 +349,7 @@ float Player::getMaxStamina()
 void Player::dodge()
 {
 	// Dodging enemies using the space key
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && canDodge) {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && canDodge && m_IsMoving ) {
 		isDodging = true;
 		canDodge = false;
 
