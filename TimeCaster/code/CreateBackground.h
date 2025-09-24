@@ -10,8 +10,12 @@ private:
 
 	const int TILE_SIZE = 64;
 	const int VERTS_IN_QUAD = 4;
-	int currentVertex = 0;
-	VertexArray rVA;
+	int currentVertexBG = 0;
+	int currentVertexFG = 0;
+	VertexArray rVABG; // Vertex array for background tiles
+	VertexArray rVAFG; // Vertex array for forground tiles
+
+	bool forGround = false;
 
 	bool debug;
 	Font debugFont;
@@ -25,9 +29,10 @@ public:
 
 	CreateBackground();
 
-	void placeTile(int x, int y, int texX, int texY);
+	void placeTile(int x, int y, int texX, int texY, bool forGround);
 
-	VertexArray getLandscape();
+	VertexArray getBackground();
+	VertexArray getForground();
 
 	std::vector<Text> getDebugText();
 

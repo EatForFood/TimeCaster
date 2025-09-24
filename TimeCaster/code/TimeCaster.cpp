@@ -680,7 +680,7 @@ int main()
 			window.setView(mainView);
 
 			// Draw the background
-    		window.draw(landscape.getLandscape(), &textureBackground);
+    		window.draw(landscape.getBackground(), &textureBackground);
 
 			for (auto& txt : landscape.getDebugText()) {
 				window.draw(txt);
@@ -737,6 +737,8 @@ int main()
 			{
 				window.draw(manaPickup.getSprite());
 			}
+
+			window.draw(landscape.getForground(), &textureBackground);
 
 			//Draw the crosshair
 			window.draw(spriteCrosshair);
