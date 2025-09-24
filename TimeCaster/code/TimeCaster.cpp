@@ -17,17 +17,30 @@
 using namespace std;
 using namespace sf;
 
-int main()
+string difficultyToString(Difficulty difficulty)
 {
+	switch (difficulty)
+	{
+	case Difficulty::Easy:   return "Easy";
+	case Difficulty::Medium: return "Medium";
+	case Difficulty::Hard:   return "Hard";
+	}
+	return "Unknown";
+}
+
+int main()
+{	
 	// Here is the instance of TextureHolder
 	TextureHolder holder;
 	
 	// The game will always be in one of these states
-	enum class State { MAIN_MENU, OPTIONS, STORY_INTRO, PLAYING, PAUSED, LEVELING_UP, GAME_OVER };
+	enum class State { MAIN_MENU, OPTIONS_MENU, STORY_INTRO, PLAYING, PAUSED, LEVELING_UP, GAME_OVER };
 	
 	// Start with the MAIN_MENU state
 	State state = State::MAIN_MENU;
 
+	// Start with the Easy difficulty state
+	Difficulty difficulty = Difficulty::Easy;
 
 	// Get the screen resolution and create an SFML window
 	Vector2f resolution;
@@ -88,8 +101,8 @@ int main()
 	// FPS float number
 	float fps = 0.f;
 
-	// Boolean for whether the fps should be displayed
-	bool displayFps = true;
+	// Boolean for whether to display the fps
+	bool displayFps = false;
 	
 	// When was the fire button last pressed?
 	Time lastPressed;
@@ -116,33 +129,24 @@ int main()
 	int hiScore = 0;
 
 	// For the home/game over screen
-	Sprite spriteGameOver;
-	Texture textureGameOver = TextureHolder::GetTexture("graphics/Castle (edited).jpg");
-	spriteGameOver.setTexture(textureGameOver);
-	spriteGameOver.setPosition(0, 0);
+	Sprite spriteMainMenu;
+	Texture textureMainMenu = TextureHolder::GetTexture("graphics/Castle (edited).jpg");
+	spriteMainMenu.setTexture(textureMainMenu);
+	spriteMainMenu.setPosition(0, 0);
 
 	// Create a view for the HUD
 	View hudView(sf::FloatRect(0, 0, resolution.x, resolution.y));
-
-	/*
-	// Create a sprite for the ammo icon
-	Sprite spriteAmmoIcon;
-	Texture textureAmmoIcon = TextureHolder::GetTexture("graphics/ammo_icon.png");
-	spriteAmmoIcon.setTexture(textureAmmoIcon);
-	spriteAmmoIcon.setPosition(20, 980);
-	*/
 
 	// Main menu font
 	Font font;
 	font.loadFromFile("fonts/PixelifySans-Bold.ttf");
 
 	// Paused
-	Text pausedText;
-	pausedText.setFont(font);
-	pausedText.setCharacterSize(155);
+	Text pausedText("Press enter \nto continue", font, 155);
 	pausedText.setFillColor(Color::White);
-	pausedText.setPosition(400, 400);
-	pausedText.setString("Press enter \nto continue");
+	FloatRect textBounds = pausedText.getLocalBounds();
+	Vector2f viewCentre = mainView.getCenter();
+	pausedText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 400);
 
 	// Levelling up
 	Text levelUpText;
@@ -175,28 +179,12 @@ int main()
 		inputFile.close();
 	}
 
-	// Buy Shotgun Text
-	Text buyShotgunText;
-	buyShotgunText.setFont(font);
-	buyShotgunText.setCharacterSize(25);
-	buyShotgunText.setFillColor(Color::White);
-	buyShotgunText.setPosition(960,540);
-	buyShotgunText.setString("E: Buy Shotgun 50 pts");
-
-	// Buy Rifle Text
-	Text buyRifleText;
-	buyRifleText.setFont(font);
-	buyRifleText.setCharacterSize(25);
-	buyRifleText.setFillColor(Color::White);
-	buyRifleText.setPosition(960, 540);
-	buyRifleText.setString("E: Buy Assault Rifle 100 pts");
-
 	// FPS text
 	Text fpsText;
 	fpsText.setFont(font);
 	fpsText.setCharacterSize(20);
 	fpsText.setFillColor(Color::White);
-	fpsText.setPosition(1850, 5);
+	fpsText.setPosition(1800, 5);
 
 	// Health bar
 	RectangleShape healthBar;
@@ -231,44 +219,136 @@ int main()
 	// Play button
 	RectangleShape playButton;
 	playButton.setFillColor(Color::Green);
-	playButton.setPosition(10, 10);
-	playButton.setSize(Vector2f(100, 40));
+	playButton.setPosition(200, 210);
+	playButton.setSize(Vector2f(300, 80));
 
 	// Play button text
-	Text playButtonText;
-	playButtonText.setFont(font);
-	playButtonText.setCharacterSize(20);
+	Text playButtonText("Play Game", font, 40);
 	playButtonText.setFillColor(Color::Black);
-	playButtonText.setPosition(10, 20);
-	playButtonText.setString("Play Game");
+	textBounds = playButtonText.getLocalBounds();
+	float x = playButton.getPosition().x + (playButton.getSize().x / 2.f) - (textBounds.width / 2.f);
+	float y = playButton.getPosition().y + (playButton.getSize().y / 2.f) - (textBounds.height / 2.f);
+	playButtonText.setPosition(x - textBounds.left, y - textBounds.top);
 
 	// Options button
 	RectangleShape optionsButton;
 	optionsButton.setFillColor(Color::Green);
-	optionsButton.setPosition(10, 60);
-	optionsButton.setSize(Vector2f(100, 40));
+	optionsButton.setPosition(200, 320);
+	optionsButton.setSize(Vector2f(300, 80));
 
 	// options button text
-	Text optionsButtonText;
-	optionsButtonText.setFont(font);
-	optionsButtonText.setCharacterSize(20);
+	Text optionsButtonText("Options", font, 40);
 	optionsButtonText.setFillColor(Color::Black);
-	optionsButtonText.setPosition(10, 70);
-	optionsButtonText.setString("Options");
+	textBounds = optionsButtonText.getLocalBounds();
+	x = optionsButton.getPosition().x + (optionsButton.getSize().x / 2.f) - (textBounds.width / 2.f);
+	y = optionsButton.getPosition().y + (optionsButton.getSize().y / 2.f) - (textBounds.height / 2.f);
+	optionsButtonText.setPosition(x - textBounds.left, y - textBounds.top);
 
 	// Quit game button
 	RectangleShape quitGameButton;
 	quitGameButton.setFillColor(Color::Green);
-	quitGameButton.setPosition(10, 110);
-	quitGameButton.setSize(Vector2f(100, 40));
+	quitGameButton.setPosition(200, 430);
+	quitGameButton.setSize(Vector2f(300, 80));
 
-	// options button text
-	Text quitGameButtonText;
-	quitGameButtonText.setFont(font);
-	quitGameButtonText.setCharacterSize(20);
+	// Quit game button text
+	Text quitGameButtonText("Quit Game", font, 40);
 	quitGameButtonText.setFillColor(Color::Black);
-	quitGameButtonText.setPosition(10, 120);
-	quitGameButtonText.setString("Quit Game");
+	textBounds = quitGameButtonText.getLocalBounds();
+	x = quitGameButton.getPosition().x + (quitGameButton.getSize().x / 2.f) - (textBounds.width / 2.f);
+	y = quitGameButton.getPosition().y + (quitGameButton.getSize().y / 2.f) - (textBounds.height / 2.f);
+	quitGameButtonText.setPosition(x - textBounds.left, y - textBounds.top);
+
+	// Options heading text
+	Text optionsHeadingText("Options", font, 50);
+	optionsHeadingText.setFillColor(Color::White);
+	textBounds = optionsHeadingText.getLocalBounds();
+	viewCentre = mainView.getCenter();
+	optionsHeadingText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 10);
+
+	// Main menu button
+	RectangleShape mainMenuButton;
+	mainMenuButton.setFillColor(Color::Green);
+	mainMenuButton.setSize(Vector2f(300, 80));
+	textBounds = mainMenuButton.getLocalBounds();
+	viewCentre = mainView.getCenter();
+	mainMenuButton.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 975);
+
+	// Main menu button text
+	Text mainMenuButtonText("Main Menu", font, 40);
+	mainMenuButtonText.setFillColor(Color::Black);
+	textBounds = mainMenuButtonText.getLocalBounds();
+	x = mainMenuButton.getPosition().x + (mainMenuButton.getSize().x / 2.f) - (textBounds.width / 2.f);
+	y = mainMenuButton.getPosition().y + (mainMenuButton.getSize().y / 2.f) - (textBounds.height / 2.f);
+	mainMenuButtonText.setPosition(x - textBounds.left, y - textBounds.top);
+
+	// Volume slider text
+	Text volumeSliderText("Volume", font, 40);
+	volumeSliderText.setFillColor(Color::White);
+	textBounds = volumeSliderText.getLocalBounds();
+	viewCentre = mainView.getCenter();
+	volumeSliderText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 150);
+
+	// Slider track
+	RectangleShape track(Vector2f(400, 5));
+	track.setFillColor(sf::Color::White);
+	textBounds = track.getLocalBounds();
+	viewCentre = mainView.getCenter();
+	int trackY = 250;
+	track.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, trackY);
+
+	// Slider handle
+	CircleShape handle(10);
+	handle.setFillColor(Color::Red);
+	handle.setOrigin(10, 10); // Centre the circle
+	handle.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, trackY + 2); // Start at min volume
+
+	// Display FPS button
+	RectangleShape displayFPSButton;
+	if (displayFps) {
+		displayFPSButton.setFillColor(Color::Green);
+	}
+	else {
+		displayFPSButton.setFillColor(Color::Red);
+	}
+	displayFPSButton.setSize(Vector2f(300, 80));
+	textBounds = displayFPSButton.getLocalBounds();
+	viewCentre = mainView.getCenter();
+	displayFPSButton.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 300);
+
+	// Display FPS button text
+	Text displayFPSButtonText("Display FPS", font, 40);
+	displayFPSButtonText.setFillColor(Color::Black);
+	textBounds = displayFPSButtonText.getLocalBounds();
+	x = displayFPSButton.getPosition().x + (displayFPSButton.getSize().x / 2.f) - (textBounds.width / 2.f);
+	y = displayFPSButton.getPosition().y + (displayFPSButton.getSize().y / 2.f) - (textBounds.height / 2.f);
+	displayFPSButtonText.setPosition(x - textBounds.left, y - textBounds.top);
+
+	// Display difficulty button
+	RectangleShape difficultyButton;
+	if (difficulty == Difficulty::Easy)
+	{
+		difficultyButton.setFillColor(Color::Green);
+	}
+	else if (difficulty == Difficulty::Medium)
+	{
+		difficultyButton.setFillColor(Color::Yellow);
+	}
+	else
+	{
+		difficultyButton.setFillColor(Color::Red);
+	}
+	difficultyButton.setSize(Vector2f(400, 80));
+	textBounds = difficultyButton.getLocalBounds();
+	viewCentre = mainView.getCenter();
+	difficultyButton.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 400);
+
+	// Display difficulty button text
+	Text difficultyButtonText("Difficulty: " + difficultyToString(difficulty), font, 40);
+	difficultyButtonText.setFillColor(Color::Black);
+	textBounds = difficultyButtonText.getLocalBounds();
+	x = difficultyButton.getPosition().x + (difficultyButton.getSize().x / 2.f) - (textBounds.width / 2.f);
+	y = difficultyButton.getPosition().y + (difficultyButton.getSize().y / 2.f) - (textBounds.height / 2.f);
+	difficultyButtonText.setPosition(x - textBounds.left, y - textBounds.top);
 
 	// When did we last update the HUD?
 	int framesSinceLastHUDUpdate = 0;
@@ -294,7 +374,11 @@ int main()
 	//press numpad0 to reset if you want to test again
 	//remove this in full build
 
+	// Boolean for whether the start game sound has played
 	bool startSoundPlayed = false;
+
+	// Boolean for whether the player is dragging the slider or not
+	bool dragging = false;
 
 	// The main game loop
 	while (window.isOpen())
@@ -315,6 +399,36 @@ int main()
 			// Getting the mouse position and mapping those pixels to coordinates
 			Vector2i mousePos = Mouse::getPosition(window);
 			Vector2f worldPos = window.mapPixelToCoords(mousePos);
+
+			if (event.type == Event::MouseWheelScrolled)
+			{
+				if (event.mouseWheelScroll.wheel == Mouse::VerticalWheel)
+				{
+					if (event.mouseWheelScroll.delta > 0)
+					{
+						mainView.zoom(0.9f);
+					}
+					else if (event.mouseWheelScroll.delta < 0)
+					{
+						mainView.zoom(1.1f);
+					}
+				}
+			}
+
+			if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
+			{
+				if (handle.getGlobalBounds().contains(sf::Vector2f(event.mouseButton.x, event.mouseButton.y)))
+				{
+					dragging = true;
+				}
+
+			}
+
+			// Stop dragging
+			if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left)
+			{
+				dragging = false;
+			}
 
 			if (event.type == Event::KeyPressed || Mouse::isButtonPressed(Mouse::Left))
 			{
@@ -350,15 +464,61 @@ int main()
 				}
 
 				// Player hit the options button
-				else if (optionsButton.getGlobalBounds().contains(worldPos))
+				if (optionsButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU)
 				{
-					state = State::OPTIONS;
+					state = State::OPTIONS_MENU;
 				}
 
 				// Player hit the quit game button
-				else if (quitGameButton.getGlobalBounds().contains(worldPos))
+				if (quitGameButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU)
 				{
 					window.close();
+				}
+
+				// Player hit the main menu button
+				if (mainMenuButton.getGlobalBounds().contains(worldPos) && state == State::OPTIONS_MENU)
+				{
+					state = State::MAIN_MENU;
+				}
+
+				if (mainMenuButton.getGlobalBounds().contains(worldPos) && state == State::PAUSED) 
+				{
+					state = State::MAIN_MENU;
+				}
+
+				// Player hit the display fps button
+				if (displayFPSButton.getGlobalBounds().contains(worldPos) && state == State::OPTIONS_MENU)
+				{
+					if (displayFps) {
+						displayFps = false;
+					}
+					else {
+						displayFps = true;
+					}
+				}
+
+				// Player hit the difficulty button
+				if (difficultyButton.getGlobalBounds().contains(worldPos) && state == State::OPTIONS_MENU)
+				{
+					switch (difficulty) {
+					case Difficulty::Easy:
+						difficulty = Difficulty::Medium;
+						break;
+
+					case Difficulty::Medium:
+						difficulty = Difficulty::Hard;
+						break;
+
+					case Difficulty::Hard:
+						difficulty = Difficulty::Easy;
+						break;
+					}
+
+					difficultyButtonText.setString("Difficulty: " + difficultyToString(difficulty));
+					textBounds = difficultyButtonText.getLocalBounds();
+					x = difficultyButton.getPosition().x + (difficultyButton.getSize().x / 2.f) - (textBounds.width / 2.f);
+					y = difficultyButton.getPosition().y + (difficultyButton.getSize().y / 2.f) - (textBounds.height / 2.f);
+					difficultyButtonText.setPosition(x - textBounds.left, y - textBounds.top);
 				}
 			}
 		} // End event polling
@@ -437,20 +597,41 @@ int main()
 			debugreset = true;
 		}
 
-
 		if (event.key.code == Keyboard::Numpad8 && !debugreset)
 		{
-		
 			player.hit(gameTimeTotal, 10, 200);
 			debugreset = true;
-		
 		}
+
 		if (event.key.code == Keyboard::Numpad9 && !debugreset)
 		{
-
 			player.hit(gameTimeTotal, 30, 1000);
 			debugreset = true;
+		}
 
+		// Handle the display fps button changing colour based on boolean
+		if (state == State::OPTIONS_MENU) {
+			// Change colour of displayFPSButton based on displayFps button
+			if (displayFps) {
+				displayFPSButton.setFillColor(Color::Green);
+			}
+			else {
+				displayFPSButton.setFillColor(Color::Red);
+			}
+
+			// Change colour of difficultyButton based on selected difficulty
+			if (difficulty == Difficulty::Easy)
+			{
+				difficultyButton.setFillColor(Color::Green);
+			}
+			else if (difficulty == Difficulty::Medium)
+			{
+				difficultyButton.setFillColor(Color::Yellow);
+			}
+			else
+			{
+				difficultyButton.setFillColor(Color::Red);
+			}
 		}
 
 		// Handle the levelling up state
@@ -504,6 +685,7 @@ int main()
 				state = State::PLAYING;
 			}
 
+			// Handle player and pickups spawning alongside terrain generation
 			if (state == State::PLAYING)
 			{
 				// We will modify the next two lines later
@@ -535,8 +717,6 @@ int main()
 		****************/
 		if (state == State::PLAYING)
 		{
-			ShowCursor(false); // hide the windows cursor
-
 			// Update the delta time
 			Time dt = clock.restart();
 
@@ -641,6 +821,37 @@ int main()
 
 		} // End updating the scene
 
+		if (state == State::PLAYING)
+		{
+			window.setMouseCursorVisible(false);
+			window.setMouseCursorGrabbed(true);
+		}
+		else if (state == State::PAUSED || state == State::MAIN_MENU || state == State::OPTIONS_MENU)
+		{
+			window.setMouseCursorVisible(true);
+			window.setMouseCursorGrabbed(false);
+		}
+
+		if (state == State::OPTIONS_MENU) {
+			if (dragging)
+			{
+				Vector2i mousePos = Mouse::getPosition(window);
+				float x = static_cast<float>(mousePos.x);
+
+				// Clamp within track
+				if (x < track.getPosition().x) x = track.getPosition().x;
+				if (x > track.getPosition().x + track.getSize().x) x = track.getPosition().x + track.getSize().x;
+
+				handle.setPosition(x, handle.getPosition().y);
+
+				// Map handle position to global volume
+				float globalVolume = ((x - track.getPosition().x) / track.getSize().x) * 100.f;
+
+				// Apply to everything
+				Listener::setGlobalVolume(globalVolume);
+			}
+		}
+
 		/*************
 		Draw the scene
 		**************/
@@ -722,7 +933,6 @@ int main()
 			window.setView(hudView);
 			
 			// Draw all the HUD elements
-			//window.draw(spriteAmmoIcon);
 			window.draw(goldCountText);
 			window.draw(emptyHealthBar);
 			window.draw(healthBar);
@@ -738,25 +948,44 @@ int main()
 
 		if (state == State::LEVELING_UP)
 		{
-			window.draw(spriteGameOver);
+			window.clear();
+			window.draw(spriteMainMenu);
 			window.draw(levelUpText);
 		}
 
 		if (state == State::PAUSED)
 		{
 			window.draw(pausedText);
+			window.draw(mainMenuButton);
+			window.draw(mainMenuButtonText);
 		}
 
 		if (state == State::MAIN_MENU)
 		{
-			window.draw(spriteGameOver);
-			window.draw(goldCountText);
+			window.clear();
+			window.draw(spriteMainMenu);
 			window.draw(playButton);
 			window.draw(playButtonText);
 			window.draw(optionsButton);
 			window.draw(optionsButtonText);
 			window.draw(quitGameButton);
 			window.draw(quitGameButtonText);
+		}
+
+		if (state == State::OPTIONS_MENU)
+		{
+			window.clear();
+			window.draw(spriteMainMenu);
+			window.draw(optionsHeadingText);
+			window.draw(mainMenuButton);
+			window.draw(mainMenuButtonText);
+			window.draw(volumeSliderText);
+			window.draw(track);
+			window.draw(handle);
+			window.draw(displayFPSButton);
+			window.draw(displayFPSButtonText);
+			window.draw(difficultyButton);
+			window.draw(difficultyButtonText);
 		}
 
 		window.display();
