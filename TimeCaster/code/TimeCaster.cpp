@@ -294,6 +294,8 @@ int main()
 	//press numpad0 to reset if you want to test again
 	//remove this in full build
 
+	bool startSoundPlayed = false;
+
 	// The main game loop
 	while (window.isOpen())
 	{
@@ -337,7 +339,11 @@ int main()
 					goldCount = 0;
 
 					// Play the start game sound
-					sound.playStartGameSound();
+					if (!startSoundPlayed) {
+						sound.playStartGameSound();
+					}
+
+					startSoundPlayed = true;
 
 					// Reset the player's stats
 					player.resetPlayerStats();
