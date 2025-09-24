@@ -283,9 +283,16 @@ int main()
 	struct DrawableItem {
 		float y;
 		sf::Sprite sprite;
+
+		DrawableItem(float y, const sf::Sprite& sprite)
+			: y(y), sprite(sprite) {}
 	};
 
 	std::vector<DrawableItem> drawables;
+
+	bool debugreset = false; //it's a bit of a hack but it works to stop multiple upgrades from one key press
+	//press numpad0 to reset if you want to test again
+	//remove this in full build
 
 	// The main game loop
 	while (window.isOpen())
@@ -396,6 +403,49 @@ int main()
 				player.stopRight();
 			}
 		}// End WASD while playing
+		// below are debug functions, comment them out in full build / when needed
+		// if you add any more, make sure they check if debug reset is false and set it to true or else it will run every loop while the key is pressed
+
+		if (event.key.code == Keyboard::Numpad0)
+		{
+			debugreset = false;
+		}
+		if (event.key.code == Keyboard::Numpad1 && !debugreset)
+		{
+			// Increase health
+			player.upgradeHealth();
+			debugreset = true;
+		}
+
+		if (event.key.code == Keyboard::Numpad2 &&  !debugreset)
+		{
+			// Increase stamina
+			player.upgradeStamina();
+			debugreset = true;
+		}
+
+		if (event.key.code == Keyboard::Numpad3 && !debugreset)
+		{
+			// Increase health
+			player.upgradeMana();
+			debugreset = true;
+		}
+
+
+		if (event.key.code == Keyboard::Numpad8 && !debugreset)
+		{
+		
+			player.hit(gameTimeTotal, 10, 200);
+			debugreset = true;
+		
+		}
+		if (event.key.code == Keyboard::Numpad9 && !debugreset)
+		{
+
+			player.hit(gameTimeTotal, 30, 1000);
+			debugreset = true;
+
+		}
 
 		// Handle the levelling up state
 		if (state == State::LEVELING_UP)
@@ -619,13 +669,11 @@ int main()
 			}
 			*/
 
-			// Add entities to drawables vector
 			for (auto& entity : landscape.getEntities()) {
-				drawables.push_back({ entity.getPosition().y, entity.getSprite() });
+				drawables.emplace_back(entity.getPosition().y, entity.getSprite());
 			}
 
-			// Add player to drawables vector
-			drawables.push_back({ player.getY(), player.getSpriteFromSheet()});
+			drawables.emplace_back(player.getY(), player.getSpriteFromSheet());
 
 			// Sort by y value using lambda function (ascending = top to bottom)
 			std::sort(drawables.begin(), drawables.end(),

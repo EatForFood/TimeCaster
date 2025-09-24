@@ -57,16 +57,16 @@ protected:
 
 	sf::Vector2i sheetCoordinate; // Coordinate on spritesheet
 	sf::Vector2i spriteSize;
-	bool alive{ true };
-	int animation_it_limit; //Max animation iterations
-	bool horizontal{ true };
-	int ani_counter{};
-	int counter{};
-	Clock clock;
-	float timeElapsed;
+	bool m_Alive{ true };
+	int m_Animation_It_Limit; //Max animation iterations
+	bool m_Horizontal{ true };
+	int m_Ani_Counter{};
+	int m_Counter{};
+	Clock m_Clock;
+	float m_TimeElapsed;
 	//50 ms for each frame
 
-	float animationTimer = 0;
+	float m_AnimationTimer = 0;
 
 	IntRect m_Hitbox;
 

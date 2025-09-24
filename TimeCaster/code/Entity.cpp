@@ -12,50 +12,50 @@ void Entity::spawn(String type, float x, float y)
 {
     if (type == "tree1")
     {
-        setSpriteFromSheet(768, 128, 64, 128);
+        m_Sprite = Sprite(TextureHolder::GetTexture("graphics/foliage/trees/tree1.png"));
         m_Sprite.setOrigin(32,48);
     }
 
     if (type == "tree2")
     {
-        setSpriteFromSheet(768, 192, 64, 128);
+        m_Sprite = Sprite(TextureHolder::GetTexture("graphics/foliage/trees/tree2.png"));
         m_Sprite.setOrigin(32, 48);
     }
 
     if (type == "tree3")
     {
-        setSpriteFromSheet(830, 0, 64, 182);
-        m_Sprite.setOrigin(32, 118);
+        m_Sprite = Sprite(TextureHolder::GetTexture("graphics/foliage/trees/tree3.png"));
+        m_Sprite.setOrigin(32, 55);
     }
 
     if (type == "tree4")
     {
-        setSpriteFromSheet(884, 64, 64, 128);
-        m_Sprite.setOrigin(32, 64);
+        m_Sprite = Sprite(TextureHolder::GetTexture("graphics/foliage/trees/tree4.png"));
+        m_Sprite.setOrigin(32, 70);
     }
 
     if (type == "tree5")
     {
-        setSpriteFromSheet(884, 128, 64, 128);
+        m_Sprite = Sprite(TextureHolder::GetTexture("graphics/foliage/trees/tree5.png"));
         m_Sprite.setOrigin(32, 64);
     }
 
     if (type == "tree6")
     {
-        setSpriteFromSheet(884, 192, 64, 128);
+        m_Sprite = Sprite(TextureHolder::GetTexture("graphics/foliage/trees/tree6.png"));
         m_Sprite.setOrigin(32, 64);
     }
 
     if (type == "tree7")
     {
-        setSpriteFromSheet(884, 256, 192, 128);
-        m_Sprite.setOrigin(96, 112);
+        m_Sprite = Sprite(TextureHolder::GetTexture("graphics/foliage/trees/tree7.png"));
+        m_Sprite.setOrigin(96, 60);
     }
 
     if (type == "tree8")
     {
-        setSpriteFromSheet(884, 448, 192, 128);
-        m_Sprite.setOrigin(96, 112);
+        m_Sprite = Sprite(TextureHolder::GetTexture("graphics/foliage/trees/tree8.png"));
+        m_Sprite.setOrigin(96, 80);
     }
 
     m_Position = Vector2f(x, y);
@@ -67,14 +67,9 @@ Vector2f Entity::getPosition()
     return m_Position;
 }
 
-Sprite Entity::getSprite()
+const Sprite Entity::getSprite()
 {
 	return m_Sprite;
-}
-
-void Entity::setSpriteFromSheet(int x, int y, int spriteWidth, int spriteHeight)
-{
-    m_Sprite.setTextureRect(sf::IntRect(x, y, spriteWidth, spriteHeight));
 }
 
 void Entity::update(float elapsedTime, Player player, Vector2i mousePosition)

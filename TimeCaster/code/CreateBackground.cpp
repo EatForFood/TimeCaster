@@ -115,6 +115,7 @@ int CreateBackground::createLandscape()
 		placeTile(x, 15, 64, 1076);
 	}
 
+
 	if (setUp)
 	{
 		CreateEntity("tree1", 5, 5);
