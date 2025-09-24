@@ -69,7 +69,7 @@ Time Player::getLastHitTime()
 
 bool Player::hit(Time timeHit, float damage, int iFrames)
 {
-	if (timeHit.asMilliseconds() - m_LastHit.asMilliseconds() > m_IFrames && isDodging) // can't be hit while dodging, also checks for i frames
+	if (timeHit.asMilliseconds() - m_LastHit.asMilliseconds() > m_IFrames && m_IsDodging) // can't be hit while dodging, also checks for i frames
 	{
 		 m_LastHit = timeHit; // if you successfully dodge an attack it resets the hit timer so you can't be hit again straight away
 		 m_IFrames = iFrames;
@@ -133,7 +133,16 @@ void Player::stopDown()
 void Player::update(float elapsedTime, Vector2i mousePosition)
 {
 
-	timeElapsed = elapsedTime;
+	m_TimeElapsed = elapsedTime; 
+
+	if (!m_UpPressed && !m_DownPressed && !m_LeftPressed && !m_RightPressed)
+	{
+		m_IsMoving = false;
+	}
+	else {
+		m_IsMoving = true;
+	}
+
 
 	if (!m_UpPressed || !m_DownPressed || !m_LeftPressed || !m_RightPressed) // if player is not moving set sprite to standing frame in last direction faced
 	{
@@ -158,7 +167,9 @@ void Player::update(float elapsedTime, Vector2i mousePosition)
 		}
 	}
 	
-	if (!m_UpPressed && !m_DownPressed && !m_LeftPressed && !m_RightPressed && m_Stamina < m_MaxStamina  )
+
+
+	if (!m_IsMoving && m_Stamina < m_MaxStamina  )
 	{
 		m_Stamina += m_StaminaRecharge; //recharge stamina faster when not moving
 	}
@@ -167,12 +178,15 @@ void Player::update(float elapsedTime, Vector2i mousePosition)
 	}
 	
 
+		
+
 	if (m_UpPressed)
 	{
 		m_PositionLast = m_Position;
 		m_Position.y -= m_Speed * elapsedTime;
 		setSpriteFromSheet(IntRect(0, 0, 576, 64)); // set sprite depending on direction
 		direction = Vector2f(0, 1);
+	
 	}
 
 	if (m_DownPressed)
@@ -199,7 +213,7 @@ void Player::update(float elapsedTime, Vector2i mousePosition)
 		direction = Vector2f(-1, 0);
 	}
 
-	if (!isDodging)
+	if (!m_IsDodging)
 	{
 		m_Speed = START_SPEED;
 	}
@@ -207,7 +221,7 @@ void Player::update(float elapsedTime, Vector2i mousePosition)
 	if (m_UpPressed && m_RightPressed || m_UpPressed && m_LeftPressed ||
 		m_DownPressed && m_RightPressed || m_DownPressed && m_LeftPressed) // player moved too fast diagonally
 	{
-		if (!isDodging)
+		if (!m_IsDodging)
 		{
 			m_Speed = m_Speed * 0.75;
 		}
@@ -335,24 +349,24 @@ float Player::getMaxStamina()
 void Player::dodge()
 {
 	// Dodging enemies using the space key
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && canDodge) {
-		isDodging = true;
-		canDodge = false;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && m_CanDodge && m_IsMoving ) {
+		m_IsDodging = true;
+		m_CanDodge = false;
 
-		dodgeClock.restart();
-		cooldownClock.restart();
+		m_DodgeClock.restart();
+		m_CooldownClock.restart();
 		startDodge();
 	}
 
 	// After 200ms stop dodge
-	if (isDodging && dodgeClock.getElapsedTime().asSeconds() > dodgeDuration) {
-		isDodging = false;
+	if (m_IsDodging && m_DodgeClock.getElapsedTime().asSeconds() > m_DodgeDuration) {
+		m_IsDodging = false;
 		stopDodge();
 	}
 
 	// Allows the player to dodge again
-	if (!canDodge && cooldownClock.getElapsedTime().asSeconds() > dodgeCooldown && m_Stamina >= 50) {
-		canDodge = true;
+	if (!m_CanDodge && m_CooldownClock.getElapsedTime().asSeconds() > m_DodgeCooldown && m_Stamina >= 50) {
+		m_CanDodge = true;
 	}
 }
 

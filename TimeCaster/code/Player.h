@@ -26,17 +26,19 @@ private:
 	float m_StaminaRecharge;
 
 	// Dodge variables
-	bool isDodging = false;
-	bool canDodge = false;
-	Clock dodgeClock;
-	Clock cooldownClock;
-	float dodgeDuration = 0.2f; // 200ms dodge
-	float dodgeCooldown = 1.0f; // 1 second cooldown on dodge
+	bool m_IsDodging = false;
+	bool m_CanDodge = false;
+	Clock m_DodgeClock;
+	Clock m_CooldownClock;
+	float m_DodgeDuration = 0.2f; // 200ms dodge
+	float m_DodgeCooldown = 1.0f; // 1 second cooldown on dodge
 
 	// When was the player last hit
 	Time m_LastHit;
 	// How many iFrames the player has after being hit
 	int m_IFrames = 0;
+	// If the player is moving or not
+	bool m_IsMoving = false;
 
 public:
 

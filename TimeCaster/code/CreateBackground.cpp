@@ -3,6 +3,9 @@
 #include "Entity.h"
 #include "CreateBackground.h"
 
+using namespace std;
+using namespace sf;
+
 CreateBackground::CreateBackground()
 {
 	

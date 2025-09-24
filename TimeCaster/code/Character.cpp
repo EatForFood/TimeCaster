@@ -53,20 +53,20 @@ void Character::setSpriteFromSheet(sf::IntRect textureBox) // set sprite
 	spriteSize = sf::Vector2i(tile_size, tile_size);
 	if (textureBox.width > tile_size)
 	{
-		animation_it_limit = textureBox.width / tile_size;
+		m_Animation_It_Limit = textureBox.width / tile_size;
 
-		horizontal = true;
+		m_Horizontal = true;
 	}
 	else if (textureBox.height > tile_size)
 	{
-		animation_it_limit = textureBox.height / tile_size;
-		horizontal = false;
+		m_Animation_It_Limit = textureBox.height / tile_size;
+		m_Horizontal = false;
 	}
 	else
 		throw std::logic_error("Animation bounding box must contain multiply sprites, setSprite(sf::IntRect )\n");
 
-	//	cout << "setSpriteFromSheet  " << "animation_it limit" << animation_it_limit << "\n";
-	//	cout << "setSpriteFromSheet func " << "ani_counter " << ani_counter << "\n";
+	//	cout << "setSpriteFromSheet  " << "animation_it limit" << m_Animation_It_Limit << "\n";
+	//	cout << "setSpriteFromSheet func " << "m_Ani_Counter " << m_Ani_Counter << "\n";
 
 	m_Sprite.setTextureRect(sf::IntRect{ sheetCoordinate, spriteSize });
 
@@ -74,29 +74,29 @@ void Character::setSpriteFromSheet(sf::IntRect textureBox) // set sprite
 
 void Character::moveTextureRect() // animate sprite by moving texRect location
 {
-	//	cout << " Move Texture Rect ani_counter " << ani_counter << "\n";
+	//	cout << " Move Texture Rect m_Ani_Counter " << m_Ani_Counter << "\n";
 		// if the animation counter is greater than the animation limit reset to 1;
-	if (ani_counter == animation_it_limit)
+	if (m_Ani_Counter == m_Animation_It_Limit)
 	{
-		ani_counter = 0;
+		m_Ani_Counter = 0;
 	}
 
-	if (horizontal) {
+	if (m_Horizontal) {
 
-		m_Sprite.setTextureRect(sf::IntRect(sheetCoordinate + sf::Vector2i(spriteSize.x * ani_counter, 0), spriteSize));
+		m_Sprite.setTextureRect(sf::IntRect(sheetCoordinate + sf::Vector2i(spriteSize.x * m_Ani_Counter, 0), spriteSize));
 	}
 	else {
-		m_Sprite.setTextureRect(sf::IntRect(sheetCoordinate + sf::Vector2i(0, spriteSize.y * ani_counter), spriteSize));
+		m_Sprite.setTextureRect(sf::IntRect(sheetCoordinate + sf::Vector2i(0, spriteSize.y * m_Ani_Counter), spriteSize));
 	}
 
 	//increment animation counter to point to the next frame
 	double timePerFrame;
 	timePerFrame = 1.0 / 6.0;
-	animationTimer = animationTimer + timeElapsed;
-	if (animationTimer > timePerFrame)
+	m_AnimationTimer = m_AnimationTimer + m_TimeElapsed;
+	if (m_AnimationTimer > timePerFrame)
 	{
-		ani_counter++;
-		animationTimer = 0;
+		m_Ani_Counter++;
+		m_AnimationTimer = 0;
 	}
 
 }

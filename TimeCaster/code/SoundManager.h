@@ -5,6 +5,7 @@
 #include <iostream>
 #include <list>
 
+using namespace std;
 using namespace sf;
 
 class SoundManager
@@ -13,9 +14,13 @@ private:
 	// List to store soundtrack songs
 	Sound soundtrack[2];
 
+	// Prepare the start game sound
+	SoundBuffer startGameBuffer;
+	Sound startGame;
+
 	// Prepare the hit sound
-	SoundBuffer hurtBuffer;
-	Sound hurt;
+	SoundBuffer hitBuffer;
+	Sound hit;
 
 public:
 	// SoundManager constructor
@@ -29,4 +34,8 @@ public:
 
 	// Play soundtrack function
 	void playSoundtrack();
+
+	void playStartGameSound();
+
+	void playHitSound();
 };
