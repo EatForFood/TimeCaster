@@ -157,12 +157,12 @@ void Player::update(float elapsedTime, Vector2i mousePosition)
 			setSpriteFromSheet(IntRect(0, 128, 576, 64));
 		}
 
-		if (direction == Vector2f(-1, 0)) // right
+		if (direction == Vector2f(1, 0)) // right
 		{
 			setSpriteFromSheet(IntRect(0, 192, 576, 64));
 		}
 
-		if (direction == Vector2f(1, 0)) // left
+		if (direction == Vector2f(-1, 0)) // left
 		{
 			setSpriteFromSheet(IntRect(0, 64, 576, 64));
 		}
