@@ -133,7 +133,7 @@ void Player::stopDown()
 void Player::update(float elapsedTime, Vector2i mousePosition)
 {
 
-	timeElapsed = elapsedTime; 
+	m_TimeElapsed = elapsedTime; 
 
 	if (!m_UpPressed && !m_DownPressed && !m_LeftPressed && !m_RightPressed)
 	{
