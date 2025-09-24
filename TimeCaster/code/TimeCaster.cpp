@@ -350,6 +350,13 @@ int main()
 	y = difficultyButton.getPosition().y + (difficultyButton.getSize().y / 2.f) - (textBounds.height / 2.f);
 	difficultyButtonText.setPosition(x - textBounds.left, y - textBounds.top);
 
+	// Story into text
+	Text storyIntroText("You desire retribution, but at what cost?", font, 40);
+	storyIntroText.setFillColor(Color::White);
+	textBounds = storyIntroText.getLocalBounds();
+	viewCentre = mainView.getCenter();
+	storyIntroText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 150);
+
 	// When did we last update the HUD?
 	int framesSinceLastHUDUpdate = 0;
 
@@ -379,6 +386,9 @@ int main()
 
 	// Boolean for whether the player is dragging the slider or not
 	bool dragging = false;
+
+	// Setting volume to 0 upon start of game
+	Listener::setGlobalVolume(0);
 
 	// The main game loop
 	while (window.isOpen())
@@ -415,13 +425,12 @@ int main()
 				}
 			}
 
-			if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
+			if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left && state == State::OPTIONS_MENU)
 			{
 				if (handle.getGlobalBounds().contains(sf::Vector2f(event.mouseButton.x, event.mouseButton.y)))
 				{
 					dragging = true;
 				}
-
 			}
 
 			// Stop dragging
@@ -433,13 +442,13 @@ int main()
 			if (event.type == Event::KeyPressed || Mouse::isButtonPressed(Mouse::Left))
 			{
 				// Pause a game while playing
-				if (event.key.code == Keyboard::Return && state == State::PLAYING)
+				if (event.key.code == Keyboard::Escape && state == State::PLAYING)
 				{
 					state = State::PAUSED;
 				}
 
 				// Restart while paused
-				else if (event.key.code == Keyboard::Return && state == State::PAUSED)
+				else if (event.key.code == Keyboard::Escape && state == State::PAUSED)
 				{
 					state = State::PLAYING;
 					// Reset the clock so there isn't a frame jump
@@ -447,9 +456,10 @@ int main()
 				}
 
 				// Player hit the play game button
-				else if (playButton.getGlobalBounds().contains(worldPos))
+				else if (playButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU)
 				{
 					state = State::LEVELING_UP;
+					// state = State::STORY_INTRO;
 					goldCount = 0;
 
 					// Play the start game sound
@@ -466,23 +476,28 @@ int main()
 				// Player hit the options button
 				if (optionsButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU)
 				{
+					sound.playButtonClickSound();
 					state = State::OPTIONS_MENU;
 				}
 
 				// Player hit the quit game button
 				if (quitGameButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU)
 				{
+					sound.playButtonClickSound();
+					// Save info to file before quitting
 					window.close();
 				}
 
 				// Player hit the main menu button
 				if (mainMenuButton.getGlobalBounds().contains(worldPos) && state == State::OPTIONS_MENU)
 				{
+					sound.playButtonClickSound();
 					state = State::MAIN_MENU;
 				}
 
 				if (mainMenuButton.getGlobalBounds().contains(worldPos) && state == State::PAUSED) 
 				{
+					sound.playButtonClickSound();
 					state = State::MAIN_MENU;
 				}
 
@@ -490,9 +505,11 @@ int main()
 				if (displayFPSButton.getGlobalBounds().contains(worldPos) && state == State::OPTIONS_MENU)
 				{
 					if (displayFps) {
+						sound.playButtonClickSound();
 						displayFps = false;
 					}
 					else {
+						sound.playButtonClickSound();
 						displayFps = true;
 					}
 				}
@@ -519,15 +536,15 @@ int main()
 					x = difficultyButton.getPosition().x + (difficultyButton.getSize().x / 2.f) - (textBounds.width / 2.f);
 					y = difficultyButton.getPosition().y + (difficultyButton.getSize().y / 2.f) - (textBounds.height / 2.f);
 					difficultyButtonText.setPosition(x - textBounds.left, y - textBounds.top);
+					sound.playButtonClickSound();
+				}
+
+				if (state == State::STORY_INTRO && event.key.code == Keyboard::Escape)
+				{
+					state = State::PLAYING;
 				}
 			}
 		} // End event polling
-
-		 // Handle the player quitting
-		if (Keyboard::isKeyPressed(Keyboard::Escape))
-		{
-			window.close();
-		}
 
 		// Handle controls while playing
 		if (state == State::PLAYING)
@@ -568,10 +585,10 @@ int main()
 			{
 				player.stopRight();
 			}
-		}// End WASD while playing
-		// below are debug functions, comment them out in full build / when needed
-		// if you add any more, make sure they check if debug reset is false and set it to true or else it will run every loop while the key is pressed
+		} // End WASD while playing
 
+		/* below are debug functions, comment them out in full build / when needed
+		if you add any more, make sure they check if debug reset is false and set it to true or else it will run every loop while the key is pressed */
 		if (event.key.code == Keyboard::Numpad0)
 		{
 			debugreset = false;
@@ -610,7 +627,8 @@ int main()
 		}
 
 		// Handle the display fps button changing colour based on boolean
-		if (state == State::OPTIONS_MENU) {
+		if (state == State::OPTIONS_MENU) 
+		{
 			// Change colour of displayFPSButton based on displayFps button
 			if (displayFps) {
 				displayFPSButton.setFillColor(Color::Green);
@@ -943,7 +961,6 @@ int main()
 			if (displayFps) {
 				window.draw(fpsText);
 			}
-			
 		}
 
 		if (state == State::LEVELING_UP)
@@ -987,6 +1004,14 @@ int main()
 			window.draw(difficultyButton);
 			window.draw(difficultyButtonText);
 		}
+
+		/*
+		if (state == State::STORY_INTRO) 
+		{
+			window.clear();
+			window.draw(storyIntroText);
+		}
+		*/
 
 		window.display();
 

@@ -20,6 +20,10 @@ SoundManager::SoundManager() {
 	// Loads hit sound file into buffer
 	hitBuffer.loadFromFile("sound/hit.wav");
 	hit.setBuffer(hitBuffer);
+
+	// Loads click sound from file into buffer
+	clickBuffer.loadFromFile("sound/buttonClick.wav");
+	buttonClick.setBuffer(clickBuffer);
 } // End of SoundManager constructor
 
 // Function for placing songs within the soundtrack list
@@ -50,4 +54,8 @@ void SoundManager::playStartGameSound() {
 
 void SoundManager::playHitSound() {
 	hit.play();
+}
+
+void SoundManager::playButtonClickSound() {
+	buttonClick.play();
 }

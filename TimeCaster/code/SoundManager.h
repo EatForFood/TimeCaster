@@ -22,6 +22,9 @@ private:
 	SoundBuffer hitBuffer;
 	Sound hit;
 
+	SoundBuffer clickBuffer;
+	Sound buttonClick;
+
 public:
 	// SoundManager constructor
 	SoundManager();
@@ -38,4 +41,6 @@ public:
 	void playStartGameSound();
 
 	void playHitSound();
+
+	void playButtonClickSound();
 };
