@@ -74,7 +74,7 @@ bool Player::hit(Time timeHit)
 		 m_LastHit = timeHit; // if you successfully dodge an attack it resets the hit timer so you can't be hit again straight away
 		return false;
 	}
-	else if (timeHit.asMilliseconds() - m_LastHit.asMilliseconds() > 200)// 2 tenths of second
+	else if (timeHit.asMilliseconds() - m_LastHit.asMilliseconds() > 200)// 2 tenths of second // we may make to need this longer
 	{
 		
 		m_LastHit = timeHit;
@@ -269,7 +269,7 @@ void Player::upgradeStamina()
 {
 	// 25% max Stamina upgrade
 	//25% because dodging takes 50 stamina so you'd get half of one more dodge
-	m_MaxStamina += (START_STAMINA * .25);
+	m_MaxStamina += (START_STAMINA * 0.25f);
 }
 
 void Player::upgradeMana()
