@@ -26,7 +26,7 @@ public:
 	Vector2f getPosition();
 
 	// Get the sprite for drawing
-	Sprite getSprite();
+	const Sprite getSprite();
 
 	// Let the pickup update itself each frame
 	void update(float elapsedTime, Player player, Vector2i mousePosition);

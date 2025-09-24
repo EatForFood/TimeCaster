@@ -280,6 +280,9 @@ int main()
 	struct DrawableItem {
 		float y;
 		sf::Sprite sprite;
+
+		DrawableItem(float y, const sf::Sprite& sprite)
+			: y(y), sprite(sprite) {}
 	};
 
 	std::vector<DrawableItem> drawables;
@@ -648,13 +651,11 @@ int main()
 				}
 			}
 
-			// Add entities to drawables vector
 			for (auto& entity : landscape.getEntities()) {
-				drawables.push_back({ entity.getPosition().y, entity.getSprite() });
+				drawables.emplace_back(entity.getPosition().y, entity.getSprite());
 			}
 
-			// Add player to drawables vector
-			drawables.push_back({ player.getY(), player.getSpriteFromSheet()});
+			drawables.emplace_back(player.getY(), player.getSpriteFromSheet());
 
 			// Sort by y value using lambda function (ascending = top to bottom)
 			std::sort(drawables.begin(), drawables.end(),
