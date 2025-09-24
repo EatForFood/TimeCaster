@@ -35,6 +35,8 @@ private:
 
 	// When was the player last hit
 	Time m_LastHit;
+	// How many iFrames the player has after being hit
+	int m_IFrames = 0;
 
 public:
 
@@ -46,7 +48,7 @@ public:
 	void spawn(IntRect arena, Vector2f resolution, int tileSize);
 
 	// Handle the player getting hit by an enemy
-	bool hit(Time timeHit);
+	bool hit(Time timeHit, float damage, int iFrames);
 
 	// How long ago was the player last hit
 	Time getLastHitTime();

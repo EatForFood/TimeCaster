@@ -449,9 +449,16 @@ int main()
 		if (event.key.code == Keyboard::Numpad8 && !debugreset)
 		{
 		
-			player.hit(gameTimeTotal);
+			player.hit(gameTimeTotal, 10, 200);
 			debugreset = true;
 		
+		}
+		if (event.key.code == Keyboard::Numpad9 && !debugreset)
+		{
+
+			player.hit(gameTimeTotal, 30, 1000);
+			debugreset = true;
+
 		}
 
 		// Handle the levelling up state

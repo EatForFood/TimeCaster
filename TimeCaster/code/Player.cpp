@@ -67,18 +67,20 @@ Time Player::getLastHitTime()
 	return m_LastHit;
 }
 
-bool Player::hit(Time timeHit)
+bool Player::hit(Time timeHit, float damage, int iFrames)
 {
-	if (isDodging) // can't be hit while dodging
+	if (timeHit.asMilliseconds() - m_LastHit.asMilliseconds() > m_IFrames && isDodging) // can't be hit while dodging, also checks for i frames
 	{
 		 m_LastHit = timeHit; // if you successfully dodge an attack it resets the hit timer so you can't be hit again straight away
+		 m_IFrames = iFrames;
+	
 		return false;
 	}
-	else if (timeHit.asMilliseconds() - m_LastHit.asMilliseconds() > 200)// 2 tenths of second // we may make to need this longer
+	else if (timeHit.asMilliseconds() - m_LastHit.asMilliseconds() > m_IFrames)
 	{
-		
+		m_IFrames = iFrames;
 		m_LastHit = timeHit;
-		m_Health -= 10; //Change this to be varible?
+		m_Health -= damage; 
 		return true;
 	}
 	else
