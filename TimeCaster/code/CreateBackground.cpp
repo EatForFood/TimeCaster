@@ -112,49 +112,6 @@ int CreateBackground::createLandscape()
 		}
 	}
 
-	// House west wall
-	for (int x = 15; x < 20; x++)
-	{
-		if (x == 17)
-		{
-			placeTile(x, 18, 320, 1140, false); // door
-		}
-		else
-		{
-			placeTile(x, 18, 64, 1140, false);
-		}
-		
-	}
-
-	// House east wall *
-	for (int y = 15; y < 19; y++)
-	{
-		placeTile(19, y, 64, 1140, false);
-	}
-
-	// House east roof
-	placeTile(17, 14, 448, 1076, true);
-	placeTile(18, 14, 448, 1076, true);
-
-	// House 2nd floor east wall
-	for (int y = 15; y < 17; y++)
-	{
-		placeTile(18, y, 512, 1460, false);
-	}
-
-	// House west roof 1
-	for (int x = 14; x < 19; x++)
-	{
-		placeTile(x, 17, 64, 1076, true);
-	}
-
-	// House west roof 2
-	for (int x = 13; x < 18; x++)
-	{
-		placeTile(x, 15, 64, 1076, true);
-	}
-
-
 	if (setUp) // only create tree entities once
 	{
 		CreateEntity("tree1", 5, 5);
@@ -167,8 +124,57 @@ int CreateBackground::createLandscape()
 		CreateEntity("tree8", 29, 7);
 		setUp = false;
 	}
+	placeHouse1(15, 15);
+	placeHouse1(23, 15);
+	placeHouse1(15, 23);
+	placeHouse1(23, 23);
 
 	return TILE_SIZE;
+}
+
+void CreateBackground::placeHouse1(int sx, int sy) { // sx 15, sy 18
+
+	// House west wall
+	for (int x = sx; x < sx + 5; x++)
+	{
+		if (x == sx + 2)
+		{
+			placeTile(x, sy, 320, 1140, false); // door
+		}
+		else
+		{
+			placeTile(x, sy, 64, 1140, false);
+		}
+
+	}
+
+	// House east wall *
+	for (int y = sy-3; y < sy+1; y++)
+	{
+		placeTile(sx+4, y, 64, 1140, false);
+	}
+
+	// House east roof
+	placeTile(sx+2, sy-4, 448, 1076, true);
+	placeTile(sx+3, sy-4, 448, 1076, true);
+
+	// House 2nd floor east wall
+	for (int y = sy-3; y < sy-1; y++)
+	{
+		placeTile(sx+3, y, 512, 1460, true);
+	}
+
+	// House west roof 1
+	for (int x = sx-1; x < sx+4; x++)
+	{
+		placeTile(x, sy-1, 64, 1076, true);
+	}
+
+	// House west roof 2
+	for (int x = sx-2; x < sx+3; x++)
+	{
+		placeTile(x, sy-3, 64, 1076, true);
+	}
 }
 
 // These trees can be placed in places the player cannot reach for background scenary

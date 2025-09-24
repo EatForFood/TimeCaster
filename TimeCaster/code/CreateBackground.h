@@ -42,6 +42,8 @@ public:
 
 	int createLandscape();
 
+	void placeHouse1(int x, int y);
+
 	void placeTree1(int x, int y);
 	void placeTree2(int x, int y);
 	void placeTree3(int x, int y);
