@@ -42,7 +42,7 @@ int main()
 	View mainView(sf::FloatRect(0, 0, resolution.x, resolution.y));
 
 	// Zoom view
-	mainView.zoom(0.5f);
+	mainView.zoom(0.3f);
 
 	// Here is our clock for timing everything
 	Clock clock;
@@ -655,10 +655,6 @@ int main()
 			// Draw the background
     		window.draw(landscape.getBackground(), &textureBackground);
 
-			for (auto& txt : landscape.getDebugText()) {
-				window.draw(txt);
-			}
-
 			// DRAW EFFECTS
 			for (int i = 0; i < 249; i++) // draw decals
 			{
@@ -714,6 +710,10 @@ int main()
 			}
 
 			window.draw(landscape.getForground(), &textureBackground);
+
+			for (auto& txt : landscape.getDebugText()) { // draw debug text showing tile location
+				window.draw(txt);
+			}
 
 			//Draw the crosshair
 			window.draw(spriteCrosshair);

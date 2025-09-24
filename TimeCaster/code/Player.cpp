@@ -22,6 +22,7 @@ Player::Player()
 	// Set the origin of the sprite to the centre, 
 	// for smooth rotation
 	m_Sprite.setOrigin(32, 64);
+	m_Sprite.setScale(0.75,0.75);
 
 }
 

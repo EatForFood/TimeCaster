@@ -7,7 +7,7 @@ using namespace sf;
 class Player : public Character
 {
 private:
-	const float START_SPEED = 150;
+	const float START_SPEED = 100;
 	const float START_HEALTH = 100;
 	const float START_MANA = 100;
 	const float START_STAMINA = 100;

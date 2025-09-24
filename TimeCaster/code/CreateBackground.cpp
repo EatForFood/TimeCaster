@@ -19,7 +19,7 @@ void CreateBackground::placeTile(int x, int y, int texX, int texY, bool forGroun
 	float ix = (x - y) * (TILE_SIZE / 2);
 	float iy = (x + y) * (TILE_SIZE / 4);
 
-	if (forGround)
+	if (forGround) // place tiles on forground layer
 	{
 		rVAFG[currentVertexFG + 0].position = sf::Vector2f(ix, iy);
 		rVAFG[currentVertexFG + 1].position = sf::Vector2f(ix + TILE_SIZE, iy);
@@ -34,7 +34,7 @@ void CreateBackground::placeTile(int x, int y, int texX, int texY, bool forGroun
 
 		currentVertexFG += VERTS_IN_QUAD;
 	}
-	else
+	else // place tiles on background layer
 	{
 		rVABG[currentVertexBG + 0].position = sf::Vector2f(ix, iy);
 		rVABG[currentVertexBG + 1].position = sf::Vector2f(ix + TILE_SIZE, iy);
@@ -115,10 +115,18 @@ int CreateBackground::createLandscape()
 	// House west wall
 	for (int x = 15; x < 20; x++)
 	{
-		placeTile(x, 18, 64, 1140, false);
+		if (x == 17)
+		{
+			placeTile(x, 18, 320, 1140, false); // door
+		}
+		else
+		{
+			placeTile(x, 18, 64, 1140, false);
+		}
+		
 	}
 
-	// House east wall
+	// House east wall *
 	for (int y = 15; y < 19; y++)
 	{
 		placeTile(19, y, 64, 1140, false);
@@ -147,7 +155,7 @@ int CreateBackground::createLandscape()
 	}
 
 
-	if (setUp)
+	if (setUp) // only create tree entities once
 	{
 		CreateEntity("tree1", 5, 5);
 		CreateEntity("tree2", 8, 5);
