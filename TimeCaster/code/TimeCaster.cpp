@@ -14,16 +14,16 @@
 #include "SoundManager.h"
 #include "Entity.h"
 
-using namespace sf;
 using namespace std;
+using namespace sf;
 
 int main()
 {
 	// Here is the instance of TextureHolder
 	TextureHolder holder;
 	
-	// The game will always be in one of four states
-	enum class State { MAIN_MENU, OPTIONS, PLAYING, PAUSED, LEVELING_UP, GAME_OVER };
+	// The game will always be in one of these states
+	enum class State { MAIN_MENU, OPTIONS, STORY_INTRO, PLAYING, PAUSED, LEVELING_UP, GAME_OVER };
 	
 	// Start with the MAIN_MENU state
 	State state = State::MAIN_MENU;
@@ -36,8 +36,7 @@ int main()
 	resolution.x = 1920;
 	resolution.y = 1080;
 
-	RenderWindow window(VideoMode(resolution.x, resolution.y),
-		"TimeCaster", Style::Fullscreen);
+	RenderWindow window(VideoMode(resolution.x, resolution.y), "TimeCaster", Style::Fullscreen);
 
 	// Create a an SFML View for the main action
 	View mainView(sf::FloatRect(0, 0, resolution.x, resolution.y));
@@ -68,6 +67,7 @@ int main()
 	// Create an instance of the SoundManager class
 	SoundManager sound;
 
+	// Create an instance of the CreateBackground class
 	CreateBackground landscape;
 
 	// Create the background
@@ -75,6 +75,7 @@ int main()
 	// Load the texture for our background vertex array
 	Texture textureBackground = TextureHolder::GetTexture("graphics/landscape.png");
 
+	/*
 	// 100 bullets should do
 	Bullet bullets[100];
 	int currentBullet = 0;
@@ -82,9 +83,13 @@ int main()
 	int bulletsInClip = 6;
 	int clipSize = 6;
 	float fireRate = 1;
+	*/
 
 	// FPS float number
 	float fps = 0.f;
+
+	// Boolean for whether the fps should be displayed
+	bool displayFps = true;
 	
 	// When was the fire button last pressed?
 	Time lastPressed;
@@ -119,19 +124,17 @@ int main()
 	// Create a view for the HUD
 	View hudView(sf::FloatRect(0, 0, resolution.x, resolution.y));
 
+	/*
 	// Create a sprite for the ammo icon
 	Sprite spriteAmmoIcon;
 	Texture textureAmmoIcon = TextureHolder::GetTexture("graphics/ammo_icon.png");
 	spriteAmmoIcon.setTexture(textureAmmoIcon);
 	spriteAmmoIcon.setPosition(20, 980);
-
-	// Load the font
-	Font font;
-	font.loadFromFile("fonts/zombiecontrol.ttf");
+	*/
 
 	// Main menu font
-	Font pixelFont;
-	pixelFont.loadFromFile("fonts/PixelifySans-Bold.ttf");
+	Font font;
+	font.loadFromFile("fonts/PixelifySans-Bold.ttf");
 
 	// Paused
 	Text pausedText;
@@ -159,7 +162,7 @@ int main()
 
 	// Gold text
 	Text goldCountText;
-	goldCountText.setFont(pixelFont);
+	goldCountText.setFont(font);
 	goldCountText.setCharacterSize(55);
 	goldCountText.setFillColor(Color::White);
 	goldCountText.setPosition(1400, 0);
@@ -190,7 +193,7 @@ int main()
 
 	// FPS text
 	Text fpsText;
-	fpsText.setFont(pixelFont);
+	fpsText.setFont(font);
 	fpsText.setCharacterSize(20);
 	fpsText.setFillColor(Color::White);
 	fpsText.setPosition(1850, 5);
@@ -233,7 +236,7 @@ int main()
 
 	// Play button text
 	Text playButtonText;
-	playButtonText.setFont(pixelFont);
+	playButtonText.setFont(font);
 	playButtonText.setCharacterSize(20);
 	playButtonText.setFillColor(Color::Black);
 	playButtonText.setPosition(10, 20);
@@ -247,7 +250,7 @@ int main()
 
 	// options button text
 	Text optionsButtonText;
-	optionsButtonText.setFont(pixelFont);
+	optionsButtonText.setFont(font);
 	optionsButtonText.setCharacterSize(20);
 	optionsButtonText.setFillColor(Color::Black);
 	optionsButtonText.setPosition(10, 70);
@@ -261,7 +264,7 @@ int main()
 
 	// options button text
 	Text quitGameButtonText;
-	quitGameButtonText.setFont(pixelFont);
+	quitGameButtonText.setFont(font);
 	quitGameButtonText.setCharacterSize(20);
 	quitGameButtonText.setFillColor(Color::Black);
 	quitGameButtonText.setPosition(10, 120);
@@ -290,14 +293,11 @@ int main()
 		// Calculating fps
 		float deltaTime = fpsClock.restart().asSeconds();
 		fps = 1.f / deltaTime;
-
 		fpsText.setString("FPS: " + to_string((int)fps));
 		
-		/*
-		************
+		/***********
 		Handle input
-		************
-		*/
+		************/
 
 		// Handle events
 		Event event;
@@ -323,21 +323,14 @@ int main()
 					clock.restart();
 				}
 
-				// Start a new game while in MAIN_MENU state
-				else if (event.key.code == Keyboard::Return && state == State::MAIN_MENU)
-				{
-					state = State::LEVELING_UP;
-					goldCount = 0;
-
-					// Reset the player's stats
-					player.resetPlayerStats();
-				}
-
 				// Player hit the play game button
 				else if (playButton.getGlobalBounds().contains(worldPos))
 				{
 					state = State::LEVELING_UP;
 					goldCount = 0;
+
+					// Play the start game sound
+					sound.playStartGameSound();
 
 					// Reset the player's stats
 					player.resetPlayerStats();
@@ -402,14 +395,6 @@ int main()
 			{
 				player.stopRight();
 			}
-
-			// Fire a bullet
-			if (Mouse::isButtonPressed(Mouse::Left))
-			{
-
-
-			} // End fire a bullet
-
 		}// End WASD while playing
 
 		// Handle the levelling up state
@@ -419,14 +404,14 @@ int main()
 			if (event.key.code == Keyboard::Num1)
 			{
 				// Increase fire rate
-				fireRate++;
+				//fireRate++;
 				state = State::PLAYING;
 			}
 
 			if (event.key.code == Keyboard::Num2)
 			{
 				// Increase clip size
-				clipSize += clipSize;
+				//clipSize += clipSize;
 				state = State::PLAYING;
 			}
 
@@ -465,11 +450,6 @@ int main()
 
 			if (state == State::PLAYING)
 			{
-				// Increase the wave number
-				//wave++;
-
-				// Prepare the level
-				
 				// We will modify the next two lines later
 				arena.width = 1900;
 				arena.height = 800;
@@ -494,11 +474,9 @@ int main()
 			}
 		}// End levelling up
 
-		 /*
-		 ****************
-		 UPDATE THE FRAME
-		 ****************
-		 */
+		/***************
+		UPDATE THE FRAME
+		****************/
 		if (state == State::PLAYING)
 		{
 			ShowCursor(false); // hide the windows cursor
@@ -529,9 +507,8 @@ int main()
 
 			// Make the view centre around the player				
 			mainView.setCenter(player.getCenter());
-
-			// Loop through each Zombie and update them
 			
+			/*
 			// Update any bullets that are in-flight
 			for (int i = 0; i < 100; i++)
 			{
@@ -540,6 +517,7 @@ int main()
 					bullets[i].update(dtAsSeconds);
 				}
 			}
+			*/
 
 			// Update the pickups
 			healthPickup.update(dtAsSeconds);
@@ -556,25 +534,21 @@ int main()
 			// Has the player touched ammo pickup
 			if (player.getPosition().intersects(ammoPickup.getPosition()) && ammoPickup.isSpawned()) 
 			{
-				bulletsSpare += ammoPickup.gotIt();
+				//bulletsSpare += ammoPickup.gotIt();
 			}
-
 
 			// Has the player touched stamina pickup
 			if (player.getPosition().intersects(staminaPickup.getPosition()) && staminaPickup.isSpawned())
 			{
 				player.increaseStaminaLevel(staminaPickup.gotIt()); 
 				// Play a sound
-	
 			}
-
 
 			// Has the player touched mana pickup
 			if (player.getPosition().intersects(manaPickup.getPosition()) && manaPickup.isSpawned())
 			{
 				player.increaseManaLevel(manaPickup.gotIt());
 				// Play a sound
-
 			}
 
 			if (currentDecal > 248)
@@ -600,10 +574,8 @@ int main()
 			framesSinceLastHUDUpdate++;
 			// Calculate FPS every fpsMeasurementFrameInterval frames
 			
-			// Update game HUD text
-			stringstream ssGoldCount;
-
 			// Update the gold text
+			stringstream ssGoldCount;
 			ssGoldCount << "Gold:" << goldCount;
 			goldCountText.setString(ssGoldCount.str());
 
@@ -613,12 +585,9 @@ int main()
 
 		} // End updating the scene
 
-		 /*
-		 **************
-		 Draw the scene
-		 **************
-		 */
-
+		/*************
+		Draw the scene
+		**************/
 		if (state == State::PLAYING)
 		{
 			window.clear();
@@ -640,6 +609,7 @@ int main()
 				window.draw(decal[i].getSprite());
 			}
 
+			/*
 			for (int i = 0; i < 100; i++)
 			{
 				if (bullets[i].isInFlight())
@@ -647,6 +617,7 @@ int main()
 					window.draw(bullets[i].getShape());
 				}
 			}
+			*/
 
 			// Add entities to drawables vector
 			for (auto& entity : landscape.getEntities()) {
@@ -670,7 +641,7 @@ int main()
 
 			drawables.clear();
 
-			// Draw the pickups is currently spawned
+			// Draw the pickups that are currently spawned
 			if (ammoPickup.isSpawned())
 			{
 				window.draw(ammoPickup.getSprite());
@@ -695,7 +666,7 @@ int main()
 			window.setView(hudView);
 			
 			// Draw all the HUD elements
-			window.draw(spriteAmmoIcon);
+			//window.draw(spriteAmmoIcon);
 			window.draw(goldCountText);
 			window.draw(emptyHealthBar);
 			window.draw(healthBar);
@@ -703,7 +674,10 @@ int main()
 			window.draw(manaBar);
 			window.draw(emptyStaminaBar);
 			window.draw(staminaBar);
-			window.draw(fpsText);
+			if (displayFps) {
+				window.draw(fpsText);
+			}
+			
 		}
 
 		if (state == State::LEVELING_UP)

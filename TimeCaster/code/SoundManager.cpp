@@ -10,12 +10,16 @@ using namespace sf;
 
 // SoundManager constructor
 SoundManager::SoundManager() {
-	// Loads hurt sound file into buffer
-	// hurtBuffer.loadFromFile("sound/hit.wav");
-	// hurt.setBuffer(hurtBuffer);
-
 	// Seeding randomiser
 	srand(time(0));
+	
+	// Loads start game sound file into buffer
+	startGameBuffer.loadFromFile("sound/startGame.wav");
+	startGame.setBuffer(startGameBuffer);
+
+	// Loads hit sound file into buffer
+	hitBuffer.loadFromFile("sound/hit.wav");
+	hit.setBuffer(hitBuffer);
 } // End of SoundManager constructor
 
 // Function for placing songs within the soundtrack list
@@ -39,3 +43,11 @@ bool SoundManager::isSoundtrackPlaying() {
 void SoundManager::playSoundtrack() {
 	soundtrack[rand() % sizeof(soundtrack) / sizeof(Sound)].play();
 } // End of playSoundtrack function
+
+void SoundManager::playStartGameSound() {
+	startGame.play();
+}
+
+void SoundManager::playHitSound() {
+	hit.play();
+}
