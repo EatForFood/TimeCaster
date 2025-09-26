@@ -477,6 +477,7 @@ int main()
 				if (optionsButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU)
 				{
 					sound.playButtonClickSound();
+					landscape.clearBackground();
 					state = State::OPTIONS_MENU;
 				}
 
@@ -492,12 +493,14 @@ int main()
 				if (mainMenuButton.getGlobalBounds().contains(worldPos) && state == State::OPTIONS_MENU)
 				{
 					sound.playButtonClickSound();
+					landscape.clearBackground();
 					state = State::MAIN_MENU;
 				}
 
 				if (mainMenuButton.getGlobalBounds().contains(worldPos) && state == State::PAUSED) 
 				{
 					sound.playButtonClickSound();
+					landscape.clearBackground();
 					state = State::MAIN_MENU;
 				}
 

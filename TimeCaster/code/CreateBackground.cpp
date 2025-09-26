@@ -112,23 +112,21 @@ int CreateBackground::createLandscape()
 		}
 	}
 
-	if (setUp) // only create tree entities once
-	{
-		CreateEntity("tree1", 5, 5);
-		CreateEntity("tree2", 8, 5);
-		CreateEntity("tree3", 5, 8);
-		CreateEntity("tree4", 5, 14);
-		CreateEntity("tree5", 14, 7);
-		CreateEntity("tree6", 18, 7);
-		CreateEntity("tree7", 22, 7);
-		CreateEntity("tree8", 29, 7);
-		setUp = false;
-	}
+	CreateEntity("tree1", 5, 5);
+	CreateEntity("tree2", 8, 5);
+	CreateEntity("tree3", 5, 8);
+	CreateEntity("tree4", 5, 14);
+	CreateEntity("tree5", 14, 7);
+	CreateEntity("tree6", 18, 7);
+	CreateEntity("tree7", 22, 7);
+	CreateEntity("tree8", 29, 7);
+
+	
 	placeHouse1(15, 15);
 	placeHouse1(23, 15);
 	placeHouse1(15, 23);
 	placeHouse1(23, 23);
-
+	
 	return TILE_SIZE;
 }
 
@@ -263,4 +261,13 @@ std::vector<Text> CreateBackground::getDebugText() {
 std::vector<Entity> CreateBackground::getEntities() {
 
 	return entities;
+}
+
+void CreateBackground::clearBackground() {
+	rVABG.clear();
+	rVAFG.clear();
+	currentVertexBG = 0;
+	currentVertexFG = 0;
+	entities.clear();
+
 }
