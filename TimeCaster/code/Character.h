@@ -96,7 +96,10 @@ public:
 	Sprite getSpriteFromSheet();
 
 	// Where is the character
-	FloatRect getPosition();
+	void setPosition(Vector2f newPosition);
+	Vector2f getPosition();
+
+	FloatRect getGlobalBounds();
 
 	float getY();
 

@@ -2,6 +2,7 @@
 #include "TimeCaster.h"
 #include "Entity.h"
 #include "CreateBackground.h"
+#include "NavBox.h"
 
 using namespace std;
 using namespace sf;
@@ -146,7 +147,7 @@ void CreateBackground::placeHouse1(int sx, int sy) { // sx 15, sy 18
 
 	}
 
-	// House east wall *
+	// House east wall 
 	for (int y = sy-3; y < sy+1; y++)
 	{
 		placeTile(sx+4, y, 64, 1140, false);
@@ -173,6 +174,9 @@ void CreateBackground::placeHouse1(int sx, int sy) { // sx 15, sy 18
 	{
 		placeTile(x, sy-3, 64, 1076, true);
 	}
+
+	NavBox navbox(sx+1, sy-3, 5, 4);
+	navBoxes.push_back(navbox);
 }
 
 // These trees can be placed in places the player cannot reach for background scenary
@@ -238,7 +242,11 @@ void CreateBackground::CreateEntity(String type, int x, int y) {
 	float ix = (x - y) * (TILE_SIZE / 2);
 	float iy = (x + y) * (TILE_SIZE / 4);
 	entity.spawn(type, ix, iy);
+
+	NavBox nav(x,y,1,1);
+	nav.NavTree();
 	entities.push_back(entity);
+	navBoxes.push_back(nav);
 }
 
 // return background Vertex Array
@@ -253,14 +261,19 @@ VertexArray CreateBackground::getForground() {
 	return rVAFG;
 }
 
-std::vector<Text> CreateBackground::getDebugText() {
+vector<Text> CreateBackground::getDebugText() {
 
 	return debugText;
 }
 
-std::vector<Entity> CreateBackground::getEntities() {
+vector<Entity> CreateBackground::getEntities() {
 
 	return entities;
+}
+
+vector<NavBox> CreateBackground::getNavBoxes() {
+
+	return navBoxes;
 }
 
 void CreateBackground::clearBackground() {
@@ -269,5 +282,6 @@ void CreateBackground::clearBackground() {
 	currentVertexBG = 0;
 	currentVertexFG = 0;
 	entities.clear();
+	navBoxes.clear();
 
 }

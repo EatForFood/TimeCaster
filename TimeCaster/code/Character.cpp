@@ -1,7 +1,19 @@
 #include "Character.h"
 #include "TextureHolder.h"
 
-FloatRect Character::getPosition()
+Vector2f Character::getPosition()
+{
+	return m_Position;
+}
+
+void Character::setPosition(Vector2f newPosition)
+{
+	m_Position = newPosition;
+	m_Sprite.setPosition(m_Position);
+}
+
+
+FloatRect Character::getGlobalBounds()
 {
 	return m_Sprite.getGlobalBounds();
 }

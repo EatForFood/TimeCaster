@@ -1,6 +1,7 @@
 #include "player.h"
 #include "TextureHolder.h"
 
+
 Player::Player()
 {
 	m_Speed = START_SPEED;
@@ -14,14 +15,10 @@ Player::Player()
 	
 
 	// Associate a texture with the sprite
-	// !!Watch this space!!
-	//m_Sprite = Sprite(TextureHolder::GetTexture("graphics/player_pistol.png"));
-
 	m_Sprite = Sprite(TextureHolder::GetTexture("graphics/player/playerWalk.png"));
 
 	// Set the origin of the sprite to the centre, 
-	// for smooth rotation
-	m_Sprite.setOrigin(32, 64);
+	m_Sprite.setOrigin(32, 32);
 	m_Sprite.setScale(0.75,0.75);
 
 }
@@ -181,16 +178,15 @@ void Player::update(float elapsedTime, Vector2i mousePosition)
 
 		
 
-	if (m_UpPressed)
+	if (m_UpPressed && !upDisabled)
 	{
 		m_PositionLast = m_Position;
 		m_Position.y -= m_Speed * elapsedTime;
 		setSpriteFromSheet(IntRect(0, 0, 576, 64)); // set sprite depending on direction
 		direction = Vector2f(0, 1);
-	
 	}
 
-	if (m_DownPressed)
+	if (m_DownPressed && !downDisabled)
 	{
 		m_PositionLast = m_Position;
 		m_Position.y += m_Speed * elapsedTime;
@@ -198,7 +194,7 @@ void Player::update(float elapsedTime, Vector2i mousePosition)
 		direction = Vector2f(0, -1);
 	}
 
-	if (m_RightPressed)
+	if (m_RightPressed && !rightDisabled)
 	{
 		m_PositionLast = m_Position;
 		m_Position.x += m_Speed * elapsedTime;
@@ -206,7 +202,7 @@ void Player::update(float elapsedTime, Vector2i mousePosition)
 		direction = Vector2f(1, 0);
 	}
 
-	if (m_LeftPressed)
+	if (m_LeftPressed && !leftDisabled)
 	{
 		m_PositionLast = m_Position;
 		m_Position.x -= m_Speed * elapsedTime;
@@ -267,7 +263,27 @@ void Player::update(float elapsedTime, Vector2i mousePosition)
 	{
 		moveTextureRect();
 	}
+	/*
+	if (rightDisabled)
+	{
+		leftDisabled = false;
+	}
 
+	if (leftDisabled)
+	{
+		rightDisabled = false;
+	}
+
+	if (upDisabled)
+	{
+		downDisabled = false;
+	}
+
+	if (downDisabled)
+	{
+		upDisabled = false;
+	}
+	*/
 }
 
 void Player::upgradeSpeed()
@@ -388,3 +404,24 @@ void Player::stopDodge() {
 	m_Speed = m_Speed / 2;
 }
 
+void Player::disableDown() {
+	downDisabled = true;
+}
+
+void Player::disableUp() {
+	upDisabled = true;
+}
+
+void Player::disableRight() {
+	rightDisabled = true;
+}
+
+void Player::disableLeft() {
+	leftDisabled = true;
+}
+
+
+void Player::revertPosition() {
+	setPosition(m_PositionLast);
+	m_Position = m_PositionLast;
+}

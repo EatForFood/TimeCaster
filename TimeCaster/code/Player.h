@@ -40,6 +40,11 @@ private:
 	// If the player is moving or not
 	bool m_IsMoving = false;
 
+	bool upDisabled = false;
+	bool downDisabled = false;
+	bool rightDisabled = false;
+	bool leftDisabled = false;
+
 public:
 
 	Player();
@@ -102,6 +107,12 @@ public:
 
 	float getMana();
 	float getMaxMana();
+
+	void revertPosition();
+	void disableUp();
+	void disableDown();
+	void disableRight();
+	void disableLeft();
 
 };
 #pragma once

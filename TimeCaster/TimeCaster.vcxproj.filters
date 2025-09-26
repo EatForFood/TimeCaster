@@ -48,6 +48,12 @@
     <ClInclude Include="code\Entity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="code\NavBox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\CollisionDetection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="code\Bullet.cpp">
@@ -81,6 +87,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="code\Entity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\NavBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\CollisionDetection.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

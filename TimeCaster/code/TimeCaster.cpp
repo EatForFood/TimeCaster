@@ -12,7 +12,7 @@
 #include "Windows.h"
 #include "CreateBackground.h"
 #include "SoundManager.h"
-#include "Entity.h"
+#include "CollisionDetection.h"
 
 using namespace std;
 using namespace sf;
@@ -30,6 +30,9 @@ string difficultyToString(Difficulty difficulty)
 
 int main()
 {	
+
+	CollisionDetection collision;
+
 	// Here is the instance of TextureHolder
 	TextureHolder holder;
 	
@@ -556,6 +559,12 @@ int main()
 			if (Keyboard::isKeyPressed(Keyboard::W))
 			{
 				player.moveUp();
+				for (auto& nav : landscape.getNavBoxes()) { // if player walks into navBox 
+					if (collision.pointInShape(player.getPosition(), nav.getShape())) {
+						player.revertPosition();
+						player.setPosition(Vector2f(player.getPosition().x, player.getPosition().y + 1.5f));
+					}
+				}
 			}
 			else
 			{
@@ -565,6 +574,12 @@ int main()
 			if (Keyboard::isKeyPressed(Keyboard::S))
 			{
 				player.moveDown();
+				for (auto& nav : landscape.getNavBoxes()) { // if player walks into navBox 
+					if (collision.pointInShape(player.getPosition(), nav.getShape())) {
+						player.revertPosition();
+						player.setPosition(Vector2f(player.getPosition().x,player.getPosition().y - 1.5f));
+					}
+				}
 			}
 			else
 			{
@@ -574,6 +589,12 @@ int main()
 			if (Keyboard::isKeyPressed(Keyboard::A))
 			{
 				player.moveLeft();
+				for (auto& nav : landscape.getNavBoxes()) { // if player walks into navBox 
+					if (collision.pointInShape(player.getPosition(), nav.getShape())) {
+						player.revertPosition();
+						player.setPosition(Vector2f(player.getPosition().x + 1.5f, player.getPosition().y));
+					}
+				}
 			}
 			else
 			{
@@ -583,6 +604,12 @@ int main()
 			if (Keyboard::isKeyPressed(Keyboard::D))
 			{
 				player.moveRight();
+				for (auto& nav : landscape.getNavBoxes()) { // if player walks into navBox 
+					if (collision.pointInShape(player.getPosition(), nav.getShape())) {
+						player.revertPosition();
+						player.setPosition(Vector2f(player.getPosition().x - 1.5f, player.getPosition().y));
+					}
+				}
 			}
 			else
 			{
@@ -763,7 +790,7 @@ int main()
 			Vector2f playerPosition(player.getCenter());
 
 			// Make the view centre around the player				
-			mainView.setCenter(player.getCenter());
+			mainView.setCenter(player.getCenter().x,player.getCenter().y-30);
 			
 			/*
 			// Update any bullets that are in-flight
@@ -783,31 +810,31 @@ int main()
 			manaPickup.update(dtAsSeconds);
 
 			// Has the player touched health pickup
-			if (player.getPosition().intersects(healthPickup.getPosition()) && healthPickup.isSpawned())
+			if (player.getGlobalBounds().intersects(healthPickup.getPosition()) && healthPickup.isSpawned())
 			{
 				player.increaseHealthLevel(healthPickup.gotIt());
 			}
 
 			// Has the player touched ammo pickup
-			if (player.getPosition().intersects(ammoPickup.getPosition()) && ammoPickup.isSpawned()) 
+			if (player.getGlobalBounds().intersects(ammoPickup.getPosition()) && ammoPickup.isSpawned())
 			{
 				//bulletsSpare += ammoPickup.gotIt();
 			}
 
 			// Has the player touched stamina pickup
-			if (player.getPosition().intersects(staminaPickup.getPosition()) && staminaPickup.isSpawned())
+			if (player.getGlobalBounds().intersects(staminaPickup.getPosition()) && staminaPickup.isSpawned())
 			{
 				player.increaseStaminaLevel(staminaPickup.gotIt()); 
 				// Play a sound
 			}
 
 			// Has the player touched mana pickup
-			if (player.getPosition().intersects(manaPickup.getPosition()) && manaPickup.isSpawned())
+			if (player.getGlobalBounds().intersects(manaPickup.getPosition()) && manaPickup.isSpawned())
 			{
 				player.increaseManaLevel(manaPickup.gotIt());
 				// Play a sound
 			}
-
+		
 			if (currentDecal > 248)
 			{
 				currentDecal = 0;
@@ -945,6 +972,10 @@ int main()
 
 			for (auto& txt : landscape.getDebugText()) { // draw debug text showing tile location
 				window.draw(txt);
+			}
+
+			for (auto& nav : landscape.getNavBoxes()) { // draw debug text showing tile location
+				window.draw(nav.getShape());
 			}
 
 			//Draw the crosshair

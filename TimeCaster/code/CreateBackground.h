@@ -1,8 +1,10 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "Entity.h"
+#include "NavBox.h"
 
 using namespace sf;
+using namespace std;
 
 class CreateBackground
 {
@@ -19,11 +21,12 @@ private:
 
 	bool debug;
 	Font debugFont;
-	std::vector<Text> debugText;
+	vector<Text> debugText;
 
-	std::vector<Entity> entities;
+	vector<Entity> entities;
 
-	bool setUp = true;
+	vector<NavBox> navBoxes;
+
 
 public:
 
@@ -34,11 +37,13 @@ public:
 	VertexArray getBackground();
 	VertexArray getForground();
 
-	std::vector<Text> getDebugText();
+	vector<Text> getDebugText();
 
 	void CreateEntity(String type, int x, int y);
 
-	std::vector<Entity> getEntities();
+	vector<Entity> getEntities();
+
+	vector<NavBox> getNavBoxes();
 
 	int createLandscape();
 

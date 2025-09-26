@@ -21,10 +21,12 @@
   <ItemGroup>
     <ClInclude Include="code\Bullet.h" />
     <ClInclude Include="code\Character.h" />
+    <ClInclude Include="code\CollisionDetection.h" />
     <ClInclude Include="code\CreateBackground.h" />
     <ClInclude Include="code\Decal.h" />
     <ClInclude Include="code\Entity.h" />
     <ClInclude Include="code\Gun.h" />
+    <ClInclude Include="code\NavBox.h" />
     <ClInclude Include="code\Pickup.h" />
     <ClInclude Include="code\Player.h" />
     <ClInclude Include="code\SoundManager.h" />
@@ -34,10 +36,12 @@
   <ItemGroup>
     <ClCompile Include="code\Bullet.cpp" />
     <ClCompile Include="code\Character.cpp" />
+    <ClCompile Include="code\CollisionDetection.cpp" />
     <ClCompile Include="code\CreateBackground.cpp" />
     <ClCompile Include="code\Decal.cpp" />
     <ClCompile Include="code\Entity.cpp" />
     <ClCompile Include="code\Gun.cpp" />
+    <ClCompile Include="code\NavBox.cpp" />
     <ClCompile Include="code\Pickup.cpp" />
     <ClCompile Include="code\Player.cpp" />
     <ClCompile Include="code\SoundManager.cpp" />
