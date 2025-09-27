@@ -790,7 +790,7 @@ int main()
 			Vector2f playerPosition(player.getCenter());
 
 			// Make the view centre around the player				
-			mainView.setCenter(player.getCenter().x,player.getCenter().y-30);
+			mainView.setCenter(player.getCenter().x,player.getCenter().y-10);
 			
 			/*
 			// Update any bullets that are in-flight
