@@ -31,20 +31,16 @@ string difficultyToString(Difficulty difficulty)
 
 int main()
 {	
-
 	CollisionDetection collision;
 
 	// Here is the instance of TextureHolder
 	TextureHolder holder;
 	
-	// The game will always be in one of these states
-	enum class State { MAIN_MENU, OPTIONS_MENU, STORY_INTRO, PLAYING, PAUSED, LEVELING_UP, GAME_OVER };
-	
 	// Start with the MAIN_MENU state
 	State state = State::MAIN_MENU;
 
-	// Start with the Easy difficulty state
-	Difficulty difficulty = Difficulty::Easy;
+	// Start with the Medium difficulty state
+	Difficulty difficulty = Difficulty::Medium;
 
 	// Get the screen resolution and create an SFML window
 	Vector2f resolution;
@@ -64,7 +60,7 @@ int main()
 	// Here is our clock for timing everything
 	Clock clock;
 
-	// Clock used for tracking and displaying fps
+	// Clock used for tracking fps
 	Clock fpsClock;
 
 	// How long has the PLAYING state been active
@@ -88,7 +84,7 @@ int main()
 	CreateBackground landscape;
 
 	// Create the background
-	//VertexArray background;
+	// VertexArray background;
 	// Load the texture for our background vertex array
 	Texture textureBackground = TextureHolder::GetTexture("graphics/landscape.png");
 
@@ -117,10 +113,12 @@ int main()
 
 	// Hide the mouse pointer and replace it with crosshair
 	window.setMouseCursorVisible(true);
-	Sprite spriteCrosshair;
-	Texture textureCrosshair = TextureHolder::GetTexture("graphics/crosshair.png");
-	spriteCrosshair.setTexture(textureCrosshair);
-	spriteCrosshair.setOrigin(25, 25);
+	Sprite spriteCursor;
+	Texture textureCursorOpen = TextureHolder::GetTexture("graphics/knightCursorOpen.png");
+	Texture textureCursorClosed = TextureHolder::GetTexture("graphics/knightCursorClosed.png");
+	spriteCursor.setTexture(textureCursorOpen);
+	spriteCursor.setScale(0.4,0.4);
+	spriteCursor.setOrigin(25, 25);
 
 	// Create a couple of pickups
 	Pickup healthPickup(1);
@@ -129,7 +127,7 @@ int main()
 	Pickup manaPickup(4);
 
 	// About the game
-	int goldCount = 0;
+	
 	int hiScore = 0;
 
 	// For the home/game over screen
@@ -141,12 +139,20 @@ int main()
 	// Create a view for the HUD
 	View hudView(sf::FloatRect(0, 0, resolution.x, resolution.y));
 
-	// Main menu font
+	// Main font
 	Font font;
 	font.loadFromFile("fonts/PixelifySans-Bold.ttf");
 
-	// Paused
-	Text pausedText("Press enter \nto continue", font, 155);
+	// Load the high score from a text file
+	ifstream inputFile("gamedata/scores.txt");
+	if (inputFile.is_open())
+	{
+		inputFile >> hiScore;
+		inputFile.close();
+	}
+
+	// Paused text
+	Text pausedText("Press escape \nto continue", font, 130);
 	pausedText.setFillColor(Color::White);
 	FloatRect textBounds = pausedText.getLocalBounds();
 	Vector2f viewCentre = mainView.getCenter();
@@ -174,14 +180,6 @@ int main()
 	goldCountText.setCharacterSize(55);
 	goldCountText.setFillColor(Color::White);
 	goldCountText.setPosition(1400, 0);
-
-	// Load the high score from a text file/
-	ifstream inputFile("gamedata/scores.txt");
-	if (inputFile.is_open())
-	{
-		inputFile >> hiScore;
-		inputFile.close();
-	}
 
 	// FPS text
 	Text fpsText;
@@ -220,24 +218,42 @@ int main()
 	emptyManaBar.setFillColor(Color::Black);
 	emptyManaBar.setPosition(10, 110);
 
+	/***********
+	Main Menu UI
+	************/
+	
 	// Play button
-	RectangleShape playButton;
-	playButton.setFillColor(Color::Green);
-	playButton.setPosition(200, 210);
-	playButton.setSize(Vector2f(300, 80));
+	RectangleShape newGameButton;
+	newGameButton.setFillColor(Color::Yellow);
+	newGameButton.setPosition(200, 210);
+	newGameButton.setSize(Vector2f(300, 80));
 
 	// Play button text
-	Text playButtonText("Play Game", font, 40);
-	playButtonText.setFillColor(Color::Black);
-	textBounds = playButtonText.getLocalBounds();
-	float x = playButton.getPosition().x + (playButton.getSize().x / 2.f) - (textBounds.width / 2.f);
-	float y = playButton.getPosition().y + (playButton.getSize().y / 2.f) - (textBounds.height / 2.f);
-	playButtonText.setPosition(x - textBounds.left, y - textBounds.top);
+	Text newGameButtonText("New Game", font, 40);
+	newGameButtonText.setFillColor(Color::Black);
+	textBounds = newGameButtonText.getLocalBounds();
+	float x = newGameButton.getPosition().x + (newGameButton.getSize().x / 2.f) - (textBounds.width / 2.f);
+	float y = newGameButton.getPosition().y + (newGameButton.getSize().y / 2.f) - (textBounds.height / 2.f);
+	newGameButtonText.setPosition(x - textBounds.left, y - textBounds.top);
+
+	// Play button
+	RectangleShape loadGameButton;
+	loadGameButton.setFillColor(Color::Green);
+	loadGameButton.setPosition(200, 320);
+	loadGameButton.setSize(Vector2f(300, 80));
+
+	// Play button text
+	Text loadGameButtonText("Load Game", font, 40);
+	loadGameButtonText.setFillColor(Color::Black);
+	textBounds = loadGameButtonText.getLocalBounds();
+	x = loadGameButton.getPosition().x + (loadGameButton.getSize().x / 2.f) - (textBounds.width / 2.f);
+	y = loadGameButton.getPosition().y + (loadGameButton.getSize().y / 2.f) - (textBounds.height / 2.f);
+	loadGameButtonText.setPosition(x - textBounds.left, y - textBounds.top);
 
 	// Options button
 	RectangleShape optionsButton;
 	optionsButton.setFillColor(Color::Green);
-	optionsButton.setPosition(200, 320);
+	optionsButton.setPosition(200, 430);
 	optionsButton.setSize(Vector2f(300, 80));
 
 	// options button text
@@ -251,7 +267,7 @@ int main()
 	// Quit game button
 	RectangleShape quitGameButton;
 	quitGameButton.setFillColor(Color::Green);
-	quitGameButton.setPosition(200, 430);
+	quitGameButton.setPosition(200, 540);
 	quitGameButton.setSize(Vector2f(300, 80));
 
 	// Quit game button text
@@ -262,6 +278,10 @@ int main()
 	y = quitGameButton.getPosition().y + (quitGameButton.getSize().y / 2.f) - (textBounds.height / 2.f);
 	quitGameButtonText.setPosition(x - textBounds.left, y - textBounds.top);
 
+	/***********
+	Options Menu UI
+	************/
+	
 	// Options heading text
 	Text optionsHeadingText("Options", font, 50);
 	optionsHeadingText.setFillColor(Color::White);
@@ -304,7 +324,9 @@ int main()
 	CircleShape handle(10);
 	handle.setFillColor(Color::Red);
 	handle.setOrigin(10, 10); // Centre the circle
-	handle.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, trackY + 2); // Start at min volume
+	textBounds = handle.getLocalBounds();
+	x = track.getPosition().x + (track.getSize().x / 2.f) - (textBounds.width / 2.f);
+	handle.setPosition(x - textBounds.left, trackY + 2); // Slider start at 50% volume
 
 	// Display FPS button
 	RectangleShape displayFPSButton;
@@ -361,6 +383,13 @@ int main()
 	viewCentre = mainView.getCenter();
 	storyIntroText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 150);
 
+	// Skip intro text
+	Text skipIntroText("-- Space to skip --", font, 30);
+	skipIntroText.setFillColor(Color::White);
+	textBounds = skipIntroText.getLocalBounds();
+	viewCentre = mainView.getCenter();
+	skipIntroText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 1000);
+
 	// When did we last update the HUD?
 	int framesSinceLastHUDUpdate = 0;
 
@@ -383,7 +412,7 @@ int main()
 
 	vector<Item> items;
 
-	bool debugreset = false; //it's a bit of a hack but it works to stop multiple upgrades from one key press
+	bool debugreset = true; //it's a bit of a hack but it works to stop multiple upgrades from one key press
 	//press numpad0 to reset if you want to test again
 	//remove this in full build
 
@@ -393,8 +422,11 @@ int main()
 	// Boolean for whether the player is dragging the slider or not
 	bool dragging = false;
 
-	// Setting volume to 0 upon start of game
-	Listener::setGlobalVolume(0);
+	// Setting volume to 50 upon start of game
+	Listener::setGlobalVolume(50);
+
+	// Populate soundtrack
+	sound.populateSoundtrack();
 
 	// The main game loop
 	while (window.isOpen())
@@ -431,7 +463,7 @@ int main()
 				}
 			}
 
-			if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left && state == State::OPTIONS_MENU)
+			if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left && state == State::OPTIONS_MENU)
 			{
 				if (handle.getGlobalBounds().contains(sf::Vector2f(event.mouseButton.x, event.mouseButton.y)))
 				{
@@ -440,7 +472,7 @@ int main()
 			}
 
 			// Stop dragging
-			if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left)
+			if (event.type == Event::MouseButtonReleased && event.mouseButton.button == Mouse::Left)
 			{
 				dragging = false;
 			}
@@ -461,12 +493,30 @@ int main()
 					clock.restart();
 				}
 
-				// Player hit the play game button
-				else if (playButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU)
+				// Player hit the new game button in the main menu
+				else if (newGameButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU)
 				{
 					state = State::LEVELING_UP;
 					// state = State::STORY_INTRO;
-					goldCount = 0;
+					
+
+					// Play the start game sound
+					if (!startSoundPlayed) {
+						sound.playStartGameSound();
+					}
+
+					startSoundPlayed = true;
+					
+					player.createNewSave();
+					player.loadSaveFile();
+				}
+
+				// Player hit the load game button in the main menu
+				else if (loadGameButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU)
+				{
+					state = State::LEVELING_UP;
+					// state = State::STORY_INTRO;
+
 
 					// Play the start game sound
 					if (!startSoundPlayed) {
@@ -475,8 +525,15 @@ int main()
 
 					startSoundPlayed = true;
 
-					// Reset the player's stats
-					player.resetPlayerStats();
+					// Loads player stats from text file
+					if (player.loadSaveFile() == true) {
+						// Player loaded successfully
+					}
+					else {
+						// No save file so create a new one with default values and load it	
+						player.createNewSave();
+						player.loadSaveFile();
+					}
 				}
 
 				// Player hit the options button
@@ -495,7 +552,7 @@ int main()
 					window.close();
 				}
 
-				// Player hit the main menu button
+				// Player hit the main menu button in the options menu
 				if (mainMenuButton.getGlobalBounds().contains(worldPos) && state == State::OPTIONS_MENU)
 				{
 					sound.playButtonClickSound();
@@ -503,10 +560,12 @@ int main()
 					state = State::MAIN_MENU;
 				}
 
+				// Player hit the main menu button in the pause menu
 				if (mainMenuButton.getGlobalBounds().contains(worldPos) && state == State::PAUSED) 
 				{
 					sound.playButtonClickSound();
 					landscape.clearBackground();
+					player.updateSaveFile(player.getSpeed(), player.getHealth(), player.getMaxHealth(), player.getStamina(), player.getMaxStamina(), player.getStaminaRecharge(), player.getMana(), player.getMaxMana(), player.getGold(), player.getPosition());
 					state = State::MAIN_MENU;
 				}
 
@@ -620,50 +679,47 @@ int main()
 			}
 		} // End WASD while playing
 
-		if (!sound.isSoundtrackPlaying()) {
-			sound.playSoundtrack();
-		}
-
 		/* below are debug functions, comment them out in full build / when needed
 		if you add any more, make sure they check if debug reset is false and set it to true or else it will run every loop while the key is pressed */
-		if (event.key.code == Keyboard::Numpad0)
+		if (event.key.code == Keyboard::Num0 && state == State::PLAYING)
 		{
 			debugreset = false;
 		}
-		if (event.key.code == Keyboard::Numpad1 && !debugreset)
+		if (event.key.code == Keyboard::Num1 && !debugreset && state == State::PLAYING)
 		{
 			// Increase health
 			player.upgradeHealth();
 			debugreset = true;
 		}
 
-		if (event.key.code == Keyboard::Numpad2 &&  !debugreset)
+		if (event.key.code == Keyboard::Num2 &&  !debugreset && state == State::PLAYING)
 		{
 			// Increase stamina
 			player.upgradeStamina();
 			debugreset = true;
 		}
 
-		if (event.key.code == Keyboard::Numpad3 && !debugreset)
+		if (event.key.code == Keyboard::Num3 && !debugreset && state == State::PLAYING)
 		{
 			// Increase health
 			player.upgradeMana();
 			debugreset = true;
 		}
 
-		if (event.key.code == Keyboard::Numpad8 && !debugreset)
+
+		if (event.key.code == Keyboard::Num8 && !debugreset && state == State::PLAYING)
 		{
 			player.hit(gameTimeTotal, 10, 200);
 			debugreset = true;
 		}
 
-		if (event.key.code == Keyboard::Numpad9 && !debugreset)
+		if (event.key.code == Keyboard::Num9 && !debugreset && state == State::PLAYING)
 		{
 			player.hit(gameTimeTotal, 30, 1000);
 			debugreset = true;
 		}
 
-		if (event.key.code == Keyboard::G && !debugreset)
+		if (event.key.code == Keyboard::G && !debugreset && state == State::PLAYING)
 		{
 			for (int i = 0; i < (rand() % 10); i++) {
 				items.emplace_back("gold", Vector2f(0, 300));
@@ -734,13 +790,13 @@ int main()
 				healthPickup.upgrade();
 				state = State::PLAYING;
 			}
-
+			
 			if (event.key.code == Keyboard::Num6)
 			{
 				ammoPickup.upgrade();
 				state = State::PLAYING;
 			}
-
+			
 			if (event.key.code == Keyboard::Num7)
 			{
 				// Increase stamina
@@ -796,7 +852,7 @@ int main()
 			mouseWorldPosition = window.mapPixelToCoords(Mouse::getPosition(), mainView);
 
 			// Set the crosshair to the mouse world location
-			spriteCrosshair.setPosition(mouseWorldPosition);
+			spriteCursor.setPosition(mouseWorldPosition);
 
 			// Update the player
 			player.update(dtAsSeconds, Mouse::getPosition());
@@ -882,7 +938,7 @@ int main()
 			
 			// Update the gold text
 			stringstream ssGoldCount;
-			ssGoldCount << "Gold:" << goldCount;
+			ssGoldCount << "Gold:" << player.getGold();
 			goldCountText.setString(ssGoldCount.str());
 
 			framesSinceLastHUDUpdate = 0;
@@ -906,7 +962,23 @@ int main()
 				}
 			}
 
+			if (!sound.isSoundtrackPlaying()) {
+				sound.playSoundtrack();
+			}
+
 		} // End updating the scene
+
+		if (state == State::MAIN_MENU)
+		{
+			startSoundPlayed = FALSE;
+		}
+		
+		if (state == State::MAIN_MENU || state == State::LEVELING_UP || state == State::OPTIONS_MENU)
+		{
+			if (sound.isSoundtrackPlaying()) {
+				sound.stopSoundtrack();
+			}
+		}
 
 		if (state == State::PLAYING)
 		{
@@ -1021,8 +1093,15 @@ int main()
 				window.draw(nav.getShape());
 			}
 
+			if (Mouse::isButtonPressed(Mouse::Left) && state == State::PLAYING) {
+				spriteCursor.setTexture(textureCursorClosed);
+			}
+			else {
+				spriteCursor.setTexture(textureCursorOpen);
+			}
+			
 			//Draw the crosshair
-			window.draw(spriteCrosshair);
+			window.draw(spriteCursor);
 
 			// Switch to the HUD view
 			window.setView(hudView);
@@ -1058,8 +1137,10 @@ int main()
 		{
 			window.clear();
 			window.draw(spriteMainMenu);
-			window.draw(playButton);
-			window.draw(playButtonText);
+			window.draw(newGameButton);
+			window.draw(newGameButtonText);
+			window.draw(loadGameButton);
+			window.draw(loadGameButtonText);
 			window.draw(optionsButton);
 			window.draw(optionsButtonText);
 			window.draw(quitGameButton);
@@ -1082,13 +1163,13 @@ int main()
 			window.draw(difficultyButtonText);
 		}
 
-		/*
 		if (state == State::STORY_INTRO) 
 		{
 			window.clear();
 			window.draw(storyIntroText);
+			window.draw(storyIntroText);
+			window.draw(skipIntroText);
 		}
-		*/
 
 		window.display();
 

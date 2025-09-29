@@ -1,5 +1,11 @@
 #include "player.h"
 #include "TextureHolder.h"
+#include <iostream>
+#include <fstream>
+#include <iomanip>
+
+using namespace std;
+using namespace sf;
 
 
 Player::Player()
@@ -23,23 +29,18 @@ Player::Player()
 
 }
 
-void Player::resetPlayerStats()
+void Player::createNewSave()
 {
-	m_Speed = START_SPEED;
-	m_Health = START_HEALTH;
-	m_Stamina = START_STAMINA;
-	m_MaxHealth = START_HEALTH;
-	m_MaxMana = START_MANA;
-	m_MaxStamina = START_STAMINA;
-	m_StaminaRecharge = START_STAMINA_RECHARGE;
+	std::ofstream saveFile("gamedata/TCSave.txt");
+
+	saveFile << std::fixed << std::setprecision(5) << START_SPEED << " " << START_HEALTH << " " << START_HEALTH << " " << START_STAMINA << " "
+		<< START_STAMINA << " " << START_STAMINA_RECHARGE << " " << START_MANA << " " << START_MANA << " " << 0 << " " << 64 << " " << 64 << std::endl;
+
+	saveFile.close();
 }
 
 void Player::spawn(IntRect arena, Vector2f resolution, int tileSize)
 {
-	// Place the player in the middle of the arena
-	m_Position.x = 64;
-	m_Position.y = 64;
-
 	m_Hitbox.left = m_Position.x - 20;
 	m_Hitbox.width = 40;
 	m_Hitbox.top = m_Position.y - 20;
@@ -361,6 +362,59 @@ float Player::getStamina()
 float Player::getMaxStamina()
 {
 	return m_MaxStamina;
+}
+
+float Player::getStaminaRecharge()
+{
+	return m_StaminaRecharge;
+}
+
+
+int Player::getGold()
+{
+	return m_Gold;
+}
+
+float Player::getSpeed()
+{
+	return m_Speed;
+}
+
+//remember to pass in all player stats to be saved
+void Player::updateSaveFile(float currentSpeed, float currentHealth, float maxHealth, float currentStamina, float maxStamina, float staminaRecharge, float currentMana, float maxMana, int gold, Vector2f position)
+{
+		
+	std::ofstream saveFile("gamedata/TCSave.txt");
+
+	saveFile << std::fixed << std::setprecision(5) << currentSpeed << " " << currentHealth << " " << maxHealth << " " << currentStamina << " "
+	<< maxStamina << " " << staminaRecharge << " " << currentMana << " " << maxMana << " " << gold << " " << position.x << " " << position.y << std::endl;
+
+	saveFile.close();
+}
+
+bool Player::loadSaveFile()
+{
+	std::ifstream loadFile("gamedata/TCSave.txt");
+
+	if (loadFile.is_open())
+	{
+		loadFile >> m_Speed;
+		loadFile >> m_Health;
+		loadFile >> m_MaxHealth;
+		loadFile >> m_Stamina;
+		loadFile >> m_MaxStamina;
+		loadFile >> m_StaminaRecharge;
+		loadFile >> m_Mana;
+		loadFile >> m_MaxMana;
+		loadFile >> m_Gold;
+		loadFile >> m_Position.x;
+		loadFile >> m_Position.y;
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 void Player::dodge()

@@ -12,6 +12,7 @@ private:
 	const float START_MANA = 100;
 	const float START_STAMINA = 100;
 	const float START_STAMINA_RECHARGE = 0.05;
+	
 
 	// Which directions is the player currently moving in
 	bool m_UpPressed;
@@ -24,6 +25,7 @@ private:
 	float m_Stamina;
 	float m_MaxStamina;
 	float m_StaminaRecharge;
+	int m_Gold;
 
 	// Dodge variables
 	bool m_IsDodging = false;
@@ -32,7 +34,7 @@ private:
 	Clock m_CooldownClock;
 	float m_DodgeDuration = 0.2f; // 200ms dodge
 	float m_DodgeCooldown = 1.0f; // 1 second cooldown on dodge
-
+	
 	// When was the player last hit
 	Time m_LastHit;
 	// How many iFrames the player has after being hit
@@ -49,8 +51,8 @@ public:
 
 	Player();
 
-	// reset player to default stats
-	void resetPlayerStats();
+	// make a new save file with default values
+	void createNewSave();
 
 	void spawn(IntRect arena, Vector2f resolution, int tileSize);
 
@@ -104,6 +106,9 @@ public:
 
 	float getStamina();
 	float getMaxStamina();
+	float getStaminaRecharge();
+	int getGold();
+	float getSpeed();
 
 	float getMana();
 	float getMaxMana();
@@ -113,6 +118,11 @@ public:
 	void disableDown();
 	void disableRight();
 	void disableLeft();
+
+	//save and load player stats/position/etc.
+	void updateSaveFile(float currentSpeed, float currentHealth, float maxHealth, float currentStamina, float maxStamina, float staminaRecharge, float currentMana, float maxMana, int gold,  Vector2f position);
+	//load player stats/position/etc. from save file
+	bool loadSaveFile();
 
 };
 #pragma once
