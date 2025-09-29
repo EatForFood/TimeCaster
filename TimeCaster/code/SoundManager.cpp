@@ -24,11 +24,15 @@ SoundManager::SoundManager() {
 	// Loads click sound from file into buffer
 	clickBuffer.loadFromFile("sound/buttonClick.wav");
 	buttonClick.setBuffer(clickBuffer);
+
+	soundTrack1Buffer.loadFromFile("sound/soundtrack1.ogg");
+	soundtrack1.setBuffer(soundTrack1Buffer);
+
 } // End of SoundManager constructor
 
 // Function for placing songs within the soundtrack list
 void SoundManager::populateSoundtrack() {
-	//soundtrack[0] = soundtrack1;
+	soundtrack[0] = soundtrack1;
 	//soundtrack[1] = soundtrack2;
 } // End of populateSoundtrack function
 

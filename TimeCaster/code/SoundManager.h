@@ -12,7 +12,7 @@ class SoundManager
 {
 private:
 	// List to store soundtrack songs
-	Sound soundtrack[2];
+	Sound soundtrack[1];
 
 	// Prepare the start game sound
 	SoundBuffer startGameBuffer;
@@ -24,6 +24,9 @@ private:
 
 	SoundBuffer clickBuffer;
 	Sound buttonClick;
+
+	SoundBuffer soundTrack1Buffer;
+	Sound soundtrack1;
 
 public:
 	// SoundManager constructor
