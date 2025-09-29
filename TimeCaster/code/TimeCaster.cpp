@@ -401,6 +401,9 @@ int main()
 	// Setting volume to 50 upon start of game
 	Listener::setGlobalVolume(50);
 
+	// Populate soundtrack
+	sound.populateSoundtrack();
+
 	// The main game loop
 	while (window.isOpen())
 	{
@@ -624,10 +627,6 @@ int main()
 				player.stopRight();
 			}
 		} // End WASD while playing
-
-		if (!sound.isSoundtrackPlaying()) {
-			sound.playSoundtrack();
-		}
 
 		/* below are debug functions, comment them out in full build / when needed
 		if you add any more, make sure they check if debug reset is false and set it to true or else it will run every loop while the key is pressed */
@@ -898,7 +897,18 @@ int main()
 				item.update(dtAsSeconds);
 			}
 
+			if (!sound.isSoundtrackPlaying()) {
+				sound.playSoundtrack();
+			}
+
 		} // End updating the scene
+
+		if (state == State::MAIN_MENU || state == State::LEVELING_UP || state == State::OPTIONS_MENU)
+		{
+			if (sound.isSoundtrackPlaying()) {
+				sound.stopSoundtrack();
+			}
+		}
 
 		if (state == State::PLAYING)
 		{

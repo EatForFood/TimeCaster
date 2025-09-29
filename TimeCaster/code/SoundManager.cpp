@@ -31,16 +31,18 @@ SoundManager::SoundManager() {
 } // End of SoundManager constructor
 
 // Function for placing songs within the soundtrack list
-void SoundManager::populateSoundtrack() {
-	soundtrack[0] = soundtrack1;
-	//soundtrack[1] = soundtrack2;
+void SoundManager::populateSoundtrack() 
+{
+	soundtrack.push_back(soundtrack1);
+	//soundtrack.push_back(soundtrack2);
 } // End of populateSoundtrack function
 
 // Function for checking whether soundtrack is currently playing or not
-bool SoundManager::isSoundtrackPlaying() {
-	for (int i = 0; i < sizeof(soundtrack) / sizeof(Sound); i++)
+bool SoundManager::isSoundtrackPlaying() 
+{
+	for (auto& s : soundtrack) 
 	{
-		if (soundtrack[i].getStatus() == SoundSource::Status::Playing) {
+		if (s.getStatus() == SoundSource::Status::Playing) {
 			return true;
 		}
 	}
@@ -48,9 +50,21 @@ bool SoundManager::isSoundtrackPlaying() {
 } // End of isSoundtrackPlaying function
 
 // Function to play a random song from the soundtrack
-void SoundManager::playSoundtrack() {
-	soundtrack[rand() % sizeof(soundtrack) / sizeof(Sound)].play();
+void SoundManager::playSoundtrack() 
+{
+	if (!soundtrack.empty()) 
+	{
+		soundtrack[rand() % soundtrack.size()].play();
+	}
 } // End of playSoundtrack function
+
+void SoundManager::stopSoundtrack()
+{
+	for (auto& s : soundtrack) 
+	{
+		s.stop();
+	}
+}
 
 void SoundManager::playStartGameSound() {
 	startGame.play();

@@ -3,7 +3,7 @@
 #include <fstream>
 #include <SFML/Audio.hpp>
 #include <iostream>
-#include <list>
+#include <vector>
 
 using namespace std;
 using namespace sf;
@@ -11,8 +11,8 @@ using namespace sf;
 class SoundManager
 {
 private:
-	// List to store soundtrack songs
-	Sound soundtrack[1];
+	// Vector to store soundtrack songs
+	vector<Sound> soundtrack;
 
 	// Prepare the start game sound
 	SoundBuffer startGameBuffer;
@@ -40,6 +40,9 @@ public:
 
 	// Play soundtrack function
 	void playSoundtrack();
+
+	// Stop soundtrack function
+	void stopSoundtrack();
 
 	void playStartGameSound();
 
