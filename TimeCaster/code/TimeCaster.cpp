@@ -632,38 +632,53 @@ int main()
 
 		/* below are debug functions, comment them out in full build / when needed
 		if you add any more, make sure they check if debug reset is false and set it to true or else it will run every loop while the key is pressed */
-		if (event.key.code == Keyboard::Numpad0)
+		if (event.key.code == Keyboard::Num0)
 		{
 			debugreset = false;
 		}
-		if (event.key.code == Keyboard::Numpad1 && !debugreset)
+		if (event.key.code == Keyboard::Num1 && !debugreset)
 		{
 			// Increase health
 			player.upgradeHealth();
 			debugreset = true;
 		}
 
-		if (event.key.code == Keyboard::Numpad2 &&  !debugreset)
+		if (event.key.code == Keyboard::Num2 &&  !debugreset)
 		{
 			// Increase stamina
 			player.upgradeStamina();
 			debugreset = true;
 		}
 
-		if (event.key.code == Keyboard::Numpad3 && !debugreset)
+		if (event.key.code == Keyboard::Num3 && !debugreset)
 		{
 			// Increase health
 			player.upgradeMana();
 			debugreset = true;
 		}
 
-		if (event.key.code == Keyboard::Numpad8 && !debugreset)
+		if (event.key.code == Keyboard::Num5 && !debugreset)
+		{
+			// Save player stats to file
+			player.createSaveFile(player.getHealth(), player.getMaxHealth(), player.getStamina(), player.getMaxStamina(), player.getMana(), player.getMaxMana(), player.getPosition());
+			debugreset = true;
+		}
+
+
+		if (event.key.code == Keyboard::Num6 && !debugreset)
+		{
+			// Load player stats from file
+			player.loadSaveFile();
+			debugreset = true;
+		}
+
+		if (event.key.code == Keyboard::Num8 && !debugreset)
 		{
 			player.hit(gameTimeTotal, 10, 200);
 			debugreset = true;
 		}
 
-		if (event.key.code == Keyboard::Numpad9 && !debugreset)
+		if (event.key.code == Keyboard::Num9 && !debugreset)
 		{
 			player.hit(gameTimeTotal, 30, 1000);
 			debugreset = true;

@@ -1,5 +1,8 @@
 #include "player.h"
 #include "TextureHolder.h"
+#include <iostream>
+#include <fstream>
+#include <iomanip>
 
 
 Player::Player()
@@ -361,6 +364,40 @@ float Player::getStamina()
 float Player::getMaxStamina()
 {
 	return m_MaxStamina;
+}
+
+//remember to pass in all player stats to be saved
+void Player::createSaveFile(float currentHealth, float maxHealth, float currentStamina, float maxStamina, float currentMana, float maxMana, Vector2f position)
+{
+		
+	std::ofstream saveFile("TCSave.txt");
+
+	saveFile << std::fixed << std::setprecision(5) << currentHealth << " " << maxHealth << " " << currentStamina << " "
+	<< maxStamina << " " << currentMana << " " << maxMana << " " << position.x << " " << position.y << std::endl;
+
+	saveFile.close();
+}
+
+void Player::loadSaveFile()
+{
+	std::ifstream loadFile("TCSave.txt");
+
+	if (loadFile.is_open())
+	{
+		loadFile >> m_Health;
+		loadFile >> m_MaxHealth;
+		loadFile >> m_Stamina;
+		loadFile >> m_MaxStamina;
+		loadFile >> m_Mana;
+		loadFile >> m_MaxMana;
+		loadFile >> m_Position.x;
+		loadFile >> m_Position.y;
+	}
+	/*else
+	{
+		// If the file doesn't exist, do something else
+		//it's fine if we leave this blank though, it won't crash the game and the loadFile will just fail silently
+	}*/
 }
 
 void Player::dodge()

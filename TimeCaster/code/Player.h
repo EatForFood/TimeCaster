@@ -114,5 +114,9 @@ public:
 	void disableRight();
 	void disableLeft();
 
+	//save and load player stats/position/etc.
+	void createSaveFile(float currentHealth, float maxHealth, float currentStamina, float maxStamina, float currentMana, float maxMana, Vector2f position);
+	void loadSaveFile();
+
 };
 #pragma once
