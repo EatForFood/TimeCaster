@@ -486,7 +486,10 @@ int main()
 					startSoundPlayed = true;
 
 					// Reset the player's stats
-					player.resetPlayerStats();
+					// player.resetPlayerStats();
+
+					// Loads player stats from text file
+					player.loadSaveFile();
 				}
 
 				// Player hit the options button
@@ -517,6 +520,7 @@ int main()
 				{
 					sound.playButtonClickSound();
 					landscape.clearBackground();
+					player.createSaveFile(player.getHealth(), player.getMaxHealth(), player.getStamina(), player.getMaxStamina(), player.getMana(), player.getMaxMana(), player.getPosition());
 					state = State::MAIN_MENU;
 				}
 
@@ -654,21 +658,6 @@ int main()
 		{
 			// Increase health
 			player.upgradeMana();
-			debugreset = true;
-		}
-
-		if (event.key.code == Keyboard::Num5 && !debugreset)
-		{
-			// Save player stats to file
-			player.createSaveFile(player.getHealth(), player.getMaxHealth(), player.getStamina(), player.getMaxStamina(), player.getMana(), player.getMaxMana(), player.getPosition());
-			debugreset = true;
-		}
-
-
-		if (event.key.code == Keyboard::Num7 && !debugreset)
-		{
-			// Load player stats from file
-			player.loadSaveFile();
 			debugreset = true;
 		}
 

@@ -39,10 +39,6 @@ void Player::resetPlayerStats()
 
 void Player::spawn(IntRect arena, Vector2f resolution, int tileSize)
 {
-	// Place the player in the middle of the arena
-	m_Position.x = 64;
-	m_Position.y = 64;
-
 	m_Hitbox.left = m_Position.x - 20;
 	m_Hitbox.width = 40;
 	m_Hitbox.top = m_Position.y - 20;
@@ -370,7 +366,7 @@ float Player::getMaxStamina()
 void Player::createSaveFile(float currentHealth, float maxHealth, float currentStamina, float maxStamina, float currentMana, float maxMana, Vector2f position)
 {
 		
-	std::ofstream saveFile("TCSave.txt");
+	std::ofstream saveFile("gamedata/TCSave.txt");
 
 	saveFile << std::fixed << std::setprecision(5) << currentHealth << " " << maxHealth << " " << currentStamina << " "
 	<< maxStamina << " " << currentMana << " " << maxMana << " " << position.x << " " << position.y << std::endl;
@@ -380,7 +376,7 @@ void Player::createSaveFile(float currentHealth, float maxHealth, float currentS
 
 void Player::loadSaveFile()
 {
-	std::ifstream loadFile("TCSave.txt");
+	std::ifstream loadFile("gamedata/TCSave.txt");
 
 	if (loadFile.is_open())
 	{
