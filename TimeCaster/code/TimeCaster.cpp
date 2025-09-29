@@ -13,6 +13,7 @@
 #include "CreateBackground.h"
 #include "SoundManager.h"
 #include "CollisionDetection.h"
+#include "Item.h"
 
 using namespace std;
 using namespace sf;
@@ -374,7 +375,7 @@ int main()
 	// How often (in frames) should we update the HUD
 	int fpsMeasurementFrameInterval = 1000;
 
-	// struct to store y values and sprites together
+	// struct to store y values and sprites together and vector to store each object
 	struct DrawableItem {
 		float y;
 		sf::Sprite sprite;
@@ -383,7 +384,9 @@ int main()
 			: y(y), sprite(sprite) {}
 	};
 
-	std::vector<DrawableItem> drawables;
+	std::vector<DrawableItem> drawables; 
+
+	vector<Item> items;
 
 	bool debugreset = false; //it's a bit of a hack but it works to stop multiple upgrades from one key press
 	//press numpad0 to reset if you want to test again
@@ -622,6 +625,10 @@ int main()
 			}
 		} // End WASD while playing
 
+		if (!sound.isSoundtrackPlaying()) {
+			sound.playSoundtrack();
+		}
+
 		/* below are debug functions, comment them out in full build / when needed
 		if you add any more, make sure they check if debug reset is false and set it to true or else it will run every loop while the key is pressed */
 		if (event.key.code == Keyboard::Numpad0)
@@ -658,6 +665,13 @@ int main()
 		if (event.key.code == Keyboard::Numpad9 && !debugreset)
 		{
 			player.hit(gameTimeTotal, 30, 1000);
+			debugreset = true;
+		}
+
+		if (event.key.code == Keyboard::G && !debugreset)
+		{
+			Item gold("gold", player.getPosition());
+			items.push_back(gold);
 			debugreset = true;
 		}
 
@@ -795,7 +809,7 @@ int main()
 			Vector2f playerPosition(player.getCenter());
 
 			// Make the view centre around the player				
-			mainView.setCenter(player.getCenter().x,player.getCenter().y-30);
+			mainView.setCenter(player.getCenter().x,player.getCenter().y-10);
 			
 			/*
 			// Update any bullets that are in-flight
@@ -839,6 +853,13 @@ int main()
 				player.increaseManaLevel(manaPickup.gotIt());
 				// Play a sound
 			}
+
+			// Has the player touched mana pickup
+			if (player.getGlobalBounds().intersects(manaPickup.getPosition()) && manaPickup.isSpawned())
+			{
+				player.increaseManaLevel(manaPickup.gotIt());
+				// Play a sound
+			}
 		
 			if (currentDecal > 248)
 			{
@@ -871,6 +892,11 @@ int main()
 			framesSinceLastHUDUpdate = 0;
 			timeSinceLastUpdate = Time::Zero;
 			// End HUD update
+
+			// update items
+			for (auto& item : items) {
+				item.update(dtAsSeconds);
+			}
 
 		} // End updating the scene
 
@@ -934,6 +960,10 @@ int main()
 				}
 			}
 			*/
+
+			for (auto& item : items) {
+				window.draw(item.getSprite());
+			}
 
 			for (auto& entity : landscape.getEntities()) {
 				drawables.emplace_back(entity.getPosition().y, entity.getSprite());
