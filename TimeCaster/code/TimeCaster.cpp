@@ -30,20 +30,16 @@ string difficultyToString(Difficulty difficulty)
 
 int main()
 {	
-
 	CollisionDetection collision;
 
 	// Here is the instance of TextureHolder
 	TextureHolder holder;
 	
-	// The game will always be in one of these states
-	enum class State { MAIN_MENU, OPTIONS_MENU, STORY_INTRO, PLAYING, PAUSED, LEVELING_UP, GAME_OVER };
-	
 	// Start with the MAIN_MENU state
 	State state = State::MAIN_MENU;
 
-	// Start with the Easy difficulty state
-	Difficulty difficulty = Difficulty::Easy;
+	// Start with the Medium difficulty state
+	Difficulty difficulty = Difficulty::Medium;
 
 	// Get the screen resolution and create an SFML window
 	Vector2f resolution;
@@ -63,7 +59,7 @@ int main()
 	// Here is our clock for timing everything
 	Clock clock;
 
-	// Clock used for tracking and displaying fps
+	// Clock used for tracking fps
 	Clock fpsClock;
 
 	// How long has the PLAYING state been active
@@ -87,7 +83,7 @@ int main()
 	CreateBackground landscape;
 
 	// Create the background
-	//VertexArray background;
+	// VertexArray background;
 	// Load the texture for our background vertex array
 	Texture textureBackground = TextureHolder::GetTexture("graphics/landscape.png");
 
@@ -140,11 +136,19 @@ int main()
 	// Create a view for the HUD
 	View hudView(sf::FloatRect(0, 0, resolution.x, resolution.y));
 
-	// Main menu font
+	// Main font
 	Font font;
 	font.loadFromFile("fonts/PixelifySans-Bold.ttf");
 
-	// Paused
+	// Load the high score from a text file
+	ifstream inputFile("gamedata/scores.txt");
+	if (inputFile.is_open())
+	{
+		inputFile >> hiScore;
+		inputFile.close();
+	}
+
+	// Paused text
 	Text pausedText("Press enter \nto continue", font, 155);
 	pausedText.setFillColor(Color::White);
 	FloatRect textBounds = pausedText.getLocalBounds();
@@ -173,14 +177,6 @@ int main()
 	goldCountText.setCharacterSize(55);
 	goldCountText.setFillColor(Color::White);
 	goldCountText.setPosition(1400, 0);
-
-	// Load the high score from a text file/
-	ifstream inputFile("gamedata/scores.txt");
-	if (inputFile.is_open())
-	{
-		inputFile >> hiScore;
-		inputFile.close();
-	}
 
 	// FPS text
 	Text fpsText;
@@ -303,7 +299,9 @@ int main()
 	CircleShape handle(10);
 	handle.setFillColor(Color::Red);
 	handle.setOrigin(10, 10); // Centre the circle
-	handle.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, trackY + 2); // Start at min volume
+	textBounds = handle.getLocalBounds();
+	x = track.getPosition().x + (track.getSize().x / 2.f) - (textBounds.width / 2.f);
+	handle.setPosition(x - textBounds.left, trackY + 2); // Slider start at 50% volume
 
 	// Display FPS button
 	RectangleShape displayFPSButton;
@@ -360,6 +358,13 @@ int main()
 	viewCentre = mainView.getCenter();
 	storyIntroText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 150);
 
+	// Skip intro text
+	Text skipIntroText("-- Space to skip --", font, 30);
+	skipIntroText.setFillColor(Color::White);
+	textBounds = skipIntroText.getLocalBounds();
+	viewCentre = mainView.getCenter();
+	skipIntroText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 1000);
+
 	// When did we last update the HUD?
 	int framesSinceLastHUDUpdate = 0;
 
@@ -390,8 +395,8 @@ int main()
 	// Boolean for whether the player is dragging the slider or not
 	bool dragging = false;
 
-	// Setting volume to 0 upon start of game
-	Listener::setGlobalVolume(0);
+	// Setting volume to 50 upon start of game
+	Listener::setGlobalVolume(50);
 
 	// The main game loop
 	while (window.isOpen())
@@ -1039,13 +1044,13 @@ int main()
 			window.draw(difficultyButtonText);
 		}
 
-		/*
 		if (state == State::STORY_INTRO) 
 		{
 			window.clear();
 			window.draw(storyIntroText);
+			window.draw(storyIntroText);
+			window.draw(skipIntroText);
 		}
-		*/
 
 		window.display();
 
