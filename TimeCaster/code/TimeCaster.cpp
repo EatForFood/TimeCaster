@@ -13,6 +13,7 @@
 #include "CreateBackground.h"
 #include "SoundManager.h"
 #include "CollisionDetection.h"
+#include "Item.h"
 
 using namespace std;
 using namespace sf;
@@ -369,7 +370,7 @@ int main()
 	// How often (in frames) should we update the HUD
 	int fpsMeasurementFrameInterval = 1000;
 
-	// struct to store y values and sprites together
+	// struct to store y values and sprites together and vector to store each object
 	struct DrawableItem {
 		float y;
 		sf::Sprite sprite;
@@ -378,7 +379,9 @@ int main()
 			: y(y), sprite(sprite) {}
 	};
 
-	std::vector<DrawableItem> drawables;
+	std::vector<DrawableItem> drawables; 
+
+	vector<Item> items;
 
 	bool debugreset = false; //it's a bit of a hack but it works to stop multiple upgrades from one key press
 	//press numpad0 to reset if you want to test again
@@ -656,6 +659,13 @@ int main()
 			debugreset = true;
 		}
 
+		if (event.key.code == Keyboard::G && !debugreset)
+		{
+			Item gold("gold", player.getPosition());
+			items.push_back(gold);
+			debugreset = true;
+		}
+
 		// Handle the display fps button changing colour based on boolean
 		if (state == State::OPTIONS_MENU) 
 		{
@@ -834,6 +844,13 @@ int main()
 				player.increaseManaLevel(manaPickup.gotIt());
 				// Play a sound
 			}
+
+			// Has the player touched mana pickup
+			if (player.getGlobalBounds().intersects(manaPickup.getPosition()) && manaPickup.isSpawned())
+			{
+				player.increaseManaLevel(manaPickup.gotIt());
+				// Play a sound
+			}
 		
 			if (currentDecal > 248)
 			{
@@ -866,6 +883,11 @@ int main()
 			framesSinceLastHUDUpdate = 0;
 			timeSinceLastUpdate = Time::Zero;
 			// End HUD update
+
+			// update items
+			for (auto& item : items) {
+				item.update(dtAsSeconds);
+			}
 
 		} // End updating the scene
 
@@ -929,6 +951,10 @@ int main()
 				}
 			}
 			*/
+
+			for (auto& item : items) {
+				window.draw(item.getSprite());
+			}
 
 			for (auto& entity : landscape.getEntities()) {
 				drawables.emplace_back(entity.getPosition().y, entity.getSprite());

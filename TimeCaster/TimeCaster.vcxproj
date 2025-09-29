@@ -25,13 +25,16 @@
     <ClInclude Include="code\CreateBackground.h" />
     <ClInclude Include="code\Decal.h" />
     <ClInclude Include="code\Entity.h" />
+    <ClInclude Include="code\Equipment.h" />
     <ClInclude Include="code\Gun.h" />
+    <ClInclude Include="code\Item.h" />
     <ClInclude Include="code\NavBox.h" />
     <ClInclude Include="code\Pickup.h" />
     <ClInclude Include="code\Player.h" />
     <ClInclude Include="code\SoundManager.h" />
     <ClInclude Include="code\TextureHolder.h" />
     <ClInclude Include="code\TimeCaster.h" />
+    <ClInclude Include="code\Weapon.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="code\Bullet.cpp" />
@@ -40,13 +43,16 @@
     <ClCompile Include="code\CreateBackground.cpp" />
     <ClCompile Include="code\Decal.cpp" />
     <ClCompile Include="code\Entity.cpp" />
+    <ClCompile Include="code\Equipment.cpp" />
     <ClCompile Include="code\Gun.cpp" />
+    <ClCompile Include="code\Item.cpp" />
     <ClCompile Include="code\NavBox.cpp" />
     <ClCompile Include="code\Pickup.cpp" />
     <ClCompile Include="code\Player.cpp" />
     <ClCompile Include="code\SoundManager.cpp" />
     <ClCompile Include="code\TextureHolder.cpp" />
     <ClCompile Include="code\TimeCaster.cpp" />
+    <ClCompile Include="code\Weapon.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
