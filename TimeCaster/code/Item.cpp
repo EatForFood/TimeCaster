@@ -12,10 +12,9 @@ Item::Item(String type, Vector2f position)
 	// Associate the texture with the sprite
 	if (m_Type == "gold")
 	{
-		m_Sprite = Sprite(TextureHolder::GetTexture(
-			"graphics/items/goldCoin.png"));
+		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/goldCoin.png"));
 
-		// How much is pickup worth
+		// How much is item worth
 		m_Value = 1;
 
 		m_Sprite.setOrigin(5, 5);
@@ -27,6 +26,16 @@ Item::Item(String type, Vector2f position)
 	m_SecondsToLive = SECONDS_TO_DESPAWN;
 
 	m_Sprite.setPosition(m_Position);
+
+	m_MovementElapsed = 0;
+	m_MovementDuration = 0.5 + (rand() % 50) / 100;
+
+	// Random direction and speed
+	float angle = (rand() % 360) * 3.14159 / 180;
+	float speed = 20 + (rand() % 50); 
+
+	m_Velocity.x = cos(angle) * speed;
+	m_Velocity.y = sin(angle) * speed;
 }
 
 FloatRect Item::getPosition()
@@ -37,6 +46,11 @@ FloatRect Item::getPosition()
 Sprite Item::getSprite()
 {
 	return m_Sprite;
+}
+
+int Item::getValue()
+{
+	return m_Value;
 }
 
 bool Item::isSpawned()
@@ -75,7 +89,10 @@ void Item::update(float elapsedTime)
 		float deltaX = m_Velocity.x * damping * elapsedTime;
 		float deltaY = m_Velocity.y * damping * elapsedTime;
 
-		m_Sprite.setPosition(m_Position.x + deltaX, m_Position.y + deltaY);
+		m_Position.x += deltaX;
+		m_Position.y += deltaY;
+
+		m_Sprite.setPosition(m_Position.x, m_Position.y);
 
 		m_MovementElapsed += elapsedTime;
 	}

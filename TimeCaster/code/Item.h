@@ -11,7 +11,7 @@ protected:
 
 	int m_Value;
 	float m_Weight; 
-	const int SECONDS_TO_DESPAWN = 120;
+	int SECONDS_TO_DESPAWN = 120;
 	String m_Type;
 
 	// The sprite that represents this pickup
@@ -41,6 +41,8 @@ public:
 
 	// Get the sprite for drawing
 	Sprite getSprite();
+
+	int getValue();
 
 	// Let the pickup update itself each frame
 	void update(float elapsedTime);

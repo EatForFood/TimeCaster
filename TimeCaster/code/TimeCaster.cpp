@@ -665,8 +665,9 @@ int main()
 
 		if (event.key.code == Keyboard::G && !debugreset)
 		{
-			Item gold("gold", player.getPosition());
-			items.push_back(gold);
+			for (int i = 0; i < (rand() % 10); i++) {
+				items.emplace_back("gold", Vector2f(0, 300));
+			}
 			debugreset = true;
 		}
 
@@ -889,8 +890,20 @@ int main()
 			// End HUD update
 
 			// update items
-			for (auto& item : items) {
-				item.update(dtAsSeconds);
+			for (size_t i = 0; i < items.size(); )
+			{
+				items[i].update(dtAsSeconds);
+
+				if (player.getGlobalBounds().intersects(items[i].getPosition()))
+				{
+					// give gold and remove gold from vector
+					goldCount+= items[i].getValue();
+					items.erase(items.begin() + i);
+				}
+				else
+				{
+					++i;
+				}
 			}
 
 		} // End updating the scene
