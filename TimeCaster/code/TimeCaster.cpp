@@ -113,10 +113,12 @@ int main()
 
 	// Hide the mouse pointer and replace it with crosshair
 	window.setMouseCursorVisible(true);
-	Sprite spriteCrosshair;
-	Texture textureCrosshair = TextureHolder::GetTexture("graphics/crosshair.png");
-	spriteCrosshair.setTexture(textureCrosshair);
-	spriteCrosshair.setOrigin(25, 25);
+	Sprite spriteCursor;
+	Texture textureCursorOpen = TextureHolder::GetTexture("graphics/knightCursorOpen.png");
+	Texture textureCursorClosed = TextureHolder::GetTexture("graphics/knightCursorClosed.png");
+	spriteCursor.setTexture(textureCursorOpen);
+	spriteCursor.setScale(0.4,0.4);
+	spriteCursor.setOrigin(25, 25);
 
 	// Create a couple of pickups
 	Pickup healthPickup(1);
@@ -439,7 +441,7 @@ int main()
 				}
 			}
 
-			if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left && state == State::OPTIONS_MENU)
+			if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left && state == State::OPTIONS_MENU)
 			{
 				if (handle.getGlobalBounds().contains(sf::Vector2f(event.mouseButton.x, event.mouseButton.y)))
 				{
@@ -448,7 +450,7 @@ int main()
 			}
 
 			// Stop dragging
-			if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left)
+			if (event.type == Event::MouseButtonReleased && event.mouseButton.button == Mouse::Left)
 			{
 				dragging = false;
 			}
@@ -799,7 +801,7 @@ int main()
 			mouseWorldPosition = window.mapPixelToCoords(Mouse::getPosition(), mainView);
 
 			// Set the crosshair to the mouse world location
-			spriteCrosshair.setPosition(mouseWorldPosition);
+			spriteCursor.setPosition(mouseWorldPosition);
 
 			// Update the player
 			player.update(dtAsSeconds, Mouse::getPosition());
@@ -1023,8 +1025,15 @@ int main()
 				window.draw(nav.getShape());
 			}
 
+			if (Mouse::isButtonPressed(Mouse::Left) && state == State::PLAYING) {
+				spriteCursor.setTexture(textureCursorClosed);
+			}
+			else {
+				spriteCursor.setTexture(textureCursorOpen);
+			}
+			
 			//Draw the crosshair
-			window.draw(spriteCrosshair);
+			window.draw(spriteCursor);
 
 			// Switch to the HUD view
 			window.setView(hudView);
