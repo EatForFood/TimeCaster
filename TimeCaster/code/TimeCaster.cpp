@@ -665,7 +665,7 @@ int main()
 		}
 
 
-		if (event.key.code == Keyboard::Num6 && !debugreset)
+		if (event.key.code == Keyboard::Num7 && !debugreset)
 		{
 			// Load player stats from file
 			player.loadSaveFile();
@@ -754,13 +754,13 @@ int main()
 				healthPickup.upgrade();
 				state = State::PLAYING;
 			}
-
+			
 			if (event.key.code == Keyboard::Num6)
 			{
 				ammoPickup.upgrade();
 				state = State::PLAYING;
 			}
-
+			
 			if (event.key.code == Keyboard::Num7)
 			{
 				// Increase stamina
