@@ -152,7 +152,7 @@ int main()
 	}
 
 	// Paused text
-	Text pausedText("Press enter \nto continue", font, 155);
+	Text pausedText("Press escape \nto continue", font, 130);
 	pausedText.setFillColor(Color::White);
 	FloatRect textBounds = pausedText.getLocalBounds();
 	Vector2f viewCentre = mainView.getCenter();
@@ -218,24 +218,42 @@ int main()
 	emptyManaBar.setFillColor(Color::Black);
 	emptyManaBar.setPosition(10, 110);
 
+	/***********
+	Main Menu UI
+	************/
+	
 	// Play button
-	RectangleShape playButton;
-	playButton.setFillColor(Color::Green);
-	playButton.setPosition(200, 210);
-	playButton.setSize(Vector2f(300, 80));
+	RectangleShape newGameButton;
+	newGameButton.setFillColor(Color::Yellow);
+	newGameButton.setPosition(200, 210);
+	newGameButton.setSize(Vector2f(300, 80));
 
 	// Play button text
-	Text playButtonText("Play Game", font, 40);
-	playButtonText.setFillColor(Color::Black);
-	textBounds = playButtonText.getLocalBounds();
-	float x = playButton.getPosition().x + (playButton.getSize().x / 2.f) - (textBounds.width / 2.f);
-	float y = playButton.getPosition().y + (playButton.getSize().y / 2.f) - (textBounds.height / 2.f);
-	playButtonText.setPosition(x - textBounds.left, y - textBounds.top);
+	Text newGameButtonText("New Game", font, 40);
+	newGameButtonText.setFillColor(Color::Black);
+	textBounds = newGameButtonText.getLocalBounds();
+	float x = newGameButton.getPosition().x + (newGameButton.getSize().x / 2.f) - (textBounds.width / 2.f);
+	float y = newGameButton.getPosition().y + (newGameButton.getSize().y / 2.f) - (textBounds.height / 2.f);
+	newGameButtonText.setPosition(x - textBounds.left, y - textBounds.top);
+
+	// Play button
+	RectangleShape loadGameButton;
+	loadGameButton.setFillColor(Color::Green);
+	loadGameButton.setPosition(200, 320);
+	loadGameButton.setSize(Vector2f(300, 80));
+
+	// Play button text
+	Text loadGameButtonText("Load Game", font, 40);
+	loadGameButtonText.setFillColor(Color::Black);
+	textBounds = loadGameButtonText.getLocalBounds();
+	x = loadGameButton.getPosition().x + (loadGameButton.getSize().x / 2.f) - (textBounds.width / 2.f);
+	y = loadGameButton.getPosition().y + (loadGameButton.getSize().y / 2.f) - (textBounds.height / 2.f);
+	loadGameButtonText.setPosition(x - textBounds.left, y - textBounds.top);
 
 	// Options button
 	RectangleShape optionsButton;
 	optionsButton.setFillColor(Color::Green);
-	optionsButton.setPosition(200, 320);
+	optionsButton.setPosition(200, 430);
 	optionsButton.setSize(Vector2f(300, 80));
 
 	// options button text
@@ -249,7 +267,7 @@ int main()
 	// Quit game button
 	RectangleShape quitGameButton;
 	quitGameButton.setFillColor(Color::Green);
-	quitGameButton.setPosition(200, 430);
+	quitGameButton.setPosition(200, 540);
 	quitGameButton.setSize(Vector2f(300, 80));
 
 	// Quit game button text
@@ -260,6 +278,10 @@ int main()
 	y = quitGameButton.getPosition().y + (quitGameButton.getSize().y / 2.f) - (textBounds.height / 2.f);
 	quitGameButtonText.setPosition(x - textBounds.left, y - textBounds.top);
 
+	/***********
+	Options Menu UI
+	************/
+	
 	// Options heading text
 	Text optionsHeadingText("Options", font, 50);
 	optionsHeadingText.setFillColor(Color::White);
@@ -471,8 +493,8 @@ int main()
 					clock.restart();
 				}
 
-				// Player hit the play game button
-				else if (playButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU)
+				// Player hit the new game button in the main menu
+				else if (newGameButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU)
 				{
 					state = State::LEVELING_UP;
 					// state = State::STORY_INTRO;
@@ -484,9 +506,24 @@ int main()
 					}
 
 					startSoundPlayed = true;
+					
+					player.createNewSave();
+					player.loadSaveFile();
+				}
 
-					// Reset the player's stats
-					// player.resetPlayerStats();
+				// Player hit the load game button in the main menu
+				else if (loadGameButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU)
+				{
+					state = State::LEVELING_UP;
+					// state = State::STORY_INTRO;
+
+
+					// Play the start game sound
+					if (!startSoundPlayed) {
+						sound.playStartGameSound();
+					}
+
+					startSoundPlayed = true;
 
 					// Loads player stats from text file
 					if (player.loadSaveFile() == true) {
@@ -515,7 +552,7 @@ int main()
 					window.close();
 				}
 
-				// Player hit the main menu button
+				// Player hit the main menu button in the options menu
 				if (mainMenuButton.getGlobalBounds().contains(worldPos) && state == State::OPTIONS_MENU)
 				{
 					sound.playButtonClickSound();
@@ -523,6 +560,7 @@ int main()
 					state = State::MAIN_MENU;
 				}
 
+				// Player hit the main menu button in the pause menu
 				if (mainMenuButton.getGlobalBounds().contains(worldPos) && state == State::PAUSED) 
 				{
 					sound.playButtonClickSound();
@@ -917,6 +955,11 @@ int main()
 
 		} // End updating the scene
 
+		if (state == State::MAIN_MENU)
+		{
+			startSoundPlayed = FALSE;
+		}
+		
 		if (state == State::MAIN_MENU || state == State::LEVELING_UP || state == State::OPTIONS_MENU)
 		{
 			if (sound.isSoundtrackPlaying()) {
@@ -1081,8 +1124,10 @@ int main()
 		{
 			window.clear();
 			window.draw(spriteMainMenu);
-			window.draw(playButton);
-			window.draw(playButtonText);
+			window.draw(newGameButton);
+			window.draw(newGameButtonText);
+			window.draw(loadGameButton);
+			window.draw(loadGameButtonText);
 			window.draw(optionsButton);
 			window.draw(optionsButtonText);
 			window.draw(quitGameButton);

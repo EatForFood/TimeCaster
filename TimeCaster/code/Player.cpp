@@ -4,6 +4,9 @@
 #include <fstream>
 #include <iomanip>
 
+using namespace std;
+using namespace sf;
+
 
 Player::Player()
 {
@@ -34,7 +37,6 @@ void Player::createNewSave()
 		<< START_STAMINA << " " << START_STAMINA_RECHARGE << " " << START_MANA << " " << START_MANA << " " << 0 << " " << 64 << " " << 64 << std::endl;
 
 	saveFile.close();
-
 }
 
 void Player::spawn(IntRect arena, Vector2f resolution, int tileSize)
