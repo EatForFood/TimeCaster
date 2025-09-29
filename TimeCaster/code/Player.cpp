@@ -375,6 +375,11 @@ int Player::getGold()
 	return m_Gold;
 }
 
+void Player::setGold(int amount)
+{
+	m_Gold += amount;
+}
+
 float Player::getSpeed()
 {
 	return m_Speed;

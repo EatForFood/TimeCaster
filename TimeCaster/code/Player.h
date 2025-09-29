@@ -108,6 +108,7 @@ public:
 	float getMaxStamina();
 	float getStaminaRecharge();
 	int getGold();
+	void setGold(int amount);
 	float getSpeed();
 
 	float getMana();

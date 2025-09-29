@@ -953,7 +953,7 @@ int main()
 				if (player.getGlobalBounds().intersects(items[i].getPosition()))
 				{
 					// give gold and remove gold from vector
-					goldCount+= items[i].getValue();
+					player.setGold(items[i].getValue());
 					items.erase(items.begin() + i);
 				}
 				else
