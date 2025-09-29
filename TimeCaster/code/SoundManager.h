@@ -14,6 +14,29 @@ private:
 	// Vector to store soundtrack songs
 	vector<Sound> soundtrack;
 
+	/***************
+	Soundtrack songs
+	****************/
+
+	SoundBuffer soundtrack1Buffer;
+	Sound soundtrack1;
+
+	SoundBuffer soundtrack2Buffer;
+	Sound soundtrack2;
+
+	SoundBuffer soundtrack3Buffer;
+	Sound soundtrack3;
+
+	SoundBuffer soundtrack4Buffer;
+	Sound soundtrack4;
+
+	SoundBuffer soundtrack5Buffer;
+	Sound soundtrack5;
+	
+	/***********
+	Other sounds
+	************/
+	
 	// Prepare the start game sound
 	SoundBuffer startGameBuffer;
 	Sound startGame;
@@ -22,31 +45,46 @@ private:
 	SoundBuffer hitBuffer;
 	Sound hit;
 
+	// Prepare the button click sound
 	SoundBuffer clickBuffer;
 	Sound buttonClick;
 
-	SoundBuffer soundTrack1Buffer;
-	Sound soundtrack1;
+	// Prepare the boss intro sound
+	SoundBuffer bossIntroBuffer;
+	Sound bossIntro;
+
+	// Prepare the story intro sound
+	SoundBuffer storyIntroBuffer;
+	Sound storyIntro;
 
 public:
 	// SoundManager constructor
 	SoundManager();
 
-	// Populate soundtrack function
+	// Function to populate soundtrack function
 	void populateSoundtrack();
 
-	// Checks whether soundtrack is currently playing or not
+	// Function to check whether soundtrack is currently playing or not
 	bool isSoundtrackPlaying();
 
-	// Play soundtrack function
+	// Function to play a random song from the soundtrack
 	void playSoundtrack();
 
 	// Stop soundtrack function
 	void stopSoundtrack();
 
+	// Function to play the start game sound
 	void playStartGameSound();
 
+	// Function to play the hit sound
 	void playHitSound();
 
+	// Function to play the button click sound
 	void playButtonClickSound();
+
+	// Function to play the story intro sound
+	void playStoryIntroSound();
+
+	// Function to play the boss intro sound
+	void playBossIntroSound();
 };
