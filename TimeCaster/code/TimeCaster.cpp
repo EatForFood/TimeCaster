@@ -617,6 +617,10 @@ int main()
 			}
 		} // End WASD while playing
 
+		if (!sound.isSoundtrackPlaying()) {
+			sound.playSoundtrack();
+		}
+
 		/* below are debug functions, comment them out in full build / when needed
 		if you add any more, make sure they check if debug reset is false and set it to true or else it will run every loop while the key is pressed */
 		if (event.key.code == Keyboard::Numpad0)
