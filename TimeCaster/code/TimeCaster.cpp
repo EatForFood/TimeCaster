@@ -127,7 +127,7 @@ int main()
 	Pickup manaPickup(4);
 
 	// About the game
-	int goldCount = 0;
+	
 	int hiScore = 0;
 
 	// For the home/game over screen
@@ -390,7 +390,7 @@ int main()
 
 	vector<Item> items;
 
-	bool debugreset = false; //it's a bit of a hack but it works to stop multiple upgrades from one key press
+	bool debugreset = true; //it's a bit of a hack but it works to stop multiple upgrades from one key press
 	//press numpad0 to reset if you want to test again
 	//remove this in full build
 
@@ -476,7 +476,7 @@ int main()
 				{
 					state = State::LEVELING_UP;
 					// state = State::STORY_INTRO;
-					goldCount = 0;
+					
 
 					// Play the start game sound
 					if (!startSoundPlayed) {
@@ -489,7 +489,14 @@ int main()
 					// player.resetPlayerStats();
 
 					// Loads player stats from text file
-					player.loadSaveFile();
+					if (player.loadSaveFile() == true) {
+						// Player loaded successfully
+					}
+					else {
+						// No save file so create a new one with default values and load it	
+						player.createNewSave();
+						player.loadSaveFile();
+					}
 				}
 
 				// Player hit the options button
@@ -520,7 +527,7 @@ int main()
 				{
 					sound.playButtonClickSound();
 					landscape.clearBackground();
-					player.createSaveFile(player.getHealth(), player.getMaxHealth(), player.getStamina(), player.getMaxStamina(), player.getMana(), player.getMaxMana(), player.getPosition());
+					player.updateSaveFile(player.getSpeed(), player.getHealth(), player.getMaxHealth(), player.getStamina(), player.getMaxStamina(), player.getStaminaRecharge(), player.getMana(), player.getMaxMana(), player.getGold(), player.getPosition());
 					state = State::MAIN_MENU;
 				}
 
@@ -636,44 +643,45 @@ int main()
 
 		/* below are debug functions, comment them out in full build / when needed
 		if you add any more, make sure they check if debug reset is false and set it to true or else it will run every loop while the key is pressed */
-		if (event.key.code == Keyboard::Num0)
+		if (event.key.code == Keyboard::Num0 && state == State::PLAYING)
 		{
 			debugreset = false;
 		}
-		if (event.key.code == Keyboard::Num1 && !debugreset)
+		if (event.key.code == Keyboard::Num1 && !debugreset && state == State::PLAYING)
 		{
 			// Increase health
 			player.upgradeHealth();
 			debugreset = true;
 		}
 
-		if (event.key.code == Keyboard::Num2 &&  !debugreset)
+		if (event.key.code == Keyboard::Num2 &&  !debugreset && state == State::PLAYING)
 		{
 			// Increase stamina
 			player.upgradeStamina();
 			debugreset = true;
 		}
 
-		if (event.key.code == Keyboard::Num3 && !debugreset)
+		if (event.key.code == Keyboard::Num3 && !debugreset && state == State::PLAYING)
 		{
 			// Increase health
 			player.upgradeMana();
 			debugreset = true;
 		}
 
-		if (event.key.code == Keyboard::Num8 && !debugreset)
+
+		if (event.key.code == Keyboard::Num8 && !debugreset && state == State::PLAYING)
 		{
 			player.hit(gameTimeTotal, 10, 200);
 			debugreset = true;
 		}
 
-		if (event.key.code == Keyboard::Num9 && !debugreset)
+		if (event.key.code == Keyboard::Num9 && !debugreset && state == State::PLAYING)
 		{
 			player.hit(gameTimeTotal, 30, 1000);
 			debugreset = true;
 		}
 
-		if (event.key.code == Keyboard::G && !debugreset)
+		if (event.key.code == Keyboard::G && !debugreset && state == State::PLAYING)
 		{
 			Item gold("gold", player.getPosition());
 			items.push_back(gold);
@@ -891,7 +899,7 @@ int main()
 			
 			// Update the gold text
 			stringstream ssGoldCount;
-			ssGoldCount << "Gold:" << goldCount;
+			ssGoldCount << "Gold:" << player.getGold();
 			goldCountText.setString(ssGoldCount.str());
 
 			framesSinceLastHUDUpdate = 0;
