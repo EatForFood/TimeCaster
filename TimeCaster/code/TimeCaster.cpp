@@ -500,7 +500,7 @@ int main()
 					state = State::LEVELING_UP;
 					// state = State::STORY_INTRO;
 					
-
+					
 					// Play the start game sound
 					if (!startSoundPlayed) {
 						sound.playStartGameSound();
@@ -608,10 +608,10 @@ int main()
 					difficultyButtonText.setPosition(x - textBounds.left, y - textBounds.top);
 					sound.playButtonClickSound();
 				}
-
+				
 				if (state == State::STORY_INTRO && event.key.code == Keyboard::Escape)
 				{
-					state = State::PLAYING;
+						state = State::PLAYING;
 				}
 			}
 		} // End event polling
