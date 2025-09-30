@@ -496,9 +496,7 @@ int main()
 				// Player hit the new game button in the main menu
 				else if (newGameButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU)
 				{
-					state = State::LEVELING_UP;
-					// state = State::STORY_INTRO;
-					
+					state = State::STORY_INTRO;
 
 					// Play the start game sound
 					if (!startSoundPlayed) {
@@ -514,7 +512,7 @@ int main()
 				// Player hit the load game button in the main menu
 				else if (loadGameButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU)
 				{
-					state = State::LEVELING_UP;
+					state = State::PLAYING;
 					// state = State::STORY_INTRO;
 
 
@@ -533,6 +531,32 @@ int main()
 						// No save file so create a new one with default values and load it	
 						player.createNewSave();
 						player.loadSaveFile();
+					}
+
+					// Handle player and pickups spawning alongside terrain generation
+					if (state == State::PLAYING)
+					{
+						// We will modify the next two lines later
+						arena.width = 1900;
+						arena.height = 800;
+						arena.left = 1664;
+						arena.top = 1664;
+
+						// Pass the vertex array by reference 
+						// to the createBackground function
+						int tileSize = landscape.createLandscape();
+
+						// Spawn the player in the middle of the arena
+						player.spawn(arena, resolution, tileSize);
+
+						// Configure the pick-ups
+						healthPickup.setArena(arena);
+						ammoPickup.setArena(arena);
+						staminaPickup.setArena(arena);
+						manaPickup.setArena(arena);
+
+						// Reset the clock so there isn't a frame jump
+						clock.restart();
 					}
 				}
 
@@ -606,10 +630,39 @@ int main()
 					difficultyButtonText.setPosition(x - textBounds.left, y - textBounds.top);
 					sound.playButtonClickSound();
 				}
-
-				if (state == State::STORY_INTRO && event.key.code == Keyboard::Escape)
+				
+				if (state == State::STORY_INTRO)
 				{
-					state = State::PLAYING;
+					if (event.key.code == Keyboard::Space)
+					{
+						state = State::PLAYING;
+
+						// Handle player and pickups spawning alongside terrain generation
+						if (state == State::PLAYING)
+						{
+							// We will modify the next two lines later
+							arena.width = 1900;
+							arena.height = 800;
+							arena.left = 1664;
+							arena.top = 1664;
+
+							// Pass the vertex array by reference 
+							// to the createBackground function
+							int tileSize = landscape.createLandscape();
+
+							// Spawn the player in the middle of the arena
+							player.spawn(arena, resolution, tileSize);
+
+							// Configure the pick-ups
+							healthPickup.setArena(arena);
+							ammoPickup.setArena(arena);
+							staminaPickup.setArena(arena);
+							manaPickup.setArena(arena);
+
+							// Reset the clock so there isn't a frame jump
+							clock.restart();
+						}
+					}
 				}
 			}
 		} // End event polling
