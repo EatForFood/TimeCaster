@@ -6,18 +6,27 @@
 using namespace sf;
 using namespace std;
 
-class CreateBackground
+class Chunk
 {
-private:
+protected:
 
 	const int TILE_SIZE = 64;
+	const int CHUNK_SIZE = 50;
 	const int VERTS_IN_QUAD = 4;
+
+	int offsetX; // amount to offset position of chunk by
+	int offsetY;
+
+	Vector2f offset;
+
 	int currentVertexBG = 0;
 	int currentVertexFG = 0;
 	VertexArray rVABG; // Vertex array for background tiles
 	VertexArray rVAFG; // Vertex array for forground tiles
 
 	bool forGround = false;
+
+	String m_Type; // type of chunk to generate
 
 	bool debug;
 	Font debugFont;
@@ -30,7 +39,7 @@ private:
 
 public:
 
-	CreateBackground();
+	Chunk(String type, Vector2f chunk);
 
 	void placeTile(int x, int y, int texX, int texY, bool forGround);
 
@@ -47,7 +56,7 @@ public:
 
 	int createLandscape();
 
-	void clearBackground();
+	void clearChunk();
 
 	void placeHouse1(int x, int y);
 

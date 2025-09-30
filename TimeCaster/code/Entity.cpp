@@ -13,7 +13,7 @@ void Entity::spawn(String type, float x, float y)
     if (type == "tree1")
     {
         m_Sprite = Sprite(TextureHolder::GetTexture("graphics/foliage/trees/tree1.png"));
-        m_Sprite.setOrigin(32,28);
+        m_Sprite.setOrigin(32, 28);
     }
 
     if (type == "tree2")

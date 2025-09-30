@@ -22,7 +22,7 @@
     <ClInclude Include="code\Bullet.h" />
     <ClInclude Include="code\Character.h" />
     <ClInclude Include="code\CollisionDetection.h" />
-    <ClInclude Include="code\CreateBackground.h" />
+    <ClInclude Include="code\Chunk.h" />
     <ClInclude Include="code\Decal.h" />
     <ClInclude Include="code\Entity.h" />
     <ClInclude Include="code\Equipment.h" />
@@ -35,12 +35,13 @@
     <ClInclude Include="code\TextureHolder.h" />
     <ClInclude Include="code\TimeCaster.h" />
     <ClInclude Include="code\Weapon.h" />
+    <ClInclude Include="code\World.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="code\Bullet.cpp" />
     <ClCompile Include="code\Character.cpp" />
     <ClCompile Include="code\CollisionDetection.cpp" />
-    <ClCompile Include="code\CreateBackground.cpp" />
+    <ClCompile Include="code\Chunk.cpp" />
     <ClCompile Include="code\Decal.cpp" />
     <ClCompile Include="code\Entity.cpp" />
     <ClCompile Include="code\Equipment.cpp" />
@@ -53,6 +54,7 @@
     <ClCompile Include="code\TextureHolder.cpp" />
     <ClCompile Include="code\TimeCaster.cpp" />
     <ClCompile Include="code\Weapon.cpp" />
+    <ClCompile Include="code\World.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

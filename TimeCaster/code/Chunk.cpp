@@ -1,22 +1,120 @@
 #include <SFML/Graphics.hpp>
 #include "TimeCaster.h"
 #include "Entity.h"
-#include "CreateBackground.h"
+#include "Chunk.h"
 #include "NavBox.h"
 
 using namespace std;
 using namespace sf;
 
-CreateBackground::CreateBackground()
+Chunk::Chunk(String type, Vector2f chunk)
 {
-	
+	m_Type = type;
+
+	offset.x = chunk.x * CHUNK_SIZE;
+	offset.y = chunk.y * CHUNK_SIZE;
+
+	rVABG.setPrimitiveType(Quads);
+	rVAFG.setPrimitiveType(Quads);
+
+	// Set the size of the vertex array
+	rVABG.resize(100 * 100 * VERTS_IN_QUAD);
+	rVAFG.resize(200 * 200 * VERTS_IN_QUAD);
+
+	if (m_Type == "spawn") { // create spawn chunk
+
+		/*
+	debug = false;
+	debugFont.loadFromFile("fonts/dogica.ttf");
+	*/
+
+		// Grass 
+		for (int x = 0; x < 50; x++)
+		{
+			for (int y = 0; y < 50; y++)
+			{
+
+				placeTile(x, y, 0, 0, false);
+
+
+				currentVertexBG += VERTS_IN_QUAD;
+			}
+		}
+
+		// Forground empty
+		for (int x = 0; x < 50; x++)
+		{
+			for (int y = 0; y < 50; y++)
+			{
+
+				placeTile(x, y, 256, 128, true);
+
+				currentVertexFG += VERTS_IN_QUAD;
+			}
+		}
+
+		CreateEntity("tree1", 5, 5);
+		CreateEntity("tree2", 8, 5);
+		CreateEntity("tree3", 5, 8);
+		CreateEntity("tree4", 5, 14);
+		CreateEntity("tree5", 14, 7);
+		CreateEntity("tree6", 18, 7);
+		CreateEntity("tree7", 22, 7);
+		CreateEntity("tree8", 29, 7);
+
+
+		placeHouse1(15, 15);
+		placeHouse1(23, 15);
+		placeHouse1(15, 23);
+		placeHouse1(23, 23);
+
+	}
+
+	if (m_Type == "grass") {
+
+		// Grass 
+		for (int x = 0; x < 50; x++)
+		{
+			for (int y = 0; y < 50; y++)
+			{
+
+				placeTile(x, y, 0, 0, false);
+
+
+				currentVertexBG += VERTS_IN_QUAD;
+			}
+		}
+
+		// Forground empty
+		for (int x = 0; x < 50; x++)
+		{
+			for (int y = 0; y < 50; y++)
+			{
+
+				placeTile(x, y, 256, 128, true);
+
+				currentVertexFG += VERTS_IN_QUAD;
+			}
+		}
+
+		CreateEntity("tree1", 4, 5);
+		CreateEntity("tree2", 10, 5);
+		CreateEntity("tree3", 22, 20);
+		CreateEntity("tree4", 26, 14);
+		CreateEntity("tree5", 5, 38);
+		CreateEntity("tree6", 10, 23);
+		CreateEntity("tree7", 30, 7);
+		CreateEntity("tree8", 40, 15);
+	}
 }
 
 // Function to place isometric tiles and map textures to the tiles (x and y is position on isometric grid, not coordinates)
 // texX and texY is texture location on sprite sheet
-void CreateBackground::placeTile(int x, int y, int texX, int texY, bool forGround)
+void Chunk::placeTile(int x, int y, int texX, int texY, bool forGround)
 {
 	// Cartesian to isometric
+	x += offset.x;
+	y += offset.y;
 	float ix = (x - y) * (TILE_SIZE / 2);
 	float iy = (x + y) * (TILE_SIZE / 4);
 
@@ -68,10 +166,12 @@ void CreateBackground::placeTile(int x, int y, int texX, int texY, bool forGroun
 	}
 }
 
-int CreateBackground::createLandscape()
+int Chunk::createLandscape()
 {
+	/*
 	debug = false;
 	debugFont.loadFromFile("fonts/dogica.ttf");
+	*/
 
 	// What type of primitive are we using?
 	rVABG.setPrimitiveType(Quads);
@@ -84,27 +184,21 @@ int CreateBackground::createLandscape()
 	// Start at the beginning of the vertex array
 
 	// Grass and cliffs
-	for (int x = 0; x < (rVABG.getVertexCount() / 500) - 10; x++)
+	for (int x = 0; x < 50; x++)
 	{
-		for (int y = 0; y < (rVABG.getVertexCount() / 500) - 10; y++)
+		for (int y = 0; y < 50; y++)
 		{
-			if (y <= 1 || x <= 1) // place cliffs at edges of map
-			{
-				placeTile(x, y, 256, 192, false);
-			}
-			else // place grass
-			{
-				placeTile(x, y, 0, 0, false);
-			}
-
+			
+			placeTile(x, y, 0, 0, false);
+			
 			currentVertexBG += VERTS_IN_QUAD;
 		}
 	}
 
 	// Forground empty
-	for (int x = 0; x < (rVABG.getVertexCount() / 500) - 10; x++)
+	for (int x = 0; x < 50; x++)
 	{
-		for (int y = 0; y < (rVABG.getVertexCount() / 500) - 10; y++)
+		for (int y = 0; y < 50; y++)
 		{
 		
 			placeTile(x, y, 256, 128, true);
@@ -131,7 +225,7 @@ int CreateBackground::createLandscape()
 	return TILE_SIZE;
 }
 
-void CreateBackground::placeHouse1(int sx, int sy) { // sx 15, sy 18
+void Chunk::placeHouse1(int sx, int sy) { // sx 15, sy 18
 
 	// House west wall
 	for (int x = sx; x < sx + 5; x++)
@@ -180,44 +274,44 @@ void CreateBackground::placeHouse1(int sx, int sy) { // sx 15, sy 18
 }
 
 // These trees can be placed in places the player cannot reach for background scenary
-void CreateBackground::placeTree1(int x, int y) {
+void Chunk::placeTree1(int x, int y) {
 
 	placeTile(x, y, 128, 832, false);
 	placeTile(x-2, y-2, 128, 768, false);
 }
 
-void CreateBackground::placeTree2(int x, int y) {
+void Chunk::placeTree2(int x, int y) {
 
 	placeTile(x, y, 192, 832, false);
 	placeTile(x - 2, y - 2, 192, 768, false);
 }
 
-void CreateBackground::placeTree3(int x, int y) {
+void Chunk::placeTree3(int x, int y) {
 
 	placeTile(x, y, 0, 948, false);
 	placeTile(x - 2, y - 2, 0, 884, false);
 	placeTile(x - 4, y - 4, 0, 820, false);
 }
 
-void CreateBackground::placeTree4(int x, int y) {
+void Chunk::placeTree4(int x, int y) {
 
 	placeTile(x, y, 64, 948, false);
 	placeTile(x - 2, y - 2, 64, 884, false);
 }
 
-void CreateBackground::placeTree5(int x, int y) {
+void Chunk::placeTree5(int x, int y) {
 
 	placeTile(x, y, 128, 948, false);
 	placeTile(x - 2, y - 2, 128, 884, false);
 }
 
-void CreateBackground::placeTree6(int x, int y) {
+void Chunk::placeTree6(int x, int y) {
 
 	placeTile(x, y, 192, 948, false);
 	placeTile(x - 2, y - 2, 192, 884, false);
 }
 
-void CreateBackground::placeTree7(int x, int y) {
+void Chunk::placeTree7(int x, int y) {
 
 	placeTile(x, y, 256, 948, false);
 	placeTile(x - 2, y - 2, 256, 884, false);
@@ -227,7 +321,7 @@ void CreateBackground::placeTree7(int x, int y) {
 	placeTile(x, y - 4, 384, 884, false);
 }
 
-void CreateBackground::placeTree8(int x, int y) {
+void Chunk::placeTree8(int x, int y) {
 
 	placeTile(x, y, 448, 948, false);
 	placeTile(x - 2, y - 2, 448, 884, false);
@@ -237,8 +331,10 @@ void CreateBackground::placeTree8(int x, int y) {
 	placeTile(x, y - 4, 576, 884, false);
 }
 
-void CreateBackground::CreateEntity(String type, int x, int y) {
+void Chunk::CreateEntity(String type, int x, int y) {
 	Entity entity;
+	x += offset.x;
+	y += offset.y;
 	float ix = (x - y) * (TILE_SIZE / 2);
 	float iy = (x + y) * (TILE_SIZE / 4);
 	entity.spawn(type, ix, iy);
@@ -250,33 +346,33 @@ void CreateBackground::CreateEntity(String type, int x, int y) {
 }
 
 // return background Vertex Array
-VertexArray CreateBackground::getBackground() {
+VertexArray Chunk::getBackground() {
 	
 	return rVABG;
 }
 
 // return forground Vertex Array
-VertexArray CreateBackground::getForground() {
+VertexArray Chunk::getForground() {
 
 	return rVAFG;
 }
 
-vector<Text> CreateBackground::getDebugText() {
+vector<Text> Chunk::getDebugText() {
 
 	return debugText;
 }
 
-vector<Entity> CreateBackground::getEntities() {
+vector<Entity> Chunk::getEntities() {
 
 	return entities;
 }
 
-vector<NavBox> CreateBackground::getNavBoxes() {
+vector<NavBox> Chunk::getNavBoxes() {
 
 	return navBoxes;
 }
 
-void CreateBackground::clearBackground() {
+void Chunk::clearChunk() {
 	rVABG.clear();
 	rVAFG.clear();
 	currentVertexBG = 0;

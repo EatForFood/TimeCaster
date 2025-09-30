@@ -10,7 +10,7 @@
 #include "Pickup.h"
 #include "Decal.h"
 #include "Windows.h"
-#include "CreateBackground.h"
+#include "World.h"
 #include "SoundManager.h"
 #include "CollisionDetection.h"
 #include "Item.h"
@@ -81,7 +81,7 @@ int main()
 	SoundManager sound;
 
 	// Create an instance of the CreateBackground class
-	CreateBackground landscape;
+	//Chunk landscape;
 
 	// Create the background
 	// VertexArray background;
@@ -97,6 +97,7 @@ int main()
 	int clipSize = 6;
 	float fireRate = 1;
 	*/
+	World world; // world object to manage chunks
 
 	// FPS float number
 	float fps = 0.f;
@@ -408,7 +409,7 @@ int main()
 			: y(y), sprite(sprite) {}
 	};
 
-	std::vector<DrawableItem> drawables; 
+	vector<DrawableItem> drawables; 
 
 	vector<Item> items;
 
@@ -509,6 +510,7 @@ int main()
 					
 					player.createNewSave();
 					player.loadSaveFile();
+					world.newWorld();
 				}
 
 				// Player hit the load game button in the main menu
@@ -516,7 +518,7 @@ int main()
 				{
 					state = State::LEVELING_UP;
 					// state = State::STORY_INTRO;
-
+					world.newWorld(); // should be replaced with a loadWorld() function
 
 					// Play the start game sound
 					if (!startSoundPlayed) {
@@ -540,7 +542,7 @@ int main()
 				if (optionsButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU)
 				{
 					sound.playButtonClickSound();
-					landscape.clearBackground();
+					world.clearWorld();
 					state = State::OPTIONS_MENU;
 				}
 
@@ -556,7 +558,7 @@ int main()
 				if (mainMenuButton.getGlobalBounds().contains(worldPos) && state == State::OPTIONS_MENU)
 				{
 					sound.playButtonClickSound();
-					landscape.clearBackground();
+					world.clearWorld();
 					state = State::MAIN_MENU;
 				}
 
@@ -564,7 +566,7 @@ int main()
 				if (mainMenuButton.getGlobalBounds().contains(worldPos) && state == State::PAUSED) 
 				{
 					sound.playButtonClickSound();
-					landscape.clearBackground();
+					world.clearWorld();
 					player.updateSaveFile(player.getSpeed(), player.getHealth(), player.getMaxHealth(), player.getStamina(), player.getMaxStamina(), player.getStaminaRecharge(), player.getMana(), player.getMaxMana(), player.getGold(), player.getPosition());
 					state = State::MAIN_MENU;
 				}
@@ -621,10 +623,13 @@ int main()
 			if (Keyboard::isKeyPressed(Keyboard::W))
 			{
 				player.moveUp();
-				for (auto& nav : landscape.getNavBoxes()) { // if player walks into navBox 
-					if (collision.pointInShape(player.getPosition(), nav.getShape())) {
-						player.revertPosition();
-						player.setPosition(Vector2f(player.getPosition().x, player.getPosition().y + 1.5f));
+				for (int i = 0; i < world.getWorldSize(); i++)
+				{
+					for (auto& nav : world.getNavBoxes(i)) { // if player walks into navBox 
+						if (collision.pointInShape(player.getPosition(), nav.getShape())) {
+							player.revertPosition();
+							player.setPosition(Vector2f(player.getPosition().x, player.getPosition().y + 1.5f));
+						}
 					}
 				}
 			}
@@ -636,10 +641,13 @@ int main()
 			if (Keyboard::isKeyPressed(Keyboard::S))
 			{
 				player.moveDown();
-				for (auto& nav : landscape.getNavBoxes()) { // if player walks into navBox 
-					if (collision.pointInShape(player.getPosition(), nav.getShape())) {
-						player.revertPosition();
-						player.setPosition(Vector2f(player.getPosition().x,player.getPosition().y - 1.5f));
+				for (int i = 0; i < world.getWorldSize(); i++)
+				{
+					for (auto& nav : world.getNavBoxes(i)) { // if player walks into navBox 
+						if (collision.pointInShape(player.getPosition(), nav.getShape())) {
+							player.revertPosition();
+							player.setPosition(Vector2f(player.getPosition().x, player.getPosition().y - 1.5f));
+						}
 					}
 				}
 			}
@@ -651,10 +659,13 @@ int main()
 			if (Keyboard::isKeyPressed(Keyboard::A))
 			{
 				player.moveLeft();
-				for (auto& nav : landscape.getNavBoxes()) { // if player walks into navBox 
-					if (collision.pointInShape(player.getPosition(), nav.getShape())) {
-						player.revertPosition();
-						player.setPosition(Vector2f(player.getPosition().x + 1.5f, player.getPosition().y));
+				for (int i = 0; i < world.getWorldSize(); i++)
+				{
+					for (auto& nav : world.getNavBoxes(i)) { // if player walks into navBox 
+						if (collision.pointInShape(player.getPosition(), nav.getShape())) {
+							player.revertPosition();
+							player.setPosition(Vector2f(player.getPosition().x + 1.5f, player.getPosition().y));
+						}
 					}
 				}
 			}
@@ -666,10 +677,13 @@ int main()
 			if (Keyboard::isKeyPressed(Keyboard::D))
 			{
 				player.moveRight();
-				for (auto& nav : landscape.getNavBoxes()) { // if player walks into navBox 
-					if (collision.pointInShape(player.getPosition(), nav.getShape())) {
-						player.revertPosition();
-						player.setPosition(Vector2f(player.getPosition().x - 1.5f, player.getPosition().y));
+				for (int i = 0; i < world.getWorldSize(); i++)
+				{
+					for (auto& nav : world.getNavBoxes(i)) { // if player walks into navBox 
+						if (collision.pointInShape(player.getPosition(), nav.getShape())) {
+							player.revertPosition();
+							player.setPosition(Vector2f(player.getPosition().x - 1.5f, player.getPosition().y));
+						}
 					}
 				}
 			}
@@ -815,7 +829,7 @@ int main()
 
 				// Pass the vertex array by reference 
 				// to the createBackground function
-				int tileSize = landscape.createLandscape();
+				int tileSize = 64;
 
 				// Spawn the player in the middle of the arena
 				player.spawn(arena, resolution, tileSize);
@@ -1023,7 +1037,10 @@ int main()
 			window.setView(mainView);
 
 			// Draw the background
-    		window.draw(landscape.getBackground(), &textureBackground);
+			for (int i = 0; i < world.getWorldSize(); i++)
+			{
+				window.draw(world.getBackground(i), &textureBackground);
+			}
 
 			// DRAW EFFECTS
 			for (int i = 0; i < 249; i++) // draw decals
@@ -1045,10 +1062,12 @@ int main()
 				window.draw(item.getSprite());
 			}
 
-			for (auto& entity : landscape.getEntities()) {
-				drawables.emplace_back(entity.getPosition().y, entity.getSprite());
+			for (int i = 0; i < world.getWorldSize(); i++)
+			{
+				for (auto& entity : world.getEntities(i)) {
+					drawables.emplace_back(entity.getPosition().y, entity.getSprite());
+				}
 			}
-
 			drawables.emplace_back(player.getY(), player.getSpriteFromSheet());
 
 			// Sort by y value using lambda function (ascending = top to bottom)
@@ -1083,13 +1102,17 @@ int main()
 				window.draw(manaPickup.getSprite());
 			}
 
-			window.draw(landscape.getForground(), &textureBackground);
+			for (int i = 0; i < world.getWorldSize(); i++)
+			{
+				window.draw(world.getForground(i), &textureBackground);
+			}
 
-			for (auto& txt : landscape.getDebugText()) { // draw debug text showing tile location
+			/*
+			for (auto& txt : chunks[0].getDebugText()) { // draw debug text showing tile location
 				window.draw(txt);
 			}
 
-			for (auto& nav : landscape.getNavBoxes()) { // draw debug text showing tile location
+			for (auto& nav : world.getNavBoxes(0)) { // draw debug text showing tile location
 				window.draw(nav.getShape());
 			}
 
@@ -1099,6 +1122,7 @@ int main()
 			else {
 				spriteCursor.setTexture(textureCursorOpen);
 			}
+			*/
 			
 			//Draw the crosshair
 			window.draw(spriteCursor);
