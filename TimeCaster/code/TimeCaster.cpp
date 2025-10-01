@@ -500,9 +500,7 @@ int main()
 				// Player hit the new game button in the main menu
 				else if (newGameButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU)
 				{
-					state = State::LEVELING_UP;
-					// state = State::STORY_INTRO;
-					
+					state = State::STORY_INTRO;
 					
 					// Play the start game sound
 					if (!startSoundPlayed) {
@@ -519,8 +517,7 @@ int main()
 				// Player hit the load game button in the main menu
 				else if (loadGameButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU)
 				{
-					state = State::LEVELING_UP;
-					// state = State::STORY_INTRO;
+					state = State::PLAYING;
 					world.newWorld(); // should be replaced with a loadWorld() function
 
 					// Play the start game sound
@@ -612,7 +609,7 @@ int main()
 					sound.playButtonClickSound();
 				}
 				
-				if (state == State::STORY_INTRO && event.key.code == Keyboard::Escape)
+				if (state == State::STORY_INTRO && event.key.code == Keyboard::Space)
 				{
 						state = State::PLAYING;
 				}
