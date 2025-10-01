@@ -222,30 +222,40 @@ int main()
 	/***********
 	Main Menu UI
 	************/
+	Texture& textureMainMenuButton1 = TextureHolder::GetTexture("graphics/menuButton1.png");
+	Texture& textureMainMenuButton2 = TextureHolder::GetTexture("graphics/menuButton2.png");
+	int fontSize = 35;
+
+	// TimeCaster heading text
+	Text mainHeadingText("TimeCaster", font, fontSize + 65);
+	mainHeadingText.setFillColor(Color::White);
+	textBounds = mainHeadingText.getLocalBounds();
+	viewCentre = mainView.getCenter();
+	mainHeadingText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 10);
 	
-	// Play button
+	// New game button
 	RectangleShape newGameButton;
-	newGameButton.setFillColor(Color::Yellow);
 	newGameButton.setPosition(200, 210);
 	newGameButton.setSize(Vector2f(300, 80));
+	newGameButton.setTexture(&textureMainMenuButton1);
 
-	// Play button text
-	Text newGameButtonText("New Game", font, 40);
-	newGameButtonText.setFillColor(Color::Black);
+	// New game button text
+	Text newGameButtonText("New Game", font, fontSize);
+	newGameButtonText.setFillColor(Color::Yellow);
 	textBounds = newGameButtonText.getLocalBounds();
 	float x = newGameButton.getPosition().x + (newGameButton.getSize().x / 2.f) - (textBounds.width / 2.f);
 	float y = newGameButton.getPosition().y + (newGameButton.getSize().y / 2.f) - (textBounds.height / 2.f);
-	newGameButtonText.setPosition(x - textBounds.left, y - textBounds.top);
+	newGameButtonText.setPosition(x - textBounds.left, y - textBounds.top - 8);
 
-	// Play button
+	// Load game button
 	RectangleShape loadGameButton;
-	loadGameButton.setFillColor(Color::Green);
 	loadGameButton.setPosition(200, 320);
 	loadGameButton.setSize(Vector2f(300, 80));
+	loadGameButton.setTexture(&textureMainMenuButton2);
 
-	// Play button text
-	Text loadGameButtonText("Load Game", font, 40);
-	loadGameButtonText.setFillColor(Color::Black);
+	// Load game button text
+	Text loadGameButtonText("Load Game", font, fontSize);
+	loadGameButtonText.setFillColor(Color::White);
 	textBounds = loadGameButtonText.getLocalBounds();
 	x = loadGameButton.getPosition().x + (loadGameButton.getSize().x / 2.f) - (textBounds.width / 2.f);
 	y = loadGameButton.getPosition().y + (loadGameButton.getSize().y / 2.f) - (textBounds.height / 2.f);
@@ -253,13 +263,13 @@ int main()
 
 	// Options button
 	RectangleShape optionsButton;
-	optionsButton.setFillColor(Color::Green);
 	optionsButton.setPosition(200, 430);
 	optionsButton.setSize(Vector2f(300, 80));
+	optionsButton.setTexture(&textureMainMenuButton2);
 
 	// options button text
-	Text optionsButtonText("Options", font, 40);
-	optionsButtonText.setFillColor(Color::Black);
+	Text optionsButtonText("Options", font, fontSize);
+	optionsButtonText.setFillColor(Color::White);
 	textBounds = optionsButtonText.getLocalBounds();
 	x = optionsButton.getPosition().x + (optionsButton.getSize().x / 2.f) - (textBounds.width / 2.f);
 	y = optionsButton.getPosition().y + (optionsButton.getSize().y / 2.f) - (textBounds.height / 2.f);
@@ -267,13 +277,13 @@ int main()
 
 	// Quit game button
 	RectangleShape quitGameButton;
-	quitGameButton.setFillColor(Color::Green);
 	quitGameButton.setPosition(200, 540);
 	quitGameButton.setSize(Vector2f(300, 80));
+	quitGameButton.setTexture(&textureMainMenuButton2);
 
 	// Quit game button text
-	Text quitGameButtonText("Quit Game", font, 40);
-	quitGameButtonText.setFillColor(Color::Black);
+	Text quitGameButtonText("Quit Game", font, fontSize);
+	quitGameButtonText.setFillColor(Color::White);
 	textBounds = quitGameButtonText.getLocalBounds();
 	x = quitGameButton.getPosition().x + (quitGameButton.getSize().x / 2.f) - (textBounds.width / 2.f);
 	y = quitGameButton.getPosition().y + (quitGameButton.getSize().y / 2.f) - (textBounds.height / 2.f);
@@ -284,7 +294,7 @@ int main()
 	************/
 	
 	// Options heading text
-	Text optionsHeadingText("Options", font, 50);
+	Text optionsHeadingText("Options", font, fontSize + 15);
 	optionsHeadingText.setFillColor(Color::White);
 	textBounds = optionsHeadingText.getLocalBounds();
 	viewCentre = mainView.getCenter();
@@ -292,30 +302,30 @@ int main()
 
 	// Main menu button
 	RectangleShape mainMenuButton;
-	mainMenuButton.setFillColor(Color::Green);
 	mainMenuButton.setSize(Vector2f(300, 80));
 	textBounds = mainMenuButton.getLocalBounds();
 	viewCentre = mainView.getCenter();
 	mainMenuButton.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 975);
+	mainMenuButton.setTexture(&textureMainMenuButton2);
 
 	// Main menu button text
-	Text mainMenuButtonText("Main Menu", font, 40);
-	mainMenuButtonText.setFillColor(Color::Black);
+	Text mainMenuButtonText("Main Menu", font, fontSize);
+	mainMenuButtonText.setFillColor(Color::White);
 	textBounds = mainMenuButtonText.getLocalBounds();
 	x = mainMenuButton.getPosition().x + (mainMenuButton.getSize().x / 2.f) - (textBounds.width / 2.f);
 	y = mainMenuButton.getPosition().y + (mainMenuButton.getSize().y / 2.f) - (textBounds.height / 2.f);
 	mainMenuButtonText.setPosition(x - textBounds.left, y - textBounds.top);
 
 	// Volume slider text
-	Text volumeSliderText("Volume", font, 40);
-	volumeSliderText.setFillColor(Color::White);
+	Text volumeSliderText("Volume", font, fontSize);
+	volumeSliderText.setFillColor(Color::Black);
 	textBounds = volumeSliderText.getLocalBounds();
 	viewCentre = mainView.getCenter();
 	volumeSliderText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 150);
 
 	// Slider track
 	RectangleShape track(Vector2f(400, 5));
-	track.setFillColor(sf::Color::White);
+	track.setFillColor(sf::Color::Black);
 	textBounds = track.getLocalBounds();
 	viewCentre = mainView.getCenter();
 	int trackY = 250;
@@ -341,9 +351,10 @@ int main()
 	textBounds = displayFPSButton.getLocalBounds();
 	viewCentre = mainView.getCenter();
 	displayFPSButton.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 300);
+	displayFPSButton.setTexture(&textureMainMenuButton2);
 
 	// Display FPS button text
-	Text displayFPSButtonText("Display FPS", font, 40);
+	Text displayFPSButtonText("Display FPS", font, fontSize - 5);
 	displayFPSButtonText.setFillColor(Color::Black);
 	textBounds = displayFPSButtonText.getLocalBounds();
 	x = displayFPSButton.getPosition().x + (displayFPSButton.getSize().x / 2.f) - (textBounds.width / 2.f);
@@ -364,13 +375,14 @@ int main()
 	{
 		difficultyButton.setFillColor(Color::Red);
 	}
-	difficultyButton.setSize(Vector2f(400, 80));
+	difficultyButton.setSize(Vector2f(450, 100));
 	textBounds = difficultyButton.getLocalBounds();
 	viewCentre = mainView.getCenter();
 	difficultyButton.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 400);
+	difficultyButton.setTexture(&textureMainMenuButton2);
 
 	// Display difficulty button text
-	Text difficultyButtonText("Difficulty: " + difficultyToString(difficulty), font, 40);
+	Text difficultyButtonText("Difficulty: " + difficultyToString(difficulty), font, fontSize - 5);
 	difficultyButtonText.setFillColor(Color::Black);
 	textBounds = difficultyButtonText.getLocalBounds();
 	x = difficultyButton.getPosition().x + (difficultyButton.getSize().x / 2.f) - (textBounds.width / 2.f);
@@ -423,7 +435,7 @@ int main()
 	// Boolean for whether the player is dragging the slider or not
 	bool dragging = false;
 
-	// Setting volume to 50 upon start of game
+	// Setting volume to 50 by default
 	Listener::setGlobalVolume(50);
 
 	// Populate soundtrack
@@ -1161,6 +1173,7 @@ int main()
 		{
 			window.clear();
 			window.draw(spriteMainMenu);
+			window.draw(mainHeadingText);
 			window.draw(newGameButton);
 			window.draw(newGameButtonText);
 			window.draw(loadGameButton);
