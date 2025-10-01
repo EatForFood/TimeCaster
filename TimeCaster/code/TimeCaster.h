@@ -4,6 +4,8 @@ using namespace sf;
 
 int createBackground(VertexArray& rVA, IntRect arena);
 
+
+
 // The games difficulty will always be in one of these states
 enum class Difficulty { Easy, Medium, Hard };
 

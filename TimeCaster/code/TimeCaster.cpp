@@ -29,8 +29,22 @@ string difficultyToString(Difficulty difficulty)
 	return "Unknown";
 }
 
+Difficulty stringToDifficulty(string str)
+{
+
+	if (str == "Easy") {return Difficulty::Easy; }
+	else if (str == "Medium") {return Difficulty::Medium; }
+	else if (str == "Hard") { return Difficulty::Hard; }
+	else return Difficulty::Medium;
+}
+
+
+
 int main()
 {	
+	
+	
+
 	CollisionDetection collision;
 
 	// Here is the instance of TextureHolder
@@ -73,6 +87,8 @@ int main()
 
 	// Create an instance of the Player class
 	Player player;
+
+	player.loadConfigFile();
 
 	// The boundaries of the arena
 	IntRect arena;
@@ -514,7 +530,10 @@ int main()
 					startSoundPlayed = true;
 					
 					player.createNewSave();
+					player.createConfigFile(difficultyToString(difficulty));
 					player.loadSaveFile();
+					player.loadConfigFile();
+					difficulty = stringToDifficulty(player.getdifficultyString());
 					world.newWorld();
 				}
 
@@ -534,11 +553,16 @@ int main()
 					// Loads player stats from text file
 					if (player.loadSaveFile() == true) {
 						// Player loaded successfully
+						player.loadConfigFile();
+						difficulty = stringToDifficulty(player.getdifficultyString());
 					}
 					else {
 						// No save file so create a new one with default values and load it	
 						player.createNewSave();
+						player.createConfigFile(difficultyToString(difficulty));
 						player.loadSaveFile();
+						player.loadConfigFile();
+						difficulty = stringToDifficulty(player.getdifficultyString());
 					}
 				}
 
@@ -594,14 +618,17 @@ int main()
 					switch (difficulty) {
 					case Difficulty::Easy:
 						difficulty = Difficulty::Medium;
+						player.createConfigFile(difficultyToString(difficulty));
 						break;
 
 					case Difficulty::Medium:
 						difficulty = Difficulty::Hard;
+						player.createConfigFile(difficultyToString(difficulty));
 						break;
 
 					case Difficulty::Hard:
 						difficulty = Difficulty::Easy;
+						player.createConfigFile(difficultyToString(difficulty));
 						break;
 					}
 

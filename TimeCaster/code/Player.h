@@ -3,6 +3,7 @@
 #include "Character.h"
 
 using namespace sf;
+using namespace std;
 
 class Player : public Character
 {
@@ -34,6 +35,7 @@ private:
 	Clock m_CooldownClock;
 	float m_DodgeDuration = 0.2f; // 200ms dodge
 	float m_DodgeCooldown = 1.0f; // 1 second cooldown on dodge
+	string m_DifficultyString;
 	
 	// When was the player last hit
 	Time m_LastHit;
@@ -51,8 +53,7 @@ public:
 
 	Player();
 
-	// make a new save file with default values
-	void createNewSave();
+
 
 	void spawn(IntRect arena, Vector2f resolution, int tileSize);
 
@@ -120,10 +121,15 @@ public:
 	void disableRight();
 	void disableLeft();
 
+	// make a new save file with default values
+	void createNewSave();
+	void createConfigFile(string difficultyString);
 	//save and load player stats/position/etc.
-	void updateSaveFile(float currentSpeed, float currentHealth, float maxHealth, float currentStamina, float maxStamina, float staminaRecharge, float currentMana, float maxMana, int gold,  Vector2f position);
+	void updateSaveFile(float currentSpeed, float currentHealth, float maxHealth, float currentStamina, float maxStamina, float staminaRecharge, float currentMana, float maxMana, int gold, Vector2f position);
 	//load player stats/position/etc. from save file
 	bool loadSaveFile();
+	bool loadConfigFile();
+	string getdifficultyString();
 
 };
 #pragma once
