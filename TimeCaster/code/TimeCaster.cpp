@@ -456,10 +456,13 @@ int main()
 					if (event.mouseWheelScroll.delta > 0)
 					{
 						mainView.zoom(0.9f);
+						spriteCursor.scale(0.9f, 0.9f);
+						
 					}
 					else if (event.mouseWheelScroll.delta < 0)
 					{
 						mainView.zoom(1.1f);
+						spriteCursor.scale(1.1f, 1.1f);
 					}
 				}
 			}
@@ -1115,6 +1118,7 @@ int main()
 			for (auto& nav : world.getNavBoxes(0)) { // draw debug text showing tile location
 				window.draw(nav.getShape());
 			}
+			*/
 
 			if (Mouse::isButtonPressed(Mouse::Left) && state == State::PLAYING) {
 				spriteCursor.setTexture(textureCursorClosed);
@@ -1122,7 +1126,6 @@ int main()
 			else {
 				spriteCursor.setTexture(textureCursorOpen);
 			}
-			*/
 			
 			//Draw the crosshair
 			window.draw(spriteCursor);
