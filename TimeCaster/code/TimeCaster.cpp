@@ -127,10 +127,6 @@ int main()
 	Pickup staminaPickup(3);
 	Pickup manaPickup(4);
 
-	// About the game
-	
-	int hiScore = 0;
-
 	// For the home/game over screen
 	Sprite spriteMainMenu;
 	Texture textureMainMenu = TextureHolder::GetTexture("graphics/Castle (edited).jpg");
@@ -143,14 +139,6 @@ int main()
 	// Main font
 	Font font;
 	font.loadFromFile("fonts/PixelifySans-Bold.ttf");
-
-	// Load the high score from a text file
-	ifstream inputFile("gamedata/scores.txt");
-	if (inputFile.is_open())
-	{
-		inputFile >> hiScore;
-		inputFile.close();
-	}
 
 	// Paused text
 	Text pausedText("Press escape \nto continue", font, 130);
@@ -224,6 +212,8 @@ int main()
 	************/
 	Texture& textureMainMenuButton1 = TextureHolder::GetTexture("graphics/menuButton1.png");
 	Texture& textureMainMenuButton2 = TextureHolder::GetTexture("graphics/menuButton2.png");
+	
+	// Integer used to set all text font sizes
 	int fontSize = 35;
 
 	// TimeCaster heading text
@@ -519,6 +509,8 @@ int main()
 						sound.playStartGameSound();
 					}
 
+					sound.playStoryIntroSound();
+
 					startSoundPlayed = true;
 					
 					player.createNewSave();
@@ -623,7 +615,8 @@ int main()
 				
 				if (state == State::STORY_INTRO && event.key.code == Keyboard::Space)
 				{
-						state = State::PLAYING;
+					sound.stopStoryIntroSound();
+					state = State::PLAYING;
 				}
 			}
 		} // End event polling

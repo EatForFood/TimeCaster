@@ -85,6 +85,9 @@ public:
 	// Function to play the story intro sound
 	void playStoryIntroSound();
 
+	// Function to stop the story intro sound
+	void stopStoryIntroSound();
+
 	// Function to play the boss intro sound
 	void playBossIntroSound();
 };

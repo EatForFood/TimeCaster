@@ -33,7 +33,7 @@ SoundManager::SoundManager() {
 	soundtrack5.setBuffer(soundtrack5Buffer);
 
 	/***********
-	Other sounds
+	Other sounds/music
 	************/
 	
 	// Loads start game sound file into buffer
@@ -116,6 +116,11 @@ void SoundManager::playButtonClickSound() {
 // Function to play the story intro sound
 void SoundManager::playStoryIntroSound() {
 	storyIntro.play();
+}
+
+// Function to stop the story intro sound
+void SoundManager::stopStoryIntroSound() {
+	storyIntro.stop();
 }
 
 // Function to play the boss intro sound
