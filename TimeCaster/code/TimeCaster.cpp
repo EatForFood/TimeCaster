@@ -630,10 +630,12 @@ int main()
 				player.moveUp();
 				for (int i = 0; i < world.getWorldSize(); i++)
 				{
-					for (auto& nav : world.getNavBoxes(i)) { // if player walks into navBox 
-						if (collision.pointInShape(player.getPosition(), nav.getShape())) {
-							player.revertPosition();
-							player.setPosition(Vector2f(player.getPosition().x, player.getPosition().y + 1.5f));
+					if (!collision.pointInShape(player.getPosition(), world.getChunkArea(i).getShape())) { // if player is in chunk check for collisions
+						for (auto& nav : world.getNavBoxes(i)) { // if player walks into navBox 
+							if (collision.pointInShape(player.getPosition(), nav.getShape())) {
+								player.revertPosition();
+								player.setPosition(Vector2f(player.getPosition().x, player.getPosition().y + 1.5f));
+							}
 						}
 					}
 				}
@@ -648,10 +650,12 @@ int main()
 				player.moveDown();
 				for (int i = 0; i < world.getWorldSize(); i++)
 				{
-					for (auto& nav : world.getNavBoxes(i)) { // if player walks into navBox 
-						if (collision.pointInShape(player.getPosition(), nav.getShape())) {
-							player.revertPosition();
-							player.setPosition(Vector2f(player.getPosition().x, player.getPosition().y - 1.5f));
+					if (!collision.pointInShape(player.getPosition(), world.getChunkArea(i).getShape())) {
+						for (auto& nav : world.getNavBoxes(i)) { // if player walks into navBox 
+							if (collision.pointInShape(player.getPosition(), nav.getShape())) {
+								player.revertPosition();
+								player.setPosition(Vector2f(player.getPosition().x, player.getPosition().y - 1.5f));
+							}
 						}
 					}
 				}
@@ -666,10 +670,12 @@ int main()
 				player.moveLeft();
 				for (int i = 0; i < world.getWorldSize(); i++)
 				{
-					for (auto& nav : world.getNavBoxes(i)) { // if player walks into navBox 
-						if (collision.pointInShape(player.getPosition(), nav.getShape())) {
-							player.revertPosition();
-							player.setPosition(Vector2f(player.getPosition().x + 1.5f, player.getPosition().y));
+					if (!collision.pointInShape(player.getPosition(), world.getChunkArea(i).getShape())) {
+						for (auto& nav : world.getNavBoxes(i)) { // if player walks into navBox 
+							if (collision.pointInShape(player.getPosition(), nav.getShape())) {
+								player.revertPosition();
+								player.setPosition(Vector2f(player.getPosition().x + 1.5f, player.getPosition().y));
+							}
 						}
 					}
 				}
@@ -684,10 +690,12 @@ int main()
 				player.moveRight();
 				for (int i = 0; i < world.getWorldSize(); i++)
 				{
-					for (auto& nav : world.getNavBoxes(i)) { // if player walks into navBox 
-						if (collision.pointInShape(player.getPosition(), nav.getShape())) {
-							player.revertPosition();
-							player.setPosition(Vector2f(player.getPosition().x - 1.5f, player.getPosition().y));
+					if (!collision.pointInShape(player.getPosition(), world.getChunkArea(i).getShape())) {
+						for (auto& nav : world.getNavBoxes(i)) { // if player walks into navBox 
+							if (collision.pointInShape(player.getPosition(), nav.getShape())) {
+								player.revertPosition();
+								player.setPosition(Vector2f(player.getPosition().x - 1.5f, player.getPosition().y));
+							}
 						}
 					}
 				}
@@ -1044,7 +1052,9 @@ int main()
 			// Draw the background
 			for (int i = 0; i < world.getWorldSize(); i++)
 			{
-				window.draw(world.getBackground(i), &textureBackground);
+				if (collision.distance(player.getCenter(), world.getChunkCenter(i)) < 2000) { // check player distance to chunk
+					window.draw(world.getBackground(i), &textureBackground);
+				}
 			}
 
 			// DRAW EFFECTS
@@ -1069,8 +1079,10 @@ int main()
 
 			for (int i = 0; i < world.getWorldSize(); i++)
 			{
-				for (auto& entity : world.getEntities(i)) {
-					drawables.emplace_back(entity.getPosition().y, entity.getSprite());
+				if (collision.distance(player.getCenter(),world.getChunkCenter(i)) < 2000) {
+					for (auto& entity : world.getEntities(i)) {
+						drawables.emplace_back(entity.getPosition().y, entity.getSprite());
+					}
 				}
 			}
 			drawables.emplace_back(player.getY(), player.getSpriteFromSheet());
@@ -1109,7 +1121,9 @@ int main()
 
 			for (int i = 0; i < world.getWorldSize(); i++)
 			{
-				window.draw(world.getForground(i), &textureBackground);
+				if (collision.distance(player.getCenter(), world.getChunkCenter(i)) < 2000) {
+					window.draw(world.getForground(i), &textureBackground);
+				}
 			}
 
 			/*

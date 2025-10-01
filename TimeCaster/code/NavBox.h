@@ -18,7 +18,11 @@ protected:
 	Vector2f m_Position;
 
 public:
+	NavBox();
+
 	NavBox(float x, float y, float w, float h);
+
+	void SetNavBox(float x, float y, float w, float h);
 
 	Vector2f getPosition();
 

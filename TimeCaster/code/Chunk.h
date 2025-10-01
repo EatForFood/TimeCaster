@@ -18,6 +18,8 @@ protected:
 	int offsetY;
 
 	Vector2f offset;
+	Vector2f chunkCenter;
+
 
 	int currentVertexBG = 0;
 	int currentVertexFG = 0;
@@ -34,6 +36,7 @@ protected:
 
 	vector<Entity> entities;
 
+	NavBox chunkArea;
 	vector<NavBox> navBoxes;
 
 
@@ -53,6 +56,9 @@ public:
 	vector<Entity> getEntities();
 
 	vector<NavBox> getNavBoxes();
+
+	NavBox getChunkArea();
+	Vector2f getChunkCenter();
 
 	int createLandscape();
 

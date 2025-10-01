@@ -37,6 +37,11 @@ vector<NavBox> World::getNavBoxes(int i)
 	return chunks[i].getNavBoxes();
 }
 
+NavBox World::getChunkArea(int i)
+{
+	return chunks[i].getChunkArea();
+}
+
 vector<Entity> World::getEntities(int i)
 {
 	return chunks[i].getEntities();
@@ -64,4 +69,9 @@ VertexArray World::getBackground(int i) {
 VertexArray World::getForground(int i) {
 
 	return chunks[i].getForground();
+}
+
+Vector2f World::getChunkCenter(int i)
+{
+	return chunks[i].getChunkCenter();
 }

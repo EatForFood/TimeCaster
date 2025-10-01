@@ -30,7 +30,7 @@ protected:
 	bool m_JustJumped = false;
 
 	//which direction is the character headed? used to see if we need to reset the animation to first frame as we have changed direction
-	sf::Vector2f direction{ 0, 0 };
+	sf::Vector2f direction{ 0, -1 };
 
 	// How fast is the character
 	float m_Speed;

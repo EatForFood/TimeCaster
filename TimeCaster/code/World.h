@@ -27,6 +27,10 @@ public:
 
 	int getWorldSize();
 
+	NavBox getChunkArea(int i);
+
+	Vector2f getChunkCenter(int i);
+
 	VertexArray getBackground(int i);
 
 	VertexArray getForground(int i);

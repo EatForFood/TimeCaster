@@ -14,6 +14,18 @@ Chunk::Chunk(String type, Vector2f chunk)
 	offset.x = chunk.x * CHUNK_SIZE;
 	offset.y = chunk.y * CHUNK_SIZE;
 
+	chunkArea.SetNavBox(0 + offset.x, 0 + offset.y, 0, 0);
+
+	// calcualte center point of chunk
+	int tileX = 25 + offset.x;
+	int tileY = 25 + offset.y;
+
+	float ix = (tileX - tileY) * (TILE_SIZE / 2);
+	float iy = (tileX + tileY) * (TILE_SIZE / 4);
+
+	chunkCenter = Vector2f(ix, iy);
+
+
 	rVABG.setPrimitiveType(Quads);
 	rVAFG.setPrimitiveType(Quads);
 
@@ -370,6 +382,16 @@ vector<Entity> Chunk::getEntities() {
 vector<NavBox> Chunk::getNavBoxes() {
 
 	return navBoxes;
+}
+
+NavBox Chunk::getChunkArea() {
+
+	return chunkArea;
+}
+
+Vector2f Chunk::getChunkCenter() {
+
+	return chunkCenter;
 }
 
 void Chunk::clearChunk() {

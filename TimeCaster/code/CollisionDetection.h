@@ -15,6 +15,7 @@ private:
 
 public:
 	bool pointInShape(const sf::Vector2f& point, const sf::ConvexShape& poly);
+	float distance(Vector2f point1, Vector2f point2);
 	
 };
 
