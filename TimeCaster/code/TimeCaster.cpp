@@ -90,6 +90,8 @@ int main()
 
 	player.loadConfigFile();
 
+	difficulty = stringToDifficulty(player.getdifficultyString());
+
 	// The boundaries of the arena
 	IntRect arena;
 
