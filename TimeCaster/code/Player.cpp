@@ -1,5 +1,6 @@
 #include "player.h"
 #include "TextureHolder.h"
+#include "TimeCaster.h"
 #include <iostream>
 #include <fstream>
 #include <iomanip>
@@ -29,15 +30,7 @@ Player::Player()
 
 }
 
-void Player::createNewSave()
-{
-	std::ofstream saveFile("gamedata/TCSave.txt");
 
-	saveFile << std::fixed << std::setprecision(5) << START_SPEED << " " << START_HEALTH << " " << START_HEALTH << " " << START_STAMINA << " "
-		<< START_STAMINA << " " << START_STAMINA_RECHARGE << " " << START_MANA << " " << START_MANA << " " << 0 << " " << 64 << " " << 64 << std::endl;
-
-	saveFile.close();
-}
 
 void Player::spawn(IntRect arena, Vector2f resolution, int tileSize)
 {
@@ -385,6 +378,39 @@ float Player::getSpeed()
 	return m_Speed;
 }
 
+void Player::createNewSave()
+{
+
+	
+
+	std::ofstream saveFile("gamedata/TCSave.txt");
+
+
+	saveFile << std::fixed << std::setprecision(5) << START_SPEED << " " << START_HEALTH << " " << START_HEALTH << " " << START_STAMINA << " "
+		<< START_STAMINA << " " << START_STAMINA_RECHARGE << " " << START_MANA << " " << START_MANA << " " << 0 << " " << 64 << " " << 64 << std::endl;
+
+	saveFile.close();
+}
+void Player::createConfigFile(string dfficultyString)
+{
+	std::ofstream configFile("gamedata/TCConfig.txt");
+	
+	configFile << dfficultyString << std::endl;
+	
+	configFile.close();
+}
+
+bool Player::loadConfigFile()
+{
+	std::ifstream loadFile("gamedata/TCConfig.txt");
+	if (loadFile.is_open())
+	{
+		loadFile >> m_DifficultyString;
+		return true;
+	}
+	return false;
+}
+
 //remember to pass in all player stats to be saved
 void Player::updateSaveFile(float currentSpeed, float currentHealth, float maxHealth, float currentStamina, float maxStamina, float staminaRecharge, float currentMana, float maxMana, int gold, Vector2f position)
 {
@@ -412,6 +438,7 @@ bool Player::loadSaveFile()
 		loadFile >> m_Mana;
 		loadFile >> m_MaxMana;
 		loadFile >> m_Gold;
+		loadFile >> m_DifficultyString;
 		loadFile >> m_Position.x;
 		loadFile >> m_Position.y;
 		return true;
@@ -483,4 +510,9 @@ void Player::disableLeft() {
 void Player::revertPosition() {
 	setPosition(m_PositionLast);
 	m_Position = m_PositionLast;
+}
+
+string Player::getdifficultyString()
+{
+	return m_DifficultyString;
 }
