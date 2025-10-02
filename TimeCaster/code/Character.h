@@ -39,6 +39,9 @@ protected:
 	float m_Health;
 	float m_MaxHealth;
 
+	// Character level
+	int m_Level;
+
 	// Where is & was the character
 	Vector2f m_Position;
 	Vector2f m_PositionLast;

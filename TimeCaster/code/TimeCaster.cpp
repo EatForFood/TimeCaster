@@ -546,7 +546,7 @@ int main()
 					int tileSize = 64;
 
 					// Spawn the player in the middle of the arena
-					player.spawn(arena, resolution, tileSize);
+					player.spawn(arena, resolution, tileSize, 1);
 
 					// Configure the pick-ups
 					healthPickup.setArena(arena);
@@ -592,7 +592,7 @@ int main()
 						int tileSize = 64;
 
 						// Spawn the player in the middle of the arena
-						player.spawn(arena, resolution, tileSize);
+						player.spawn(arena, resolution, tileSize, 1);
 
 						// Configure the pick-ups
 						healthPickup.setArena(arena);
@@ -624,7 +624,7 @@ int main()
 						int tileSize = 64;
 
 						// Spawn the player in the middle of the arena
-						player.spawn(arena, resolution, tileSize);
+						player.spawn(arena, resolution, tileSize, 1);
 
 						// Configure the pick-ups
 						healthPickup.setArena(arena);

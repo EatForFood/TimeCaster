@@ -12,7 +12,7 @@ void Enemy::spawn(IntRect arena, Vector2f resolution, int tileSize, String type,
 	m_Hitbox.width = 40;
 	m_Hitbox.top = m_Position.y - 20;
 	m_Hitbox.height = 40;
-	m_level = level;
+	m_Level = level;
 	m_Type = type;
 
 	// Copy the details of the arena to the player's m_Arena

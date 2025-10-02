@@ -32,12 +32,14 @@ Player::Player()
 
 
 
-void Player::spawn(IntRect arena, Vector2f resolution, int tileSize)
+void Player::spawn(IntRect arena, Vector2f resolution, int tileSize, int level)
 {
 	m_Hitbox.left = m_Position.x - 20;
 	m_Hitbox.width = 40;
 	m_Hitbox.top = m_Position.y - 20;
 	m_Hitbox.height = 40;
+
+	m_Level = level;
 
 	// Copy the details of the arena to the player's m_Arena
 	m_Arena.left = arena.left;

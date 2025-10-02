@@ -55,7 +55,7 @@ public:
 
 
 
-	void spawn(IntRect arena, Vector2f resolution, int tileSize);
+	void spawn(IntRect arena, Vector2f resolution, int tileSize, int level);
 
 	// Handle the player getting hit by an enemy
 	bool hit(Time timeHit, float damage, int iFrames);
