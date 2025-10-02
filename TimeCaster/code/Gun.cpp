@@ -102,7 +102,7 @@ int Gun::gotIt()
 	m_SecondsSinceDeSpawn = 0;
 	return m_Value;
 }
-
+/*
 void Gun::update(float elapsedTime, Player player, Vector2i mousePosition)
 {
 	m_Sprite.setPosition(player.getCenter());
@@ -113,7 +113,7 @@ void Gun::update(float elapsedTime, Player player, Vector2i mousePosition)
 
 	m_Sprite.setRotation(angle);
 
-}
+}*/
 
 void Gun::upgrade()
 {

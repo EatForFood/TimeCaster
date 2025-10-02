@@ -534,6 +534,31 @@ int main()
 					player.createNewSave();
 					player.createConfigFile(difficultyToString(difficulty));
 					player.loadSaveFile();
+
+					// We will modify the next two lines later
+					arena.width = 1900;
+					arena.height = 800;
+					arena.left = 1664;
+					arena.top = 1664;
+
+					// Pass the vertex array by reference 
+					// to the createBackground function
+					int tileSize = 64;
+
+					// Spawn the player in the middle of the arena
+					player.spawn(arena, resolution, tileSize);
+
+					// Configure the pick-ups
+					healthPickup.setArena(arena);
+					ammoPickup.setArena(arena);
+					staminaPickup.setArena(arena);
+					manaPickup.setArena(arena);
+
+					// Reset the clock so there isn't a frame jump
+					clock.restart();
+				
+
+
 					player.loadConfigFile();
 					difficulty = stringToDifficulty(player.getdifficultyString());
 					world.newWorld();
@@ -555,6 +580,30 @@ int main()
 					// Loads player stats from text file
 					if (player.loadSaveFile() == true) {
 						// Player loaded successfully
+
+									// We will modify the next two lines later
+						arena.width = 1900;
+						arena.height = 800;
+						arena.left = 1664;
+						arena.top = 1664;
+
+						// Pass the vertex array by reference 
+						// to the createBackground function
+						int tileSize = 64;
+
+						// Spawn the player in the middle of the arena
+						player.spawn(arena, resolution, tileSize);
+
+						// Configure the pick-ups
+						healthPickup.setArena(arena);
+						ammoPickup.setArena(arena);
+						staminaPickup.setArena(arena);
+						manaPickup.setArena(arena);
+
+						// Reset the clock so there isn't a frame jump
+						clock.restart();
+					
+
 						player.loadConfigFile();
 						difficulty = stringToDifficulty(player.getdifficultyString());
 					}
@@ -563,6 +612,29 @@ int main()
 						player.createNewSave();
 						player.createConfigFile(difficultyToString(difficulty));
 						player.loadSaveFile();
+
+						// We will modify the next two lines later
+						arena.width = 1900;
+						arena.height = 800;
+						arena.left = 1664;
+						arena.top = 1664;
+
+						// Pass the vertex array by reference 
+						// to the createBackground function
+						int tileSize = 64;
+
+						// Spawn the player in the middle of the arena
+						player.spawn(arena, resolution, tileSize);
+
+						// Configure the pick-ups
+						healthPickup.setArena(arena);
+						ammoPickup.setArena(arena);
+						staminaPickup.setArena(arena);
+						manaPickup.setArena(arena);
+
+						// Reset the clock so there isn't a frame jump
+						clock.restart();
+
 						player.loadConfigFile();
 						difficulty = stringToDifficulty(player.getdifficultyString());
 					}
@@ -846,22 +918,23 @@ int main()
 				healthPickup.upgrade();
 				state = State::PLAYING;
 			}
-			
+
 			if (event.key.code == Keyboard::Num6)
 			{
 				ammoPickup.upgrade();
 				state = State::PLAYING;
 			}
-			
+
 			if (event.key.code == Keyboard::Num7)
 			{
 				// Increase stamina
 				player.upgradeStamina();
 				state = State::PLAYING;
 			}
-
+		}
+		//commented out because it wasn't running at all / wasn't running properly
 			// Handle player and pickups spawning alongside terrain generation
-			if (state == State::PLAYING)
+			/*if (state == State::PLAYING)
 			{
 				// We will modify the next two lines later
 				arena.width = 1900;
@@ -884,8 +957,8 @@ int main()
 
 				// Reset the clock so there isn't a frame jump
 				clock.restart();
-			}
-		}// End levelling up
+			}*/
+		// End levelling up
 
 		/***************
 		UPDATE THE FRAME
