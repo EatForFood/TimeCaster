@@ -30,6 +30,7 @@ private:
 	float m_StaminaRecharge;
 	int m_Gold;
 
+
 	// Dodge variables
 	bool m_IsDodging = false;
 	bool m_CanDodge = false;
@@ -63,7 +64,7 @@ public:
 
 
 
-	void spawn(IntRect arena, Vector2f resolution, int tileSize);
+	void spawn(IntRect arena, Vector2f resolution, int tileSize, int level);
 
 	// Handle the player getting hit by an enemy
 	bool hit(Time timeHit, float damage, int iFrames);
@@ -119,9 +120,13 @@ public:
 	int getGold();
 	void setGold(int amount);
 	float getSpeed();
+	int getPlayerLevel();
+	void setPlayerLevel(int level);
 
 	float getMana();
 	float getMaxMana();
+
+
 
 	void revertPosition();
 	void disableUp();
@@ -133,7 +138,7 @@ public:
 	void createNewSave();
 	void createConfigFile(string difficultyString);
 	//save and load player stats/position/etc.
-	void updateSaveFile(float currentSpeed, float currentHealth, float maxHealth, float currentStamina, float maxStamina, float staminaRecharge, float currentMana, float maxMana, int gold, Vector2f position);
+	void updateSaveFile(float currentSpeed, float currentHealth, float maxHealth, float currentStamina, float maxStamina, float staminaRecharge, float currentMana, float maxMana, int gold, int playerLevel, Vector2f position);
 	//load player stats/position/etc. from save file
 	bool loadSaveFile();
 	bool loadConfigFile();

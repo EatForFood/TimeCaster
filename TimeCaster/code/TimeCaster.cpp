@@ -31,20 +31,14 @@ string difficultyToString(Difficulty difficulty)
 
 Difficulty stringToDifficulty(string str)
 {
-
 	if (str == "Easy") {return Difficulty::Easy; }
 	else if (str == "Medium") {return Difficulty::Medium; }
 	else if (str == "Hard") { return Difficulty::Hard; }
 	else return Difficulty::Medium;
 }
 
-
-
 int main()
 {	
-	
-	
-
 	CollisionDetection collision;
 
 	// Here is the instance of TextureHolder
@@ -321,7 +315,7 @@ int main()
 	mainMenuButton.setTexture(&textureMainMenuButton2);
 
 	// Main menu button text
-	Text mainMenuButtonText("Main Menu", font, fontSize);
+	Text mainMenuButtonText("Save & Exit", font, fontSize - 5);
 	mainMenuButtonText.setFillColor(Color::White);
 	textBounds = mainMenuButtonText.getLocalBounds();
 	x = mainMenuButton.getPosition().x + (mainMenuButton.getSize().x / 2.f) - (textBounds.width / 2.f);
@@ -402,14 +396,24 @@ int main()
 	difficultyButtonText.setPosition(x - textBounds.left, y - textBounds.top);
 
 	// Story into text
-	Text storyIntroText("You desire retribution, but at what cost?", font, 40);
+	Text storyIntroText(
+		"I was not always a man consumed by vengeance. Once, I had a family—warm laughter by the fire, \n"
+		"the gentle touch of my children’s hands, the steady love of my wife. \n"
+		"All of it was torn from me in a single night, \n"
+		"devoured by the fire of (name), a dragon whose name still burns in my mind. \n"
+		"Since then, every spell I’ve mastered, every scar I’ve earned, has been for one purpose alone: \n"
+		"to bring that beast to its knees. \n"
+		"I do not seek glory, nor the hollow praise of men—I seek redemption. \n"
+		"And when the dragon falls, so too shall the weight of my failure. \n\n"
+		"You desire retribution dear player, but what will it cost you?",
+		font, fontSize);
 	storyIntroText.setFillColor(Color::White);
 	textBounds = storyIntroText.getLocalBounds();
 	viewCentre = mainView.getCenter();
 	storyIntroText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 150);
 
 	// Skip intro text
-	Text skipIntroText("-- Space to skip --", font, 30);
+	Text skipIntroText("--- Press space to skip ---", font, fontSize - 5);
 	skipIntroText.setFillColor(Color::White);
 	textBounds = skipIntroText.getLocalBounds();
 	viewCentre = mainView.getCenter();
@@ -456,10 +460,12 @@ int main()
 	// The main game loop
 	while (window.isOpen())
 	{
-		// Calculating fps
-		float deltaTime = fpsClock.restart().asSeconds();
-		fps = 1.f / deltaTime;
-		fpsText.setString("FPS: " + to_string((int)fps));
+		if (displayFps) {
+			// Calculating fps
+			float deltaTime = fpsClock.restart().asSeconds();
+			fps = 1.f / deltaTime;
+			fpsText.setString("FPS: " + to_string((int)fps));
+		}
 		
 		/***********
 		Handle input
@@ -522,7 +528,7 @@ int main()
 				}
 
 				// Player hit the new game button in the main menu
-				else if (newGameButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU)
+				else if (newGameButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU && event.mouseButton.button == Mouse::Left )
 				{
 					state = State::STORY_INTRO;
 					
@@ -538,13 +544,36 @@ int main()
 					player.createNewSave();
 					player.createConfigFile(difficultyToString(difficulty));
 					player.loadSaveFile();
+
+					// We will modify the next two lines later
+					arena.width = 1900;
+					arena.height = 800;
+					arena.left = 1664;
+					arena.top = 1664;
+
+					// Pass the vertex array by reference 
+					// to the createBackground function
+					int tileSize = 64;
+
+					// Spawn the player in the middle of the arena
+					player.spawn(arena, resolution, tileSize, player.getPlayerLevel());
+
+					// Configure the pick-ups
+					healthPickup.setArena(arena);
+					ammoPickup.setArena(arena);
+					staminaPickup.setArena(arena);
+					manaPickup.setArena(arena);
+
+					// Reset the clock so there isn't a frame jump
+					clock.restart();
+				
 					player.loadConfigFile();
 					difficulty = stringToDifficulty(player.getdifficultyString());
 					world.newWorld();
 				}
 
 				// Player hit the load game button in the main menu
-				else if (loadGameButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU)
+				else if (loadGameButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU && event.mouseButton.button == Mouse::Left)
 				{
 					state = State::PLAYING;
 					world.newWorld(); // should be replaced with a loadWorld() function
@@ -559,6 +588,30 @@ int main()
 					// Loads player stats from text file
 					if (player.loadSaveFile() == true) {
 						// Player loaded successfully
+
+						// We will modify the next two lines later
+						arena.width = 1900;
+						arena.height = 800;
+						arena.left = 1664;
+						arena.top = 1664;
+
+						// Pass the vertex array by reference 
+						// to the createBackground function
+						int tileSize = 64;
+
+						// Spawn the player in the middle of the arena
+						player.spawn(arena, resolution, tileSize, player.getPlayerLevel());
+
+						// Configure the pick-ups
+						healthPickup.setArena(arena);
+						ammoPickup.setArena(arena);
+						staminaPickup.setArena(arena);
+						manaPickup.setArena(arena);
+
+						// Reset the clock so there isn't a frame jump
+						clock.restart();
+					
+
 						player.loadConfigFile();
 						difficulty = stringToDifficulty(player.getdifficultyString());
 					}
@@ -567,13 +620,36 @@ int main()
 						player.createNewSave();
 						player.createConfigFile(difficultyToString(difficulty));
 						player.loadSaveFile();
+
+						// We will modify the next two lines later
+						arena.width = 1900;
+						arena.height = 800;
+						arena.left = 1664;
+						arena.top = 1664;
+
+						// Pass the vertex array by reference 
+						// to the createBackground function
+						int tileSize = 64;
+
+						// Spawn the player in the middle of the arena
+						player.spawn(arena, resolution, tileSize, player.getPlayerLevel());
+
+						// Configure the pick-ups
+						healthPickup.setArena(arena);
+						ammoPickup.setArena(arena);
+						staminaPickup.setArena(arena);
+						manaPickup.setArena(arena);
+
+						// Reset the clock so there isn't a frame jump
+						clock.restart();
+
 						player.loadConfigFile();
 						difficulty = stringToDifficulty(player.getdifficultyString());
 					}
 				}
 
 				// Player hit the options button
-				if (optionsButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU)
+				if (optionsButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU && event.mouseButton.button == Mouse::Left )
 				{
 					sound.playButtonClickSound();
 					world.clearWorld();
@@ -581,7 +657,7 @@ int main()
 				}
 
 				// Player hit the quit game button
-				if (quitGameButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU)
+				if (quitGameButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU && event.mouseButton.button == Mouse::Left)
 				{
 					sound.playButtonClickSound();
 					// Save info to file before quitting
@@ -589,7 +665,7 @@ int main()
 				}
 
 				// Player hit the main menu button in the options menu
-				if (mainMenuButton.getGlobalBounds().contains(worldPos) && state == State::OPTIONS_MENU)
+				if (mainMenuButton.getGlobalBounds().contains(worldPos) && state == State::OPTIONS_MENU && event.mouseButton.button == Mouse::Left)
 				{
 					sound.playButtonClickSound();
 					world.clearWorld();
@@ -597,16 +673,16 @@ int main()
 				}
 
 				// Player hit the main menu button in the pause menu
-				if (mainMenuButton.getGlobalBounds().contains(worldPos) && state == State::PAUSED) 
+				if (mainMenuButton.getGlobalBounds().contains(worldPos) && state == State::PAUSED && event.mouseButton.button == Mouse::Left)
 				{
 					sound.playButtonClickSound();
 					world.clearWorld();
-					player.updateSaveFile(player.getSpeed(), player.getHealth(), player.getMaxHealth(), player.getStamina(), player.getMaxStamina(), player.getStaminaRecharge(), player.getMana(), player.getMaxMana(), player.getGold(), player.getPosition());
+					player.updateSaveFile(player.getSpeed(), player.getHealth(), player.getMaxHealth(), player.getStamina(), player.getMaxStamina(), player.getStaminaRecharge(), player.getMana(), player.getMaxMana(), player.getGold(), player.getPlayerLevel(), player.getPosition());
 					state = State::MAIN_MENU;
 				}
 
 				// Player hit the display fps button
-				if (displayFPSButton.getGlobalBounds().contains(worldPos) && state == State::OPTIONS_MENU)
+				if (displayFPSButton.getGlobalBounds().contains(worldPos) && state == State::OPTIONS_MENU && event.mouseButton.button == Mouse::Left)
 				{
 					if (displayFps) {
 						sound.playButtonClickSound();
@@ -619,7 +695,7 @@ int main()
 				}
 
 				// Player hit the difficulty button
-				if (difficultyButton.getGlobalBounds().contains(worldPos) && state == State::OPTIONS_MENU)
+				if (difficultyButton.getGlobalBounds().contains(worldPos) && state == State::OPTIONS_MENU && event.mouseButton.button == Mouse::Left)
 				{
 					switch (difficulty) {
 					case Difficulty::Easy:
@@ -722,7 +798,6 @@ int main()
 			debugreset = true;
 		}
 
-
 		if (event.key.code == Keyboard::Num8 && !debugreset && state == State::PLAYING)
 		{
 			player.hit(gameTimeTotal, 10, 200);
@@ -768,84 +843,6 @@ int main()
 				difficultyButton.setFillColor(Color::Red);
 			}
 		}
-
-		// Handle the levelling up state
-		if (state == State::LEVELING_UP)
-		{
-			// Handle the player levelling up
-			if (event.key.code == Keyboard::Num1)
-			{
-				// Increase fire rate
-				//fireRate++;
-				state = State::PLAYING;
-			}
-
-			if (event.key.code == Keyboard::Num2)
-			{
-				// Increase clip size
-				//clipSize += clipSize;
-				state = State::PLAYING;
-			}
-
-			if (event.key.code == Keyboard::Num3)
-			{
-				// Increase health
-				player.upgradeHealth();
-				state = State::PLAYING;
-			}
-
-			if (event.key.code == Keyboard::Num4)
-			{
-				// Increase speed
-				player.upgradeSpeed();
-				state = State::PLAYING;
-			}
-
-			if (event.key.code == Keyboard::Num5)
-			{
-				healthPickup.upgrade();
-				state = State::PLAYING;
-			}
-			
-			if (event.key.code == Keyboard::Num6)
-			{
-				ammoPickup.upgrade();
-				state = State::PLAYING;
-			}
-			
-			if (event.key.code == Keyboard::Num7)
-			{
-				// Increase stamina
-				player.upgradeStamina();
-				state = State::PLAYING;
-			}
-
-			// Handle player and pickups spawning alongside terrain generation
-			if (state == State::PLAYING)
-			{
-				// We will modify the next two lines later
-				arena.width = 1900;
-				arena.height = 800;
-				arena.left = 1664;
-				arena.top = 1664;
-
-				// Pass the vertex array by reference 
-				// to the createBackground function
-				int tileSize = 64;
-
-				// Spawn the player in the middle of the arena
-				player.spawn(arena, resolution, tileSize);
-
-				// Configure the pick-ups
-				healthPickup.setArena(arena);
-				ammoPickup.setArena(arena);
-				staminaPickup.setArena(arena);
-				manaPickup.setArena(arena);
-
-				// Reset the clock so there isn't a frame jump
-				clock.restart();
-			}
-		}// End levelling up
 
 		/***************
 		UPDATE THE FRAME
@@ -997,7 +994,7 @@ int main()
 			startSoundPlayed = FALSE;
 		}
 		
-		if (state == State::MAIN_MENU || state == State::LEVELING_UP || state == State::OPTIONS_MENU)
+		if (state == State::MAIN_MENU || state == State::OPTIONS_MENU)
 		{
 			if (sound.isSoundtrackPlaying()) {
 				sound.stopSoundtrack();
@@ -1165,20 +1162,6 @@ int main()
 			}
 		}
 
-		if (state == State::LEVELING_UP)
-		{
-			window.clear();
-			window.draw(spriteMainMenu);
-			window.draw(levelUpText);
-		}
-
-		if (state == State::PAUSED)
-		{
-			window.draw(pausedText);
-			window.draw(mainMenuButton);
-			window.draw(mainMenuButtonText);
-		}
-
 		if (state == State::MAIN_MENU)
 		{
 			window.clear();
@@ -1214,8 +1197,14 @@ int main()
 		{
 			window.clear();
 			window.draw(storyIntroText);
-			window.draw(storyIntroText);
 			window.draw(skipIntroText);
+		}
+
+		if (state == State::PAUSED)
+		{
+			window.draw(pausedText);
+			window.draw(mainMenuButton);
+			window.draw(mainMenuButtonText);
 		}
 
 		window.display();

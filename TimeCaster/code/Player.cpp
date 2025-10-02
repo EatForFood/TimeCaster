@@ -32,12 +32,14 @@ Player::Player()
 
 
 
-void Player::spawn(IntRect arena, Vector2f resolution, int tileSize)
+void Player::spawn(IntRect arena, Vector2f resolution, int tileSize, int level)
 {
 	m_Hitbox.left = m_Position.x - 20;
 	m_Hitbox.width = 40;
 	m_Hitbox.top = m_Position.y - 20;
 	m_Hitbox.height = 40;
+
+	m_Level = level;
 
 	// Copy the details of the arena to the player's m_Arena
 	m_Arena.left = arena.left;
@@ -52,10 +54,9 @@ void Player::spawn(IntRect arena, Vector2f resolution, int tileSize)
 	m_Resolution.x = resolution.x;
 	m_Resolution.y = resolution.y;
 
-	m_CollisionBox.left = m_Position.x - 200;    
-	m_CollisionBox.top = m_Position.y - 200;     
-	m_CollisionBox.width = 400;                  
-	m_CollisionBox.height = 400;
+	//cout << m_Resolution.x << " 1 " << m_Resolution.y << endl;
+
+
 
 }
 
@@ -268,10 +269,15 @@ void Player::update(float elapsedTime, Vector2i mousePosition, vector<NavBox> na
 	m_CollisionBox.width = 200;
 	m_CollisionBox.height = 200;
 
+	/*cout << m_Resolution.x << " 2 " << m_Resolution.y << endl;
+
+	m_Resolution.x = VideoMode::getDesktopMode().width;
+	m_Resolution.y = VideoMode::getDesktopMode().height;
+
+	cout << m_Resolution.x << " 3 " << m_Resolution.y << endl;*/
+
 	// Calculate the angle between mouse and center of screen
-	float angle = (atan2(mousePosition.y - m_Resolution.y / 2,
-		mousePosition.x - m_Resolution.x / 2)
-		* 180) / 3.141;
+	float angle = (atan2(mousePosition.y - m_Resolution.y / 2, mousePosition.x - m_Resolution.x / 2) * 180) / 3.141;
 
 	if (angle < 0) angle += 360;
 
@@ -291,6 +297,7 @@ void Player::update(float elapsedTime, Vector2i mousePosition, vector<NavBox> na
 		{
 			// facing up
 			setSpriteFromSheet({ 0, 0, 576, 64 });
+			
 		}
 		else
 		{
@@ -368,6 +375,11 @@ void Player::increaseManaLevel(int amount)
 	}
 }
 
+void Player::setPlayerLevel(int level)
+{
+	m_Level = level;
+}
+
 float Player::getMana()
 {
 	return m_Mana;
@@ -409,6 +421,11 @@ float Player::getSpeed()
 	return m_Speed;
 }
 
+int Player::getPlayerLevel()
+{
+	return m_Level;
+}
+
 void Player::createNewSave()
 {
 
@@ -418,7 +435,7 @@ void Player::createNewSave()
 
 
 	saveFile << std::fixed << std::setprecision(5) << START_SPEED << " " << START_HEALTH << " " << START_HEALTH << " " << START_STAMINA << " "
-		<< START_STAMINA << " " << START_STAMINA_RECHARGE << " " << START_MANA << " " << START_MANA << " " << 0 << " " << 64 << " " << 64 << std::endl;
+		<< START_STAMINA << " " << START_STAMINA_RECHARGE << " " << START_MANA << " " << START_MANA << " " << 0 << " " << 1 << " " << 64 << " " << 64 << std::endl;
 
 	saveFile.close();
 }
@@ -443,13 +460,13 @@ bool Player::loadConfigFile()
 }
 
 //remember to pass in all player stats to be saved
-void Player::updateSaveFile(float currentSpeed, float currentHealth, float maxHealth, float currentStamina, float maxStamina, float staminaRecharge, float currentMana, float maxMana, int gold, Vector2f position)
+void Player::updateSaveFile(float currentSpeed, float currentHealth, float maxHealth, float currentStamina, float maxStamina, float staminaRecharge, float currentMana, float maxMana, int gold, int playerLevel, Vector2f position)
 {
 		
 	std::ofstream saveFile("gamedata/TCSave.txt");
 
 	saveFile << std::fixed << std::setprecision(5) << currentSpeed << " " << currentHealth << " " << maxHealth << " " << currentStamina << " "
-	<< maxStamina << " " << staminaRecharge << " " << currentMana << " " << maxMana << " " << gold << " " << position.x << " " << position.y << std::endl;
+	<< maxStamina << " " << staminaRecharge << " " << currentMana << " " << maxMana << " " << gold << " " << playerLevel << " " << position.x << " " << position.y << std::endl;
 
 	saveFile.close();
 }
@@ -469,7 +486,7 @@ bool Player::loadSaveFile()
 		loadFile >> m_Mana;
 		loadFile >> m_MaxMana;
 		loadFile >> m_Gold;
-		loadFile >> m_DifficultyString;
+		loadFile >> m_Level;
 		loadFile >> m_Position.x;
 		loadFile >> m_Position.y;
 		return true;
