@@ -881,85 +881,6 @@ int main()
 			}
 		}
 
-		// Handle the levelling up state
-		if (state == State::LEVELING_UP)
-		{
-			// Handle the player levelling up
-			if (event.key.code == Keyboard::Num1)
-			{
-				// Increase fire rate
-				//fireRate++;
-				state = State::PLAYING;
-			}
-
-			if (event.key.code == Keyboard::Num2)
-			{
-				// Increase clip size
-				//clipSize += clipSize;
-				state = State::PLAYING;
-			}
-
-			if (event.key.code == Keyboard::Num3)
-			{
-				// Increase health
-				player.upgradeHealth();
-				state = State::PLAYING;
-			}
-
-			if (event.key.code == Keyboard::Num4)
-			{
-				// Increase speed
-				player.upgradeSpeed();
-				state = State::PLAYING;
-			}
-
-			if (event.key.code == Keyboard::Num5)
-			{
-				healthPickup.upgrade();
-				state = State::PLAYING;
-			}
-
-			if (event.key.code == Keyboard::Num6)
-			{
-				ammoPickup.upgrade();
-				state = State::PLAYING;
-			}
-
-			if (event.key.code == Keyboard::Num7)
-			{
-				// Increase stamina
-				player.upgradeStamina();
-				state = State::PLAYING;
-			}
-		}
-		//commented out because it wasn't running at all / wasn't running properly
-			// Handle player and pickups spawning alongside terrain generation
-			/*if (state == State::PLAYING)
-			{
-				// We will modify the next two lines later
-				arena.width = 1900;
-				arena.height = 800;
-				arena.left = 1664;
-				arena.top = 1664;
-
-				// Pass the vertex array by reference 
-				// to the createBackground function
-				int tileSize = 64;
-
-				// Spawn the player in the middle of the arena
-				player.spawn(arena, resolution, tileSize);
-
-				// Configure the pick-ups
-				healthPickup.setArena(arena);
-				ammoPickup.setArena(arena);
-				staminaPickup.setArena(arena);
-				manaPickup.setArena(arena);
-
-				// Reset the clock so there isn't a frame jump
-				clock.restart();
-			}*/
-		// End levelling up
-
 		/***************
 		UPDATE THE FRAME
 		****************/
@@ -1102,7 +1023,7 @@ int main()
 			startSoundPlayed = FALSE;
 		}
 		
-		if (state == State::MAIN_MENU || state == State::LEVELING_UP || state == State::OPTIONS_MENU)
+		if (state == State::MAIN_MENU || state == State::OPTIONS_MENU)
 		{
 			if (sound.isSoundtrackPlaying()) {
 				sound.stopSoundtrack();
@@ -1262,13 +1183,6 @@ int main()
 			if (displayFps) {
 				window.draw(fpsText);
 			}
-		}
-
-		if (state == State::LEVELING_UP)
-		{
-			window.clear();
-			window.draw(spriteMainMenu);
-			window.draw(levelUpText);
 		}
 
 		if (state == State::PAUSED)

@@ -24,6 +24,7 @@
     <ClInclude Include="code\CollisionDetection.h" />
     <ClInclude Include="code\Chunk.h" />
     <ClInclude Include="code\Decal.h" />
+    <ClInclude Include="code\Enemy.h" />
     <ClInclude Include="code\Entity.h" />
     <ClInclude Include="code\Equipment.h" />
     <ClInclude Include="code\Gun.h" />
@@ -43,6 +44,7 @@
     <ClCompile Include="code\CollisionDetection.cpp" />
     <ClCompile Include="code\Chunk.cpp" />
     <ClCompile Include="code\Decal.cpp" />
+    <ClCompile Include="code\Enemy.cpp" />
     <ClCompile Include="code\Entity.cpp" />
     <ClCompile Include="code\Equipment.cpp" />
     <ClCompile Include="code\Gun.cpp" />
