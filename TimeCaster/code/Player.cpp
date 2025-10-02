@@ -349,6 +349,11 @@ void Player::increaseManaLevel(int amount)
 	}
 }
 
+void Player::setPlayerLevel(int level)
+{
+	m_Level = level;
+}
+
 float Player::getMana()
 {
 	return m_Mana;
@@ -390,6 +395,11 @@ float Player::getSpeed()
 	return m_Speed;
 }
 
+int Player::getPlayerLevel()
+{
+	return m_Level;
+}
+
 void Player::createNewSave()
 {
 
@@ -399,7 +409,7 @@ void Player::createNewSave()
 
 
 	saveFile << std::fixed << std::setprecision(5) << START_SPEED << " " << START_HEALTH << " " << START_HEALTH << " " << START_STAMINA << " "
-		<< START_STAMINA << " " << START_STAMINA_RECHARGE << " " << START_MANA << " " << START_MANA << " " << 0 << " " << 64 << " " << 64 << std::endl;
+		<< START_STAMINA << " " << START_STAMINA_RECHARGE << " " << START_MANA << " " << START_MANA << " " << 0 << " " << 1 << " " << 64 << " " << 64 << std::endl;
 
 	saveFile.close();
 }
@@ -424,13 +434,13 @@ bool Player::loadConfigFile()
 }
 
 //remember to pass in all player stats to be saved
-void Player::updateSaveFile(float currentSpeed, float currentHealth, float maxHealth, float currentStamina, float maxStamina, float staminaRecharge, float currentMana, float maxMana, int gold, Vector2f position)
+void Player::updateSaveFile(float currentSpeed, float currentHealth, float maxHealth, float currentStamina, float maxStamina, float staminaRecharge, float currentMana, float maxMana, int gold, int playerLevel, Vector2f position)
 {
 		
 	std::ofstream saveFile("gamedata/TCSave.txt");
 
 	saveFile << std::fixed << std::setprecision(5) << currentSpeed << " " << currentHealth << " " << maxHealth << " " << currentStamina << " "
-	<< maxStamina << " " << staminaRecharge << " " << currentMana << " " << maxMana << " " << gold << " " << position.x << " " << position.y << std::endl;
+	<< maxStamina << " " << staminaRecharge << " " << currentMana << " " << maxMana << " " << gold << " " << playerLevel << " " << position.x << " " << position.y << std::endl;
 
 	saveFile.close();
 }
@@ -450,6 +460,7 @@ bool Player::loadSaveFile()
 		loadFile >> m_Mana;
 		loadFile >> m_MaxMana;
 		loadFile >> m_Gold;
+		loadFile >> m_Level;
 		loadFile >> m_Position.x;
 		loadFile >> m_Position.y;
 		return true;

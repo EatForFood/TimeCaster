@@ -546,7 +546,9 @@ int main()
 					int tileSize = 64;
 
 					// Spawn the player in the middle of the arena
-					player.spawn(arena, resolution, tileSize, 1);
+					player.spawn(arena, resolution, tileSize, player.getPlayerLevel());
+
+					
 
 					// Configure the pick-ups
 					healthPickup.setArena(arena);
@@ -592,7 +594,7 @@ int main()
 						int tileSize = 64;
 
 						// Spawn the player in the middle of the arena
-						player.spawn(arena, resolution, tileSize, 1);
+						player.spawn(arena, resolution, tileSize, player.getPlayerLevel());
 
 						// Configure the pick-ups
 						healthPickup.setArena(arena);
@@ -624,7 +626,7 @@ int main()
 						int tileSize = 64;
 
 						// Spawn the player in the middle of the arena
-						player.spawn(arena, resolution, tileSize, 1);
+						player.spawn(arena, resolution, tileSize, player.getPlayerLevel());
 
 						// Configure the pick-ups
 						healthPickup.setArena(arena);
@@ -669,7 +671,7 @@ int main()
 				{
 					sound.playButtonClickSound();
 					world.clearWorld();
-					player.updateSaveFile(player.getSpeed(), player.getHealth(), player.getMaxHealth(), player.getStamina(), player.getMaxStamina(), player.getStaminaRecharge(), player.getMana(), player.getMaxMana(), player.getGold(), player.getPosition());
+					player.updateSaveFile(player.getSpeed(), player.getHealth(), player.getMaxHealth(), player.getStamina(), player.getMaxStamina(), player.getStaminaRecharge(), player.getMana(), player.getMaxMana(), player.getGold(), player.getPlayerLevel(), player.getPosition());
 					state = State::MAIN_MENU;
 				}
 
