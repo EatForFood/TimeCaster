@@ -52,6 +52,10 @@ void Player::spawn(IntRect arena, Vector2f resolution, int tileSize)
 	m_Resolution.x = resolution.x;
 	m_Resolution.y = resolution.y;
 
+	//cout << m_Resolution.x << " 1 " << m_Resolution.y << endl;
+
+
+
 }
 
 Time Player::getLastHitTime()
@@ -222,10 +226,15 @@ void Player::update(float elapsedTime, Vector2i mousePosition)
 	
 	m_Sprite.setPosition(m_Position);
 
+	/*cout << m_Resolution.x << " 2 " << m_Resolution.y << endl;
+
+	m_Resolution.x = VideoMode::getDesktopMode().width;
+	m_Resolution.y = VideoMode::getDesktopMode().height;
+
+	cout << m_Resolution.x << " 3 " << m_Resolution.y << endl;*/
+
 	// Calculate the angle between mouse and center of screen
-	float angle = (atan2(mousePosition.y - m_Resolution.y / 2,
-		mousePosition.x - m_Resolution.x / 2)
-		* 180) / 3.141;
+	float angle = (atan2(mousePosition.y - m_Resolution.y / 2, mousePosition.x - m_Resolution.x / 2) * 180) / 3.141;
 
 	if (angle < 0) angle += 360;
 
@@ -245,6 +254,7 @@ void Player::update(float elapsedTime, Vector2i mousePosition)
 		{
 			// facing up
 			setSpriteFromSheet({ 0, 0, 576, 64 });
+			
 		}
 		else
 		{
@@ -438,7 +448,6 @@ bool Player::loadSaveFile()
 		loadFile >> m_Mana;
 		loadFile >> m_MaxMana;
 		loadFile >> m_Gold;
-		loadFile >> m_DifficultyString;
 		loadFile >> m_Position.x;
 		loadFile >> m_Position.y;
 		return true;
