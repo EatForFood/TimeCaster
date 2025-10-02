@@ -10,4 +10,4 @@ int createBackground(VertexArray& rVA, IntRect arena);
 enum class Difficulty { Easy, Medium, Hard };
 
 // The game will always be in one of these states
-enum class State { MAIN_MENU, OPTIONS_MENU, STORY_INTRO, PLAYING, PAUSED, LEVELING_UP, GAME_OVER };
+enum class State { MAIN_MENU, OPTIONS_MENU, STORY_INTRO, PLAYING, PAUSED, GAME_OVER };
