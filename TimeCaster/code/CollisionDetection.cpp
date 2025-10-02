@@ -29,7 +29,7 @@ bool CollisionDetection::pointInShape(const Vector2f& point, const ConvexShape& 
 	return collision; // if collision true = odd number of crossings = inside shape
 }
 
-float CollisionDetection::distance(Vector2f point1, Vector2f point2)
+float CollisionDetection::distance(Vector2f point1, Vector2f point2) // calculate distance
 {
 	return sqrt((point2.x - point1.x) * (point2.x - point1.x) + (point2.y - point1.y) * (point2.y - point1.y));
 }

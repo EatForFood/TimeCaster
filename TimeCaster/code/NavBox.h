@@ -8,7 +8,7 @@ class NavBox
 {
 protected:
 
-	const int TILE_SIZE = 64;
+	int TILE_SIZE = 64;
 
 	float ix;
 	float iy;

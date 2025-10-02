@@ -30,7 +30,7 @@ protected:
 	bool m_JustJumped = false;
 
 	//which direction is the character headed? used to see if we need to reset the animation to first frame as we have changed direction
-	sf::Vector2f direction{ 0, -1 };
+	Vector2f direction{ 0, -1 };
 
 	// How fast is the character
 	float m_Speed;
@@ -52,11 +52,13 @@ protected:
 	FloatRect m_Right;
 	FloatRect m_Left;
 
+	FloatRect m_CollisionBox;
+
 	// And a texture
 	Texture m_Texture;
 
-	sf::Vector2i sheetCoordinate; // Coordinate on spritesheet
-	sf::Vector2i spriteSize;
+	Vector2i sheetCoordinate; // Coordinate on spritesheet
+	Vector2i spriteSize;
 	bool m_Alive{ true };
 	int m_Animation_It_Limit; //Max animation iterations
 	bool m_Horizontal{ true };
@@ -108,6 +110,8 @@ public:
 
 	// Where is the origin of the character
 	Vector2f getOrigin();
+
+	FloatRect getColBox();
 
 	// Which angle is the character facing
 	float getRotation();

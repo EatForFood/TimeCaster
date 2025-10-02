@@ -75,4 +75,6 @@ public:
 	void placeTree7(int x, int y);
 	void placeTree8(int x, int y);
 
+	void createForest(int numTrees, int worldWidth, int worldHeight);
+
 };

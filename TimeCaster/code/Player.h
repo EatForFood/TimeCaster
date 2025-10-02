@@ -1,6 +1,8 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "Character.h"
+#include "NavBox.h"
+#include "CollisionDetection.h"
 
 using namespace sf;
 using namespace std;
@@ -49,6 +51,12 @@ private:
 	bool rightDisabled = false;
 	bool leftDisabled = false;
 
+	CollisionDetection collision;
+	vector<NavBox> navBoxes;
+	int m_Chunk; // player's current chunk
+
+
+
 public:
 
 	Player();
@@ -76,7 +84,7 @@ public:
 	void stopDown();
 
 	// We will call this function once every frame
-	void update(float elapsedTime, Vector2i mousePosition);
+	void update(float elapsedTime, Vector2i mousePosition, vector<NavBox> navBox);
 
 	// Give player a speed boost
 	void upgradeSpeed();
@@ -130,6 +138,9 @@ public:
 	bool loadSaveFile();
 	bool loadConfigFile();
 	string getdifficultyString();
+
+	void setChunk(int chunk);
+	int getChunk();
 
 };
 #pragma once

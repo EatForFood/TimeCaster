@@ -2,6 +2,7 @@
 #include "TimeCaster.h"
 #include "World.h"
 #include "Chunk.h"
+#include <random>
 
 
 using namespace std;
@@ -15,21 +16,32 @@ World::World()
 
 void World::newWorld()
 {
-	chunks.emplace_back("grass", Vector2f(-1, -1));
-	chunks.emplace_back("grass", Vector2f(-1, 0));
-	chunks.emplace_back("grass", Vector2f(-1, +1));
-	chunks.emplace_back("grass", Vector2f(0, -1));
-	chunks.emplace_back("spawn", Vector2f(0, 0));
-	chunks.emplace_back("grass", Vector2f(0, +1));
-	chunks.emplace_back("grass", Vector2f(+1, -1));
-	chunks.emplace_back("grass", Vector2f(+1, 0));
-	chunks.emplace_back("grass", Vector2f(+1, +1));
+    int half = GRID_SIZE / 2; 
 
+    for (int y = -half; y <= half; y++)
+    {
+        for (int x = -half; x <= half; x++)
+        {
+            if (x == 0 && y == 0) // center chunk is spawn
+            {
+                chunks.emplace_back("spawn", Vector2f(x, y));
+            }
+            else
+            {
+                chunks.emplace_back("forest", Vector2f(x, y));
+            }
+        }
+    }
 }
 
 vector<Chunk> World::getChunks()
 {
 	return chunks;
+}
+
+Chunk World::getChunk(int i)
+{
+	return chunks[i];
 }
 
 vector<NavBox> World::getNavBoxes(int i)

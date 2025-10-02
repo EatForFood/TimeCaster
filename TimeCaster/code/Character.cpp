@@ -18,6 +18,11 @@ FloatRect Character::getGlobalBounds()
 	return m_Sprite.getGlobalBounds();
 }
 
+FloatRect Character::getColBox()
+{
+	return m_CollisionBox;
+}
+
 Vector2f Character::getCenter()
 {
 	return m_Position;

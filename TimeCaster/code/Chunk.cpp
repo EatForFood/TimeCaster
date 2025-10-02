@@ -3,9 +3,13 @@
 #include "Entity.h"
 #include "Chunk.h"
 #include "NavBox.h"
+#include <random>
 
 using namespace std;
 using namespace sf;
+
+random_device rd;
+mt19937 gen(rd());
 
 Chunk::Chunk(String type, Vector2f chunk)
 {
@@ -14,8 +18,6 @@ Chunk::Chunk(String type, Vector2f chunk)
 	offset.x = chunk.x * CHUNK_SIZE;
 	offset.y = chunk.y * CHUNK_SIZE;
 
-	chunkArea.SetNavBox(0 + offset.x, 0 + offset.y, 0, 0);
-
 	// calcualte center point of chunk
 	int tileX = 25 + offset.x;
 	int tileY = 25 + offset.y;
@@ -23,7 +25,10 @@ Chunk::Chunk(String type, Vector2f chunk)
 	float ix = (tileX - tileY) * (TILE_SIZE / 2);
 	float iy = (tileX + tileY) * (TILE_SIZE / 4);
 
-	chunkCenter = Vector2f(ix, iy);
+	chunkCenter = Vector2f(ix, iy); // find center point in world coords of chunk
+
+	chunkArea.SetNavBox(offset.x, offset.y, 50, 50); // create a navBox around the chunk 
+
 
 
 	rVABG.setPrimitiveType(Quads);
@@ -117,6 +122,40 @@ Chunk::Chunk(String type, Vector2f chunk)
 		CreateEntity("tree6", 10, 23);
 		CreateEntity("tree7", 30, 7);
 		CreateEntity("tree8", 40, 15);
+
+
+	}
+
+	if (m_Type == "forest") {
+
+		// Grass 
+		for (int x = 0; x < 50; x++)
+		{
+			for (int y = 0; y < 50; y++)
+			{
+
+				placeTile(x, y, 0, 0, false);
+
+
+				currentVertexBG += VERTS_IN_QUAD;
+			}
+		}
+
+		// Forground empty
+		for (int x = 0; x < 50; x++)
+		{
+			for (int y = 0; y < 50; y++)
+			{
+
+				placeTile(x, y, 256, 128, true);
+
+				currentVertexFG += VERTS_IN_QUAD;
+			}
+		}
+
+		createForest(300,50,50);
+
+
 	}
 }
 
@@ -402,4 +441,21 @@ void Chunk::clearChunk() {
 	entities.clear();
 	navBoxes.clear();
 
+}
+
+void Chunk::createForest(int numTrees, int chunkWidth, int chunkHeight)
+{
+	uniform_int_distribution<> xDist(0, chunkWidth - 3);
+	uniform_int_distribution<> yDist(0, chunkHeight - 3);
+
+	for (int i = 0; i < numTrees; i++)
+	{
+		int x = xDist(gen);
+		int y = yDist(gen);
+
+		int type = 1 + (gen() % 3); 
+		string treeName = "tree" + to_string(type);
+
+		CreateEntity(treeName, x, y);
+	}
 }

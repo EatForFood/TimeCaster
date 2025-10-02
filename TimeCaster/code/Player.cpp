@@ -4,6 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <iomanip>
+#include "CollisionDetection.h"
 
 using namespace std;
 using namespace sf;
@@ -19,7 +20,6 @@ Player::Player()
 	m_Stamina = START_STAMINA;
 	m_MaxStamina = START_STAMINA;
 	m_StaminaRecharge = START_STAMINA_RECHARGE;
-	
 
 	// Associate a texture with the sprite
 	m_Sprite = Sprite(TextureHolder::GetTexture("graphics/player/playerWalk.png"));
@@ -51,6 +51,11 @@ void Player::spawn(IntRect arena, Vector2f resolution, int tileSize)
 	// Strore the resolution for future use
 	m_Resolution.x = resolution.x;
 	m_Resolution.y = resolution.y;
+
+	m_CollisionBox.left = m_Position.x - 200;    
+	m_CollisionBox.top = m_Position.y - 200;     
+	m_CollisionBox.width = 400;                  
+	m_CollisionBox.height = 400;
 
 }
 
@@ -122,8 +127,9 @@ void Player::stopDown()
 	m_DownPressed = false;
 }
 
-void Player::update(float elapsedTime, Vector2i mousePosition)
+void Player::update(float elapsedTime, Vector2i mousePosition, vector<NavBox> navBox)
 {
+	navBoxes = navBox;
 
 	m_TimeElapsed = elapsedTime; 
 
@@ -180,12 +186,30 @@ void Player::update(float elapsedTime, Vector2i mousePosition)
 		direction = Vector2f(0, 1);
 	}
 
+	for (auto& nav : navBoxes) { // if player walks into navBox 
+		if (m_CollisionBox.intersects(nav.getShape().getGlobalBounds()))
+		{
+			if (collision.pointInShape(m_Position, nav.getShape())) {
+				revertPosition();
+			}
+		}
+	}
+
 	if (m_DownPressed && !downDisabled)
 	{
 		m_PositionLast = m_Position;
 		m_Position.y += m_Speed * elapsedTime;
 		setSpriteFromSheet(IntRect(0, 128, 576, 64));
 		direction = Vector2f(0, -1);
+	}
+
+	for (auto& nav : navBoxes) { // if player walks into navBox 
+		if (m_CollisionBox.intersects(nav.getShape().getGlobalBounds()))
+		{
+			if (collision.pointInShape(m_Position, nav.getShape())) {
+				revertPosition();
+			}
+		}
 	}
 
 	if (m_RightPressed && !rightDisabled)
@@ -196,12 +220,30 @@ void Player::update(float elapsedTime, Vector2i mousePosition)
 		direction = Vector2f(1, 0);
 	}
 
+	for (auto& nav : navBoxes) { // if player walks into navBox 
+		if (m_CollisionBox.intersects(nav.getShape().getGlobalBounds()))
+		{
+			if (collision.pointInShape(m_Position, nav.getShape())) {
+				revertPosition();
+			}
+		}
+	}
+
 	if (m_LeftPressed && !leftDisabled)
 	{
 		m_PositionLast = m_Position;
 		m_Position.x -= m_Speed * elapsedTime;
 		setSpriteFromSheet(IntRect(0, 64, 576, 64));
 		direction = Vector2f(-1, 0);
+	}
+
+	for (auto& nav : navBoxes) { // if player walks into navBox 
+		if (m_CollisionBox.intersects(nav.getShape().getGlobalBounds()))
+		{
+			if (collision.pointInShape(m_Position, nav.getShape())) {
+				revertPosition();
+			}
+		}
 	}
 
 	if (!m_IsDodging)
@@ -221,6 +263,10 @@ void Player::update(float elapsedTime, Vector2i mousePosition)
 	dodge();
 	
 	m_Sprite.setPosition(m_Position);
+	m_CollisionBox.left = m_Position.x - 100;
+	m_CollisionBox.top = m_Position.y - 100;
+	m_CollisionBox.width = 200;
+	m_CollisionBox.height = 200;
 
 	// Calculate the angle between mouse and center of screen
 	float angle = (atan2(mousePosition.y - m_Resolution.y / 2,
@@ -257,27 +303,12 @@ void Player::update(float elapsedTime, Vector2i mousePosition)
 	{
 		moveTextureRect();
 	}
-	/*
-	if (rightDisabled)
-	{
-		leftDisabled = false;
-	}
 
-	if (leftDisabled)
-	{
-		rightDisabled = false;
-	}
-
-	if (upDisabled)
-	{
-		downDisabled = false;
-	}
-
-	if (downDisabled)
-	{
-		upDisabled = false;
-	}
-	*/
+	upDisabled = false;
+	downDisabled = false;
+	leftDisabled = false;
+	rightDisabled = false;
+	
 }
 
 void Player::upgradeSpeed()
@@ -509,10 +540,20 @@ void Player::disableLeft() {
 
 void Player::revertPosition() {
 	setPosition(m_PositionLast);
-	m_Position = m_PositionLast;
+	//m_Position = m_PositionLast;
 }
 
 string Player::getdifficultyString()
 {
 	return m_DifficultyString;
+}
+
+void Player::setChunk(int chunk)
+{
+	m_Chunk = chunk;
+}
+
+int Player::getChunk()
+{
+	return m_Chunk;
 }

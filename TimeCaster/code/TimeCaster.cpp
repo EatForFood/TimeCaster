@@ -62,6 +62,8 @@ int main()
 	resolution.y = VideoMode::getDesktopMode().height;
 	resolution.x = 1920;
 	resolution.y = 1080;
+	
+	
 
 	RenderWindow window(VideoMode(resolution.x, resolution.y), "TimeCaster", Style::Fullscreen);
 
@@ -70,6 +72,8 @@ int main()
 
 	// Zoom view
 	mainView.zoom(0.3f);
+
+	
 
 	// Here is our clock for timing everything
 	Clock clock;
@@ -656,18 +660,7 @@ int main()
 			// Handle the pressing and releasing of the WASD keys
 			if (Keyboard::isKeyPressed(Keyboard::W))
 			{
-				player.moveUp();
-				for (int i = 0; i < world.getWorldSize(); i++)
-				{
-					if (!collision.pointInShape(player.getPosition(), world.getChunkArea(i).getShape())) { // if player is in chunk check for collisions
-						for (auto& nav : world.getNavBoxes(i)) { // if player walks into navBox 
-							if (collision.pointInShape(player.getPosition(), nav.getShape())) {
-								player.revertPosition();
-								player.setPosition(Vector2f(player.getPosition().x, player.getPosition().y + 1.5f));
-							}
-						}
-					}
-				}
+				player.moveUp();					
 			}
 			else
 			{
@@ -675,19 +668,8 @@ int main()
 			}
 
 			if (Keyboard::isKeyPressed(Keyboard::S))
-			{
-				player.moveDown();
-				for (int i = 0; i < world.getWorldSize(); i++)
-				{
-					if (!collision.pointInShape(player.getPosition(), world.getChunkArea(i).getShape())) {
-						for (auto& nav : world.getNavBoxes(i)) { // if player walks into navBox 
-							if (collision.pointInShape(player.getPosition(), nav.getShape())) {
-								player.revertPosition();
-								player.setPosition(Vector2f(player.getPosition().x, player.getPosition().y - 1.5f));
-							}
-						}
-					}
-				}
+			{				
+				player.moveDown();				
 			}
 			else
 			{
@@ -696,18 +678,7 @@ int main()
 
 			if (Keyboard::isKeyPressed(Keyboard::A))
 			{
-				player.moveLeft();
-				for (int i = 0; i < world.getWorldSize(); i++)
-				{
-					if (!collision.pointInShape(player.getPosition(), world.getChunkArea(i).getShape())) {
-						for (auto& nav : world.getNavBoxes(i)) { // if player walks into navBox 
-							if (collision.pointInShape(player.getPosition(), nav.getShape())) {
-								player.revertPosition();
-								player.setPosition(Vector2f(player.getPosition().x + 1.5f, player.getPosition().y));
-							}
-						}
-					}
-				}
+				player.moveLeft();				
 			}
 			else
 			{
@@ -715,19 +686,8 @@ int main()
 			}
 
 			if (Keyboard::isKeyPressed(Keyboard::D))
-			{
+			{		
 				player.moveRight();
-				for (int i = 0; i < world.getWorldSize(); i++)
-				{
-					if (!collision.pointInShape(player.getPosition(), world.getChunkArea(i).getShape())) {
-						for (auto& nav : world.getNavBoxes(i)) { // if player walks into navBox 
-							if (collision.pointInShape(player.getPosition(), nav.getShape())) {
-								player.revertPosition();
-								player.setPosition(Vector2f(player.getPosition().x - 1.5f, player.getPosition().y));
-							}
-						}
-					}
-				}
 			}
 			else
 			{
@@ -910,8 +870,16 @@ int main()
 			// Set the crosshair to the mouse world location
 			spriteCursor.setPosition(mouseWorldPosition);
 
+			for (int i = 0; i < world.getWorldSize(); i++)
+			{
+				if (collision.pointInShape(player.getPosition(), world.getChunkArea(i).getShape())) // find players current chunk
+				{
+					player.setChunk(i);
+				}
+			}
+			
 			// Update the player
-			player.update(dtAsSeconds, Mouse::getPosition());
+			player.update(dtAsSeconds, Mouse::getPosition(), world.getNavBoxes(player.getChunk()));
 
 			// Make a note of the players new position
 			Vector2f playerPosition(player.getCenter());
@@ -1110,7 +1078,9 @@ int main()
 			{
 				if (collision.distance(player.getCenter(),world.getChunkCenter(i)) < 2000) {
 					for (auto& entity : world.getEntities(i)) {
-						drawables.emplace_back(entity.getPosition().y, entity.getSprite());
+						if (collision.distance(player.getCenter(), entity.getPosition()) < 1000) {
+							drawables.emplace_back(entity.getPosition().y, entity.getSprite());
+						}
 					}
 				}
 			}
@@ -1164,6 +1134,10 @@ int main()
 				window.draw(nav.getShape());
 			}
 			*/
+			for (auto& nav : world.getNavBoxes(player.getChunk())) { // draw debug text showing tile location
+				window.draw(nav.getShape());
+				window.draw(world.getChunkArea(player.getChunk()).getShape());
+			}
 
 			if (Mouse::isButtonPressed(Mouse::Left) && state == State::PLAYING) {
 				spriteCursor.setTexture(textureCursorClosed);

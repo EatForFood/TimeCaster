@@ -9,6 +9,8 @@ class World
 {
 private:
 
+	const int WORLD_SIZE = 9;
+	int GRID_SIZE = sqrt(WORLD_SIZE);
 	vector<Chunk> chunks;
 
 public:
@@ -18,6 +20,8 @@ public:
 	void newWorld();
 
 	vector<Chunk> getChunks();
+
+	Chunk getChunk(int i);
 
 	vector<NavBox> getNavBoxes(int i);
 
