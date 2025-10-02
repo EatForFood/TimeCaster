@@ -518,7 +518,7 @@ int main()
 				}
 
 				// Player hit the new game button in the main menu
-				else if (newGameButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU)
+				else if (newGameButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU && event.mouseButton.button == Mouse::Left )
 				{
 					state = State::STORY_INTRO;
 					
@@ -565,7 +565,7 @@ int main()
 				}
 
 				// Player hit the load game button in the main menu
-				else if (loadGameButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU)
+				else if (loadGameButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU && event.mouseButton.button == Mouse::Left)
 				{
 					state = State::PLAYING;
 					world.newWorld(); // should be replaced with a loadWorld() function
@@ -641,7 +641,7 @@ int main()
 				}
 
 				// Player hit the options button
-				if (optionsButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU)
+				if (optionsButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU && event.mouseButton.button == Mouse::Left )
 				{
 					sound.playButtonClickSound();
 					world.clearWorld();
@@ -649,7 +649,7 @@ int main()
 				}
 
 				// Player hit the quit game button
-				if (quitGameButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU)
+				if (quitGameButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU && event.mouseButton.button == Mouse::Left)
 				{
 					sound.playButtonClickSound();
 					// Save info to file before quitting
@@ -657,7 +657,7 @@ int main()
 				}
 
 				// Player hit the main menu button in the options menu
-				if (mainMenuButton.getGlobalBounds().contains(worldPos) && state == State::OPTIONS_MENU)
+				if (mainMenuButton.getGlobalBounds().contains(worldPos) && state == State::OPTIONS_MENU && event.mouseButton.button == Mouse::Left)
 				{
 					sound.playButtonClickSound();
 					world.clearWorld();
@@ -665,7 +665,7 @@ int main()
 				}
 
 				// Player hit the main menu button in the pause menu
-				if (mainMenuButton.getGlobalBounds().contains(worldPos) && state == State::PAUSED) 
+				if (mainMenuButton.getGlobalBounds().contains(worldPos) && state == State::PAUSED && event.mouseButton.button == Mouse::Left)
 				{
 					sound.playButtonClickSound();
 					world.clearWorld();
@@ -674,7 +674,7 @@ int main()
 				}
 
 				// Player hit the display fps button
-				if (displayFPSButton.getGlobalBounds().contains(worldPos) && state == State::OPTIONS_MENU)
+				if (displayFPSButton.getGlobalBounds().contains(worldPos) && state == State::OPTIONS_MENU && event.mouseButton.button == Mouse::Left)
 				{
 					if (displayFps) {
 						sound.playButtonClickSound();
@@ -687,7 +687,7 @@ int main()
 				}
 
 				// Player hit the difficulty button
-				if (difficultyButton.getGlobalBounds().contains(worldPos) && state == State::OPTIONS_MENU)
+				if (difficultyButton.getGlobalBounds().contains(worldPos) && state == State::OPTIONS_MENU && event.mouseButton.button == Mouse::Left)
 				{
 					switch (difficulty) {
 					case Difficulty::Easy:
