@@ -317,7 +317,7 @@ int main()
 	mainMenuButton.setTexture(&textureMainMenuButton2);
 
 	// Main menu button text
-	Text mainMenuButtonText("Main Menu", font, fontSize);
+	Text mainMenuButtonText("Save & Exit", font, fontSize - 5);
 	mainMenuButtonText.setFillColor(Color::White);
 	textBounds = mainMenuButtonText.getLocalBounds();
 	x = mainMenuButton.getPosition().x + (mainMenuButton.getSize().x / 2.f) - (textBounds.width / 2.f);
@@ -405,7 +405,7 @@ int main()
 	storyIntroText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 150);
 
 	// Skip intro text
-	Text skipIntroText("-- Space to skip --", font, 30);
+	Text skipIntroText("-- Press space to skip --", font, fontSize - 5);
 	skipIntroText.setFillColor(Color::White);
 	textBounds = skipIntroText.getLocalBounds();
 	viewCentre = mainView.getCenter();
@@ -559,8 +559,6 @@ int main()
 					// Reset the clock so there isn't a frame jump
 					clock.restart();
 				
-
-
 					player.loadConfigFile();
 					difficulty = stringToDifficulty(player.getdifficultyString());
 					world.newWorld();
