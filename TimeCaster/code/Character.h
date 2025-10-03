@@ -3,12 +3,27 @@
 
 
 using namespace sf;
+using namespace std;
 
 class Character
 {
 protected:
 	Sprite m_Sprite;
-	Sprite m_SpriteSheet;
+	Sprite m_SpriteSheet; // sprite sheet for base character sprite
+
+	Sprite m_SpriteHead;
+	Sprite m_SpriteSheetHead; // sprite sheet for head armour
+
+	Sprite m_SpriteTorso;
+	Sprite m_SpriteSheetTorso; // sprite sheet for torso armour
+
+	Sprite m_SpritePants;
+	Sprite m_SpriteSheetPants; // sprite sheet for pants armour
+
+	Sprite m_SpriteShoes;
+	Sprite m_SpriteSheetShoes; // sprite sheet for shoes
+
+	vector<Sprite> m_Clothes;
 
 	// How long does a jump last
 	float m_JumpDuration;
@@ -91,7 +106,12 @@ public:
 
 	//void virtual update(float elapsedTime);
 	//setSprite to use correct animation cell
-	void setSpriteFromSheet(sf::IntRect textureBox);
+	void setSpriteFromSheet(IntRect textureBox);
+
+	Sprite getPants();
+	Sprite getHead();
+	Sprite getTorso();
+	Sprite getShoes();
 
 	//move the rectangle to the next cell in the animation
 	void moveTextureRect();

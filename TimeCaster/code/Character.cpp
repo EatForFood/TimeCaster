@@ -87,6 +87,11 @@ void Character::setSpriteFromSheet(sf::IntRect textureBox) // set sprite
 
 	m_Sprite.setTextureRect(sf::IntRect{ sheetCoordinate, spriteSize });
 
+	m_SpriteHead.setTextureRect(sf::IntRect{ sheetCoordinate, spriteSize });
+	m_SpriteTorso.setTextureRect(sf::IntRect{ sheetCoordinate, spriteSize });
+	m_SpritePants.setTextureRect(sf::IntRect{ sheetCoordinate, spriteSize });
+	m_SpriteShoes.setTextureRect(sf::IntRect{ sheetCoordinate, spriteSize });
+
 }
 
 void Character::moveTextureRect() // animate sprite by moving texRect location
@@ -101,9 +106,19 @@ void Character::moveTextureRect() // animate sprite by moving texRect location
 	if (m_Horizontal) {
 
 		m_Sprite.setTextureRect(sf::IntRect(sheetCoordinate + sf::Vector2i(spriteSize.x * m_Ani_Counter, 0), spriteSize));
+
+		m_SpriteHead.setTextureRect(sf::IntRect(sheetCoordinate + sf::Vector2i(spriteSize.x * m_Ani_Counter, 0), spriteSize));
+		m_SpriteTorso.setTextureRect(sf::IntRect(sheetCoordinate + sf::Vector2i(spriteSize.x * m_Ani_Counter, 0), spriteSize));
+		m_SpritePants.setTextureRect(sf::IntRect(sheetCoordinate + sf::Vector2i(spriteSize.x * m_Ani_Counter, 0), spriteSize));
+		m_SpriteShoes.setTextureRect(sf::IntRect(sheetCoordinate + sf::Vector2i(spriteSize.x * m_Ani_Counter, 0), spriteSize));
 	}
 	else {
 		m_Sprite.setTextureRect(sf::IntRect(sheetCoordinate + sf::Vector2i(0, spriteSize.y * m_Ani_Counter), spriteSize));
+
+		m_SpriteHead.setTextureRect(sf::IntRect(sheetCoordinate + sf::Vector2i(0, spriteSize.y * m_Ani_Counter), spriteSize));
+		m_SpriteTorso.setTextureRect(sf::IntRect(sheetCoordinate + sf::Vector2i(0, spriteSize.y * m_Ani_Counter), spriteSize));
+		m_SpritePants.setTextureRect(sf::IntRect(sheetCoordinate + sf::Vector2i(0, spriteSize.y * m_Ani_Counter), spriteSize));
+		m_SpriteShoes.setTextureRect(sf::IntRect(sheetCoordinate + sf::Vector2i(0, spriteSize.y * m_Ani_Counter), spriteSize));
 	}
 
 	//increment animation counter to point to the next frame
@@ -116,4 +131,24 @@ void Character::moveTextureRect() // animate sprite by moving texRect location
 		m_AnimationTimer = 0;
 	}
 
+}
+
+Sprite Character::getPants()
+{
+	return m_SpritePants;
+}
+
+Sprite Character::getHead()
+{
+	return m_SpriteHead;
+}
+
+Sprite Character::getTorso()
+{
+	return m_SpriteTorso;
+}
+
+Sprite Character::getShoes()
+{
+	return m_SpriteShoes;
 }

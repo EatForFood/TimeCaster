@@ -60,8 +60,6 @@ public:
 	NavBox getChunkArea();
 	Vector2f getChunkCenter();
 
-	int createLandscape();
-
 	void clearChunk();
 
 	void placeHouse1(int x, int y);

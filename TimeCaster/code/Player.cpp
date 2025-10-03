@@ -28,6 +28,28 @@ Player::Player()
 	m_Sprite.setOrigin(32, 32);
 	m_Sprite.setScale(0.75,0.75);
 
+	// manually set armour sprites
+	m_SpriteHead = Sprite(TextureHolder::GetTexture("graphics/player/armour/robe/Head_robe_hood.png"));
+	m_SpriteHead.setOrigin(32, 32);
+	m_SpriteHead.setScale(0.75, 0.75);
+
+	m_SpriteTorso = Sprite(TextureHolder::GetTexture("graphics/player/armour/robe/Torso_robe_shirt_brown.png"));
+	m_SpriteTorso.setOrigin(32, 32);
+	m_SpriteTorso.setScale(0.75, 0.75);
+
+	m_SpritePants = Sprite(TextureHolder::GetTexture("graphics/player/armour/robe/Legs_robe_skirt.png"));
+	m_SpritePants.setOrigin(32, 32);
+	m_SpritePants.setScale(0.75, 0.75);
+
+	m_SpriteShoes = Sprite(TextureHolder::GetTexture("graphics/player/armour/robe/Feet_shoes_brown.png"));
+	m_SpriteShoes.setOrigin(32, 32);
+	m_SpriteShoes.setScale(0.75, 0.75);
+
+	m_Clothes.push_back(m_SpriteHead);
+	m_Clothes.push_back(m_SpriteTorso);
+	m_Clothes.push_back(m_SpritePants);
+	m_Clothes.push_back(m_SpriteShoes);
+
 }
 
 
@@ -262,7 +284,12 @@ void Player::update(float elapsedTime, Vector2i mousePosition, vector<NavBox> na
 	}
 
 	dodge();
-	
+
+	m_SpritePants.setPosition(m_Position);
+	m_SpriteHead.setPosition(m_Position);
+	m_SpriteTorso.setPosition(m_Position);
+	m_SpriteShoes.setPosition(m_Position);
+
 	m_Sprite.setPosition(m_Position);
 	m_CollisionBox.left = m_Position.x - 100;
 	m_CollisionBox.top = m_Position.y - 100;
@@ -557,7 +584,6 @@ void Player::disableLeft() {
 
 void Player::revertPosition() {
 	setPosition(m_PositionLast);
-	//m_Position = m_PositionLast;
 }
 
 string Player::getdifficultyString()

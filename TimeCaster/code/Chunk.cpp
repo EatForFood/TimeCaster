@@ -217,65 +217,6 @@ void Chunk::placeTile(int x, int y, int texX, int texY, bool forGround)
 	}
 }
 
-int Chunk::createLandscape()
-{
-	/*
-	debug = false;
-	debugFont.loadFromFile("fonts/dogica.ttf");
-	*/
-
-	// What type of primitive are we using?
-	rVABG.setPrimitiveType(Quads);
-	rVAFG.setPrimitiveType(Quads);
-
-	// Set the size of the vertex array
-	rVABG.resize(100 * 100 * VERTS_IN_QUAD);
-	rVAFG.resize(200 * 200 * VERTS_IN_QUAD);
-
-	// Start at the beginning of the vertex array
-
-	// Grass and cliffs
-	for (int x = 0; x < 50; x++)
-	{
-		for (int y = 0; y < 50; y++)
-		{
-			
-			placeTile(x, y, 0, 0, false);
-			
-			currentVertexBG += VERTS_IN_QUAD;
-		}
-	}
-
-	// Forground empty
-	for (int x = 0; x < 50; x++)
-	{
-		for (int y = 0; y < 50; y++)
-		{
-		
-			placeTile(x, y, 256, 128, true);
-
-			currentVertexFG += VERTS_IN_QUAD;
-		}
-	}
-
-	CreateEntity("tree1", 5, 5);
-	CreateEntity("tree2", 8, 5);
-	CreateEntity("tree3", 5, 8);
-	CreateEntity("tree4", 5, 14);
-	CreateEntity("tree5", 14, 7);
-	CreateEntity("tree6", 18, 7);
-	CreateEntity("tree7", 22, 7);
-	CreateEntity("tree8", 29, 7);
-
-	
-	placeHouse1(15, 15);
-	placeHouse1(23, 15);
-	placeHouse1(15, 23);
-	placeHouse1(23, 23);
-	
-	return TILE_SIZE;
-}
-
 void Chunk::placeHouse1(int sx, int sy) { // sx 15, sy 18
 
 	// House west wall
@@ -445,17 +386,17 @@ void Chunk::clearChunk() {
 
 void Chunk::createForest(int numTrees, int chunkWidth, int chunkHeight)
 {
-	uniform_int_distribution<> xDist(0, chunkWidth - 3);
-	uniform_int_distribution<> yDist(0, chunkHeight - 3);
-
-	for (int i = 0; i < numTrees; i++)
+	for (int i = 0; i < chunkWidth; i++)
 	{
-		int x = xDist(gen);
-		int y = yDist(gen);
+		for (int j = 0; j < chunkHeight; j++)
+		{
+			if (rand() % 5 == 4)
+			{
+				int type = 1 + (gen() % 2);
+				string treeName = "tree" + to_string(type);
 
-		int type = 1 + (gen() % 3); 
-		string treeName = "tree" + to_string(type);
-
-		CreateEntity(treeName, x, y);
+				CreateEntity(treeName, i, j);
+			}
+		}
 	}
 }

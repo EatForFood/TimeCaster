@@ -431,9 +431,9 @@ int main()
 	// struct to store y values and sprites together and vector to store each object
 	struct DrawableItem {
 		float y;
-		sf::Sprite sprite;
+		Sprite sprite;
 
-		DrawableItem(float y, const sf::Sprite& sprite)
+		DrawableItem(float y, const Sprite& sprite)
 			: y(y), sprite(sprite) {}
 	};
 
@@ -1082,6 +1082,11 @@ int main()
 				}
 			}
 			drawables.emplace_back(player.getY(), player.getSpriteFromSheet());
+			drawables.emplace_back(player.getY() + 0.04, player.getHead());
+			drawables.emplace_back(player.getY() + 0.03, player.getTorso());
+			drawables.emplace_back(player.getY() + 0.02, player.getPants());
+			drawables.emplace_back(player.getY() + 0.01, player.getShoes());
+			
 
 			// Sort by y value using lambda function (ascending = top to bottom)
 			std::sort(drawables.begin(), drawables.end(),
@@ -1131,10 +1136,13 @@ int main()
 				window.draw(nav.getShape());
 			}
 			*/
+
+			/*
 			for (auto& nav : world.getNavBoxes(player.getChunk())) { // draw debug text showing tile location
 				window.draw(nav.getShape());
 				window.draw(world.getChunkArea(player.getChunk()).getShape());
 			}
+			*/
 
 			if (Mouse::isButtonPressed(Mouse::Left) && state == State::PLAYING) {
 				spriteCursor.setTexture(textureCursorClosed);
