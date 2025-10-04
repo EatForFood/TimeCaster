@@ -386,9 +386,9 @@ void Chunk::clearChunk() {
 
 void Chunk::createForest(int numTrees, int chunkWidth, int chunkHeight)
 {
-	for (int i = 0; i < chunkWidth; i++)
+	for (int i = 0; i < chunkWidth - 2; i++)
 	{
-		for (int j = 0; j < chunkHeight; j++)
+		for (int j = 0; j < chunkHeight - 2; j++)
 		{
 			if (rand() % 5 == 4)
 			{
