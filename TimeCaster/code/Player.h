@@ -15,6 +15,9 @@ private:
 	const float START_MANA = 100;
 	const float START_STAMINA = 100;
 	const float START_STAMINA_RECHARGE = 0.05;
+	const float START_GOLD = 0;
+	const float START_KILLS = 0;
+	const float START_LEVEL = 1;
 
 	// Which directions is the player currently moving in
 	bool m_UpPressed;
@@ -28,6 +31,7 @@ private:
 	float m_MaxStamina;
 	float m_StaminaRecharge;
 	int m_Gold;
+	int m_Kills;
 
 	bool m_WindowedMode;
 
@@ -59,8 +63,6 @@ private:
 	int m_Chunk; // player's current chunk
 
 	FloatRect m_RenderArea;
-
-	int m_Kills;
 
 public:
 
@@ -138,7 +140,7 @@ public:
 	void createNewSave();
 	void createConfigFile(string difficultyString, bool windowedMode, bool displayFPS, float volume);
 	//save and load player stats/position/etc.
-	void updateSaveFile(float currentSpeed, float currentHealth, float maxHealth, float currentStamina, float maxStamina, float staminaRecharge, float currentMana, float maxMana, int gold, int playerLevel, Vector2f position);
+	void updateSaveFile(float currentSpeed, float currentHealth, float maxHealth, float currentStamina, float maxStamina, float staminaRecharge, float currentMana, float maxMana, int gold, int kills, int playerLevel, Vector2f position);
 	//load player stats/position/etc. from save file
 	bool loadSaveFile();
 	bool loadConfigFile();

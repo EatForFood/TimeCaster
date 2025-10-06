@@ -877,7 +877,7 @@ int main()
 				{
 					sound.playButtonClickSound();
 					world.clearWorld();
-					player.updateSaveFile(player.getSpeed(), player.getHealth(), player.getMaxHealth(), player.getStamina(), player.getMaxStamina(), player.getStaminaRecharge(), player.getMana(), player.getMaxMana(), player.getGold(), player.getPlayerLevel(), player.getPosition());
+					player.updateSaveFile(player.getSpeed(), player.getHealth(), player.getMaxHealth(), player.getStamina(), player.getMaxStamina(), player.getStaminaRecharge(), player.getMana(), player.getMaxMana(), player.getGold(), player.getKillCount(), player.getPlayerLevel(), player.getPosition());
 					state = State::MAIN_MENU;
 				}
 
