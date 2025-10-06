@@ -15,7 +15,6 @@ private:
 	const float START_MANA = 100;
 	const float START_STAMINA = 100;
 	const float START_STAMINA_RECHARGE = 0.05;
-	
 
 	// Which directions is the player currently moving in
 	bool m_UpPressed;
@@ -31,7 +30,6 @@ private:
 	int m_Gold;
 
 	bool m_WindowedMode;
-
 
 	// Dodge variables
 	bool m_IsDodging = false;
@@ -60,13 +58,10 @@ private:
 	vector<NavBox> navBoxes;
 	int m_Chunk; // player's current chunk
 
-
-
+	int m_Kills;
 public:
 
 	Player();
-
-
 
 	void spawn(IntRect arena, Vector2f resolution, int tileSize, int level);
 
@@ -130,10 +125,6 @@ public:
 	float getMana();
 	float getMaxMana();
 
-	
-
-
-
 	void revertPosition();
 	void disableUp();
 	void disableDown();
@@ -156,5 +147,7 @@ public:
 	void setChunk(int chunk);
 	int getChunk();
 
+	void incrementKillCount();
+	int getKillCount();
 };
 #pragma once
