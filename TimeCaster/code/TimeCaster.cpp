@@ -145,7 +145,7 @@ int main()
 
 	// For the home/game over screen
 	Sprite spriteMainMenu;
-	Texture textureMainMenu = TextureHolder::GetTexture("graphics/Castle (edited).jpg");
+	Texture textureMainMenu = TextureHolder::GetTexture("graphics/UI/Castle (edited).jpg");
 	spriteMainMenu.setTexture(textureMainMenu);
 	spriteMainMenu.setPosition(0, 0);
 
@@ -226,8 +226,18 @@ int main()
 	/***********
 	Main Menu UI
 	************/
-	Texture& textureMainMenuButton1 = TextureHolder::GetTexture("graphics/menuButton1.png");
-	Texture& textureMainMenuButton2 = TextureHolder::GetTexture("graphics/menuButton2.png");
+	Texture& textureMainMenuButton1 = TextureHolder::GetTexture("graphics/UI/menuButton1.png");
+	Texture& textureMainMenuButton2 = TextureHolder::GetTexture("graphics/UI/menuButton2.png");
+	Texture& textureHeadArmourFrame = TextureHolder::GetTexture("graphics/UI/headFrame.png");
+	Texture& textureChestArmourFrame = TextureHolder::GetTexture("graphics/UI/chestFrame.png");
+	Texture& textureTrousersArmourFrame = TextureHolder::GetTexture("graphics/UI/trousersFrame.png");
+	Texture& textureBootsArmourFrame = TextureHolder::GetTexture("graphics/UI/bootsFrame.png");
+	Texture& textureWeaponFrame = TextureHolder::GetTexture("graphics/UI/weaponFrame.png");
+	Texture& textureEmptyFrame = TextureHolder::GetTexture("graphics/UI/emptyFrame.png");
+	Texture& texturePlayerFrame = TextureHolder::GetTexture("graphics/UI/playerFrame.png");
+	Texture& texturePlayerInFrame = TextureHolder::GetTexture("graphics/UI/playerImg.png");
+	Texture& textureNeckFrame = TextureHolder::GetTexture("graphics/UI/neckFrame.png");
+	Texture& textureRingFrame = TextureHolder::GetTexture("graphics/UI/ringFrame.png");
 	
 	// Integer used to set all text font sizes
 	int fontSize = 35;
@@ -295,9 +305,9 @@ int main()
 	y = quitGameButton.getPosition().y + (quitGameButton.getSize().y / 2.f) - (textBounds.height / 2.f);
 	quitGameButtonText.setPosition(x - textBounds.left, y - textBounds.top);
 
-	/***********
+	/**************
 	Options Menu UI
-	************/
+	***************/
 	
 	// Options heading text
 	Text optionsHeadingText("Options", font, fontSize + 15);
@@ -419,6 +429,82 @@ int main()
 	viewCentre = mainView.getCenter();
 	skipIntroText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 1000);
 
+	/***********
+	Inventory UI 
+	************/
+
+	viewCentre = mainView.getCenter();
+	
+	// Player frame
+	RectangleShape playerFrame;
+	playerFrame.setSize(sf::Vector2f(100.f, 200.f));
+	playerFrame.setTexture(&texturePlayerFrame);
+	playerFrame.setOrigin(playerFrame.getSize() / 2.f);
+	playerFrame.setPosition(viewCentre.x, 300.f);
+
+	// Player sprite for frame
+	RectangleShape playerInFrame;
+	playerInFrame.setSize(sf::Vector2f(60.f, 100.f));
+	playerInFrame.setTexture(&texturePlayerInFrame);
+	playerInFrame.setOrigin(playerInFrame.getSize() / 2.f);
+	playerInFrame.setPosition(viewCentre.x, 300.f);
+
+	RectangleShape headArmourFrame;
+	headArmourFrame.setTexture(&textureHeadArmourFrame);
+	headArmourFrame.setSize(Vector2f(75, 75));
+	headArmourFrame.setOrigin(headArmourFrame.getSize() / 2.f);
+	headArmourFrame.setPosition(viewCentre.x - 100, 250);
+
+	RectangleShape chestArmourFrame;
+	chestArmourFrame.setTexture(&textureChestArmourFrame);
+	chestArmourFrame.setSize(Vector2f(75, 75));
+	chestArmourFrame.setOrigin(chestArmourFrame.getSize() / 2.f);
+	chestArmourFrame.setPosition(viewCentre.x + 100, 250);
+
+	RectangleShape trousersArmourFrame;
+	trousersArmourFrame.setTexture(&textureTrousersArmourFrame);
+	trousersArmourFrame.setSize(Vector2f(75, 75));
+	trousersArmourFrame.setOrigin(trousersArmourFrame.getSize() / 2.f);
+	trousersArmourFrame.setPosition(viewCentre.x - 100, 350);
+
+	RectangleShape bootsArmourFrame;
+	bootsArmourFrame.setTexture(&textureBootsArmourFrame);
+	bootsArmourFrame.setSize(Vector2f(75, 75));
+	bootsArmourFrame.setOrigin(bootsArmourFrame.getSize() / 2.f);
+	bootsArmourFrame.setPosition(viewCentre.x + 100, 350);
+	
+	RectangleShape neckFrame;
+	neckFrame.setTexture(&textureNeckFrame);
+	neckFrame.setSize(Vector2f(75, 75));
+	neckFrame.setOrigin(neckFrame.getSize() / 2.f);
+	neckFrame.setPosition(viewCentre.x - 100, 450);
+	
+	RectangleShape weaponFrame;
+	weaponFrame.setTexture(&textureWeaponFrame);
+	weaponFrame.setSize(Vector2f(75, 75));
+	weaponFrame.setOrigin(weaponFrame.getSize() / 2.f);
+	weaponFrame.setPosition(viewCentre.x, 450);
+
+	RectangleShape ringFrame;
+	ringFrame.setTexture(&textureRingFrame);
+	ringFrame.setSize(Vector2f(75, 75));
+	ringFrame.setOrigin(ringFrame.getSize() / 2.f);
+	ringFrame.setPosition(viewCentre.x + 100, 450);
+
+	RectangleShape emptyFrames[16];
+	int startX = 100;
+	int startY = 100;
+	for (int i = 0; i < sizeof(emptyFrames) / sizeof(emptyFrames[0]); i++) {
+		emptyFrames[i].setTexture(&textureEmptyFrame);
+		emptyFrames[i].setSize(Vector2f(75, 75));
+		if (i % 4 == 0) {
+			startY += 100;
+			startX = 100;
+		}
+		emptyFrames[i].setPosition(startX, startY);
+		startX += 100;
+	}
+
 	// When did we last update the HUD?
 	int framesSinceLastHUDUpdate = 0;
 
@@ -450,6 +536,9 @@ int main()
 
 	// Boolean for whether the player is dragging the slider or not
 	bool dragging = false;
+
+	// Boolean for whether to draw the inventory or not
+	bool drawInventory = false;
 
 	// Setting volume to 50 by default
 	Listener::setGlobalVolume(50);
@@ -726,6 +815,15 @@ int main()
 				{
 					sound.stopStoryIntroSound();
 					state = State::PLAYING;
+				}
+
+				if (state == State::PLAYING && event.key.code == Keyboard::Tab) {
+					if (drawInventory) {
+						drawInventory = false;
+					}
+					else {
+						drawInventory = true;
+					}
 				}
 			}
 		} // End event polling
@@ -1157,16 +1255,32 @@ int main()
 			// Switch to the HUD view
 			window.setView(hudView);
 			
-			// Draw all the HUD elements
-			window.draw(goldCountText);
-			window.draw(emptyHealthBar);
-			window.draw(healthBar);
-			window.draw(emptyManaBar);
-			window.draw(manaBar);
-			window.draw(emptyStaminaBar);
-			window.draw(staminaBar);
-			if (displayFps) {
-				window.draw(fpsText);
+			if (drawInventory) {
+				window.draw(playerFrame);
+				window.draw(playerInFrame);
+				window.draw(headArmourFrame);
+				window.draw(chestArmourFrame);
+				window.draw(trousersArmourFrame);
+				window.draw(bootsArmourFrame);
+				window.draw(neckFrame);
+				window.draw(weaponFrame);
+				window.draw(ringFrame);
+				for (int i = 0; i < sizeof(emptyFrames) / sizeof(emptyFrames[0]); i++) {
+					window.draw(emptyFrames[i]);
+				}
+			}
+			else {
+				// Draw all the HUD elements
+				window.draw(goldCountText);
+				window.draw(emptyHealthBar);
+				window.draw(healthBar);
+				window.draw(emptyManaBar);
+				window.draw(manaBar);
+				window.draw(emptyStaminaBar);
+				window.draw(staminaBar);
+				if (displayFps) {
+					window.draw(fpsText);
+				}
 			}
 		}
 
