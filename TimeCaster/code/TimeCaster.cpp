@@ -47,8 +47,26 @@ int main()
 	// Start with the MAIN_MENU state
 	State state = State::MAIN_MENU;
 
+	bool windowedMode = false;
+
 	// Start with the Medium difficulty state
 	Difficulty difficulty = Difficulty::Medium;
+
+
+
+	Player player;
+
+	bool displayFps;
+
+
+	player.loadConfigFile();
+
+	difficulty = stringToDifficulty(player.getdifficultyString());
+	 windowedMode = player.getWindowedMode();
+	 displayFps = player.getDisplayFps();
+	 Listener::setGlobalVolume(player.getVolume());
+
+
 
 	// Get the screen resolution and create an SFML window
 	Vector2f resolution;
@@ -57,7 +75,18 @@ int main()
 	resolution.x = 1920;
 	resolution.y = 1080;
 
-	RenderWindow window(VideoMode(resolution.x, resolution.y), "TimeCaster", Style::Fullscreen);
+	//RenderWindow window(VideoMode(resolution.x, resolution.y), "TimeCaster", Style::Fullscreen);
+
+	
+	RenderWindow window;
+
+	if (windowedMode == true)
+	{
+		 window.create(VideoMode(resolution.x, resolution.y), "TimeCaster", Style::Default);
+	}
+	else 	{
+		 window.create(VideoMode(resolution.x, resolution.y), "TimeCaster", Style::Fullscreen);
+	}
 
 	// Create a an SFML View for the main action
 	View mainView(sf::FloatRect(0, 0, resolution.x, resolution.y));
@@ -82,7 +111,6 @@ int main()
 	Vector2i mouseScreenPosition;
 
 	// Create an instance of the Player class
-	Player player;
 
 	// Colour filter 
 	RectangleShape filter;
@@ -90,8 +118,6 @@ int main()
 	filter.setFillColor(Color(199, 56, 20, 80));
 
 	player.loadConfigFile();
-
-	difficulty = stringToDifficulty(player.getdifficultyString());
 
 	// The boundaries of the arena
 	IntRect arena;
@@ -122,7 +148,7 @@ int main()
 	float fps = 0.f;
 
 	// Boolean for whether to display the fps
-	bool displayFps = false;
+//	bool displayFps = false;
 	
 	// When was the fire button last pressed?
 	Time lastPressed;
@@ -370,6 +396,30 @@ int main()
 	y = displayFPSButton.getPosition().y + (displayFPSButton.getSize().y / 2.f) - (textBounds.height / 2.f);
 	displayFPSButtonText.setPosition(x - textBounds.left, y - textBounds.top);
 
+	// Windowed mode button 
+	RectangleShape windowedModeButton;
+	if (windowedMode)
+	{
+		windowedModeButton.setFillColor(Color::Green);
+	}
+	else
+	{
+		windowedModeButton.setFillColor(Color::Red);
+	}
+	windowedModeButton.setSize(Vector2f(400, 80));
+	textBounds = windowedModeButton.getLocalBounds();
+	viewCentre = mainView.getCenter();
+	windowedModeButton.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 500);
+	windowedModeButton.setTexture(&textureMainMenuButton2);
+
+	// Windowed mode button text
+	Text windowedModeButtonText("Windowed Mode", font, fontSize - 5);
+	windowedModeButtonText.setFillColor(Color::Black);
+	textBounds = windowedModeButtonText.getLocalBounds();
+	x = windowedModeButton.getPosition().x + (windowedModeButton.getSize().x / 2.f) - (textBounds.width / 2.f);
+	y = windowedModeButton.getPosition().y + (windowedModeButton.getSize().y / 2.f) - (textBounds.height / 2.f);
+	windowedModeButtonText.setPosition(x - textBounds.left, y - textBounds.top);
+
 	// Display difficulty button
 	RectangleShape difficultyButton;
 	if (difficulty == Difficulty::Easy)
@@ -400,13 +450,13 @@ int main()
 
 	// Story into text
 	Text storyIntroText(
-		"I was not always a man consumed by vengeance. Once, I had a family—warm laughter by the fire, \n"
-		"the gentle touch of my children’s hands, the steady love of my wife. \n"
+		"I was not always a man consumed by vengeance. Once, I had a family-warm laughter by the fire, \n"
+		"the gentle touch of my children's hands, the steady love of my wife. \n"
 		"All of it was torn from me in a single night, \n"
 		"devoured by the fire of (name), a dragon whose name still burns in my mind. \n"
-		"Since then, every spell I’ve mastered, every scar I’ve earned, has been for one purpose alone: \n"
+		"Since then, every spell I've mastered, every scar I've earned, has been for one purpose alone: \n"
 		"to bring that beast to its knees. \n"
-		"I do not seek glory, nor the hollow praise of men—I seek redemption. \n"
+		"I do not seek glory, nor the hollow praise of men-I seek redemption. \n"
 		"And when the dragon falls, so too shall the weight of my failure. \n\n"
 		"You desire retribution dear player, but what will it cost you?",
 		font, fontSize);
@@ -453,6 +503,8 @@ int main()
 
 	// Boolean for whether the player is dragging the slider or not
 	bool dragging = false;
+
+	bool isDragging = false;
 
 	// Setting volume to 50 by default
 	Listener::setGlobalVolume(50);
@@ -545,7 +597,7 @@ int main()
 					startSoundPlayed = true;
 					
 					player.createNewSave();
-					player.createConfigFile(difficultyToString(difficulty));
+					player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume());
 					player.loadSaveFile();
 
 					// We will modify the next two lines later
@@ -572,6 +624,9 @@ int main()
 				
 					player.loadConfigFile();
 					difficulty = stringToDifficulty(player.getdifficultyString());
+					windowedMode = player.getWindowedMode();
+					displayFps = player.getDisplayFps();
+					Listener::setGlobalVolume(player.getVolume());
 					world.newWorld();
 				}
 
@@ -617,11 +672,14 @@ int main()
 
 						player.loadConfigFile();
 						difficulty = stringToDifficulty(player.getdifficultyString());
+						windowedMode = player.getWindowedMode();
+						displayFps = player.getDisplayFps();
+						Listener::setGlobalVolume(player.getVolume());
 					}
 					else {
 						// No save file so create a new one with default values and load it	
 						player.createNewSave();
-						player.createConfigFile(difficultyToString(difficulty));
+						player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume());
 						player.loadSaveFile();
 
 						// We will modify the next two lines later
@@ -648,6 +706,9 @@ int main()
 
 						player.loadConfigFile();
 						difficulty = stringToDifficulty(player.getdifficultyString());
+						windowedMode = player.getWindowedMode();
+						displayFps = player.getDisplayFps();
+						Listener::setGlobalVolume(player.getVolume());
 					}
 				}
 
@@ -672,6 +733,7 @@ int main()
 				{
 					sound.playButtonClickSound();
 					world.clearWorld();
+					player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume());
 					state = State::MAIN_MENU;
 				}
 
@@ -690,10 +752,31 @@ int main()
 					if (displayFps) {
 						sound.playButtonClickSound();
 						displayFps = false;
+						player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume());
 					}
 					else {
 						sound.playButtonClickSound();
 						displayFps = true;
+						player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume());
+					}
+				}
+
+				// Player hit the windowed mode button
+
+				// Player hit the display fps button
+				if (windowedModeButton.getGlobalBounds().contains(worldPos) && state == State::OPTIONS_MENU && event.mouseButton.button == Mouse::Left)
+				{
+					if (windowedMode) {
+						sound.playButtonClickSound();
+						windowedMode = false;
+						player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume());
+						window.create(VideoMode(resolution.x, resolution.y), "TimeCaster", Style::Fullscreen);
+					}
+					else {
+						sound.playButtonClickSound();
+						windowedMode = true;
+						player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume());
+						window.create(VideoMode(resolution.x, resolution.y), "TimeCaster", Style::Default);
 					}
 				}
 
@@ -703,17 +786,17 @@ int main()
 					switch (difficulty) {
 					case Difficulty::Easy:
 						difficulty = Difficulty::Medium;
-						player.createConfigFile(difficultyToString(difficulty));
+						player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume());
 						break;
 
 					case Difficulty::Medium:
 						difficulty = Difficulty::Hard;
-						player.createConfigFile(difficultyToString(difficulty));
+						player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume());
 						break;
 
 					case Difficulty::Hard:
 						difficulty = Difficulty::Easy;
-						player.createConfigFile(difficultyToString(difficulty));
+						player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume());
 						break;
 					}
 
@@ -784,6 +867,7 @@ int main()
 		{
 			// Increase health
 			player.upgradeHealth();
+
 			debugreset = true;
 		}
 
@@ -830,6 +914,13 @@ int main()
 			}
 			else {
 				displayFPSButton.setFillColor(Color::Red);
+			}
+
+			if (windowedMode) {
+				windowedModeButton.setFillColor(Color::Green);
+			}
+			else {
+				windowedModeButton.setFillColor(Color::Red);
 			}
 
 			// Change colour of difficultyButton based on selected difficulty
@@ -1035,6 +1126,13 @@ int main()
 
 				// Apply to everything
 				Listener::setGlobalVolume(globalVolume);
+				isDragging = true;
+				
+			}
+			if (!dragging && isDragging) {
+				// Save volume to config file
+				player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume());
+				isDragging = false;
 			}
 		}
 
@@ -1206,6 +1304,8 @@ int main()
 			window.draw(displayFPSButtonText);
 			window.draw(difficultyButton);
 			window.draw(difficultyButtonText);
+			window.draw(windowedModeButton);
+			window.draw(windowedModeButtonText);
 		}
 
 		if (state == State::STORY_INTRO) 

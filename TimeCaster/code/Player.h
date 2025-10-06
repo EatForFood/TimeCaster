@@ -30,6 +30,8 @@ private:
 	float m_StaminaRecharge;
 	int m_Gold;
 
+	bool m_WindowedMode;
+
 
 	// Dodge variables
 	bool m_IsDodging = false;
@@ -39,6 +41,8 @@ private:
 	float m_DodgeDuration = 0.2f; // 200ms dodge
 	float m_DodgeCooldown = 1.0f; // 1 second cooldown on dodge
 	string m_DifficultyString;
+	bool m_DisplayFPS;
+	float m_Volume;
 	
 	// When was the player last hit
 	Time m_LastHit;
@@ -127,6 +131,8 @@ public:
 	float getMana();
 	float getMaxMana();
 
+	
+
 
 
 	void revertPosition();
@@ -137,13 +143,16 @@ public:
 
 	// make a new save file with default values
 	void createNewSave();
-	void createConfigFile(string difficultyString);
+	void createConfigFile(string difficultyString, bool windowedMode, bool displayFPS, float volume);
 	//save and load player stats/position/etc.
 	void updateSaveFile(float currentSpeed, float currentHealth, float maxHealth, float currentStamina, float maxStamina, float staminaRecharge, float currentMana, float maxMana, int gold, int playerLevel, Vector2f position);
 	//load player stats/position/etc. from save file
 	bool loadSaveFile();
 	bool loadConfigFile();
 	string getdifficultyString();
+	bool getWindowedMode();
+	bool getDisplayFps();
+	float getVolume();
 
 	void setChunk(int chunk);
 	int getChunk();
