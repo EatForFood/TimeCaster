@@ -384,6 +384,30 @@ int main()
 	y = displayFPSButton.getPosition().y + (displayFPSButton.getSize().y / 2.f) - (textBounds.height / 2.f);
 	displayFPSButtonText.setPosition(x - textBounds.left, y - textBounds.top);
 
+	// Windowed mode button 
+	RectangleShape windowedModeButton;
+	if (windowedMode)
+	{
+		windowedModeButton.setFillColor(Color::Green);
+	}
+	else
+	{
+		windowedModeButton.setFillColor(Color::Red);
+	}
+	windowedModeButton.setSize(Vector2f(400, 80));
+	textBounds = windowedModeButton.getLocalBounds();
+	viewCentre = mainView.getCenter();
+	windowedModeButton.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 500);
+	windowedModeButton.setTexture(&textureMainMenuButton2);
+
+	// Windowed mode button text
+	Text windowedModeButtonText("Windowed Mode", font, fontSize - 5);
+	windowedModeButtonText.setFillColor(Color::Black);
+	textBounds = windowedModeButtonText.getLocalBounds();
+	x = windowedModeButton.getPosition().x + (windowedModeButton.getSize().x / 2.f) - (textBounds.width / 2.f);
+	y = windowedModeButton.getPosition().y + (windowedModeButton.getSize().y / 2.f) - (textBounds.height / 2.f);
+	windowedModeButtonText.setPosition(x - textBounds.left, y - textBounds.top);
+
 	// Display difficulty button
 	RectangleShape difficultyButton;
 	if (difficulty == Difficulty::Easy)
@@ -714,6 +738,25 @@ int main()
 					}
 				}
 
+				// Player hit the windowed mode button
+
+				// Player hit the display fps button
+				if (windowedModeButton.getGlobalBounds().contains(worldPos) && state == State::OPTIONS_MENU && event.mouseButton.button == Mouse::Left)
+				{
+					if (windowedMode) {
+						sound.playButtonClickSound();
+						windowedMode = false;
+						player.createConfigFile(difficultyToString(difficulty), windowedMode);
+						window.create(VideoMode(resolution.x, resolution.y), "TimeCaster", Style::Fullscreen);
+					}
+					else {
+						sound.playButtonClickSound();
+						windowedMode = true;
+						player.createConfigFile(difficultyToString(difficulty), windowedMode);
+						window.create(VideoMode(resolution.x, resolution.y), "TimeCaster", Style::Default);
+					}
+				}
+
 				// Player hit the difficulty button
 				if (difficultyButton.getGlobalBounds().contains(worldPos) && state == State::OPTIONS_MENU && event.mouseButton.button == Mouse::Left)
 				{
@@ -800,14 +843,7 @@ int main()
 		if (event.key.code == Keyboard::Num1 && !debugreset && state == State::PLAYING)
 		{
 			// Increase health
-			windowedMode = true;
-			if (windowedMode == true)
-			{
-				window.create(VideoMode(resolution.x, resolution.y), "TimeCaster", Style::Default);
-			}
-			else {
-				window.create(VideoMode(resolution.x, resolution.y), "TimeCaster", Style::Fullscreen);
-			}
+			player.upgradeHealth();
 
 			debugreset = true;
 		}
@@ -815,14 +851,7 @@ int main()
 		if (event.key.code == Keyboard::Num2 &&  !debugreset && state == State::PLAYING)
 		{
 			// Increase stamina
-			windowedMode = false;
-			if (windowedMode == true)
-			{
-				window.create(VideoMode(resolution.x, resolution.y), "TimeCaster", Style::Default);
-			}
-			else {
-				window.create(VideoMode(resolution.x, resolution.y), "TimeCaster", Style::Fullscreen);
-			}
+			player.upgradeStamina();
 			debugreset = true;
 		}
 
@@ -862,6 +891,13 @@ int main()
 			}
 			else {
 				displayFPSButton.setFillColor(Color::Red);
+			}
+
+			if (windowedMode) {
+				windowedModeButton.setFillColor(Color::Green);
+			}
+			else {
+				windowedModeButton.setFillColor(Color::Red);
 			}
 
 			// Change colour of difficultyButton based on selected difficulty
@@ -1234,6 +1270,8 @@ int main()
 			window.draw(displayFPSButtonText);
 			window.draw(difficultyButton);
 			window.draw(difficultyButtonText);
+			window.draw(windowedModeButton);
+			window.draw(windowedModeButtonText);
 		}
 
 		if (state == State::STORY_INTRO) 
