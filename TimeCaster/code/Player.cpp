@@ -466,11 +466,11 @@ void Player::createNewSave()
 
 	saveFile.close();
 }
-void Player::createConfigFile(string dfficultyString, bool WindowedMode)
+void Player::createConfigFile(string dfficultyString, bool windowedMode, bool displayFPS, float volume)
 {
 	std::ofstream configFile("gamedata/TCConfig.txt");
 	
-	configFile << dfficultyString << " " << WindowedMode << std::endl;
+	configFile << dfficultyString << " " << windowedMode << " " << displayFPS << " " << volume << std::endl;
 	
 	
 	configFile.close();
@@ -483,6 +483,8 @@ bool Player::loadConfigFile()
 	{
 		loadFile >> m_DifficultyString;
 		loadFile >> m_WindowedMode;
+		loadFile >> m_DisplayFPS;
+		loadFile >> m_Volume;
 		return true;
 	}
 	return false;
@@ -606,4 +608,14 @@ int Player::getChunk()
 bool Player::getWindowedMode()
 {
 	return m_WindowedMode;
+}
+
+bool Player::getDisplayFps()
+{
+	return m_DisplayFPS;
+}
+
+float Player::getVolume()
+{
+	return m_Volume;
 }

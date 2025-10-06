@@ -56,12 +56,15 @@ int main()
 
 	Player player;
 
+	bool displayFps;
 
 
 	player.loadConfigFile();
 
 	difficulty = stringToDifficulty(player.getdifficultyString());
 	 windowedMode = player.getWindowedMode();
+	 displayFps = player.getDisplayFps();
+	 Listener::setGlobalVolume(player.getVolume());
 
 
 
@@ -136,7 +139,7 @@ int main()
 	float fps = 0.f;
 
 	// Boolean for whether to display the fps
-	bool displayFps = false;
+//	bool displayFps = false;
 	
 	// When was the fire button last pressed?
 	Time lastPressed;
@@ -492,6 +495,8 @@ int main()
 	// Boolean for whether the player is dragging the slider or not
 	bool dragging = false;
 
+	bool isDragging = false;
+
 	// Setting volume to 50 by default
 	Listener::setGlobalVolume(50);
 
@@ -583,7 +588,7 @@ int main()
 					startSoundPlayed = true;
 					
 					player.createNewSave();
-					player.createConfigFile(difficultyToString(difficulty), windowedMode);
+					player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume());
 					player.loadSaveFile();
 
 					// We will modify the next two lines later
@@ -611,6 +616,8 @@ int main()
 					player.loadConfigFile();
 					difficulty = stringToDifficulty(player.getdifficultyString());
 					windowedMode = player.getWindowedMode();
+					displayFps = player.getDisplayFps();
+					Listener::setGlobalVolume(player.getVolume());
 					world.newWorld();
 				}
 
@@ -657,11 +664,13 @@ int main()
 						player.loadConfigFile();
 						difficulty = stringToDifficulty(player.getdifficultyString());
 						windowedMode = player.getWindowedMode();
+						displayFps = player.getDisplayFps();
+						Listener::setGlobalVolume(player.getVolume());
 					}
 					else {
 						// No save file so create a new one with default values and load it	
 						player.createNewSave();
-						player.createConfigFile(difficultyToString(difficulty), windowedMode);
+						player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume());
 						player.loadSaveFile();
 
 						// We will modify the next two lines later
@@ -689,6 +698,8 @@ int main()
 						player.loadConfigFile();
 						difficulty = stringToDifficulty(player.getdifficultyString());
 						windowedMode = player.getWindowedMode();
+						displayFps = player.getDisplayFps();
+						Listener::setGlobalVolume(player.getVolume());
 					}
 				}
 
@@ -713,6 +724,7 @@ int main()
 				{
 					sound.playButtonClickSound();
 					world.clearWorld();
+					player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume());
 					state = State::MAIN_MENU;
 				}
 
@@ -731,10 +743,12 @@ int main()
 					if (displayFps) {
 						sound.playButtonClickSound();
 						displayFps = false;
+						player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume());
 					}
 					else {
 						sound.playButtonClickSound();
 						displayFps = true;
+						player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume());
 					}
 				}
 
@@ -746,13 +760,13 @@ int main()
 					if (windowedMode) {
 						sound.playButtonClickSound();
 						windowedMode = false;
-						player.createConfigFile(difficultyToString(difficulty), windowedMode);
+						player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume());
 						window.create(VideoMode(resolution.x, resolution.y), "TimeCaster", Style::Fullscreen);
 					}
 					else {
 						sound.playButtonClickSound();
 						windowedMode = true;
-						player.createConfigFile(difficultyToString(difficulty), windowedMode);
+						player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume());
 						window.create(VideoMode(resolution.x, resolution.y), "TimeCaster", Style::Default);
 					}
 				}
@@ -763,17 +777,17 @@ int main()
 					switch (difficulty) {
 					case Difficulty::Easy:
 						difficulty = Difficulty::Medium;
-						player.createConfigFile(difficultyToString(difficulty), windowedMode);
+						player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume());
 						break;
 
 					case Difficulty::Medium:
 						difficulty = Difficulty::Hard;
-						player.createConfigFile(difficultyToString(difficulty), windowedMode);
+						player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume());
 						break;
 
 					case Difficulty::Hard:
 						difficulty = Difficulty::Easy;
-						player.createConfigFile(difficultyToString(difficulty), windowedMode);
+						player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume());
 						break;
 					}
 
@@ -1100,6 +1114,13 @@ int main()
 
 				// Apply to everything
 				Listener::setGlobalVolume(globalVolume);
+				isDragging = true;
+				
+			}
+			if (!dragging && isDragging) {
+				// Save volume to config file
+				player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume());
+				isDragging = false;
 			}
 		}
 
