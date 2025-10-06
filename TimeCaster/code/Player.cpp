@@ -76,10 +76,9 @@ void Player::spawn(IntRect arena, Vector2f resolution, int tileSize, int level)
 	m_Resolution.x = resolution.x;
 	m_Resolution.y = resolution.y;
 
-	//cout << m_Resolution.x << " 1 " << m_Resolution.y << endl;
+	//cout << m_Resolution.x << " 1 " << m_Resolution.y << endl
 
-
-
+	m_RenderArea = FloatRect(0, 0, 1920, 1080);
 }
 
 Time Player::getLastHitTime()
@@ -295,6 +294,9 @@ void Player::update(float elapsedTime, Vector2i mousePosition, vector<NavBox> na
 	m_CollisionBox.top = m_Position.y - 100;
 	m_CollisionBox.width = 200;
 	m_CollisionBox.height = 200;
+
+	m_RenderArea = FloatRect(m_Position.x - m_Resolution.x / 2, m_Position.y - m_Resolution.y / 2, m_Resolution.x, m_Resolution.y);
+	
 
 	/*cout << m_Resolution.x << " 2 " << m_Resolution.y << endl;
 
@@ -599,4 +601,9 @@ void Player::setChunk(int chunk)
 int Player::getChunk()
 {
 	return m_Chunk;
+}
+
+FloatRect Player::getRenderArea()
+{
+	return m_RenderArea;
 }

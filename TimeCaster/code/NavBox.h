@@ -29,5 +29,7 @@ public:
 	ConvexShape getShape();
 
 	void NavTree();
+
+	void NavEmpty();
 };
 

@@ -56,8 +56,6 @@ int main()
 	resolution.y = VideoMode::getDesktopMode().height;
 	resolution.x = 1920;
 	resolution.y = 1080;
-	
-	
 
 	RenderWindow window(VideoMode(resolution.x, resolution.y), "TimeCaster", Style::Fullscreen);
 
@@ -85,6 +83,11 @@ int main()
 
 	// Create an instance of the Player class
 	Player player;
+
+	// Colour filter 
+	RectangleShape filter;
+	filter.setSize(Vector2f(1920,1080));
+	filter.setFillColor(Color(199, 56, 20, 80));
 
 	player.loadConfigFile();
 
@@ -878,6 +881,9 @@ int main()
 			// Update the player
 			player.update(dtAsSeconds, Mouse::getPosition(), world.getNavBoxes(player.getChunk()));
 
+			filter.setOrigin(player.getPosition());
+			filter.setPosition(player.getPosition().x, player.getPosition().y);
+
 			// Make a note of the players new position
 			Vector2f playerPosition(player.getCenter());
 
@@ -1075,22 +1081,22 @@ int main()
 			{
 				if (collision.distance(player.getCenter(),world.getChunkCenter(i)) < 2000) {
 					for (auto& entity : world.getEntities(i)) {
-						if (collision.distance(player.getCenter(), entity.getPosition()) < 1000) {
-							drawables.emplace_back(entity.getPosition().y, entity.getSprite());
+						if (player.getRenderArea().intersects(entity.getSprite().getGlobalBounds())) {
+							drawables.emplace_back(entity.getSprite().getGlobalBounds().top + entity.getSprite().getGlobalBounds().height, entity.getSprite());
 						}
 					}
 				}
 			}
-			drawables.emplace_back(player.getY(), player.getSpriteFromSheet());
-			drawables.emplace_back(player.getY() + 0.04, player.getHead());
-			drawables.emplace_back(player.getY() + 0.03, player.getTorso());
-			drawables.emplace_back(player.getY() + 0.02, player.getPants());
-			drawables.emplace_back(player.getY() + 0.01, player.getShoes());
+			drawables.emplace_back(player.getSprite().getGlobalBounds().top + player.getSprite().getGlobalBounds().height, player.getSpriteFromSheet()); // place player armour into drawables
+			drawables.emplace_back(player.getSprite().getGlobalBounds().top + player.getSprite().getGlobalBounds().height + 0.01, player.getHead());
+			drawables.emplace_back(player.getSprite().getGlobalBounds().top + player.getSprite().getGlobalBounds().height + 0.02, player.getTorso());
+			drawables.emplace_back(player.getSprite().getGlobalBounds().top + player.getSprite().getGlobalBounds().height + 0.03, player.getPants());
+			drawables.emplace_back(player.getSprite().getGlobalBounds().top + player.getSprite().getGlobalBounds().height + 0.04, player.getShoes());
 			
 
 			// Sort by y value using lambda function (ascending = top to bottom)
-			std::sort(drawables.begin(), drawables.end(),
-				[](const DrawableItem& a, const DrawableItem& b) {
+			sort(drawables.begin(), drawables.end(),[](const DrawableItem& a, const DrawableItem& b) 
+				{
 					return a.y < b.y;
 				}
 			);
@@ -1168,6 +1174,7 @@ int main()
 			if (displayFps) {
 				window.draw(fpsText);
 			}
+			window.draw(filter);
 		}
 
 		if (state == State::MAIN_MENU)

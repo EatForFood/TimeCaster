@@ -51,7 +51,7 @@ public:
 
 	vector<Text> getDebugText();
 
-	void CreateEntity(String type, int x, int y);
+	void CreateEntity(String type, int x, int y, bool navBox);
 
 	vector<Entity> getEntities();
 

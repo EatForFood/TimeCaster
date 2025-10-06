@@ -63,3 +63,9 @@ ConvexShape NavBox::getShape()
 {
     return navArea;
 }
+
+void NavBox::NavEmpty() // empty navbox
+{
+    navArea.setScale(0.0f, 0.0f);
+    navArea.setPosition(navArea.getPosition().x, navArea.getPosition().y);
+}

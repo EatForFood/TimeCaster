@@ -70,14 +70,14 @@ Chunk::Chunk(String type, Vector2f chunk)
 			}
 		}
 
-		CreateEntity("tree1", 5, 5);
-		CreateEntity("tree2", 8, 5);
-		CreateEntity("tree3", 5, 8);
-		CreateEntity("tree4", 5, 14);
-		CreateEntity("tree5", 14, 7);
-		CreateEntity("tree6", 18, 7);
-		CreateEntity("tree7", 22, 7);
-		CreateEntity("tree8", 29, 7);
+		CreateEntity("tree1", 5, 5, true);
+		CreateEntity("tree2", 8, 5, true);
+		CreateEntity("tree3", 5, 8, true);
+		CreateEntity("tree4", 5, 14, true);
+		CreateEntity("tree5", 14, 7, true);
+		CreateEntity("tree6", 18, 7, true);
+		CreateEntity("tree7", 22, 7, true);
+		CreateEntity("tree8", 29, 7, true);
 
 
 		placeHouse1(15, 15);
@@ -114,14 +114,14 @@ Chunk::Chunk(String type, Vector2f chunk)
 			}
 		}
 
-		CreateEntity("tree1", 4, 5);
-		CreateEntity("tree2", 10, 5);
-		CreateEntity("tree3", 22, 20);
-		CreateEntity("tree4", 26, 14);
-		CreateEntity("tree5", 5, 38);
-		CreateEntity("tree6", 10, 23);
-		CreateEntity("tree7", 30, 7);
-		CreateEntity("tree8", 40, 15);
+		CreateEntity("tree1", 4, 5, true);
+		CreateEntity("tree2", 10, 5, true);
+		CreateEntity("tree3", 22, 20, true);
+		CreateEntity("tree4", 26, 14, true);
+		CreateEntity("tree5", 5, 38, true);
+		CreateEntity("tree6", 10, 23, true);
+		CreateEntity("tree7", 30, 7, true);
+		CreateEntity("tree8", 40, 15, true);
 
 
 	}
@@ -323,7 +323,7 @@ void Chunk::placeTree8(int x, int y) {
 	placeTile(x, y - 4, 576, 884, false);
 }
 
-void Chunk::CreateEntity(String type, int x, int y) {
+void Chunk::CreateEntity(String type, int x, int y, bool navBox) {
 	Entity entity;
 	x += offset.x;
 	y += offset.y;
@@ -331,10 +331,20 @@ void Chunk::CreateEntity(String type, int x, int y) {
 	float iy = (x + y) * (TILE_SIZE / 4);
 	entity.spawn(type, ix, iy);
 
-	NavBox nav(x,y,1,1);
-	nav.NavTree();
+	if (navBox) // if entity requires a navBox for isometric collisions
+	{
+		NavBox nav(x, y, 1, 1);
+		nav.NavTree();
+		navBoxes.push_back(nav);
+	}
+	else
+	{
+		NavBox nav(x, y, 1, 1);
+		nav.NavEmpty();
+		navBoxes.push_back(nav);
+	}
+
 	entities.push_back(entity);
-	navBoxes.push_back(nav);
 }
 
 // return background Vertex Array
@@ -384,18 +394,31 @@ void Chunk::clearChunk() {
 
 }
 
-void Chunk::createForest(int numTrees, int chunkWidth, int chunkHeight)
+void Chunk::createForest(int numTrees, int chunkWidth, int chunkHeight) // create a forest from random tree entities
 {
 	for (int i = 0; i < chunkWidth - 2; i++)
 	{
 		for (int j = 0; j < chunkHeight - 2; j++)
 		{
-			if (rand() % 5 == 4)
+			int chance = rand() % 20;
+
+			if (chance <= 1) // 10% chance to spawn tree
 			{
 				int type = 1 + (gen() % 2);
-				string treeName = "tree" + to_string(type);
-
-				CreateEntity(treeName, i, j);
+				string entity = "tree" + to_string(type);
+				CreateEntity(entity, i, j, true);
+			}
+			else if (chance <= 3) // 10% chance to spawn bush
+			{
+				int type = 1 + (gen() % 4);
+				string entity = "bush" + to_string(type);
+				CreateEntity(entity, i, j, false);
+			}
+			else if (chance == 4) // 10% chance to spawn bush
+			{
+				int type = 1 + (gen() % 2);
+				string entity = "log" + to_string(type);
+				CreateEntity(entity, i, j, false);
 			}
 		}
 	}

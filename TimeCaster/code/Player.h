@@ -56,6 +56,7 @@ private:
 	vector<NavBox> navBoxes;
 	int m_Chunk; // player's current chunk
 
+	FloatRect m_RenderArea;
 
 
 public:
@@ -146,6 +147,8 @@ public:
 
 	void setChunk(int chunk);
 	int getChunk();
+
+	FloatRect getRenderArea();
 
 };
 #pragma once
