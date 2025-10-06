@@ -47,8 +47,23 @@ int main()
 	// Start with the MAIN_MENU state
 	State state = State::MAIN_MENU;
 
+	bool windowedMode = false;
+
 	// Start with the Medium difficulty state
 	Difficulty difficulty = Difficulty::Medium;
+
+
+
+	Player player;
+
+
+
+	player.loadConfigFile();
+
+	difficulty = stringToDifficulty(player.getdifficultyString());
+	 windowedMode = player.getWindowedMode();
+
+
 
 	// Get the screen resolution and create an SFML window
 	Vector2f resolution;
@@ -57,9 +72,15 @@ int main()
 	resolution.x = 1920;
 	resolution.y = 1080;
 	
-	
+	RenderWindow window;
 
-	RenderWindow window(VideoMode(resolution.x, resolution.y), "TimeCaster", Style::Fullscreen);
+	if (windowedMode == true)
+	{
+		 window.create(VideoMode(resolution.x, resolution.y), "TimeCaster", Style::Default);
+	}
+	else 	{
+		 window.create(VideoMode(resolution.x, resolution.y), "TimeCaster", Style::Fullscreen);
+	}
 
 	// Create a an SFML View for the main action
 	View mainView(sf::FloatRect(0, 0, resolution.x, resolution.y));
@@ -84,11 +105,7 @@ int main()
 	Vector2i mouseScreenPosition;
 
 	// Create an instance of the Player class
-	Player player;
 
-	player.loadConfigFile();
-
-	difficulty = stringToDifficulty(player.getdifficultyString());
 
 	// The boundaries of the arena
 	IntRect arena;
@@ -542,7 +559,7 @@ int main()
 					startSoundPlayed = true;
 					
 					player.createNewSave();
-					player.createConfigFile(difficultyToString(difficulty));
+					player.createConfigFile(difficultyToString(difficulty), windowedMode);
 					player.loadSaveFile();
 
 					// We will modify the next two lines later
@@ -569,6 +586,7 @@ int main()
 				
 					player.loadConfigFile();
 					difficulty = stringToDifficulty(player.getdifficultyString());
+					windowedMode = player.getWindowedMode();
 					world.newWorld();
 				}
 
@@ -614,11 +632,12 @@ int main()
 
 						player.loadConfigFile();
 						difficulty = stringToDifficulty(player.getdifficultyString());
+						windowedMode = player.getWindowedMode();
 					}
 					else {
 						// No save file so create a new one with default values and load it	
 						player.createNewSave();
-						player.createConfigFile(difficultyToString(difficulty));
+						player.createConfigFile(difficultyToString(difficulty), windowedMode);
 						player.loadSaveFile();
 
 						// We will modify the next two lines later
@@ -645,6 +664,7 @@ int main()
 
 						player.loadConfigFile();
 						difficulty = stringToDifficulty(player.getdifficultyString());
+						windowedMode = player.getWindowedMode();
 					}
 				}
 
@@ -700,17 +720,17 @@ int main()
 					switch (difficulty) {
 					case Difficulty::Easy:
 						difficulty = Difficulty::Medium;
-						player.createConfigFile(difficultyToString(difficulty));
+						player.createConfigFile(difficultyToString(difficulty), windowedMode);
 						break;
 
 					case Difficulty::Medium:
 						difficulty = Difficulty::Hard;
-						player.createConfigFile(difficultyToString(difficulty));
+						player.createConfigFile(difficultyToString(difficulty), windowedMode);
 						break;
 
 					case Difficulty::Hard:
 						difficulty = Difficulty::Easy;
-						player.createConfigFile(difficultyToString(difficulty));
+						player.createConfigFile(difficultyToString(difficulty), windowedMode);
 						break;
 					}
 
@@ -780,14 +800,29 @@ int main()
 		if (event.key.code == Keyboard::Num1 && !debugreset && state == State::PLAYING)
 		{
 			// Increase health
-			player.upgradeHealth();
+			windowedMode = true;
+			if (windowedMode == true)
+			{
+				window.create(VideoMode(resolution.x, resolution.y), "TimeCaster", Style::Default);
+			}
+			else {
+				window.create(VideoMode(resolution.x, resolution.y), "TimeCaster", Style::Fullscreen);
+			}
+
 			debugreset = true;
 		}
 
 		if (event.key.code == Keyboard::Num2 &&  !debugreset && state == State::PLAYING)
 		{
 			// Increase stamina
-			player.upgradeStamina();
+			windowedMode = false;
+			if (windowedMode == true)
+			{
+				window.create(VideoMode(resolution.x, resolution.y), "TimeCaster", Style::Default);
+			}
+			else {
+				window.create(VideoMode(resolution.x, resolution.y), "TimeCaster", Style::Fullscreen);
+			}
 			debugreset = true;
 		}
 

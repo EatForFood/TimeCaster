@@ -30,6 +30,8 @@ private:
 	float m_StaminaRecharge;
 	int m_Gold;
 
+	bool m_WindowedMode;
+
 
 	// Dodge variables
 	bool m_IsDodging = false;
@@ -126,6 +128,8 @@ public:
 	float getMana();
 	float getMaxMana();
 
+	bool getWindowedMode();
+
 
 
 	void revertPosition();
@@ -136,7 +140,7 @@ public:
 
 	// make a new save file with default values
 	void createNewSave();
-	void createConfigFile(string difficultyString);
+	void createConfigFile(string difficultyString, bool WindowedMode);
 	//save and load player stats/position/etc.
 	void updateSaveFile(float currentSpeed, float currentHealth, float maxHealth, float currentStamina, float maxStamina, float staminaRecharge, float currentMana, float maxMana, int gold, int playerLevel, Vector2f position);
 	//load player stats/position/etc. from save file
