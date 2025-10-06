@@ -172,9 +172,12 @@ int main()
 	Pickup staminaPickup(3);
 	Pickup manaPickup(4);
 
+	// Integer used to set all text font sizes
+	int fontSize = 35;
+
 	// For the home/game over screen
 	Sprite spriteMainMenu;
-	Texture textureMainMenu = TextureHolder::GetTexture("graphics/Castle (edited).jpg");
+	Texture textureMainMenu = TextureHolder::GetTexture("graphics/UI/Castle (edited).jpg");
 	spriteMainMenu.setTexture(textureMainMenu);
 	spriteMainMenu.setPosition(0, 0);
 
@@ -209,11 +212,10 @@ int main()
 	levelUpText.setString(levelUpStream.str());
 
 	// Gold text
-	Text goldCountText;
-	goldCountText.setFont(font);
-	goldCountText.setCharacterSize(55);
-	goldCountText.setFillColor(Color::White);
-	goldCountText.setPosition(1400, 0);
+	Text goldCountText("Gold: " + player.getGold(), font, fontSize);
+	goldCountText.setFillColor(Color::Black);
+	textBounds = goldCountText.getLocalBounds();
+	goldCountText.setPosition(viewCentre.x - 45, 360);
 
 	// FPS text
 	Text fpsText;
@@ -255,11 +257,8 @@ int main()
 	/***********
 	Main Menu UI
 	************/
-	Texture& textureMainMenuButton1 = TextureHolder::GetTexture("graphics/menuButton1.png");
-	Texture& textureMainMenuButton2 = TextureHolder::GetTexture("graphics/menuButton2.png");
-	
-	// Integer used to set all text font sizes
-	int fontSize = 35;
+	Texture& textureMainMenuButton1 = TextureHolder::GetTexture("graphics/UI/menuButton1.png");
+	Texture& textureMainMenuButton2 = TextureHolder::GetTexture("graphics/UI/menuButton2.png");
 
 	// TimeCaster heading text
 	Text mainHeadingText("TimeCaster", font, fontSize + 65);
@@ -472,6 +471,139 @@ int main()
 	viewCentre = mainView.getCenter();
 	skipIntroText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 1000);
 
+	/***********
+	Inventory UI
+	************/
+
+	Texture& textureHeadArmourFrame = TextureHolder::GetTexture("graphics/UI/headFrame.png");
+	Texture& textureChestArmourFrame = TextureHolder::GetTexture("graphics/UI/chestFrame.png");
+	Texture& textureTrousersArmourFrame = TextureHolder::GetTexture("graphics/UI/trousersFrame.png");
+	Texture& textureBootsArmourFrame = TextureHolder::GetTexture("graphics/UI/bootsFrame.png");
+	Texture& textureWeaponFrame = TextureHolder::GetTexture("graphics/UI/weaponFrame.png");
+	Texture& textureEmptyFrame = TextureHolder::GetTexture("graphics/UI/emptyFrame.png");
+	Texture& texturePlayerFrame = TextureHolder::GetTexture("graphics/UI/playerFrame.png");
+	Texture& texturePlayerInFrame = TextureHolder::GetTexture("graphics/UI/player.png");
+	Texture& textureNeckFrame = TextureHolder::GetTexture("graphics/UI/neckFrame.png");
+	Texture& textureRingFrame = TextureHolder::GetTexture("graphics/UI/ringFrame.png");
+
+	viewCentre = mainView.getCenter();
+
+	// Player frame
+	RectangleShape playerFrame;
+	playerFrame.setSize(sf::Vector2f(100.f, 200.f));
+	playerFrame.setTexture(&texturePlayerFrame);
+	playerFrame.setOrigin(playerFrame.getSize() / 2.f);
+	playerFrame.setPosition(viewCentre.x - 200, 400);
+
+	// Player sprite for frame
+	RectangleShape playerInFrame;
+	playerInFrame.setSize(sf::Vector2f(60.f, 100.f));
+	playerInFrame.setTexture(&texturePlayerInFrame);
+	playerInFrame.setOrigin(playerInFrame.getSize() / 2.f);
+	playerInFrame.setPosition(viewCentre.x - 200, 400);
+
+	RectangleShape headArmourFrame;
+	headArmourFrame.setTexture(&textureHeadArmourFrame);
+	headArmourFrame.setSize(Vector2f(75, 75));
+	headArmourFrame.setOrigin(headArmourFrame.getSize() / 2.f);
+	headArmourFrame.setPosition(viewCentre.x - 300, 350);
+
+	RectangleShape chestArmourFrame;
+	chestArmourFrame.setTexture(&textureChestArmourFrame);
+	chestArmourFrame.setSize(Vector2f(75, 75));
+	chestArmourFrame.setOrigin(chestArmourFrame.getSize() / 2.f);
+	chestArmourFrame.setPosition(viewCentre.x - 100, 350);
+
+	RectangleShape trousersArmourFrame;
+	trousersArmourFrame.setTexture(&textureTrousersArmourFrame);
+	trousersArmourFrame.setSize(Vector2f(75, 75));
+	trousersArmourFrame.setOrigin(trousersArmourFrame.getSize() / 2.f);
+	trousersArmourFrame.setPosition(viewCentre.x - 300, 450);
+
+	RectangleShape bootsArmourFrame;
+	bootsArmourFrame.setTexture(&textureBootsArmourFrame);
+	bootsArmourFrame.setSize(Vector2f(75, 75));
+	bootsArmourFrame.setOrigin(bootsArmourFrame.getSize() / 2.f);
+	bootsArmourFrame.setPosition(viewCentre.x - 100, 450);
+
+	RectangleShape neckFrame;
+	neckFrame.setTexture(&textureNeckFrame);
+	neckFrame.setSize(Vector2f(75, 75));
+	neckFrame.setOrigin(neckFrame.getSize() / 2.f);
+	neckFrame.setPosition(viewCentre.x - 300, 550);
+
+	RectangleShape weaponFrame;
+	weaponFrame.setTexture(&textureWeaponFrame);
+	weaponFrame.setSize(Vector2f(75, 75));
+	weaponFrame.setOrigin(weaponFrame.getSize() / 2.f);
+	weaponFrame.setPosition(viewCentre.x - 200, 550);
+
+	RectangleShape ringFrame;
+	ringFrame.setTexture(&textureRingFrame);
+	ringFrame.setSize(Vector2f(75, 75));
+	ringFrame.setOrigin(ringFrame.getSize() / 2.f);
+	ringFrame.setPosition(viewCentre.x - 100, 550);
+
+	RectangleShape emptyFrames[16];
+	int startX = viewCentre.x - 300;
+	int startY = 650;
+	for (int i = 0; i < sizeof(emptyFrames) / sizeof(emptyFrames[0]); i++) {
+		emptyFrames[i].setTexture(&textureEmptyFrame);
+		emptyFrames[i].setSize(Vector2f(75, 75));
+		emptyFrames[i].setOrigin(emptyFrames[i].getSize() / 2.f);
+		if (i != 0 && i % 8 == 0) {
+			startY += 100;
+			startX = viewCentre.x - 300;
+		}
+		emptyFrames[i].setPosition(startX, startY);
+		startX += 100;
+	}
+
+	// Display kill count inventory text
+	Text killsText("Kills: " + player.getKillCount(), font, fontSize);
+	killsText.setFillColor(Color::Black);
+	textBounds = killsText.getLocalBounds();
+	killsText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 310);
+
+	RectangleShape invHealthBar;
+	invHealthBar.setFillColor(Color::Red);
+	invHealthBar.setPosition(viewCentre.x - 310, 825);
+
+	RectangleShape backgroundInvHealthBar;
+	backgroundInvHealthBar.setFillColor(Color::Black);
+	backgroundInvHealthBar.setSize(Vector2f(200, 50));
+	backgroundInvHealthBar.setPosition(viewCentre.x - 310, 825);
+
+	// Display invHealthBar text
+	Text invHealthBarText("0 / 0", font, fontSize - 5);
+	invHealthBarText.setFillColor(Color::White);
+
+	RectangleShape invStamBar;
+	invStamBar.setFillColor(Color::Green);
+	invStamBar.setPosition(viewCentre.x - 60, 825);
+
+	RectangleShape backgroundInvStamBar;
+	backgroundInvStamBar.setFillColor(Color::Black);
+	backgroundInvStamBar.setSize(Vector2f(200, 50));
+	backgroundInvStamBar.setPosition(viewCentre.x - 60, 825);
+
+	// Display invStamBar text
+	Text invStamBarText("0 / 0", font, fontSize - 5);
+	invStamBarText.setFillColor(Color::White);
+
+	RectangleShape invManaBar;
+	invManaBar.setFillColor(Color::Magenta);
+	invManaBar.setPosition(viewCentre.x + 190, 825);
+
+	RectangleShape backgroundInvManaBar;
+	backgroundInvManaBar.setFillColor(Color::Black);
+	backgroundInvManaBar.setSize(Vector2f(200, 50));
+	backgroundInvManaBar.setPosition(viewCentre.x + 190, 825);
+
+	// Display invManaBar text
+	Text invManaBarText("0 / 0", font, fontSize - 5);
+	invManaBarText.setFillColor(Color::White);
+	
 	// When did we last update the HUD?
 	int framesSinceLastHUDUpdate = 0;
 
@@ -505,6 +637,9 @@ int main()
 	bool dragging = false;
 
 	bool isDragging = false;
+
+	// Boolean for whether to draw the inventory or not
+	bool drawInventory = false;
 
 	// Setting volume to 50 by default
 	Listener::setGlobalVolume(50);
@@ -569,7 +704,7 @@ int main()
 			if (event.type == Event::KeyPressed || Mouse::isButtonPressed(Mouse::Left))
 			{
 				// Pause a game while playing
-				if (event.key.code == Keyboard::Escape && state == State::PLAYING)
+				if (event.key.code == Keyboard::Escape && state == State::PLAYING && !drawInventory)
 				{
 					state = State::PAUSED;
 				}
@@ -813,11 +948,20 @@ int main()
 					sound.stopStoryIntroSound();
 					state = State::PLAYING;
 				}
+
+				if (state == State::PLAYING && event.key.code == Keyboard::Tab) {
+					if (drawInventory) {
+						drawInventory = false;
+					}
+					else {
+						drawInventory = true;
+					}
+				}
 			}
 		} // End event polling
 
 		// Handle controls while playing
-		if (state == State::PLAYING)
+		if (state == State::PLAYING && !drawInventory)
 		{
 			// Handle the pressing and releasing of the WASD keys
 			if (Keyboard::isKeyPressed(Keyboard::W))
@@ -1059,6 +1203,41 @@ int main()
 			ssGoldCount << "Gold:" << player.getGold();
 			goldCountText.setString(ssGoldCount.str());
 
+			// Update the kills text
+			if (drawInventory) {
+				stringstream ssKillCount;
+				ssKillCount << "Kills: " << player.getKillCount();
+				killsText.setString(ssKillCount.str());
+
+				stringstream ssHealthBar;
+				ssHealthBar << player.getHealth() << " / " << player.getMaxHealth();
+				invHealthBarText.setString(ssHealthBar.str());
+				textBounds = invHealthBarText.getLocalBounds();
+				x = backgroundInvHealthBar.getPosition().x + (backgroundInvHealthBar.getSize().x / 2.f) - (textBounds.width / 2.f);
+				y = backgroundInvHealthBar.getPosition().y + (backgroundInvHealthBar.getSize().y / 2.f) - (textBounds.height / 2.f);
+				invHealthBarText.setPosition(x - textBounds.left, y - textBounds.top);
+
+				stringstream ssStamBar;
+				ssStamBar << player.getStamina() << " / " << player.getMaxStamina();
+				invStamBarText.setString(ssStamBar.str());
+				textBounds = invStamBarText.getLocalBounds();
+				x = backgroundInvStamBar.getPosition().x + (backgroundInvStamBar.getSize().x / 2.f) - (textBounds.width / 2.f);
+				y = backgroundInvStamBar.getPosition().y + (backgroundInvStamBar.getSize().y / 2.f) - (textBounds.height / 2.f);
+				invStamBarText.setPosition(x - textBounds.left, y - textBounds.top);
+
+				stringstream ssManaBar;
+				ssManaBar << player.getMana() << " / " << player.getMaxMana();
+				invManaBarText.setString(ssManaBar.str());
+				textBounds = invManaBarText.getLocalBounds();
+				x = backgroundInvManaBar.getPosition().x + (backgroundInvManaBar.getSize().x / 2.f) - (textBounds.width / 2.f);
+				y = backgroundInvManaBar.getPosition().y + (backgroundInvManaBar.getSize().y / 2.f) - (textBounds.height / 2.f);
+				invManaBarText.setPosition(x - textBounds.left, y - textBounds.top);
+
+				invHealthBar.setSize(Vector2f(200 * (player.getHealth() / player.getMaxHealth()), 50));
+				invStamBar.setSize(Vector2f(200 * (player.getStamina() / player.getMaxStamina()), 50));
+				invManaBar.setSize(Vector2f(200 * (player.getMana() / player.getMaxMana()), 50));
+			}
+
 			framesSinceLastHUDUpdate = 0;
 			timeSinceLastUpdate = Time::Zero;
 			// End HUD update
@@ -1261,18 +1440,45 @@ int main()
 			// Switch to the HUD view
 			window.setView(hudView);
 			
-			// Draw all the HUD elements
-			window.draw(goldCountText);
-			window.draw(emptyHealthBar);
-			window.draw(healthBar);
-			window.draw(emptyManaBar);
-			window.draw(manaBar);
-			window.draw(emptyStaminaBar);
-			window.draw(staminaBar);
-			if (displayFps) {
-				window.draw(fpsText);
+			if (drawInventory) {
+				window.draw(filter);
+				window.draw(playerFrame);
+				window.draw(playerInFrame);
+				window.draw(headArmourFrame);
+				window.draw(chestArmourFrame);
+				window.draw(trousersArmourFrame);
+				window.draw(bootsArmourFrame);
+				window.draw(neckFrame);
+				window.draw(weaponFrame);
+				window.draw(ringFrame);
+				for (int i = 0; i < sizeof(emptyFrames) / sizeof(emptyFrames[0]); i++) {
+					window.draw(emptyFrames[i]);
+				}
+				window.draw(killsText);
+				window.draw(goldCountText);
+				window.draw(backgroundInvHealthBar);
+				window.draw(invHealthBar);
+				window.draw(invHealthBarText);
+				window.draw(backgroundInvStamBar);
+				window.draw(invStamBar);
+				window.draw(invStamBarText);
+				window.draw(backgroundInvManaBar);
+				window.draw(invManaBar);
+				window.draw(invManaBarText);
 			}
-			window.draw(filter);
+			else {
+				// Draw all the HUD elements
+				window.draw(emptyHealthBar);
+				window.draw(healthBar);
+				window.draw(emptyManaBar);
+				window.draw(manaBar);
+				window.draw(emptyStaminaBar);
+				window.draw(staminaBar);
+				if (displayFps) {
+					window.draw(fpsText);
+				}
+				window.draw(filter);
+			}
 		}
 
 		if (state == State::MAIN_MENU)

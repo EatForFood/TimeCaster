@@ -9,7 +9,6 @@
 using namespace std;
 using namespace sf;
 
-
 Player::Player()
 {
 	m_Speed = START_SPEED;
@@ -49,10 +48,7 @@ Player::Player()
 	m_Clothes.push_back(m_SpriteTorso);
 	m_Clothes.push_back(m_SpritePants);
 	m_Clothes.push_back(m_SpriteShoes);
-
 }
-
-
 
 void Player::spawn(IntRect arena, Vector2f resolution, int tileSize, int level)
 {
@@ -106,7 +102,6 @@ bool Player::hit(Time timeHit, float damage, int iFrames)
 	{
 		return false;
 	}
-
 }
 
 void Player::moveLeft()
@@ -163,7 +158,6 @@ void Player::update(float elapsedTime, Vector2i mousePosition, vector<NavBox> na
 		m_IsMoving = true;
 	}
 
-
 	if (!m_UpPressed || !m_DownPressed || !m_LeftPressed || !m_RightPressed) // if player is not moving set sprite to standing frame in last direction faced
 	{
 		if (direction == Vector2f(0, 1)) // up
@@ -186,8 +180,6 @@ void Player::update(float elapsedTime, Vector2i mousePosition, vector<NavBox> na
 			setSpriteFromSheet(IntRect(0, 64, 576, 64));
 		}
 	}
-	
-
 
 	if (!m_IsMoving && m_Stamina < m_MaxStamina  )
 	{
@@ -195,10 +187,7 @@ void Player::update(float elapsedTime, Vector2i mousePosition, vector<NavBox> na
 	}
 	else if (m_Stamina < m_MaxStamina) {
 		m_Stamina += m_StaminaRecharge * 0.33; //recharge stamina slower when moving
-	}
-	
-
-		
+	}	
 
 	if (m_UpPressed && !upDisabled)
 	{
@@ -434,7 +423,6 @@ float Player::getStaminaRecharge()
 	return m_StaminaRecharge;
 }
 
-
 int Player::getGold()
 {
 	return m_Gold;
@@ -457,11 +445,7 @@ int Player::getPlayerLevel()
 
 void Player::createNewSave()
 {
-
-	
-
 	std::ofstream saveFile("gamedata/TCSave.txt");
-
 
 	saveFile << std::fixed << std::setprecision(5) << START_SPEED << " " << START_HEALTH << " " << START_HEALTH << " " << START_STAMINA << " "
 		<< START_STAMINA << " " << START_STAMINA_RECHARGE << " " << START_MANA << " " << START_MANA << " " << 0 << " " << 1 << " " << 64 << " " << 64 << std::endl;
@@ -473,7 +457,6 @@ void Player::createConfigFile(string dfficultyString, bool windowedMode, bool di
 	std::ofstream configFile("gamedata/TCConfig.txt");
 	
 	configFile << dfficultyString << " " << windowedMode << " " << displayFPS << " " << volume << std::endl;
-	
 	
 	configFile.close();
 }
@@ -494,8 +477,7 @@ bool Player::loadConfigFile()
 
 //remember to pass in all player stats to be saved
 void Player::updateSaveFile(float currentSpeed, float currentHealth, float maxHealth, float currentStamina, float maxStamina, float staminaRecharge, float currentMana, float maxMana, int gold, int playerLevel, Vector2f position)
-{
-		
+{	
 	std::ofstream saveFile("gamedata/TCSave.txt");
 
 	saveFile << std::fixed << std::setprecision(5) << currentSpeed << " " << currentHealth << " " << maxHealth << " " << currentStamina << " "
@@ -556,18 +538,12 @@ void Player::dodge()
 
 // Multiplies the player's speed to simulate dodging
 void Player::startDodge() {
-
-
 	m_Speed = m_Speed * 2;
-	m_Stamina -= 50;  
-
-
-
+	m_Stamina -= 50;
 }
 
 // Returns player's speed to original value to stop dodge
 void Player::stopDodge() {
-
 	m_Speed = m_Speed / 2;
 }
 
@@ -586,7 +562,6 @@ void Player::disableRight() {
 void Player::disableLeft() {
 	leftDisabled = true;
 }
-
 
 void Player::revertPosition() {
 	setPosition(m_PositionLast);
@@ -612,7 +587,6 @@ FloatRect Player::getRenderArea()
 	return m_RenderArea;
 }
 
-
 bool Player::getWindowedMode()
 {
 	return m_WindowedMode;
@@ -626,4 +600,12 @@ bool Player::getDisplayFps()
 float Player::getVolume()
 {
 	return m_Volume;
+}
+
+void Player::incrementKillCount() {
+	m_Kills++;
+}
+
+int Player::getKillCount() {
+	return m_Kills;
 }
