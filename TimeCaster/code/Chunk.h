@@ -64,15 +64,7 @@ public:
 
 	void placeHouse1(int x, int y);
 
-	void placeTree1(int x, int y);
-	void placeTree2(int x, int y);
-	void placeTree3(int x, int y);
-	void placeTree4(int x, int y);
-	void placeTree5(int x, int y);
-	void placeTree6(int x, int y);
-	void placeTree7(int x, int y);
-	void placeTree8(int x, int y);
-
 	void createForest(int numTrees, int worldWidth, int worldHeight);
+	void createBurntForest(int numTrees, int chunkWidth, int chunkHeight);
 
 };

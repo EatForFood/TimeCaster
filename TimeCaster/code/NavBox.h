@@ -30,6 +30,8 @@ public:
 
 	void NavTree();
 
+	void NavTreeLarge();
+
 	void NavEmpty();
 };
 

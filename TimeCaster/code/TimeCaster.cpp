@@ -115,7 +115,7 @@ int main()
 	// Colour filter 
 	RectangleShape filter;
 	filter.setSize(Vector2f(1920,1080));
-	filter.setFillColor(Color(199, 56, 20, 80));
+	filter.setFillColor(Color(199, 56, 20, 40));
 
 	player.loadConfigFile();
 

@@ -50,9 +50,20 @@ Chunk::Chunk(String type, Vector2f chunk)
 		{
 			for (int y = 0; y < 50; y++)
 			{
+				int chance = rand() % 2500;
 
-				placeTile(x, y, 0, 0, false);
-
+				if (chance <= 1200) // 10% chance to spawn tree
+				{
+					placeTile(x, y, 0, 0, false);
+				}
+				else if (chance <= 2400) // 10% chance to spawn bush
+				{
+					placeTile(x, y, 64, 0, false);
+				}
+				else if (chance <= 2500) // 10% chance to spawn big tree
+				{
+					placeTile(x, y, 384, 0, false);
+				}
 
 				currentVertexBG += VERTS_IN_QUAD;
 			}
@@ -95,8 +106,59 @@ Chunk::Chunk(String type, Vector2f chunk)
 			for (int y = 0; y < 50; y++)
 			{
 
-				placeTile(x, y, 0, 0, false);
+				int chance = rand() % 2500;
 
+				if (chance <= 1200) // 10% chance to spawn tree
+				{
+					placeTile(x, y, 0, 0, false);
+				}
+				else if (chance <= 2400) // 10% chance to spawn bush
+				{
+					placeTile(x, y, 64, 0, false);
+				}
+				else if (chance <= 2500) // 10% chance to spawn big tree
+				{
+					placeTile(x, y, 384, 0, false);
+				}
+
+				currentVertexBG += VERTS_IN_QUAD;
+			}
+		}
+
+		// Forground empty
+		for (int x = 0; x < 50; x++)
+		{
+			for (int y = 0; y < 50; y++)
+			{
+
+				placeTile(x, y, 256, 128, true);
+
+				currentVertexFG += VERTS_IN_QUAD;
+			}
+		}
+	}
+
+	if (m_Type == "forest") {
+
+		// Grass 
+		for (int x = 0; x < 50; x++)
+		{
+			for (int y = 0; y < 50; y++)
+			{
+				int chance = rand() % 2500;
+
+				if (chance <= 1200) // 10% chance to spawn tree
+				{
+					placeTile(x, y, 0, 0, false);
+				}
+				else if (chance <= 2400) // 10% chance to spawn bush
+				{
+					placeTile(x, y, 64, 0, false);
+				}
+				else if (chance <= 2500) // 10% chance to spawn big tree
+				{
+					placeTile(x, y, 384, 0, false);
+				}
 
 				currentVertexBG += VERTS_IN_QUAD;
 			}
@@ -114,19 +176,10 @@ Chunk::Chunk(String type, Vector2f chunk)
 			}
 		}
 
-		CreateEntity("tree1", 4, 5, true);
-		CreateEntity("tree2", 10, 5, true);
-		CreateEntity("tree3", 22, 20, true);
-		CreateEntity("tree4", 26, 14, true);
-		CreateEntity("tree5", 5, 38, true);
-		CreateEntity("tree6", 10, 23, true);
-		CreateEntity("tree7", 30, 7, true);
-		CreateEntity("tree8", 40, 15, true);
-
-
+		createForest(300,50,50);
 	}
 
-	if (m_Type == "forest") {
+	if (m_Type == "scorchedForest") {
 
 		// Grass 
 		for (int x = 0; x < 50; x++)
@@ -153,9 +206,7 @@ Chunk::Chunk(String type, Vector2f chunk)
 			}
 		}
 
-		createForest(300,50,50);
-
-
+		createBurntForest(300, 50, 50);
 	}
 }
 
@@ -265,64 +316,6 @@ void Chunk::placeHouse1(int sx, int sy) { // sx 15, sy 18
 	navBoxes.push_back(navbox);
 }
 
-// These trees can be placed in places the player cannot reach for background scenary
-void Chunk::placeTree1(int x, int y) {
-
-	placeTile(x, y, 128, 832, false);
-	placeTile(x-2, y-2, 128, 768, false);
-}
-
-void Chunk::placeTree2(int x, int y) {
-
-	placeTile(x, y, 192, 832, false);
-	placeTile(x - 2, y - 2, 192, 768, false);
-}
-
-void Chunk::placeTree3(int x, int y) {
-
-	placeTile(x, y, 0, 948, false);
-	placeTile(x - 2, y - 2, 0, 884, false);
-	placeTile(x - 4, y - 4, 0, 820, false);
-}
-
-void Chunk::placeTree4(int x, int y) {
-
-	placeTile(x, y, 64, 948, false);
-	placeTile(x - 2, y - 2, 64, 884, false);
-}
-
-void Chunk::placeTree5(int x, int y) {
-
-	placeTile(x, y, 128, 948, false);
-	placeTile(x - 2, y - 2, 128, 884, false);
-}
-
-void Chunk::placeTree6(int x, int y) {
-
-	placeTile(x, y, 192, 948, false);
-	placeTile(x - 2, y - 2, 192, 884, false);
-}
-
-void Chunk::placeTree7(int x, int y) {
-
-	placeTile(x, y, 256, 948, false);
-	placeTile(x - 2, y - 2, 256, 884, false);
-	placeTile(x + 1, y - 1, 320, 948, false);
-	placeTile(x - 1, y - 3, 320, 884, false);
-	placeTile(x + 2, y - 2, 384, 948, false);
-	placeTile(x, y - 4, 384, 884, false);
-}
-
-void Chunk::placeTree8(int x, int y) {
-
-	placeTile(x, y, 448, 948, false);
-	placeTile(x - 2, y - 2, 448, 884, false);
-	placeTile(x + 1, y - 1, 512, 948, false);
-	placeTile(x - 1, y - 3, 512, 884, false);
-	placeTile(x + 2, y - 2, 576, 948, false);
-	placeTile(x, y - 4, 576, 884, false);
-}
-
 void Chunk::CreateEntity(String type, int x, int y, bool navBox) {
 	Entity entity;
 	x += offset.x;
@@ -335,6 +328,12 @@ void Chunk::CreateEntity(String type, int x, int y, bool navBox) {
 	{
 		NavBox nav(x, y, 1, 1);
 		nav.NavTree();
+		navBoxes.push_back(nav);
+	}
+	else if (type == "tree5" || type == "tree8")
+	{
+		NavBox nav(x, y, 1, 1);
+		nav.NavTreeLarge();
 		navBoxes.push_back(nav);
 	}
 	else
@@ -400,25 +399,63 @@ void Chunk::createForest(int numTrees, int chunkWidth, int chunkHeight) // creat
 	{
 		for (int j = 0; j < chunkHeight - 2; j++)
 		{
-			int chance = rand() % 20;
+			int chance = rand() % 2500;
 
-			if (chance <= 1) // 10% chance to spawn tree
+			if (chance <= 200) // 10% chance to spawn tree
 			{
 				int type = 1 + (gen() % 2);
 				string entity = "tree" + to_string(type);
 				CreateEntity(entity, i, j, true);
 			}
-			else if (chance <= 3) // 10% chance to spawn bush
+			else if (chance <= 400) // 10% chance to spawn bush
 			{
-				int type = 1 + (gen() % 4);
+				int type = 1 + (gen() % 5);
 				string entity = "bush" + to_string(type);
 				CreateEntity(entity, i, j, false);
 			}
-			else if (chance == 4) // 10% chance to spawn bush
+			else if (chance <= 410) // 10% chance to spawn log
 			{
 				int type = 1 + (gen() % 2);
 				string entity = "log" + to_string(type);
 				CreateEntity(entity, i, j, false);
+			}
+			else if (chance == 500) // 10% chance to spawn big tree
+			{
+				CreateEntity("tree5", i, j, false);
+			}
+		}
+	}
+}
+
+void Chunk::createBurntForest(int numTrees, int chunkWidth, int chunkHeight) // create a forest from random tree entities
+{
+	for (int i = 0; i < chunkWidth - 2; i++)
+	{
+		for (int j = 0; j < chunkHeight - 2; j++)
+		{
+			int chance = rand() % 2500;
+
+			if (chance <= 200) // 10% chance to spawn tree
+			{
+				int type = 6 + (gen() % 2);
+				string entity = "tree" + to_string(type);
+				CreateEntity(entity, i, j, true);
+			}
+			else if (chance <= 400) // 10% chance to spawn bush
+			{
+				int type = 6;
+				string entity = "bush" + to_string(type);
+				CreateEntity(entity, i, j, false);
+			}
+			else if (chance <= 410) // 10% chance to spawn log
+			{
+				int type = 1 + (gen() % 2);
+				string entity = "log" + to_string(type);
+				CreateEntity(entity, i, j, false);
+			}
+			else if (chance == 500) // 10% chance to spawn big tree
+			{
+				CreateEntity("tree8", i, j, false);
 			}
 		}
 	}

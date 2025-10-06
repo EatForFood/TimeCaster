@@ -25,37 +25,37 @@ void Entity::spawn(String type, float x, float y)
     if (type == "tree3")
     {
         m_Sprite = Sprite(TextureHolder::GetTexture("graphics/foliage/trees/tree3.png"));
-        m_Sprite.setOrigin(32, 30);
+        m_Sprite.setOrigin(32, 28);
     }
 
     if (type == "tree4")
     {
         m_Sprite = Sprite(TextureHolder::GetTexture("graphics/foliage/trees/tree4.png"));
-        m_Sprite.setOrigin(32, 48);
-    }
-
-    if (type == "tree5")
-    {
-        m_Sprite = Sprite(TextureHolder::GetTexture("graphics/foliage/trees/tree5.png"));
-        m_Sprite.setOrigin(32, 40);
-    }
-
-    if (type == "tree6")
-    {
-        m_Sprite = Sprite(TextureHolder::GetTexture("graphics/foliage/trees/tree6.png"));
-        m_Sprite.setOrigin(32, 40);
+        m_Sprite.setOrigin(32, 28);
     }
 
     if (type == "tree7")
     {
         m_Sprite = Sprite(TextureHolder::GetTexture("graphics/foliage/trees/tree7.png"));
-        m_Sprite.setOrigin(96, 34);
+        m_Sprite.setOrigin(32, 48);
+    }
+
+    if (type == "tree6")
+    {
+        m_Sprite = Sprite(TextureHolder::GetTexture("graphics/foliage/trees/tree6.png"));
+        m_Sprite.setOrigin(32, 28);
+    }
+
+    if (type == "tree5")
+    {
+        m_Sprite = Sprite(TextureHolder::GetTexture("graphics/foliage/trees/tree5.png"));
+        m_Sprite.setOrigin(96, 54);
     }
 
     if (type == "tree8")
     {
         m_Sprite = Sprite(TextureHolder::GetTexture("graphics/foliage/trees/tree8.png"));
-        m_Sprite.setOrigin(96, 54);
+        m_Sprite.setOrigin(96, 36);
     }
 
     if (type == "bush1")

@@ -54,6 +54,12 @@ void NavBox::NavTree() // reduce navBox size for trees
     navArea.setPosition(navArea.getPosition().x, navArea.getPosition().y + 55);
 }
 
+void NavBox::NavTreeLarge() // reduce navBox size for trees
+{
+    navArea.setScale(0.5f, 0.5f);
+    navArea.setPosition(navArea.getPosition().x, navArea.getPosition().y + 55);
+}
+
 Vector2f NavBox::getPosition()
 {
     return m_Position;
