@@ -397,13 +397,13 @@ int main()
 
 	// Story into text
 	Text storyIntroText(
-		"I was not always a man consumed by vengeance. Once, I had a family—warm laughter by the fire, \n"
-		"the gentle touch of my children’s hands, the steady love of my wife. \n"
+		"I was not always a man consumed by vengeance. Once, I had a family-warm laughter by the fire, \n"
+		"the gentle touch of my children's hands, the steady love of my wife. \n"
 		"All of it was torn from me in a single night, \n"
 		"devoured by the fire of (name), a dragon whose name still burns in my mind. \n"
-		"Since then, every spell I’ve mastered, every scar I’ve earned, has been for one purpose alone: \n"
+		"Since then, every spell I've mastered, every scar I've earned, has been for one purpose alone: \n"
 		"to bring that beast to its knees. \n"
-		"I do not seek glory, nor the hollow praise of men—I seek redemption. \n"
+		"I do not seek glory, nor the hollow praise of men-I seek redemption. \n"
 		"And when the dragon falls, so too shall the weight of my failure. \n\n"
 		"You desire retribution dear player, but what will it cost you?",
 		font, fontSize);
