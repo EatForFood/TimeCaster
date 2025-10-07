@@ -52,8 +52,6 @@ int main()
 	// Start with the Medium difficulty state
 	Difficulty difficulty = Difficulty::Medium;
 
-
-
 	Player player;
 
 	bool displayFps;
@@ -769,7 +767,6 @@ int main()
 				else if (loadGameButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU && event.mouseButton.button == Mouse::Left)
 				{
 					state = State::PLAYING;
-					world.newWorld(); // should be replaced with a loadWorld() function
 
 					// Play the start game sound
 					if (!startSoundPlayed) {
@@ -781,6 +778,7 @@ int main()
 					// Loads player stats from text file
 					if (player.loadSaveFile() == true) {
 						// Player loaded successfully
+						world.loadWorld();
 
 						// We will modify the next two lines later
 						arena.width = 1900;

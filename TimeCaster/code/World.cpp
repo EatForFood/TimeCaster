@@ -3,6 +3,8 @@
 #include "World.h"
 #include "Chunk.h"
 #include <random>
+#include <fstream>
+#include <sstream>
 
 
 using namespace std;
@@ -14,9 +16,11 @@ World::World()
 }
 
 
-void World::newWorld()
+void World::newWorld() // create new world and save chunks to file
 {
     int half = GRID_SIZE / 2; 
+
+    ofstream out("gamedata/TCWorld.txt");
 
     for (int y = -half; y <= half; y++)
     {
@@ -24,14 +28,48 @@ void World::newWorld()
         {
             if (x == 0 && y == 0) // center chunk is spawn
             {
-                chunks.emplace_back("spawn", Vector2f(x, y));
+                string type = "spawn";
+                out << type << " "
+                    << x << " "
+                    << y << "\n";
+                chunks.emplace_back("spawn", Vector2f(x, y), false);
             }
             else
             {
-                chunks.emplace_back("forest", Vector2f(x, y));
+                string type = "forest";
+                out << type << " "
+                    << x << " "
+                    << y << "\n";
+                chunks.emplace_back("forest", Vector2f(x, y), false);
             }
         }
     }
+
+    out.close();
+}
+
+void World::loadWorld() // load world from file
+{
+    std::ifstream in("gamedata/TCWorld.txt");
+    if (!in.is_open())
+        return;
+
+    chunks.clear();
+
+    std::string line;
+    while (std::getline(in, line))
+    {
+        std::istringstream ss(line);
+        std::string type;
+        float x, y;
+
+        ss >> type >> x >> y;
+
+        // Recreate chunk, mark as loaded
+        chunks.emplace_back(type, sf::Vector2f(x, y), true);
+    }
+
+    in.close();
 }
 
 vector<Chunk> World::getChunks()

@@ -1,0 +1,9 @@
+forest -1 -1
+forest 0 -1
+forest 1 -1
+forest -1 0
+spawn 0 0
+forest 1 0
+forest -1 1
+forest 0 1
+forest 1 1

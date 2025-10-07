@@ -13,11 +13,17 @@ private:
 	int GRID_SIZE = sqrt(WORLD_SIZE);
 	vector<Chunk> chunks;
 
+	Vector2i m_TileTypeF[50][50];
+	String m_TileEntityF[50][50];
+	Vector2i m_TileTypeFGroundF[50][50];
+
 public:
 
 	World();
 
 	void newWorld();
+
+	void loadWorld();
 
 	vector<Chunk> getChunks();
 

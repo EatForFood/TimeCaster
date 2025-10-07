@@ -1,6 +1,7 @@
 #include "Weapon.h"
 #include "TextureHolder.h"
 
+
 Weapon::Weapon(String type, sf::Vector2f position)
 	: Item(type, position) // call base constructor
 {

@@ -17,6 +17,7 @@ protected:
 	int offsetX; // amount to offset position of chunk by
 	int offsetY;
 
+	Vector2f m_Chunk;
 	Vector2f offset;
 	Vector2f chunkCenter;
 
@@ -30,6 +31,13 @@ protected:
 
 	String m_Type; // type of chunk to generate
 
+	bool m_LoadChunk = false;
+	
+	Vector2i m_TileType[50][50];
+	String m_TileEntity[50][50];
+	Vector2i m_TileTypeFGround[50][50];
+	
+
 	bool debug;
 	Font debugFont;
 	vector<Text> debugText;
@@ -42,16 +50,19 @@ protected:
 
 public:
 
-	Chunk(String type, Vector2f chunk);
+	Chunk(String type, Vector2f chunk, bool load);
+	
+	void saveChunk();
+	void loadChunk();
 
-	void placeTile(int x, int y, int texX, int texY, bool forGround);
+	void placeTile(int x, int y, int texX, int texY, bool forGround, bool save);
 
 	VertexArray getBackground();
 	VertexArray getForground();
 
 	vector<Text> getDebugText();
 
-	void CreateEntity(String type, int x, int y, bool navBox);
+	void CreateEntity(String type, int x, int y);
 
 	vector<Entity> getEntities();
 
