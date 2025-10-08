@@ -1050,21 +1050,14 @@ int main()
 		}
 
 
-
-		
-
 		/* below are debug functions, comment them out in full build / when needed
 		if you add any more, make sure they check if debug reset is false and set it to true or else it will run every loop while the key is pressed */
 		if (event.key.code == Keyboard::Num0 && state == State::PLAYING)
 		{
 			debugreset = false;
-
-			
 		}
 		if (event.key.code == Keyboard::Num1 && !debugreset && state == State::PLAYING)
 		{
-
-			
 			// Increase health
 			player.upgradeHealth();
 
@@ -1174,9 +1167,11 @@ int main()
 				}
 			}
 			
-			// Update the player
-			player.update(dtAsSeconds, Mouse::getPosition(), world.getNavBoxes(player.getChunk()));
-			enemy.update(dtAsSeconds, world.getNavBoxes(enemy.getChunk()));
+			if (!drawInventory) {
+				// Update the player
+				player.update(dtAsSeconds, Mouse::getPosition(), world.getNavBoxes(player.getChunk()));
+				enemy.update(dtAsSeconds, world.getNavBoxes(enemy.getChunk()));
+			}
 
 			filter.setOrigin(player.getPosition());
 			filter.setPosition(player.getPosition().x, player.getPosition().y);
@@ -1426,6 +1421,18 @@ int main()
 					}
 				}
 			}
+
+			for (int i = 0; i < world.getWorldSize(); i++)
+			{
+				if (collision.distance(enemy.getCenter(), world.getChunkCenter(i)) < 2000) {
+					for (auto& entity : world.getEntities(i)) {
+						if (enemy.getRenderArea().intersects(entity.getSprite().getGlobalBounds())) {
+							drawables.emplace_back(entity.getSprite().getGlobalBounds().top + entity.getSprite().getGlobalBounds().height, entity.getSprite());
+						}
+					}
+				}
+			}
+			drawables.emplace_back(enemy.getSprite().getGlobalBounds().top + enemy.getSprite().getGlobalBounds().height, enemy.getSpriteFromSheet()); // place enemy into drawables
 			drawables.emplace_back(player.getSprite().getGlobalBounds().top + player.getSprite().getGlobalBounds().height, player.getSpriteFromSheet()); // place player armour into drawables
 			drawables.emplace_back(player.getSprite().getGlobalBounds().top + player.getSprite().getGlobalBounds().height + 0.01, player.getHead());
 			drawables.emplace_back(player.getSprite().getGlobalBounds().top + player.getSprite().getGlobalBounds().height + 0.02, player.getTorso());
@@ -1446,9 +1453,6 @@ int main()
 			}
 
 			drawables.clear();
-
-			// Draw enemy
-			window.draw(enemy.getSprite());
 
 			// Draw the pickups that are currently spawned
 			if (ammoPickup.isSpawned())

@@ -301,3 +301,8 @@ int Enemy::getChunk()
 {
 	return m_Chunk;
 }
+
+FloatRect Enemy::getRenderArea()
+{
+	return m_RenderArea;
+}
