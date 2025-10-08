@@ -47,6 +47,7 @@ Player::Player()
 	m_SpriteShoes.setOrigin(32, 32);
 	m_SpriteShoes.setScale(0.75, 0.75);
 
+
 	m_Clothes.push_back(m_SpriteHead);
 	m_Clothes.push_back(m_SpriteTorso);
 	m_Clothes.push_back(m_SpritePants);
@@ -450,15 +451,15 @@ void Player::createNewSave()
 	std::ofstream saveFile("gamedata/TCSave.txt");
 
 	saveFile << std::fixed << std::setprecision(5) << START_SPEED << " " << START_HEALTH << " " << START_HEALTH << " " << START_STAMINA << " "
-		<< START_STAMINA << " " << START_STAMINA_RECHARGE << " " << START_MANA << " " << START_MANA << " " << START_GOLD << " " << START_KILLS << " " << START_LEVEL << " " << 64 << " " << 64 << std::endl;
+		<< START_STAMINA << " " << START_STAMINA_RECHARGE << " " << START_MANA << " " << START_MANA << " " << START_GOLD << " " << START_KILLS << " " << START_LEVEL << " "  << START_EQUIPPED_WEAPON << " " << START_SWORD << " " << START_WAND << " " << 64 << " " << 64 << std::endl;
 
 	saveFile.close();
 }
-void Player::createConfigFile(string dfficultyString, bool windowedMode, bool displayFPS, float volume)
+void Player::createConfigFile(string difficultyString, bool windowedMode, bool displayFPS, float volume)
 {
 	std::ofstream configFile("gamedata/TCConfig.txt");
 	
-	configFile << dfficultyString << " " << windowedMode << " " << displayFPS << " " << volume << std::endl;
+	configFile << difficultyString << " " << windowedMode << " " << displayFPS << " " << volume << std::endl;
 	
 	configFile.close();
 }
@@ -478,12 +479,13 @@ bool Player::loadConfigFile()
 }
 
 //remember to pass in all player stats to be saved
-void Player::updateSaveFile(float currentSpeed, float currentHealth, float maxHealth, float currentStamina, float maxStamina, float staminaRecharge, float currentMana, float maxMana, int gold, int kills, int playerLevel, Vector2f position)
+void Player::updateSaveFile(float currentSpeed, float currentHealth, float maxHealth, float currentStamina, float maxStamina, float staminaRecharge, float currentMana, float maxMana, int gold, int kills, int playerLevel, int equippedWeapon, int savedSword, int savedWand, Vector2f position)
 {	
 	std::ofstream saveFile("gamedata/TCSave.txt");
 
 	saveFile << std::fixed << std::setprecision(5) << currentSpeed << " " << currentHealth << " " << maxHealth << " " << currentStamina << " "
-	<< maxStamina << " " << staminaRecharge << " " << currentMana << " " << maxMana << " " << gold << " " << kills << " " << playerLevel << " " << position.x << " " << position.y << std::endl;
+	<< maxStamina << " " << staminaRecharge << " " << currentMana << " " << maxMana << " " << gold << " " << kills << " " << playerLevel << " "
+	<< equippedWeapon << " " << savedSword << " " << savedWand << " " << position.x << " " << position.y << std::endl;
 
 	saveFile.close();
 }
@@ -505,6 +507,9 @@ bool Player::loadSaveFile()
 		loadFile >> m_Gold;
 		loadFile >> m_Kills;
 		loadFile >> m_Level;
+		loadFile >> m_EquippedWeapon;
+		loadFile >> m_SavedSword;
+		loadFile >> m_SavedWand;
 		loadFile >> m_Position.x;
 		loadFile >> m_Position.y;
 		return true;
@@ -611,4 +616,52 @@ void Player::incrementKillCount() {
 
 int Player::getKillCount() {
 	return m_Kills;
+}
+
+int Player::getSavedSword()
+{
+	return m_SavedSword;
+}
+
+int Player::getSavedWand()
+{
+	return m_SavedWand;
+}
+
+int Player::getEquippedWeapon()
+{
+	return m_EquippedWeapon;
+}
+
+void Player::switchWeapon()
+{
+	if (m_EquippedWeapon == m_SavedSword)
+	{
+		m_EquippedWeapon = m_SavedWand;
+	}
+	else
+	{
+		m_EquippedWeapon = m_SavedSword;
+	}
+
+}
+
+IntRect Player::getEquippedWeaponIcon()
+{
+
+	switch (m_EquippedWeapon) {
+	case 0:
+		m_EquippedWeaponIcon = { 0, 0, 0, 0 };
+		break;
+	case 1:
+		m_EquippedWeaponIcon = { 960, 896, 32,32 };
+		break;
+	case 11:
+		m_EquippedWeaponIcon = { 194, 864, 32,32 };
+		break;
+	default:
+		m_EquippedWeaponIcon = { 0, 0, 0, 0 };
+		break;
+	}
+	return m_EquippedWeaponIcon;
 }
