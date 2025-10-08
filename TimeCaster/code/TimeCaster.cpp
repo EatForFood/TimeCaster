@@ -696,6 +696,34 @@ int main()
 				}
 			}
 
+		if ((event.type == Event::MouseButtonPressed && event.key.code == Mouse::Middle && state == State::PLAYING) ||
+			(event.type == Event::KeyPressed && event.key.code == Keyboard::F && state == State::PLAYING))
+		{
+
+			cout << " Weapon switched" << endl;
+
+			player.switchWeapon();
+
+
+			switch (player.getEquippedWeapon()) {
+			case 0:
+				equippedWeaponIcon.setTextureRect(sf::IntRect{ 0, 0, 0, 0 });
+				break;
+
+			case 1:
+				equippedWeaponIcon.setTextureRect(sf::IntRect{ 960, 896, 32,32 });
+				break;
+			case 11:
+				equippedWeaponIcon.setTextureRect(sf::IntRect{ 194, 864, 32,32 });
+				break;
+			default:
+				equippedWeaponIcon.setTextureRect(sf::IntRect{ 0, 0, 0, 0 });
+				break;
+			}
+
+
+		}
+
 			if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left && state == State::OPTIONS_MENU)
 			{
 				if (handle.getGlobalBounds().contains(sf::Vector2f(event.mouseButton.x, event.mouseButton.y)))
@@ -1020,32 +1048,7 @@ int main()
 		}
 
 
-		if (event.key.code == Mouse::Middle || event.key.code == Keyboard::F && state == State::PLAYING)
-		{
 
-			cout << " Weapon switched" << endl;
-
-			player.switchWeapon();
-
-
-			switch (player.getEquippedWeapon()) {
-			case 0:
-				equippedWeaponIcon.setTextureRect(sf::IntRect{ 0, 0, 0, 0 });
-				break;
-
-			case 1:
-				equippedWeaponIcon.setTextureRect(sf::IntRect{ 960, 896, 32,32 });
-				break;
-			case 11:
-				equippedWeaponIcon.setTextureRect(sf::IntRect{ 194, 864, 32,32 });
-				break;
-			default:
-				equippedWeaponIcon.setTextureRect(sf::IntRect{ 0, 0, 0, 0 });
-				break;
-			}
-
-
-		}
 		
 
 		/* below are debug functions, comment them out in full build / when needed
