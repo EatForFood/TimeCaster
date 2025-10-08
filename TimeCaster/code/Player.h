@@ -15,12 +15,12 @@ private:
 	const float START_MANA = 100;
 	const float START_STAMINA = 100;
 	const float START_STAMINA_RECHARGE = 0.05;
-	const float START_GOLD = 0;
-	const float START_KILLS = 0;
-	const float START_LEVEL = 1;
-	const float START_EQUIPPED_WEAPON = 1;
-	const float START_SWORD = 1;
-	const float START_WAND = 11;
+	const int START_GOLD = 0;
+	const int START_KILLS = 0;
+	const int START_LEVEL = 1;
+	const int START_EQUIPPED_WEAPON = 1;
+	const int START_SWORD = 1;
+	const int START_WAND = 11;
 
 	// Which directions is the player currently moving in
 	bool m_UpPressed;
@@ -35,9 +35,9 @@ private:
 	float m_StaminaRecharge;
 	int m_Gold;
 	int m_Kills;
-	int m_SavedSword = 1;
-	int m_SavedWand = 11;
-	int m_EquippedWeapon = 0;
+	int m_SavedSword;
+	int m_SavedWand;
+	int m_EquippedWeapon;
 
 	bool m_WindowedMode;
 
@@ -69,6 +69,8 @@ private:
 	int m_Chunk; // player's current chunk
 
 	FloatRect m_RenderArea;
+
+	IntRect m_EquippedWeaponIcon;
 
 public:
 
@@ -168,4 +170,6 @@ public:
 	int getEquippedWeapon();
 
 	void switchWeapon();
+
+	IntRect getEquippedWeaponIcon();
 };

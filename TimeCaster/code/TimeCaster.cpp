@@ -117,6 +117,7 @@ int main()
 
 	player.loadConfigFile();
 
+
 	// The boundaries of the arena
 	IntRect arena;
 
@@ -497,7 +498,7 @@ int main()
 	RectangleShape equippedWeaponIcon;
 	
 	equippedWeaponIcon.setTexture(&textureItems);
-	equippedWeaponIcon.setTextureRect(sf::IntRect{ 960, 896, 32,32 });
+	//equippedWeaponIcon.setTextureRect(player.getEquippedWeaponIcon());
 	equippedWeaponIcon.setSize(Vector2f(75, 75));
 	equippedWeaponIcon.setOrigin(equippedWeaponIcon.getSize() / 2.f);
 	equippedWeaponIcon.setPosition(viewCentre.x - 200, 550);
@@ -700,26 +701,10 @@ int main()
 			(event.type == Event::KeyPressed && event.key.code == Keyboard::F && state == State::PLAYING))
 		{
 
-			cout << " Weapon switched" << endl;
+			//cout << " Weapon switched" << endl;
 
 			player.switchWeapon();
-
-
-			switch (player.getEquippedWeapon()) {
-			case 0:
-				equippedWeaponIcon.setTextureRect(sf::IntRect{ 0, 0, 0, 0 });
-				break;
-
-			case 1:
-				equippedWeaponIcon.setTextureRect(sf::IntRect{ 960, 896, 32,32 });
-				break;
-			case 11:
-				equippedWeaponIcon.setTextureRect(sf::IntRect{ 194, 864, 32,32 });
-				break;
-			default:
-				equippedWeaponIcon.setTextureRect(sf::IntRect{ 0, 0, 0, 0 });
-				break;
-			}
+			equippedWeaponIcon.setTextureRect(player.getEquippedWeaponIcon());
 
 
 		}
@@ -796,21 +781,12 @@ int main()
 					// Reset the clock so there isn't a frame jump
 					clock.restart();
 				
+			
+
+					equippedWeaponIcon.setTextureRect(player.getEquippedWeaponIcon());
+
 					
-						switch (player.getEquippedWeapon()) {
-						case 0:
-							equippedWeaponIcon.setTextureRect(sf::IntRect{ 0, 0, 0, 0 });
-							break;
-						case 1:
-							equippedWeaponIcon.setTextureRect(sf::IntRect{ 960, 896, 32,32 });
-							break;
-						case 11:
-							equippedWeaponIcon.setTextureRect(sf::IntRect{ 194, 864, 32,32 });
-							break;
-						default:
-							equippedWeaponIcon.setTextureRect(sf::IntRect{ 0, 0, 0, 0 });
-							break;
-						}
+
 					player.loadConfigFile();
 					difficulty = stringToDifficulty(player.getdifficultyString());
 					windowedMode = player.getWindowedMode();
@@ -858,21 +834,7 @@ int main()
 						// Reset the clock so there isn't a frame jump
 						clock.restart();
 
-
-						switch (player.getEquippedWeapon()) {
-						case 0:
-							equippedWeaponIcon.setTextureRect(sf::IntRect{ 0, 0, 0, 0 });
-							break;
-						case 1:
-							equippedWeaponIcon.setTextureRect(sf::IntRect{ 960, 896, 32,32 });
-							break;
-						case 11:
-							equippedWeaponIcon.setTextureRect(sf::IntRect{ 194, 864, 32,32 });
-							break;
-						default:
-							equippedWeaponIcon.setTextureRect(sf::IntRect{ 0, 0, 0, 0 });
-							break;
-						}
+						equippedWeaponIcon.setTextureRect(player.getEquippedWeaponIcon());
 
 
 						player.loadConfigFile();
@@ -912,20 +874,10 @@ int main()
 						clock.restart();
 
 
-						switch (player.getEquippedWeapon()) {
-						case 0:
-							equippedWeaponIcon.setTextureRect(sf::IntRect{ 0, 0, 0, 0 });
-							break;
-						case 1:
-							equippedWeaponIcon.setTextureRect(sf::IntRect{ 960, 896, 32,32 });
-							break;
-						case 11:
-							equippedWeaponIcon.setTextureRect(sf::IntRect{ 194, 864, 32,32 });
-							break;
-						default:
-							equippedWeaponIcon.setTextureRect(sf::IntRect{ 0, 0, 0, 0 });
-							break;
-						}
+
+
+
+						equippedWeaponIcon.setTextureRect(player.getEquippedWeaponIcon());
 
 						player.loadConfigFile();
 						difficulty = stringToDifficulty(player.getdifficultyString());

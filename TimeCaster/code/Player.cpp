@@ -455,11 +455,11 @@ void Player::createNewSave()
 
 	saveFile.close();
 }
-void Player::createConfigFile(string dfficultyString, bool windowedMode, bool displayFPS, float volume)
+void Player::createConfigFile(string difficultyString, bool windowedMode, bool displayFPS, float volume)
 {
 	std::ofstream configFile("gamedata/TCConfig.txt");
 	
-	configFile << dfficultyString << " " << windowedMode << " " << displayFPS << " " << volume << std::endl;
+	configFile << difficultyString << " " << windowedMode << " " << displayFPS << " " << volume << std::endl;
 	
 	configFile.close();
 }
@@ -646,3 +646,22 @@ void Player::switchWeapon()
 
 }
 
+IntRect Player::getEquippedWeaponIcon()
+{
+
+	switch (m_EquippedWeapon) {
+	case 0:
+		m_EquippedWeaponIcon = { 0, 0, 0, 0 };
+		break;
+	case 1:
+		m_EquippedWeaponIcon = { 960, 896, 32,32 };
+		break;
+	case 11:
+		m_EquippedWeaponIcon = { 194, 864, 32,32 };
+		break;
+	default:
+		m_EquippedWeaponIcon = { 0, 0, 0, 0 };
+		break;
+	}
+	return m_EquippedWeaponIcon;
+}
