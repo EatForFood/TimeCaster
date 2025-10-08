@@ -772,6 +772,8 @@ int main()
 					player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume());
 					player.loadSaveFile();
 
+
+
 					// We will modify the next two lines later
 					arena.width = 1900;
 					arena.height = 800;
@@ -794,6 +796,21 @@ int main()
 					// Reset the clock so there isn't a frame jump
 					clock.restart();
 				
+					
+						switch (player.getEquippedWeapon()) {
+						case 0:
+							equippedWeaponIcon.setTextureRect(sf::IntRect{ 0, 0, 0, 0 });
+							break;
+						case 1:
+							equippedWeaponIcon.setTextureRect(sf::IntRect{ 960, 896, 32,32 });
+							break;
+						case 11:
+							equippedWeaponIcon.setTextureRect(sf::IntRect{ 194, 864, 32,32 });
+							break;
+						default:
+							equippedWeaponIcon.setTextureRect(sf::IntRect{ 0, 0, 0, 0 });
+							break;
+						}
 					player.loadConfigFile();
 					difficulty = stringToDifficulty(player.getdifficultyString());
 					windowedMode = player.getWindowedMode();
@@ -840,7 +857,23 @@ int main()
 
 						// Reset the clock so there isn't a frame jump
 						clock.restart();
-					
+
+
+						switch (player.getEquippedWeapon()) {
+						case 0:
+							equippedWeaponIcon.setTextureRect(sf::IntRect{ 0, 0, 0, 0 });
+							break;
+						case 1:
+							equippedWeaponIcon.setTextureRect(sf::IntRect{ 960, 896, 32,32 });
+							break;
+						case 11:
+							equippedWeaponIcon.setTextureRect(sf::IntRect{ 194, 864, 32,32 });
+							break;
+						default:
+							equippedWeaponIcon.setTextureRect(sf::IntRect{ 0, 0, 0, 0 });
+							break;
+						}
+
 
 						player.loadConfigFile();
 						difficulty = stringToDifficulty(player.getdifficultyString());
@@ -853,6 +886,8 @@ int main()
 						player.createNewSave();
 						player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume());
 						player.loadSaveFile();
+
+
 
 						// We will modify the next two lines later
 						arena.width = 1900;
@@ -875,6 +910,22 @@ int main()
 
 						// Reset the clock so there isn't a frame jump
 						clock.restart();
+
+
+						switch (player.getEquippedWeapon()) {
+						case 0:
+							equippedWeaponIcon.setTextureRect(sf::IntRect{ 0, 0, 0, 0 });
+							break;
+						case 1:
+							equippedWeaponIcon.setTextureRect(sf::IntRect{ 960, 896, 32,32 });
+							break;
+						case 11:
+							equippedWeaponIcon.setTextureRect(sf::IntRect{ 194, 864, 32,32 });
+							break;
+						default:
+							equippedWeaponIcon.setTextureRect(sf::IntRect{ 0, 0, 0, 0 });
+							break;
+						}
 
 						player.loadConfigFile();
 						difficulty = stringToDifficulty(player.getdifficultyString());
@@ -914,7 +965,7 @@ int main()
 				{
 					sound.playButtonClickSound();
 					world.clearWorld();
-					player.updateSaveFile(player.getSpeed(), player.getHealth(), player.getMaxHealth(), player.getStamina(), player.getMaxStamina(), player.getStaminaRecharge(), player.getMana(), player.getMaxMana(), player.getGold(), player.getKillCount(), player.getPlayerLevel(), player.getPosition());
+					player.updateSaveFile(player.getSpeed(), player.getHealth(), player.getMaxHealth(), player.getStamina(), player.getMaxStamina(), player.getStaminaRecharge(), player.getMana(), player.getMaxMana(), player.getGold(), player.getKillCount(), player.getPlayerLevel(), player.getEquippedWeapon(), player.getSavedSword(), player.getSavedWand(), player.getPosition());
 					state = State::MAIN_MENU;
 				}
 

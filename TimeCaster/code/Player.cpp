@@ -47,6 +47,7 @@ Player::Player()
 	m_SpriteShoes.setOrigin(32, 32);
 	m_SpriteShoes.setScale(0.75, 0.75);
 
+
 	m_Clothes.push_back(m_SpriteHead);
 	m_Clothes.push_back(m_SpriteTorso);
 	m_Clothes.push_back(m_SpritePants);
@@ -450,7 +451,7 @@ void Player::createNewSave()
 	std::ofstream saveFile("gamedata/TCSave.txt");
 
 	saveFile << std::fixed << std::setprecision(5) << START_SPEED << " " << START_HEALTH << " " << START_HEALTH << " " << START_STAMINA << " "
-		<< START_STAMINA << " " << START_STAMINA_RECHARGE << " " << START_MANA << " " << START_MANA << " " << START_GOLD << " " << START_KILLS << " " << START_LEVEL << " " << 64 << " " << 64 << std::endl;
+		<< START_STAMINA << " " << START_STAMINA_RECHARGE << " " << START_MANA << " " << START_MANA << " " << START_GOLD << " " << START_KILLS << " " << START_LEVEL << " "  << START_EQUIPPED_WEAPON << " " << START_SWORD << " " << START_WAND << " " << << 64 << " " << 64 << std::endl;
 
 	saveFile.close();
 }
@@ -478,12 +479,13 @@ bool Player::loadConfigFile()
 }
 
 //remember to pass in all player stats to be saved
-void Player::updateSaveFile(float currentSpeed, float currentHealth, float maxHealth, float currentStamina, float maxStamina, float staminaRecharge, float currentMana, float maxMana, int gold, int kills, int playerLevel, Vector2f position)
+void Player::updateSaveFile(float currentSpeed, float currentHealth, float maxHealth, float currentStamina, float maxStamina, float staminaRecharge, float currentMana, float maxMana, int gold, int kills, int playerLevel, int equippedWeapon, int savedSword, int savedWand, Vector2f position)
 {	
 	std::ofstream saveFile("gamedata/TCSave.txt");
 
 	saveFile << std::fixed << std::setprecision(5) << currentSpeed << " " << currentHealth << " " << maxHealth << " " << currentStamina << " "
-	<< maxStamina << " " << staminaRecharge << " " << currentMana << " " << maxMana << " " << gold << " " << kills << " " << playerLevel << " " << position.x << " " << position.y << std::endl;
+	<< maxStamina << " " << staminaRecharge << " " << currentMana << " " << maxMana << " " << gold << " " << kills << " " << playerLevel << " "
+	<< equippedWeapon << " " << savedSword << " " << savedWand << " " << position.x << " " << position.y << std::endl;
 
 	saveFile.close();
 }
@@ -505,6 +507,9 @@ bool Player::loadSaveFile()
 		loadFile >> m_Gold;
 		loadFile >> m_Kills;
 		loadFile >> m_Level;
+		loadFile >> m_EquippedWeapon;
+		loadFile >> m_SavedSword;
+		loadFile >> m_SavedWand;
 		loadFile >> m_Position.x;
 		loadFile >> m_Position.y;
 		return true;

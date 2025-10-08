@@ -18,6 +18,9 @@ private:
 	const float START_GOLD = 0;
 	const float START_KILLS = 0;
 	const float START_LEVEL = 1;
+	const float START_EQUIPPED_WEAPON = 1;
+	const float START_SWORD = 1;
+	const float START_WAND = 11;
 
 	// Which directions is the player currently moving in
 	bool m_UpPressed;
@@ -143,7 +146,7 @@ public:
 	void createNewSave();
 	void createConfigFile(string difficultyString, bool windowedMode, bool displayFPS, float volume);
 	//save and load player stats/position/etc.
-	void updateSaveFile(float currentSpeed, float currentHealth, float maxHealth, float currentStamina, float maxStamina, float staminaRecharge, float currentMana, float maxMana, int gold, int kills, int playerLevel, Vector2f position);
+	void updateSaveFile(float currentSpeed, float currentHealth, float maxHealth, float currentStamina, float maxStamina, float staminaRecharge, float currentMana, float maxMana, int gold, int kills, int playerLevel, int equppedWeapon, int savedSword, int savedWand, Vector2f position);
 	//load player stats/position/etc. from save file
 	bool loadSaveFile();
 	bool loadConfigFile();
