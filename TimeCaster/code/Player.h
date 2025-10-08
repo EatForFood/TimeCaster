@@ -50,6 +50,7 @@ private:
 	Time m_LastHit;
 	// How many iFrames the player has after being hit
 	int m_IFrames = 0;
+	
 	// If the player is moving or not
 	bool m_IsMoving = false;
 

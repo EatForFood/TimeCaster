@@ -12,7 +12,6 @@ void Character::setPosition(Vector2f newPosition)
 	m_Sprite.setPosition(m_Position);
 }
 
-
 FloatRect Character::getGlobalBounds()
 {
 	return m_Sprite.getGlobalBounds();
@@ -91,13 +90,12 @@ void Character::setSpriteFromSheet(sf::IntRect textureBox) // set sprite
 	m_SpriteTorso.setTextureRect(sf::IntRect{ sheetCoordinate, spriteSize });
 	m_SpritePants.setTextureRect(sf::IntRect{ sheetCoordinate, spriteSize });
 	m_SpriteShoes.setTextureRect(sf::IntRect{ sheetCoordinate, spriteSize });
-
 }
 
 void Character::moveTextureRect() // animate sprite by moving texRect location
 {
 	//	cout << " Move Texture Rect m_Ani_Counter " << m_Ani_Counter << "\n";
-		// if the animation counter is greater than the animation limit reset to 1;
+	// if the animation counter is greater than the animation limit reset to 1;
 	if (m_Ani_Counter == m_Animation_It_Limit)
 	{
 		m_Ani_Counter = 0;
@@ -130,7 +128,6 @@ void Character::moveTextureRect() // animate sprite by moving texRect location
 		m_Ani_Counter++;
 		m_AnimationTimer = 0;
 	}
-
 }
 
 Sprite Character::getPants()

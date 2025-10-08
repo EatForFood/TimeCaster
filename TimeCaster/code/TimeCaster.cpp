@@ -14,6 +14,7 @@
 #include "SoundManager.h"
 #include "CollisionDetection.h"
 #include "Item.h"
+#include "Enemy.h"
 
 using namespace std;
 using namespace sf;
@@ -53,18 +54,16 @@ int main()
 	Difficulty difficulty = Difficulty::Medium;
 
 	Player player;
+	Enemy enemy;
 
 	bool displayFps;
-
 
 	player.loadConfigFile();
 
 	difficulty = stringToDifficulty(player.getdifficultyString());
-	 windowedMode = player.getWindowedMode();
-	 displayFps = player.getDisplayFps();
-	 Listener::setGlobalVolume(player.getVolume());
-
-
+	windowedMode = player.getWindowedMode();
+	displayFps = player.getDisplayFps();
+	Listener::setGlobalVolume(player.getVolume());
 
 	// Get the screen resolution and create an SFML window
 	Vector2f resolution;
@@ -74,7 +73,6 @@ int main()
 	resolution.y = 1080;
 
 	//RenderWindow window(VideoMode(resolution.x, resolution.y), "TimeCaster", Style::Fullscreen);
-
 	
 	RenderWindow window;
 
@@ -91,8 +89,6 @@ int main()
 
 	// Zoom view
 	mainView.zoom(0.3f);
-
-	
 
 	// Here is our clock for timing everything
 	Clock clock;
@@ -321,9 +317,9 @@ int main()
 	y = quitGameButton.getPosition().y + (quitGameButton.getSize().y / 2.f) - (textBounds.height / 2.f);
 	quitGameButtonText.setPosition(x - textBounds.left, y - textBounds.top);
 
-	/***********
+	/**************
 	Options Menu UI
-	************/
+	***************/
 	
 	// Options heading text
 	Text optionsHeadingText("Options", font, fontSize + 15);
@@ -745,6 +741,7 @@ int main()
 
 					// Spawn the player in the middle of the arena
 					player.spawn(arena, resolution, tileSize, player.getPlayerLevel());
+					enemy.spawn(arena, resolution, tileSize, "Goblin", player.getPlayerLevel());
 
 					// Configure the pick-ups
 					healthPickup.setArena(arena);
@@ -792,6 +789,7 @@ int main()
 
 						// Spawn the player in the middle of the arena
 						player.spawn(arena, resolution, tileSize, player.getPlayerLevel());
+						enemy.spawn(arena, resolution, tileSize, "Goblin", player.getPlayerLevel());
 
 						// Configure the pick-ups
 						healthPickup.setArena(arena);
@@ -801,7 +799,6 @@ int main()
 
 						// Reset the clock so there isn't a frame jump
 						clock.restart();
-					
 
 						player.loadConfigFile();
 						difficulty = stringToDifficulty(player.getdifficultyString());
@@ -827,6 +824,7 @@ int main()
 
 						// Spawn the player in the middle of the arena
 						player.spawn(arena, resolution, tileSize, player.getPlayerLevel());
+						enemy.spawn(arena, resolution, tileSize, "Goblin", player.getPlayerLevel());
 
 						// Configure the pick-ups
 						healthPickup.setArena(arena);
@@ -1109,10 +1107,16 @@ int main()
 				{
 					player.setChunk(i);
 				}
+
+				if (collision.pointInShape(enemy.getPosition(), world.getChunkArea(i).getShape())) // find enemy's current chunk
+				{
+					enemy.setChunk(i);
+				}
 			}
 			
 			// Update the player
 			player.update(dtAsSeconds, Mouse::getPosition(), world.getNavBoxes(player.getChunk()));
+			enemy.update(dtAsSeconds, world.getNavBoxes(enemy.getChunk()));
 
 			filter.setOrigin(player.getPosition());
 			filter.setPosition(player.getPosition().x, player.getPosition().y);
@@ -1382,6 +1386,9 @@ int main()
 			}
 
 			drawables.clear();
+
+			// Draw enemy
+			window.draw(enemy.getSprite());
 
 			// Draw the pickups that are currently spawned
 			if (ammoPickup.isSpawned())
