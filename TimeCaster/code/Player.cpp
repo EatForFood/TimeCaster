@@ -451,7 +451,7 @@ void Player::createNewSave()
 	std::ofstream saveFile("gamedata/TCSave.txt");
 
 	saveFile << std::fixed << std::setprecision(5) << START_SPEED << " " << START_HEALTH << " " << START_HEALTH << " " << START_STAMINA << " "
-		<< START_STAMINA << " " << START_STAMINA_RECHARGE << " " << START_MANA << " " << START_MANA << " " << START_GOLD << " " << START_KILLS << " " << START_LEVEL << " "  << START_EQUIPPED_WEAPON << " " << START_SWORD << " " << START_WAND << " " << << 64 << " " << 64 << std::endl;
+		<< START_STAMINA << " " << START_STAMINA_RECHARGE << " " << START_MANA << " " << START_MANA << " " << START_GOLD << " " << START_KILLS << " " << START_LEVEL << " "  << START_EQUIPPED_WEAPON << " " << START_SWORD << " " << START_WAND << " " << 64 << " " << 64 << std::endl;
 
 	saveFile.close();
 }
