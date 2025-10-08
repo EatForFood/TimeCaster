@@ -612,3 +612,32 @@ void Player::incrementKillCount() {
 int Player::getKillCount() {
 	return m_Kills;
 }
+
+int Player::getSavedSword()
+{
+	return m_SavedSword;
+}
+
+int Player::getSavedWand()
+{
+	return m_SavedWand;
+}
+
+int Player::getEquippedWeapon()
+{
+	return m_EquippedWeapon;
+}
+
+void Player::switchWeapon()
+{
+	if (m_EquippedWeapon == m_SavedSword)
+	{
+		m_EquippedWeapon = m_SavedWand;
+	}
+	else
+	{
+		m_EquippedWeapon = m_SavedSword;
+	}
+
+}
+

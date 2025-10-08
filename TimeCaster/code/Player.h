@@ -32,6 +32,9 @@ private:
 	float m_StaminaRecharge;
 	int m_Gold;
 	int m_Kills;
+	int m_SavedSword = 1;
+	int m_SavedWand = 11;
+	int m_EquippedWeapon = 0;
 
 	bool m_WindowedMode;
 
@@ -156,4 +159,10 @@ public:
 
 	void incrementKillCount();
 	int getKillCount();
+
+	int getSavedSword();
+	int getSavedWand();
+	int getEquippedWeapon();
+
+	void switchWeapon();
 };

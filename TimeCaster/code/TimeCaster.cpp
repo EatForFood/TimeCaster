@@ -483,15 +483,24 @@ int main()
 	Texture& texturePlayerInFrame = TextureHolder::GetTexture("graphics/UI/player.png");
 	Texture& textureNeckFrame = TextureHolder::GetTexture("graphics/UI/neckFrame.png");
 	Texture& textureRingFrame = TextureHolder::GetTexture("graphics/UI/ringFrame.png");
+	
+	Texture& textureItems = TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png");
 
-	viewCentre = mainView.getCenter();
-
+	
 	// Player frame
 	RectangleShape playerFrame;
 	playerFrame.setSize(sf::Vector2f(100.f, 200.f));
 	playerFrame.setTexture(&texturePlayerFrame);
 	playerFrame.setOrigin(playerFrame.getSize() / 2.f);
 	playerFrame.setPosition(viewCentre.x - 200, 400);
+
+	RectangleShape equippedWeaponIcon;
+	
+	equippedWeaponIcon.setTexture(&textureItems);
+	equippedWeaponIcon.setTextureRect(sf::IntRect{ 960, 896, 32,32 });
+	equippedWeaponIcon.setSize(Vector2f(75, 75));
+	equippedWeaponIcon.setOrigin(equippedWeaponIcon.getSize() / 2.f);
+	equippedWeaponIcon.setPosition(viewCentre.x - 200, 550);
 
 	// Player sprite for frame
 	RectangleShape playerInFrame;
@@ -638,6 +647,8 @@ int main()
 
 	// Boolean for whether to draw the inventory or not
 	bool drawInventory = false;
+
+
 
 	// Setting volume to 50 by default
 	Listener::setGlobalVolume(50);
@@ -997,16 +1008,52 @@ int main()
 			{
 				player.stopRight();
 			}
+
+
 		} // End WASD while playing
+		
+
+
+		if (event.key.code == Mouse::Middle || event.key.code == Keyboard::F && state == State::PLAYING)
+		{
+
+			cout << " Weapon switched" << endl;
+
+			player.switchWeapon();
+
+
+			switch (player.getEquippedWeapon()) {
+			case 0:
+				equippedWeaponIcon.setTextureRect(sf::IntRect{ 0, 0, 0, 0 });
+				break;
+
+			case 1:
+				equippedWeaponIcon.setTextureRect(sf::IntRect{ 960, 896, 32,32 });
+				break;
+			case 11:
+				equippedWeaponIcon.setTextureRect(sf::IntRect{ 194, 864, 32,32 });
+				break;
+			default:
+				equippedWeaponIcon.setTextureRect(sf::IntRect{ 0, 0, 0, 0 });
+				break;
+			}
+
+
+		}
+		
 
 		/* below are debug functions, comment them out in full build / when needed
 		if you add any more, make sure they check if debug reset is false and set it to true or else it will run every loop while the key is pressed */
 		if (event.key.code == Keyboard::Num0 && state == State::PLAYING)
 		{
 			debugreset = false;
+
+			
 		}
 		if (event.key.code == Keyboard::Num1 && !debugreset && state == State::PLAYING)
 		{
+
+			
 			// Increase health
 			player.upgradeHealth();
 
@@ -1448,6 +1495,7 @@ int main()
 				window.draw(bootsArmourFrame);
 				window.draw(neckFrame);
 				window.draw(weaponFrame);
+				window.draw(equippedWeaponIcon);
 				window.draw(ringFrame);
 				for (int i = 0; i < sizeof(emptyFrames) / sizeof(emptyFrames[0]); i++) {
 					window.draw(emptyFrames[i]);
