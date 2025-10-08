@@ -43,7 +43,7 @@ void Enemy::spawn(IntRect arena, Vector2f resolution, int tileSize, String type,
 	}
 	else if (type == "Goblin") {
 		// Associate a texture with the sprite
-		m_Sprite = Sprite(TextureHolder::GetTexture("graphics/swordGoblin.png"));
+		m_Sprite = Sprite(TextureHolder::GetTexture("graphics/Enemies/swordGoblin.png"));
 		
 		// Set the origin of the sprite to the centre, 
 		m_Sprite.setOrigin(32, 32);

@@ -1174,9 +1174,11 @@ int main()
 				}
 			}
 			
-			// Update the player
-			player.update(dtAsSeconds, Mouse::getPosition(), world.getNavBoxes(player.getChunk()));
-			enemy.update(dtAsSeconds, world.getNavBoxes(enemy.getChunk()));
+			if (!drawInventory) {
+				// Update the player and enemy
+				player.update(dtAsSeconds, Mouse::getPosition(), world.getNavBoxes(player.getChunk()));
+				enemy.update(dtAsSeconds, world.getNavBoxes(enemy.getChunk()));
+			}
 
 			filter.setOrigin(player.getPosition());
 			filter.setPosition(player.getPosition().x, player.getPosition().y);
