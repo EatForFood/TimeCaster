@@ -1011,7 +1011,13 @@ int main()
 
 
 		} // End WASD while playing
-		
+		else if (drawInventory)
+		{
+			player.stopRight();
+			player.stopLeft();
+			player.stopUp();
+			player.stopDown();	
+		}
 
 
 		if (event.key.code == Mouse::Middle || event.key.code == Keyboard::F && state == State::PLAYING)
