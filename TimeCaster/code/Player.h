@@ -15,9 +15,12 @@ private:
 	const float START_MANA = 100;
 	const float START_STAMINA = 100;
 	const float START_STAMINA_RECHARGE = 0.05;
-	const float START_GOLD = 0;
-	const float START_KILLS = 0;
-	const float START_LEVEL = 1;
+	const int START_GOLD = 0;
+	const int START_KILLS = 0;
+	const int START_LEVEL = 1;
+	const int START_EQUIPPED_WEAPON = 1;
+	const int START_SWORD = 1;
+	const int START_WAND = 11;
 
 	// Which directions is the player currently moving in
 	bool m_UpPressed;
@@ -32,6 +35,9 @@ private:
 	float m_StaminaRecharge;
 	int m_Gold;
 	int m_Kills;
+	int m_SavedSword;
+	int m_SavedWand;
+	int m_EquippedWeapon;
 
 	bool m_WindowedMode;
 
@@ -50,6 +56,7 @@ private:
 	Time m_LastHit;
 	// How many iFrames the player has after being hit
 	int m_IFrames = 0;
+	
 	// If the player is moving or not
 	bool m_IsMoving = false;
 
@@ -63,6 +70,8 @@ private:
 	int m_Chunk; // player's current chunk
 
 	FloatRect m_RenderArea;
+
+	IntRect m_EquippedWeaponIcon;
 
 public:
 
@@ -140,7 +149,7 @@ public:
 	void createNewSave();
 	void createConfigFile(string difficultyString, bool windowedMode, bool displayFPS, float volume);
 	//save and load player stats/position/etc.
-	void updateSaveFile(float currentSpeed, float currentHealth, float maxHealth, float currentStamina, float maxStamina, float staminaRecharge, float currentMana, float maxMana, int gold, int kills, int playerLevel, Vector2f position);
+	void updateSaveFile(float currentSpeed, float currentHealth, float maxHealth, float currentStamina, float maxStamina, float staminaRecharge, float currentMana, float maxMana, int gold, int kills, int playerLevel, int equppedWeapon, int savedSword, int savedWand, Vector2f position);
 	//load player stats/position/etc. from save file
 	bool loadSaveFile();
 	bool loadConfigFile();
@@ -156,4 +165,12 @@ public:
 
 	void incrementKillCount();
 	int getKillCount();
+
+	int getSavedSword();
+	int getSavedWand();
+	int getEquippedWeapon();
+
+	void switchWeapon();
+
+	IntRect getEquippedWeaponIcon();
 };

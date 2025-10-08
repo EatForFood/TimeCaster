@@ -14,6 +14,7 @@
 #include "SoundManager.h"
 #include "CollisionDetection.h"
 #include "Item.h"
+#include "Enemy.h"
 
 using namespace std;
 using namespace sf;
@@ -53,18 +54,16 @@ int main()
 	Difficulty difficulty = Difficulty::Medium;
 
 	Player player;
+	Enemy enemy;
 
 	bool displayFps;
-
 
 	player.loadConfigFile();
 
 	difficulty = stringToDifficulty(player.getdifficultyString());
-	 windowedMode = player.getWindowedMode();
-	 displayFps = player.getDisplayFps();
-	 Listener::setGlobalVolume(player.getVolume());
-
-
+	windowedMode = player.getWindowedMode();
+	displayFps = player.getDisplayFps();
+	Listener::setGlobalVolume(player.getVolume());
 
 	// Get the screen resolution and create an SFML window
 	Vector2f resolution;
@@ -74,7 +73,6 @@ int main()
 	resolution.y = 1080;
 
 	//RenderWindow window(VideoMode(resolution.x, resolution.y), "TimeCaster", Style::Fullscreen);
-
 	
 	RenderWindow window;
 
@@ -91,8 +89,6 @@ int main()
 
 	// Zoom view
 	mainView.zoom(0.3f);
-
-	
 
 	// Here is our clock for timing everything
 	Clock clock;
@@ -116,6 +112,7 @@ int main()
 	filter.setFillColor(Color(199, 56, 20, 40));
 
 	player.loadConfigFile();
+
 
 	// The boundaries of the arena
 	IntRect arena;
@@ -321,9 +318,9 @@ int main()
 	y = quitGameButton.getPosition().y + (quitGameButton.getSize().y / 2.f) - (textBounds.height / 2.f);
 	quitGameButtonText.setPosition(x - textBounds.left, y - textBounds.top);
 
-	/***********
+	/**************
 	Options Menu UI
-	************/
+	***************/
 	
 	// Options heading text
 	Text optionsHeadingText("Options", font, fontSize + 15);
@@ -483,15 +480,24 @@ int main()
 	Texture& texturePlayerInFrame = TextureHolder::GetTexture("graphics/UI/player.png");
 	Texture& textureNeckFrame = TextureHolder::GetTexture("graphics/UI/neckFrame.png");
 	Texture& textureRingFrame = TextureHolder::GetTexture("graphics/UI/ringFrame.png");
+	
+	Texture& textureItems = TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png");
 
-	viewCentre = mainView.getCenter();
-
+	
 	// Player frame
 	RectangleShape playerFrame;
 	playerFrame.setSize(sf::Vector2f(100.f, 200.f));
 	playerFrame.setTexture(&texturePlayerFrame);
 	playerFrame.setOrigin(playerFrame.getSize() / 2.f);
 	playerFrame.setPosition(viewCentre.x - 200, 400);
+
+	RectangleShape equippedWeaponIcon;
+	
+	equippedWeaponIcon.setTexture(&textureItems);
+	//equippedWeaponIcon.setTextureRect(player.getEquippedWeaponIcon());
+	equippedWeaponIcon.setSize(Vector2f(75, 75));
+	equippedWeaponIcon.setOrigin(equippedWeaponIcon.getSize() / 2.f);
+	equippedWeaponIcon.setPosition(viewCentre.x - 200, 550);
 
 	// Player sprite for frame
 	RectangleShape playerInFrame;
@@ -639,6 +645,8 @@ int main()
 	// Boolean for whether to draw the inventory or not
 	bool drawInventory = false;
 
+
+
 	// Setting volume to 50 by default
 	Listener::setGlobalVolume(50);
 
@@ -684,6 +692,18 @@ int main()
 					}
 				}
 			}
+
+		if ((event.type == Event::MouseButtonPressed && event.key.code == Mouse::Middle && state == State::PLAYING) ||
+			(event.type == Event::KeyPressed && event.key.code == Keyboard::F && state == State::PLAYING))
+		{
+
+			//cout << " Weapon switched" << endl;
+
+			player.switchWeapon();
+			equippedWeaponIcon.setTextureRect(player.getEquippedWeaponIcon());
+
+
+		}
 
 			if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left && state == State::OPTIONS_MENU)
 			{
@@ -733,6 +753,8 @@ int main()
 					player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume());
 					player.loadSaveFile();
 
+
+
 					// We will modify the next two lines later
 					arena.width = 1900;
 					arena.height = 800;
@@ -745,6 +767,7 @@ int main()
 
 					// Spawn the player in the middle of the arena
 					player.spawn(arena, resolution, tileSize, player.getPlayerLevel());
+					enemy.spawn(arena, resolution, tileSize, "Goblin", player.getPlayerLevel());
 
 					// Configure the pick-ups
 					healthPickup.setArena(arena);
@@ -755,6 +778,12 @@ int main()
 					// Reset the clock so there isn't a frame jump
 					clock.restart();
 				
+			
+
+					equippedWeaponIcon.setTextureRect(player.getEquippedWeaponIcon());
+
+					
+
 					player.loadConfigFile();
 					difficulty = stringToDifficulty(player.getdifficultyString());
 					windowedMode = player.getWindowedMode();
@@ -792,6 +821,7 @@ int main()
 
 						// Spawn the player in the middle of the arena
 						player.spawn(arena, resolution, tileSize, player.getPlayerLevel());
+						enemy.spawn(arena, resolution, tileSize, "Goblin", player.getPlayerLevel());
 
 						// Configure the pick-ups
 						healthPickup.setArena(arena);
@@ -801,7 +831,9 @@ int main()
 
 						// Reset the clock so there isn't a frame jump
 						clock.restart();
-					
+
+						equippedWeaponIcon.setTextureRect(player.getEquippedWeaponIcon());
+
 
 						player.loadConfigFile();
 						difficulty = stringToDifficulty(player.getdifficultyString());
@@ -815,6 +847,8 @@ int main()
 						player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume());
 						player.loadSaveFile();
 
+
+
 						// We will modify the next two lines later
 						arena.width = 1900;
 						arena.height = 800;
@@ -827,6 +861,7 @@ int main()
 
 						// Spawn the player in the middle of the arena
 						player.spawn(arena, resolution, tileSize, player.getPlayerLevel());
+						enemy.spawn(arena, resolution, tileSize, "Goblin", player.getPlayerLevel());
 
 						// Configure the pick-ups
 						healthPickup.setArena(arena);
@@ -836,6 +871,12 @@ int main()
 
 						// Reset the clock so there isn't a frame jump
 						clock.restart();
+
+
+
+
+
+						equippedWeaponIcon.setTextureRect(player.getEquippedWeaponIcon());
 
 						player.loadConfigFile();
 						difficulty = stringToDifficulty(player.getdifficultyString());
@@ -875,7 +916,7 @@ int main()
 				{
 					sound.playButtonClickSound();
 					world.clearWorld();
-					player.updateSaveFile(player.getSpeed(), player.getHealth(), player.getMaxHealth(), player.getStamina(), player.getMaxStamina(), player.getStaminaRecharge(), player.getMana(), player.getMaxMana(), player.getGold(), player.getKillCount(), player.getPlayerLevel(), player.getPosition());
+					player.updateSaveFile(player.getSpeed(), player.getHealth(), player.getMaxHealth(), player.getStamina(), player.getMaxStamina(), player.getStaminaRecharge(), player.getMana(), player.getMaxMana(), player.getGold(), player.getKillCount(), player.getPlayerLevel(), player.getEquippedWeapon(), player.getSavedSword(), player.getSavedWand(), player.getPosition());
 					state = State::MAIN_MENU;
 				}
 
@@ -997,16 +1038,33 @@ int main()
 			{
 				player.stopRight();
 			}
+
+
 		} // End WASD while playing
+		else if (drawInventory)
+		{
+			player.stopRight();
+			player.stopLeft();
+			player.stopUp();
+			player.stopDown();	
+		}
+
+
+
+		
 
 		/* below are debug functions, comment them out in full build / when needed
 		if you add any more, make sure they check if debug reset is false and set it to true or else it will run every loop while the key is pressed */
 		if (event.key.code == Keyboard::Num0 && state == State::PLAYING)
 		{
 			debugreset = false;
+
+			
 		}
 		if (event.key.code == Keyboard::Num1 && !debugreset && state == State::PLAYING)
 		{
+
+			
 			// Increase health
 			player.upgradeHealth();
 
@@ -1109,10 +1167,16 @@ int main()
 				{
 					player.setChunk(i);
 				}
+
+				if (collision.pointInShape(enemy.getPosition(), world.getChunkArea(i).getShape())) // find enemy's current chunk
+				{
+					enemy.setChunk(i);
+				}
 			}
 			
 			// Update the player
 			player.update(dtAsSeconds, Mouse::getPosition(), world.getNavBoxes(player.getChunk()));
+			enemy.update(dtAsSeconds, world.getNavBoxes(enemy.getChunk()));
 
 			filter.setOrigin(player.getPosition());
 			filter.setPosition(player.getPosition().x, player.getPosition().y);
@@ -1383,6 +1447,9 @@ int main()
 
 			drawables.clear();
 
+			// Draw enemy
+			window.draw(enemy.getSprite());
+
 			// Draw the pickups that are currently spawned
 			if (ammoPickup.isSpawned())
 			{
@@ -1448,6 +1515,7 @@ int main()
 				window.draw(bootsArmourFrame);
 				window.draw(neckFrame);
 				window.draw(weaponFrame);
+				window.draw(equippedWeaponIcon);
 				window.draw(ringFrame);
 				for (int i = 0; i < sizeof(emptyFrames) / sizeof(emptyFrames[0]); i++) {
 					window.draw(emptyFrames[i]);
