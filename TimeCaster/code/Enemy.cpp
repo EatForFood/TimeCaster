@@ -137,31 +137,31 @@ void Enemy::update(float elapsedTime, vector<NavBox> navBox) {
 			int randMove = rand() % 5;
 			switch (randMove) {
 			case 0: // Up
-				moveUp();
 				stopLeft();
 				stopRight();
 				stopDown();
+				moveUp();
 				break;
 
 			case 1: // Down
-				moveDown();
 				stopLeft();
 				stopRight();
 				stopUp();
+				moveDown();
 				break;
 
 			case 2: // Left
-				moveLeft();
 				stopUp();
 				stopRight();
 				stopDown();
+				moveLeft();
 				break;
 
 			case 3: // Right
-				moveRight();
 				stopLeft();
 				stopUp();
 				stopDown();
+				moveRight();
 				break;
 
 			case 4:
@@ -198,7 +198,7 @@ void Enemy::update(float elapsedTime, vector<NavBox> navBox) {
 	{
 		m_PositionLast = m_Position;
 		m_Position.y -= m_Speed * elapsedTime;
-		setSpriteFromSheet(IntRect(0, 128, 576, 64));
+		setSpriteFromSheet(IntRect(0, 128, 448, 64));
 		direction = Vector2f(0, 1);
 	}
 
@@ -216,7 +216,7 @@ void Enemy::update(float elapsedTime, vector<NavBox> navBox) {
 	{
 		m_PositionLast = m_Position;
 		m_Position.y += m_Speed * elapsedTime;
-		setSpriteFromSheet(IntRect(0, 0, 576, 64)); // set sprite depending on direction
+		setSpriteFromSheet(IntRect(0, 0, 448, 64)); // set sprite depending on direction
 		direction = Vector2f(0, -1);
 	}
 
@@ -234,7 +234,7 @@ void Enemy::update(float elapsedTime, vector<NavBox> navBox) {
 	{
 		m_PositionLast = m_Position;
 		m_Position.x += m_Speed * elapsedTime;
-		setSpriteFromSheet(IntRect(0, 64, 576, 64));
+		setSpriteFromSheet(IntRect(0, 64, 448, 64));
 		direction = Vector2f(1, 0);
 	}
 
@@ -252,7 +252,7 @@ void Enemy::update(float elapsedTime, vector<NavBox> navBox) {
 	{
 		m_PositionLast = m_Position;
 		m_Position.x -= m_Speed * elapsedTime;
-		setSpriteFromSheet(IntRect(0, 192, 576, 64));
+		setSpriteFromSheet(IntRect(0, 192, 448, 64));
 		direction = Vector2f(-1, 0);
 	}
 

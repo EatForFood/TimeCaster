@@ -1167,7 +1167,7 @@ int main()
 				}
 			}
 			
-			if (!drawInventory) {
+			if (!drawInventory && state == State::PLAYING) {
 				// Update the player
 				player.update(dtAsSeconds, Mouse::getPosition(), world.getNavBoxes(player.getChunk()));
 				enemy.update(dtAsSeconds, world.getNavBoxes(enemy.getChunk()));
