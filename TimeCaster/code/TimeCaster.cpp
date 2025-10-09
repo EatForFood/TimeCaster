@@ -443,8 +443,13 @@ int main()
 	difficultyButtonText.setPosition(x - textBounds.left, y - textBounds.top);
 
 	// Story into text
-	Text storyIntroText(
-		"I was not always a man consumed by vengeance. Once, I had a family-warm laughter by the fire, \n"
+	Text storyIntroText;
+	storyIntroText.setFont(font);
+	storyIntroText.setCharacterSize(fontSize);
+	storyIntroText.setFillColor(Color::White);
+	storyIntroText.setPosition(150, 150);
+
+	string fullText = "I was not always a man consumed by vengeance. Once, I had a family-warm laughter by the fire, \n"
 		"the gentle touch of my children's hands, the steady love of my wife. \n"
 		"All of it was torn from me in a single night, \n"
 		"devoured by the fire of (name), a dragon whose name still burns in my mind. \n"
@@ -452,12 +457,12 @@ int main()
 		"to bring that beast to its knees. \n"
 		"I do not seek glory, nor the hollow praise of men-I seek redemption. \n"
 		"And when the dragon falls, so too shall the weight of my failure. \n\n"
-		"You desire retribution dear player, but what will it cost you?",
-		font, fontSize);
-	storyIntroText.setFillColor(Color::White);
-	textBounds = storyIntroText.getLocalBounds();
-	viewCentre = mainView.getCenter();
-	storyIntroText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 150);
+		"You desire retribution dear player, but what will it cost you?";
+	string displayedText;
+
+	Clock textClock;
+	float delay = 0.05f; // seconds between characters
+	int currentChar = 0;
 
 	// Skip intro text
 	Text skipIntroText("--- Press space to skip ---", font, fontSize - 5);
@@ -986,6 +991,9 @@ int main()
 				{
 					sound.stopStoryIntroSound();
 					state = State::PLAYING;
+					displayedText = "";
+					storyIntroText.setString(displayedText);
+					currentChar = 0;
 				}
 
 				if (state == State::PLAYING && event.key.code == Keyboard::Tab) {
@@ -1325,6 +1333,19 @@ int main()
 		if (state == State::MAIN_MENU)
 		{
 			startSoundPlayed = FALSE;
+		}
+
+		if (state == State::STORY_INTRO) {
+			if (currentChar < (int)fullText.size())
+			{
+				if (clock.getElapsedTime().asSeconds() >= delay)
+				{
+					displayedText += fullText[currentChar];
+					storyIntroText.setString(displayedText);
+					currentChar++;
+					clock.restart();
+				}
+			}
 		}
 		
 		if (state == State::MAIN_MENU || state == State::OPTIONS_MENU)
