@@ -58,4 +58,6 @@ public:
 	void setChunk(int chunk);
 
 	int getChunk();
+
+	FloatRect getRenderArea();
 };
