@@ -1531,12 +1531,13 @@ int main()
 			}
 			
 			//Draw the crosshair
-			window.draw(spriteCursor);
+			//window.draw(spriteCursor);
 
 			// Switch to the HUD view
 			window.setView(hudView);
 			
 			if (drawInventory) {
+
 				window.draw(filter);
 				window.draw(playerFrame);
 				window.draw(playerInFrame);
@@ -1562,6 +1563,11 @@ int main()
 				window.draw(backgroundInvManaBar);
 				window.draw(invManaBar);
 				window.draw(invManaBarText);
+
+				window.setView(mainView);
+				window.draw(spriteCursor);
+				window.setView(hudView);
+				
 			}
 			else {
 				// Draw all the HUD elements
@@ -1574,7 +1580,16 @@ int main()
 				if (displayFps) {
 					window.draw(fpsText);
 				}
+
+
 				window.draw(filter);
+
+
+				window.setView(mainView);
+				window.draw(spriteCursor);
+				window.setView(hudView);
+
+
 			}
 		}
 

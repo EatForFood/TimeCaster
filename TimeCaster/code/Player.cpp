@@ -654,7 +654,7 @@ IntRect Player::getEquippedWeaponIcon()
 		m_EquippedWeaponIcon = { 0, 0, 0, 0 };
 		break;
 	case 1:
-		m_EquippedWeaponIcon = { 960, 896, 32,32 };
+		m_EquippedWeaponIcon = { 961, 896, 32,32 };
 		break;
 	case 11:
 		m_EquippedWeaponIcon = { 194, 864, 32,32 };
