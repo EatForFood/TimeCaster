@@ -38,6 +38,13 @@ Difficulty stringToDifficulty(string str)
 	else return Difficulty::Medium;
 }
 
+void moveDraggedIcon(RectangleShape* draggedIcon, Vector2f mousePos)
+{
+	float x = static_cast<float>(mousePos.x);
+	float y = static_cast<float>(mousePos.y);
+	draggedIcon->setPosition(x - 30, y - 30);
+}
+
 int main()
 {	
 	CollisionDetection collision;
@@ -57,6 +64,10 @@ int main()
 	Enemy enemy;
 
 	bool displayFps;
+	bool draggingItem = true;
+
+
+
 
 	player.loadConfigFile();
 
@@ -489,6 +500,7 @@ int main()
 	Texture& textureItems = TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png");
 
 	
+
 	// Player frame
 	RectangleShape playerFrame;
 	playerFrame.setSize(sf::Vector2f(100.f, 200.f));
@@ -567,6 +579,25 @@ int main()
 		emptyFrames[i].setPosition(startX, startY);
 		startX += 100;
 	}
+
+	RectangleShape itemIcon[16];
+	 startX = viewCentre.x - 300;
+	 startY = 650;
+	for (int i = 0; i < sizeof(itemIcon) / sizeof(itemIcon[0]); i++) {
+		itemIcon[i].setTexture(&textureItems);
+		itemIcon[i].setTextureRect(sf::IntRect(961, 896, 32, 32)); // default to this until we expand the weapon/item features
+		itemIcon[i].setSize(Vector2f(75, 75));
+		itemIcon[i].setOrigin(itemIcon[i].getSize() / 2.f);
+		if (i != 0 && i % 8 == 0) {
+			startY += 100;
+			startX = viewCentre.x - 300;
+		}
+		itemIcon[i].setPosition(startX, startY);
+		startX += 100;
+	}
+
+
+	RectangleShape* clickedShape = nullptr;
 
 	// Display kill count inventory text
 	Text killsText("Kills: " + player.getKillCount(), font, fontSize);
@@ -667,7 +698,11 @@ int main()
 			fps = 1.f / deltaTime;
 			fpsText.setString("FPS: " + to_string((int)fps));
 		}
-		
+
+
+		// Getting the mouse position and mapping those pixels to coordinates
+		Vector2i mousePos = Mouse::getPosition(window);
+		Vector2f worldPos = window.mapPixelToCoords(mousePos);
 		/***********
 		Handle input
 		************/
@@ -677,8 +712,9 @@ int main()
 		while (window.pollEvent(event))
 		{
 			// Getting the mouse position and mapping those pixels to coordinates
-			Vector2i mousePos = Mouse::getPosition(window);
-			Vector2f worldPos = window.mapPixelToCoords(mousePos);
+			//Vector2i mousePos = Mouse::getPosition(window);
+			//Vector2f worldPos = window.mapPixelToCoords(mousePos);
+			//Moved code to main game loop
 
 			if (event.type == Event::MouseWheelScrolled)
 			{
@@ -1207,6 +1243,63 @@ int main()
 			}
 			*/
 
+			// Drag items the player clicks on
+			if (drawInventory)
+			{
+
+
+				
+				if (equippedWeaponIcon.getGlobalBounds().contains(worldPos) && Mouse::isButtonPressed(Mouse::Left) && !draggingItem)
+				{
+
+					//float x = static_cast<float>(worldPos.x);
+					//float y = static_cast<float>(worldPos.y);
+					//equippedWeaponIcon.setPosition(x - 30, y - 30);
+
+					clickedShape = &equippedWeaponIcon;
+
+					//moveDraggedIcon(equippedWeaponIcon, worldPos);
+
+					draggingItem = true;
+				}
+
+				for (int i = 0; i < sizeof(itemIcon) / sizeof(itemIcon[0]); i++) {
+
+					if (itemIcon[i].getGlobalBounds().contains(worldPos) && Mouse::isButtonPressed(Mouse::Left) && !draggingItem)
+					{
+						
+						clickedShape = &itemIcon[i];
+
+						//float x = static_cast<float>(worldPos.x);
+						//float y = static_cast<float>(worldPos.y);
+						//itemIcon[i].setPosition(x - 30, y - 30);
+
+					//	moveDraggedIcon(itemIcon[i], worldPos);
+
+						draggingItem = true;
+					}
+				}
+
+				if (draggingItem && clickedShape != NULL)
+				{
+					
+					moveDraggedIcon(clickedShape, worldPos);
+				}
+
+				if (draggingItem && !Mouse::isButtonPressed(Mouse::Left))
+				{
+					draggingItem = false;
+				}
+
+
+
+
+		
+			
+
+
+			}
+
 			// Update the pickups
 			healthPickup.update(dtAsSeconds);
 			ammoPickup.update(dtAsSeconds);
@@ -1547,7 +1640,7 @@ int main()
 				window.draw(bootsArmourFrame);
 				window.draw(neckFrame);
 				window.draw(weaponFrame);
-				window.draw(equippedWeaponIcon);
+				
 				window.draw(ringFrame);
 				for (int i = 0; i < sizeof(emptyFrames) / sizeof(emptyFrames[0]); i++) {
 					window.draw(emptyFrames[i]);
@@ -1563,7 +1656,15 @@ int main()
 				window.draw(backgroundInvManaBar);
 				window.draw(invManaBar);
 				window.draw(invManaBarText);
+			
+				// draw icons last 
+								
+				for (int i = 0; i < sizeof(itemIcon) / sizeof(itemIcon[0]); i++) {
+					window.draw(itemIcon[i]);
+				}
 
+				window.draw(equippedWeaponIcon);
+				
 				window.setView(mainView);
 				window.draw(spriteCursor);
 				window.setView(hudView);
@@ -1646,3 +1747,4 @@ int main()
 
 	return 0;
 }
+
