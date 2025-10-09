@@ -166,22 +166,22 @@ void Player::update(float elapsedTime, Vector2i mousePosition, vector<NavBox> na
 	{
 		if (direction == Vector2f(0, 1)) // up
 		{
-			setSpriteFromSheet(IntRect(0, 0, 576, 64));
+			setSpriteFromSheet(IntRect(0, 0, 576, 64), 64);
 		}
 
 		if (direction == Vector2f(0, -1)) // down
 		{
-			setSpriteFromSheet(IntRect(0, 128, 576, 64));
+			setSpriteFromSheet(IntRect(0, 128, 576, 64), 64);
 		}
 
 		if (direction == Vector2f(1, 0)) // right
 		{
-			setSpriteFromSheet(IntRect(0, 192, 576, 64));
+			setSpriteFromSheet(IntRect(0, 192, 576, 64), 64);
 		}
 
 		if (direction == Vector2f(-1, 0)) // left
 		{
-			setSpriteFromSheet(IntRect(0, 64, 576, 64));
+			setSpriteFromSheet(IntRect(0, 64, 576, 64), 64);
 		}
 	}
 
@@ -197,7 +197,7 @@ void Player::update(float elapsedTime, Vector2i mousePosition, vector<NavBox> na
 	{
 		m_PositionLast = m_Position;
 		m_Position.y -= m_Speed * elapsedTime;
-		setSpriteFromSheet(IntRect(0, 0, 576, 64)); // set sprite depending on direction
+		setSpriteFromSheet(IntRect(0, 0, 576, 64), 64); // set sprite depending on direction
 		direction = Vector2f(0, 1);
 	}
 
@@ -214,7 +214,7 @@ void Player::update(float elapsedTime, Vector2i mousePosition, vector<NavBox> na
 	{
 		m_PositionLast = m_Position;
 		m_Position.y += m_Speed * elapsedTime;
-		setSpriteFromSheet(IntRect(0, 128, 576, 64));
+		setSpriteFromSheet(IntRect(0, 128, 576, 64), 64);
 		direction = Vector2f(0, -1);
 	}
 
@@ -231,7 +231,7 @@ void Player::update(float elapsedTime, Vector2i mousePosition, vector<NavBox> na
 	{
 		m_PositionLast = m_Position;
 		m_Position.x += m_Speed * elapsedTime;
-		setSpriteFromSheet(IntRect(0, 192, 576, 64));
+		setSpriteFromSheet(IntRect(0, 192, 576, 64), 64);
 		direction = Vector2f(1, 0);
 	}
 
@@ -248,7 +248,7 @@ void Player::update(float elapsedTime, Vector2i mousePosition, vector<NavBox> na
 	{
 		m_PositionLast = m_Position;
 		m_Position.x -= m_Speed * elapsedTime;
-		setSpriteFromSheet(IntRect(0, 64, 576, 64));
+		setSpriteFromSheet(IntRect(0, 64, 576, 64), 64);
 		direction = Vector2f(-1, 0);
 	}
 
@@ -308,23 +308,23 @@ void Player::update(float elapsedTime, Vector2i mousePosition, vector<NavBox> na
 		if (angle >= 45 && angle < 135)
 		{
 			// facing down
-			setSpriteFromSheet({ 0, 128, 576, 64 });
+			setSpriteFromSheet({ 0, 128, 576, 64 }, 64);
 		}
 		else if (angle >= 135 && angle < 225)
 		{
 			// facing left
-			setSpriteFromSheet({ 0, 64, 576, 64 });
+			setSpriteFromSheet({ 0, 64, 576, 64 }, 64);
 		}
 		else if (angle >= 225 && angle < 315)
 		{
 			// facing up
-			setSpriteFromSheet({ 0, 0, 576, 64 });
+			setSpriteFromSheet({ 0, 0, 576, 64 }, 64);
 			
 		}
 		else
 		{
 			// facing right
-			setSpriteFromSheet({ 0, 192, 576, 64 });
+			setSpriteFromSheet({ 0, 192, 576, 64 }, 64);
 		}
 	}
 
