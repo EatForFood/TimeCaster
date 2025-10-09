@@ -252,7 +252,7 @@ void Enemy::update(float elapsedTime, vector<NavBox> navBox) {
 	{
 		m_PositionLast = m_Position;
 		m_Position.x -= m_Speed * elapsedTime;
-		setSpriteFromSheet(IntRect(0, 192, 448, 62), 65);
+		setSpriteFromSheet(IntRect(0, 192, 576, 64));
 		direction = Vector2f(-1, 0);
 	}
 

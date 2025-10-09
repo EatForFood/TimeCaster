@@ -48,9 +48,10 @@ Chunk::Chunk(String type, Vector2f chunk, bool load)
 		if (m_Type == "spawn")
 		{
 			placeHouse1(15, 15);
-			placeHouse1(23, 15);
-			placeHouse1(15, 23);
-			placeHouse1(23, 23);
+			placeHouse2(23, 15);
+			placeHouse3(15, 23);
+			placeHouse4(23, 23);
+			placeCastle(10, 35);
 		}
 	}
 	else
@@ -96,20 +97,11 @@ Chunk::Chunk(String type, Vector2f chunk, bool load)
 				}
 			}
 
-			CreateEntity("tree1", 5, 5);
-			CreateEntity("tree2", 8, 5);
-			CreateEntity("tree3", 5, 8);
-			CreateEntity("tree4", 5, 14);
-			CreateEntity("tree5", 14, 7);
-			CreateEntity("tree6", 18, 7);
-			CreateEntity("tree7", 22, 7);
-			CreateEntity("tree8", 29, 7);
-
-
 			placeHouse1(15, 15);
-			placeHouse1(23, 15);
-			placeHouse1(15, 23);
-			placeHouse1(23, 23);
+			placeHouse2(23, 15);
+			placeHouse3(15, 23);
+			placeHouse4(23, 23);
+			placeCastle(10, 35);
 
 		}
 
@@ -294,7 +286,6 @@ void Chunk::placeTile(int x, int y, int texX, int texY, bool forGround, bool sav
 
 void Chunk::placeHouse1(int sx, int sy) { // sx 15, sy 18
 
-
 	// House west wall
 	for (int x = sx; x < sx + 5; x++)
 	{
@@ -340,6 +331,253 @@ void Chunk::placeHouse1(int sx, int sy) { // sx 15, sy 18
 
 	NavBox navbox(sx + 1, sy - 3, 5, 4);
 	navBoxes.push_back(navbox);
+}
+
+void Chunk::placeHouse2(int sx, int sy) { // sx 15, sy 18
+
+	// House west wall
+	for (int x = sx; x < sx + 2; x++)
+	{	
+		placeTile(x, sy, 64, 896, false, false);
+	}
+
+	// House east wall 
+	for (int y = sy - 2; y < sy + 1; y++)
+	{
+		if (y == sy - 1)
+		{
+			placeTile(sx + 1, y, 256, 896, false, false);
+		}
+		else
+		{
+			placeTile(sx + 1, y, 64, 896, false, false);
+		}
+	}
+	// roof
+	placeTile(sx - 1, sy  -1, 320, 832, true, false);
+
+	for (int y = sy - 3; y < sy; y++)
+	{
+		placeTile(sx, y, 128, 832, true, false);
+	}
+
+	NavBox navbox(sx + 1, sy - 2, 2, 3);
+	navBoxes.push_back(navbox);
+}
+
+void Chunk::placeHouse3(int sx, int sy) { // sx 15, sy 18
+
+	// House west wall
+	for (int x = sx; x < sx + 3; x++)
+	{
+		if (x == sx + 1)
+		{
+			placeTile(x, sy, 320, 896, false, false); // door
+		}
+		else
+		{
+			placeTile(x, sy, 64, 896, false, false);
+		}
+	}
+
+	// House east wall 
+	for (int y = sy - 1; y < sy + 1; y++)
+	{
+		placeTile(sx + 2, y, 64, 896, false, false);	
+	}
+
+	placeTile(sx + 1, sy - 2, 448, 832, true, false);
+
+	// roof
+	for (int x = sx - 1; x < sx + 2; x++)
+	{
+		placeTile(x, sy - 1, 64, 832, true, false);
+	}
+
+	NavBox navbox(sx + 1, sy - 1, 3, 2);
+	navBoxes.push_back(navbox);
+}
+
+void Chunk::placeHouse4(int sx, int sy) { // sx 15, sy 18
+
+	// House west wall
+	for (int x = sx; x < sx + 2; x++)
+	{
+		placeTile(x, sy, 64, 896, false, false);
+	}
+
+	// House east wall 
+	for (int y = sy - 2; y < sy + 1; y++)
+	{
+		if (y == sy - 1)
+		{
+			placeTile(sx + 1, y, 256, 896, false, false);
+		}
+		else
+		{
+			placeTile(sx + 1, y, 64, 896, false, false);
+		}
+	}
+
+	// House west wall 2
+	for (int x = sx + 2; x < sx + 5; x++)
+	{
+		if (x == sx + 3)
+		{
+			placeTile(x, sy - 2, 448, 896, false, false);
+		}
+		else
+		{
+			placeTile(x, sy - 2, 64, 896, false, false);
+		}
+	}
+
+	// House east wall  2
+	for (int y = sy - 3; y < sy - 1; y++)
+	{
+		placeTile(sx + 4, y, 64, 896, false, false);
+	}
+
+	placeTile(sx + 3, sy - 4, 448, 832, true, false);
+
+	// roof
+	placeTile(sx - 1, sy - 1, 320, 832, true, false);
+
+	placeTile(sx, sy - 3, 576, 832, true, false); // corner piece
+
+	for (int y = sy - 2; y < sy; y++)
+	{
+		placeTile(sx, y, 128, 832, true, false);
+	}
+
+	// roof
+	for (int x = sx + 1; x < sx + 4; x++)
+	{
+		placeTile(x, sy - 3, 64, 832, true, false);
+	}
+
+
+	NavBox navbox(sx + 1, sy - 2, 2, 3);
+	navBoxes.push_back(navbox);
+
+	NavBox navbox2(sx + 3, sy - 3, 3, 2);
+	navBoxes.push_back(navbox2);
+}
+
+void Chunk::placeCastle(int sx, int sy) { // sx 15, sy 18
+
+	// FIRST LEVEL
+
+	// House west wall 
+	for (int y = sy - 30; y < sy; y++)
+	{
+		placeTile(sx, y, 0, 768, false, false);
+	}
+
+	// House north wall
+	for (int x = sx + 1; x < sx + 25; x++)
+	{
+		placeTile(x, sy - 30, 0, 768, false, false);
+	}
+
+	// House east wall 
+	for (int y = sy - 30; y < sy; y++)
+	{
+		placeTile(sx + 24, y, 0, 768, false, false);
+	}
+
+	// House south wall
+	for (int x = sx; x < sx + 25; x++)
+	{
+		placeTile(x, sy, 0, 768, false, false);
+	}
+
+	// SECOND LEVEL
+
+	// House west wall 
+	for (int y = sy - 31; y < sy; y++)
+	{
+		placeTile(sx-1, y, 0, 768, true, false);
+	}
+
+	// House north wall
+	for (int x = sx; x < sx + 24; x++)
+	{
+		placeTile(x, sy - 31, 0, 768, true, false);
+	}
+
+	// House east wall 
+	for (int y = sy - 31; y < sy; y++)
+	{
+		placeTile(sx + 23, y, 0, 768, true, false);
+	}
+
+	// House south wall
+	for (int x = sx - 1; x < sx + 24; x++)
+	{
+		placeTile(x, sy - 1, 0, 768, true, false);
+	}
+
+	// THIRD LEVEL
+
+	// House west wall 
+	for (int y = sy - 32; y < sy - 1; y++)
+	{
+		placeTile(sx - 2, y, 0, 768, true, false);
+	}
+
+	// House north wall
+	for (int x = sx - 1; x < sx + 23; x++)
+	{
+		placeTile(x, sy - 32, 0, 768, true, false);
+	}
+
+	// House east wall 
+	for (int y = sy - 32; y < sy - 1; y++)
+	{
+		placeTile(sx + 22, y, 0, 768, true, false);
+	}
+
+	// House south wall
+	for (int x = sx - 2; x < sx + 23; x++)
+	{
+		placeTile(x, sy - 2, 0, 768, true, false);
+	}
+
+	// FOURTH LEVEL
+
+	// House west wall 
+	for (int y = sy - 33; y < sy - 1; y++)
+	{
+		if (y % 2 == 0) {
+			placeTile(sx - 3, y, 0, 832, true, false);
+		}
+	}
+
+	// House north wall
+	for (int x = sx - 1; x < sx + 22; x++)
+	{
+		if (x % 2 == 1) {
+			placeTile(x, sy - 33, 0, 768, true, false);
+		}
+	}
+
+	// House east wall 
+	for (int y = sy - 32; y < sy - 1; y++)
+	{
+		if (y % 2 == 0) {
+			placeTile(sx + 21, y, 0, 768, true, false);
+		}
+	}
+
+	// House south wall
+	for (int x = sx - 2; x < sx + 23; x++)
+	{
+		if (x % 2 == 1) {
+			placeTile(x, sy - 3, 0, 768, true, false);
+		}
+	}
+
 }
 
 void Chunk::CreateEntity(String type, int x, int y) {

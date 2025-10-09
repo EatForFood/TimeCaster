@@ -74,6 +74,10 @@ public:
 	void clearChunk();
 
 	void placeHouse1(int x, int y);
+	void placeHouse2(int x, int y);
+	void placeHouse3(int x, int y);
+	void placeHouse4(int x, int y);
+	void placeCastle(int x, int y);
 
 	void createForest(int numTrees, int worldWidth, int worldHeight);
 	void createBurntForest(int numTrees, int chunkWidth, int chunkHeight);
