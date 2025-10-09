@@ -62,9 +62,9 @@ float Character::getY()
 	return m_Position.y - 64;
 }
 
-void Character::setSpriteFromSheet(sf::IntRect textureBox) // set sprite
+void Character::setSpriteFromSheet(sf::IntRect textureBox, int tileSize) // set sprite
 {
-	int tile_size = 64;
+	int tile_size = tileSize;
 	sheetCoordinate = sf::Vector2i(textureBox.left, textureBox.top);
 	spriteSize = sf::Vector2i(tile_size, tile_size);
 	if (textureBox.width > tile_size)

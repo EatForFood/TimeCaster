@@ -106,7 +106,7 @@ public:
 
 	//void virtual update(float elapsedTime);
 	//setSprite to use correct animation cell
-	void setSpriteFromSheet(IntRect textureBox);
+	void setSpriteFromSheet(IntRect textureBox, int tileSize);
 
 	Sprite getPants();
 	Sprite getHead();

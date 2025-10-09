@@ -43,7 +43,7 @@ void Enemy::spawn(IntRect arena, Vector2f resolution, int tileSize, String type,
 	}
 	else if (type == "Goblin") {
 		// Associate a texture with the sprite
-		m_Sprite = Sprite(TextureHolder::GetTexture("graphics/swordGoblin.png"));
+		m_Sprite = Sprite(TextureHolder::GetTexture("graphics/Enemies/swordGoblin.png"));
 		
 		// Set the origin of the sprite to the centre, 
 		m_Sprite.setOrigin(32, 32);
@@ -175,22 +175,22 @@ void Enemy::update(float elapsedTime, vector<NavBox> navBox) {
 	{
 		if (direction == Vector2f(0, -1)) // up
 		{
-			setSpriteFromSheet(IntRect(0, 0, 576, 64));
+			setSpriteFromSheet(IntRect(0, 0, 576, 64), 65);
 		}
 
 		if (direction == Vector2f(0, 1)) // down
 		{
-			setSpriteFromSheet(IntRect(0, 128, 576, 64));
+			setSpriteFromSheet(IntRect(0, 128, 576, 64), 65);
 		}
 
 		if (direction == Vector2f(-1, 0)) // right
 		{
-			setSpriteFromSheet(IntRect(0, 192, 576, 64));
+			setSpriteFromSheet(IntRect(0, 192, 576, 64), 65);
 		}
 
 		if (direction == Vector2f(1, 0)) // left
 		{
-			setSpriteFromSheet(IntRect(0, 64, 576, 64));
+			setSpriteFromSheet(IntRect(0, 64, 576, 64), 65);
 		}
 	}
 
@@ -198,7 +198,7 @@ void Enemy::update(float elapsedTime, vector<NavBox> navBox) {
 	{
 		m_PositionLast = m_Position;
 		m_Position.y -= m_Speed * elapsedTime;
-		setSpriteFromSheet(IntRect(0, 128, 448, 64));
+		setSpriteFromSheet(IntRect(0, 128, 448, 62), 65);
 		direction = Vector2f(0, 1);
 	}
 
@@ -216,7 +216,7 @@ void Enemy::update(float elapsedTime, vector<NavBox> navBox) {
 	{
 		m_PositionLast = m_Position;
 		m_Position.y += m_Speed * elapsedTime;
-		setSpriteFromSheet(IntRect(0, 0, 448, 64)); // set sprite depending on direction
+		setSpriteFromSheet(IntRect(0, 0, 448, 62), 65); // set sprite depending on direction
 		direction = Vector2f(0, -1);
 	}
 
@@ -234,7 +234,7 @@ void Enemy::update(float elapsedTime, vector<NavBox> navBox) {
 	{
 		m_PositionLast = m_Position;
 		m_Position.x += m_Speed * elapsedTime;
-		setSpriteFromSheet(IntRect(0, 64, 448, 64));
+		setSpriteFromSheet(IntRect(0, 64, 448, 62), 65);
 		direction = Vector2f(1, 0);
 	}
 
@@ -252,7 +252,7 @@ void Enemy::update(float elapsedTime, vector<NavBox> navBox) {
 	{
 		m_PositionLast = m_Position;
 		m_Position.x -= m_Speed * elapsedTime;
-		setSpriteFromSheet(IntRect(0, 192, 448, 64));
+		setSpriteFromSheet(IntRect(0, 192, 576, 64), 65);
 		direction = Vector2f(-1, 0);
 	}
 
