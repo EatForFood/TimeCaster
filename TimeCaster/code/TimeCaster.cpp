@@ -891,6 +891,12 @@ int main()
 				{
 					sound.playButtonClickSound();
 					world.clearWorld();
+
+					float savedVolume = track.getPosition().x + track.getSize().x * (player.getVolume() / 100.0f);
+						handle.setPosition(savedVolume, handle.getPosition().y);
+						
+				// Map handle position to global volume
+			
 					state = State::OPTIONS_MENU;
 				}
 
