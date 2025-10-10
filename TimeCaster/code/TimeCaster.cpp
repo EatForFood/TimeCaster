@@ -46,12 +46,12 @@ void moveDraggedIcon(RectangleShape* draggedIcon, Vector2f mousePos)
 }
 
 int main()
-{	
+{
 	CollisionDetection collision;
 
 	// Here is the instance of TextureHolder
 	TextureHolder holder;
-	
+
 	// Start with the MAIN_MENU state
 	State state = State::MAIN_MENU;
 
@@ -66,8 +66,10 @@ int main()
 	bool displayFps;
 	bool draggingItem = true;
 
-
-
+	float itemLastX = 0;
+	float itemLastY = 0;
+	int itemLastIndex = -1;
+	bool itemPlaced = false;
 
 	player.loadConfigFile();
 
@@ -84,15 +86,15 @@ int main()
 	resolution.y = 1080;
 
 	//RenderWindow window(VideoMode(resolution.x, resolution.y), "TimeCaster", Style::Fullscreen);
-	
+
 	RenderWindow window;
 
 	if (windowedMode == true)
 	{
-		 window.create(VideoMode(resolution.x, resolution.y), "TimeCaster", Style::Default);
+		window.create(VideoMode(resolution.x, resolution.y), "TimeCaster", Style::Default);
 	}
-	else 	{
-		 window.create(VideoMode(resolution.x, resolution.y), "TimeCaster", Style::Fullscreen);
+	else {
+		window.create(VideoMode(resolution.x, resolution.y), "TimeCaster", Style::Fullscreen);
 	}
 
 	// Create a an SFML View for the main action
@@ -119,7 +121,7 @@ int main()
 
 	// Colour filter 
 	RectangleShape filter;
-	filter.setSize(Vector2f(1920,1080));
+	filter.setSize(Vector2f(1920, 1080));
 	filter.setFillColor(Color(199, 56, 20, 40));
 
 	player.loadConfigFile();
@@ -155,7 +157,7 @@ int main()
 
 	// Boolean for whether to display the fps
 //	bool displayFps = false;
-	
+
 	// When was the fire button last pressed?
 	Time lastPressed;
 
@@ -169,7 +171,7 @@ int main()
 	Texture textureCursorOpen = TextureHolder::GetTexture("graphics/knightCursorOpen.png");
 	Texture textureCursorClosed = TextureHolder::GetTexture("graphics/knightCursorClosed.png");
 	spriteCursor.setTexture(textureCursorOpen);
-	spriteCursor.setScale(0.4,0.4);
+	spriteCursor.setScale(0.4, 0.4);
 	spriteCursor.setOrigin(25, 25);
 
 	// Create a couple of pickups
@@ -272,7 +274,7 @@ int main()
 	textBounds = mainHeadingText.getLocalBounds();
 	viewCentre = mainView.getCenter();
 	mainHeadingText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 10);
-	
+
 	// New game button
 	RectangleShape newGameButton;
 	newGameButton.setPosition(200, 210);
@@ -332,7 +334,7 @@ int main()
 	/**************
 	Options Menu UI
 	***************/
-	
+
 	// Options heading text
 	Text optionsHeadingText("Options", font, fontSize + 15);
 	optionsHeadingText.setFillColor(Color::White);
@@ -496,10 +498,10 @@ int main()
 	Texture& texturePlayerInFrame = TextureHolder::GetTexture("graphics/UI/player.png");
 	Texture& textureNeckFrame = TextureHolder::GetTexture("graphics/UI/neckFrame.png");
 	Texture& textureRingFrame = TextureHolder::GetTexture("graphics/UI/ringFrame.png");
-	
+
 	Texture& textureItems = TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png");
 
-	
+
 
 	// Player frame
 	RectangleShape playerFrame;
@@ -509,7 +511,7 @@ int main()
 	playerFrame.setPosition(viewCentre.x - 200, 400);
 
 	RectangleShape equippedWeaponIcon;
-	
+
 	equippedWeaponIcon.setTexture(&textureItems);
 	//equippedWeaponIcon.setTextureRect(player.getEquippedWeaponIcon());
 	equippedWeaponIcon.setSize(Vector2f(75, 75));
@@ -580,9 +582,17 @@ int main()
 		startX += 100;
 	}
 
+	int storedItem[16];
+	for (int i = 0; i < sizeof(storedItem) / sizeof(storedItem[0]); i++) {
+		storedItem[i] = 1; // 0 is for no items, every other number is a different item
+		// TODO: link these numbers to actual items, for now every slot is filled with item 1 (starting sword)
+
+		//in the future we'll probably load this from a save file, but for now slots are manually filled
+	}
+
 	RectangleShape itemIcon[16];
-	 startX = viewCentre.x - 300;
-	 startY = 650;
+	startX = viewCentre.x - 300;
+	startY = 650;
 	for (int i = 0; i < sizeof(itemIcon) / sizeof(itemIcon[0]); i++) {
 		itemIcon[i].setTexture(&textureItems);
 		itemIcon[i].setTextureRect(sf::IntRect(961, 896, 32, 32)); // default to this until we expand the weapon/item features
@@ -595,6 +605,9 @@ int main()
 		itemIcon[i].setPosition(startX, startY);
 		startX += 100;
 	}
+
+	itemIcon[0].setPosition(9999, 9999); //move the first one so we have an empty slot to start with
+	storedItem[0] = 0; //empty slot
 
 
 	RectangleShape* clickedShape = nullptr;
@@ -1194,7 +1207,7 @@ int main()
 
 			// Make a decimal fraction of 1 from the delta time
 			float dtAsSeconds = dt.asSeconds();
-			
+
 			// Where is the mouse pointer
 			mouseScreenPosition = Mouse::getPosition();
 
@@ -1216,7 +1229,7 @@ int main()
 					enemy.setChunk(i);
 				}
 			}
-			
+
 			if (!drawInventory && state == State::PLAYING) {
 				// Update the player
 				player.update(dtAsSeconds, Mouse::getPosition(), world.getNavBoxes(player.getChunk()));
@@ -1230,8 +1243,8 @@ int main()
 			Vector2f playerPosition(player.getCenter());
 
 			// Make the view centre around the player				
-			mainView.setCenter(player.getCenter().x,player.getCenter().y-10);
-			
+			mainView.setCenter(player.getCenter().x, player.getCenter().y - 10);
+
 			/*
 			// Update any bullets that are in-flight
 			for (int i = 0; i < 100; i++)
@@ -1247,58 +1260,88 @@ int main()
 			if (drawInventory)
 			{
 
+				/*	if (equippedWeaponIcon.getGlobalBounds().contains(worldPos) && Mouse::isButtonPressed(Mouse::Left) && !draggingItem)
+					{
 
-				
-				if (equippedWeaponIcon.getGlobalBounds().contains(worldPos) && Mouse::isButtonPressed(Mouse::Left) && !draggingItem)
-				{
+						itemLastX = equippedWeaponIcon.getPosition().x;
+						itemLastY = equippedWeaponIcon.getPosition().y;
+						clickedShape = &equippedWeaponIcon;
 
-					//float x = static_cast<float>(worldPos.x);
-					//float y = static_cast<float>(worldPos.y);
-					//equippedWeaponIcon.setPosition(x - 30, y - 30);
 
-					clickedShape = &equippedWeaponIcon;
-
-					//moveDraggedIcon(equippedWeaponIcon, worldPos);
-
-					draggingItem = true;
-				}
+						draggingItem = true;
+						itemPlaced = false;
+					} */ //equipped weapon will use different logic in the future
 
 				for (int i = 0; i < sizeof(itemIcon) / sizeof(itemIcon[0]); i++) {
 
+					// player clicked on an item icon and is not already dragging something
 					if (itemIcon[i].getGlobalBounds().contains(worldPos) && Mouse::isButtonPressed(Mouse::Left) && !draggingItem)
 					{
-						
-						clickedShape = &itemIcon[i];
+		
+						for (int j = 0; j < sizeof(emptyFrames) / sizeof(emptyFrames[0]); j++) {
 
-						//float x = static_cast<float>(worldPos.x);
-						//float y = static_cast<float>(worldPos.y);
-						//itemIcon[i].setPosition(x - 30, y - 30);
+							// checks if item grabbed is in an item slot, if so remove it from that slot
+							if (itemIcon[i].getGlobalBounds().intersects(emptyFrames[j].getGlobalBounds()) && storedItem[j] != 0)
+							{
+								storedItem[j] = 0;
+								itemLastIndex = j;  //remove item from slot while dragging and save index in case we need to put it back
+								cout << "this index was set to 0: " << j << endl;
 
-					//	moveDraggedIcon(itemIcon[i], worldPos);
+								itemLastX = itemIcon[i].getPosition().x;
+								itemLastY = itemIcon[i].getPosition().y;
+								clickedShape = &itemIcon[i];
 
-						draggingItem = true;
-					}
-				}
+							}
 
-				if (draggingItem && clickedShape != NULL)
-				{
-					
-					moveDraggedIcon(clickedShape, worldPos);
-				}
-
-				if (draggingItem && !Mouse::isButtonPressed(Mouse::Left))
-				{
-					draggingItem = false;
-				}
-
-
+						}
+						//more logic for grabbing items from other places will go here in the future
 
 
 		
-			
+						
 
+							draggingItem = true;
 
+							itemPlaced = false;
+						
+					}
+
+					if (draggingItem && clickedShape != NULL)
+					{
+
+						moveDraggedIcon(clickedShape, worldPos);
+					}
+
+					if (draggingItem && !Mouse::isButtonPressed(Mouse::Left))
+					{
+						if (clickedShape != NULL)
+						{
+							for (int i = 0; i < sizeof(emptyFrames) / sizeof(emptyFrames[0]); i++) {
+
+								if (clickedShape->getGlobalBounds().intersects(emptyFrames[i].getGlobalBounds()) && storedItem[i] == 0)
+								{
+									clickedShape->setPosition(emptyFrames[i].getPosition());
+									itemPlaced = true;
+									storedItem[i] = 1; //in future link to actual item
+								}
+
+							}
+
+							if (!itemPlaced)
+							{
+
+								clickedShape->setPosition(itemLastX, itemLastY);
+								storedItem[itemLastIndex] = 1; //put item back in original slot
+								cout << "this index was set to 1: " << itemLastIndex << endl;
+								itemPlaced = true;
+
+							}
+						}
+						draggingItem = false;
+					}
+				}
 			}
+		
 
 			// Update the pickups
 			healthPickup.update(dtAsSeconds);
