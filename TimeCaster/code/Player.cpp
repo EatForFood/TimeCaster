@@ -479,13 +479,13 @@ bool Player::loadConfigFile()
 }
 
 //remember to pass in all player stats to be saved
-void Player::updateSaveFile(float currentSpeed, float currentHealth, float maxHealth, float currentStamina, float maxStamina, float staminaRecharge, float currentMana, float maxMana, int gold, int kills, int playerLevel, int equippedWeapon, int savedSword, int savedWand, Vector2f position)
+void Player::updateSaveFile()
 {	
 	std::ofstream saveFile("gamedata/TCSave.txt");
 
-	saveFile << std::fixed << std::setprecision(5) << currentSpeed << " " << currentHealth << " " << maxHealth << " " << currentStamina << " "
-	<< maxStamina << " " << staminaRecharge << " " << currentMana << " " << maxMana << " " << gold << " " << kills << " " << playerLevel << " "
-	<< equippedWeapon << " " << savedSword << " " << savedWand << " " << position.x << " " << position.y << std::endl;
+	saveFile << std::fixed << std::setprecision(5) << m_Speed << " " << m_Health << " " << m_MaxHealth << " " << m_Stamina << " "
+	<< m_MaxStamina << " " << m_StaminaRecharge << " " << m_Mana << " " << m_MaxMana << " " << m_Gold << " " << m_Kills << " " << m_Level << " "
+	<< m_EquippedWeapon << " " << m_SavedSword << " " << m_SavedWand << " " << m_Position.x << " " << m_Position.y << std::endl;
 
 	saveFile.close();
 }

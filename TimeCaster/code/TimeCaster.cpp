@@ -963,7 +963,7 @@ int main()
 				{
 					sound.playButtonClickSound();
 					world.clearWorld();
-					player.updateSaveFile(player.getSpeed(), player.getHealth(), player.getMaxHealth(), player.getStamina(), player.getMaxStamina(), player.getStaminaRecharge(), player.getMana(), player.getMaxMana(), player.getGold(), player.getKillCount(), player.getPlayerLevel(), player.getEquippedWeapon(), player.getSavedSword(), player.getSavedWand(), player.getPosition());
+					player.updateSaveFile();
 					state = State::MAIN_MENU;
 				}
 
