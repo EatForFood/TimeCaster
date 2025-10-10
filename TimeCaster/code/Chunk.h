@@ -79,7 +79,7 @@ public:
 	void placeHouse4(int x, int y);
 	void placeCastle(int x, int y);
 
-	void createForest(int numTrees, int worldWidth, int worldHeight);
-	void createBurntForest(int numTrees, int chunkWidth, int chunkHeight);
+	void createForest();
+	void createBurntForest();
 
 };

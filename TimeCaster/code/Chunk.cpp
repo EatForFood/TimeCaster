@@ -1,4 +1,4 @@
-#include <SFML/Graphics.hpp>
+﻿#include <SFML/Graphics.hpp>
 #include "TimeCaster.h"
 #include "Entity.h"
 #include "Chunk.h"
@@ -47,10 +47,10 @@ Chunk::Chunk(String type, Vector2f chunk, bool load)
 
 		if (m_Type == "spawn")
 		{
-			placeHouse1(15, 15);
-			placeHouse2(23, 15);
-			placeHouse3(15, 23);
-			placeHouse4(23, 23);
+			placeHouse4(13, 11);
+			placeHouse3(23, 10);
+			placeHouse2(13, 23);
+			placeHouse1(23, 26);
 			placeCastle(10, 35);
 		}
 	}
@@ -58,31 +58,73 @@ Chunk::Chunk(String type, Vector2f chunk, bool load)
 	{
 		if (m_Type == "spawn") { // create spawn chunk
 
-			/*
-		debug = false;
-		debugFont.loadFromFile("fonts/dogica.ttf");
-		*/
-
-		// Grass 
+			// Grass 
 			for (int x = 0; x < 50; x++)
 			{
 				for (int y = 0; y < 50; y++)
 				{
-					int chance = rand() % 2500;
+					if (x > 9 && x < 35 && y > 4 && y < 35) // create mud inside castle
+					{
+						int chance = rand() % 5;
 
-					if (chance <= 1200) // 10% chance to spawn tree
-					{
-						placeTile(x, y, 0, 0, false, true);
+						if (chance <= 2)
+						{
+							placeTile(x, y, 7, 0, false, true);
+						}
+						else
+						{
+							placeTile(x, y, 8, 0, false, true);
+						}
 					}
-					else if (chance <= 2400) // 10% chance to spawn bush
+					else if (x > 7 && x < 38 && y > 2 && y < 37) // create grass that trees cant spawn on 
 					{
-						placeTile(x, y, 64, 0, false, true);
-					}
-					else if (chance <= 2500) // 10% chance to spawn big tree
-					{
-						placeTile(x, y, 384, 0, false, true);
-					}
 
+						int chance = rand() % 5;
+
+						if (chance <= 2)
+						{
+							placeTile(x, y, 4, 2, false, true);
+						}
+						else
+						{
+							placeTile(x, y, 5, 2, false, true);
+						}
+
+					}
+					else
+					{
+						int chance = rand() % 2500; // use random grass tiles to give ground some texture
+
+						if (chance <= 1200)
+						{
+							placeTile(x, y, 0, 0, false, true);
+						}
+						else if (chance <= 2400)
+						{
+							placeTile(x, y, 1, 0, false, true);
+						}
+						else if (chance <= 2500)
+						{
+							placeTile(x, y, 6, 0, false, true);
+						}
+					}
+				}
+			}
+
+			for (int x = 10; x < 35; x++) // create road with pavestones
+			{
+				for (int y = 15; y < 18; y++)
+				{
+					int chance = rand() % 5;
+
+					if (chance <= 2)
+					{
+						placeTile(x, y, 8, 1, false, false);
+					}
+					else
+					{
+						placeTile(x, y, 9, 1, false, false);
+					}
 				}
 			}
 
@@ -92,17 +134,19 @@ Chunk::Chunk(String type, Vector2f chunk, bool load)
 				for (int y = 0; y < 50; y++)
 				{
 
-					placeTile(x, y, 256, 128, true, true);
+					placeTile(x, y, 6, 2, true, true);
 
 				}
 			}
 
-			placeHouse1(15, 15);
-			placeHouse2(23, 15);
-			placeHouse3(15, 23);
-			placeHouse4(23, 23);
+			placeHouse4(13, 11);
+			placeHouse3(23, 10);
+			placeHouse2(13, 23);
+			placeHouse1(23, 26);
 			placeCastle(10, 35);
 
+
+			createForest(); // create a forest
 		}
 
 		if (m_Type == "grass") {
@@ -115,15 +159,15 @@ Chunk::Chunk(String type, Vector2f chunk, bool load)
 
 					int chance = rand() % 2500;
 
-					if (chance <= 1200) // 10% chance to spawn tree
+					if (chance <= 1200)
 					{
 						placeTile(x, y, 0, 0, false, true);
 					}
-					else if (chance <= 2400) // 10% chance to spawn bush
+					else if (chance <= 2400)
 					{
 						placeTile(x, y, 64, 0, false, true);
 					}
-					else if (chance <= 2500) // 10% chance to spawn big tree
+					else if (chance <= 2500)
 					{
 						placeTile(x, y, 384, 0, false, true);
 					}
@@ -137,7 +181,7 @@ Chunk::Chunk(String type, Vector2f chunk, bool load)
 				for (int y = 0; y < 50; y++)
 				{
 
-					placeTile(x, y, 256, 128, true, true);
+					placeTile(x, y, 6, 2, true, true);
 
 				}
 			}
@@ -152,17 +196,17 @@ Chunk::Chunk(String type, Vector2f chunk, bool load)
 				{
 					int chance = rand() % 2500;
 
-					if (chance <= 1200) // 10% chance to spawn tree
+					if (chance <= 1200)
 					{
 						placeTile(x, y, 0, 0, false, true);
 					}
-					else if (chance <= 2400) // 10% chance to spawn bush
+					else if (chance <= 2400)
 					{
-						placeTile(x, y, 64, 0, false, true);
+						placeTile(x, y, 1, 0, false, true);
 					}
-					else if (chance <= 2500) // 10% chance to spawn big tree
+					else if (chance <= 2500)
 					{
-						placeTile(x, y, 384, 0, false, true);
+						placeTile(x, y, 6, 0, false, true);
 					}
 				}
 			}
@@ -173,12 +217,12 @@ Chunk::Chunk(String type, Vector2f chunk, bool load)
 				for (int y = 0; y < 50; y++)
 				{
 
-					placeTile(x, y, 256, 128, true, true);
+					placeTile(x, y, 6, 2, true, true);
 
 				}
 			}
 
-			createForest(300, 50, 50);
+			createForest(); // create a forest
 		}
 
 		if (m_Type == "scorchedForest") {
@@ -200,12 +244,12 @@ Chunk::Chunk(String type, Vector2f chunk, bool load)
 				for (int y = 0; y < 50; y++)
 				{
 
-					placeTile(x, y, 256, 128, true, true);
+					placeTile(x, y, 6, 2, true, true);
 
 				}
 			}
 
-			createBurntForest(300, 50, 50);
+			createBurntForest();
 		}
 
 		saveChunk();
@@ -222,13 +266,15 @@ void Chunk::placeTile(int x, int y, int texX, int texY, bool forGround, bool sav
 	{
 		if (forGround)
 		{
-			m_TileTypeFGround[x][y] = Vector2i(texX / TILE_SIZE, texY / TILE_SIZE);
+			m_TileTypeFGround[x][y] = Vector2i(texX, texY);
 		}
 		else
 		{
-			m_TileType[x][y] = Vector2i(texX / TILE_SIZE, texY / TILE_SIZE);
+			m_TileType[x][y] = Vector2i(texX, texY);
 		}
 	}
+	texX *= TILE_SIZE;
+	texY *= TILE_SIZE;
 
 	// Cartesian to isometric
 	x += offset.x;
@@ -291,11 +337,11 @@ void Chunk::placeHouse1(int sx, int sy) { // sx 15, sy 18
 	{
 		if (x == sx + 2)
 		{
-			placeTile(x, sy, 320, 896, false, false); // door
+			placeTile(x, sy, 5, 14, false, false); // door
 		}
 		else
 		{
-			placeTile(x, sy, 64, 896, false, false);
+			placeTile(x, sy, 1, 14, false, false);
 		}
 
 	}
@@ -303,29 +349,29 @@ void Chunk::placeHouse1(int sx, int sy) { // sx 15, sy 18
 	// House east wall 
 	for (int y = sy - 3; y < sy + 1; y++)
 	{
-		placeTile(sx + 4, y, 64, 896, false, false);
+		placeTile(sx + 4, y, 1, 14, false, false);
 	}
 
 	// House 2nd floor east wall
 	for (int y = sy - 3; y < sy - 1; y++)
 	{
-		placeTile(sx + 3, y, 512, 1216, true, false);
+		placeTile(sx + 3, y, 8, 19, true, false);
 	}
 
 	// House east roof
-	placeTile(sx + 2, sy - 4, 448, 832, true, false);
-	placeTile(sx + 3, sy - 4, 448, 832, true, false);
+	placeTile(sx + 2, sy - 4, 7, 13, true, false);
+	placeTile(sx + 3, sy - 4, 7, 13, true, false);
 
 	// House west roof 1
 	for (int x = sx - 1; x < sx + 4; x++)
 	{
-		placeTile(x, sy - 1, 64, 832, true, false);
+		placeTile(x, sy - 1, 1, 13, true, false);
 	}
 
 	// House west roof 2
 	for (int x = sx - 2; x < sx + 3; x++)
 	{
-		placeTile(x, sy - 3, 64, 832, true, false);
+		placeTile(x, sy - 3, 1, 13, true, false);
 	}
 
 
@@ -337,8 +383,8 @@ void Chunk::placeHouse2(int sx, int sy) { // sx 15, sy 18
 
 	// House west wall
 	for (int x = sx; x < sx + 2; x++)
-	{	
-		placeTile(x, sy, 64, 896, false, false);
+	{
+		placeTile(x, sy, 1, 14, false, false);
 	}
 
 	// House east wall 
@@ -346,19 +392,19 @@ void Chunk::placeHouse2(int sx, int sy) { // sx 15, sy 18
 	{
 		if (y == sy - 1)
 		{
-			placeTile(sx + 1, y, 256, 896, false, false);
+			placeTile(sx + 1, y, 4, 14, false, false);
 		}
 		else
 		{
-			placeTile(sx + 1, y, 64, 896, false, false);
+			placeTile(sx + 1, y, 1, 14, false, false);
 		}
 	}
 	// roof
-	placeTile(sx - 1, sy  -1, 320, 832, true, false);
+	placeTile(sx - 1, sy - 1, 5, 13, true, false);
 
 	for (int y = sy - 3; y < sy; y++)
 	{
-		placeTile(sx, y, 128, 832, true, false);
+		placeTile(sx, y, 2, 13, true, false);
 	}
 
 	NavBox navbox(sx + 1, sy - 2, 2, 3);
@@ -372,26 +418,26 @@ void Chunk::placeHouse3(int sx, int sy) { // sx 15, sy 18
 	{
 		if (x == sx + 1)
 		{
-			placeTile(x, sy, 320, 896, false, false); // door
+			placeTile(x, sy, 5, 14, false, false); // door
 		}
 		else
 		{
-			placeTile(x, sy, 64, 896, false, false);
+			placeTile(x, sy, 1, 14, false, false);
 		}
 	}
 
 	// House east wall 
 	for (int y = sy - 1; y < sy + 1; y++)
 	{
-		placeTile(sx + 2, y, 64, 896, false, false);	
+		placeTile(sx + 2, y, 1, 14, false, false);
 	}
 
-	placeTile(sx + 1, sy - 2, 448, 832, true, false);
+	placeTile(sx + 1, sy - 2, 7, 13, true, false);
 
 	// roof
 	for (int x = sx - 1; x < sx + 2; x++)
 	{
-		placeTile(x, sy - 1, 64, 832, true, false);
+		placeTile(x, sy - 1, 1, 13, true, false);
 	}
 
 	NavBox navbox(sx + 1, sy - 1, 3, 2);
@@ -403,7 +449,7 @@ void Chunk::placeHouse4(int sx, int sy) { // sx 15, sy 18
 	// House west wall
 	for (int x = sx; x < sx + 2; x++)
 	{
-		placeTile(x, sy, 64, 896, false, false);
+		placeTile(x, sy, 1, 14, false, false);
 	}
 
 	// House east wall 
@@ -411,11 +457,11 @@ void Chunk::placeHouse4(int sx, int sy) { // sx 15, sy 18
 	{
 		if (y == sy - 1)
 		{
-			placeTile(sx + 1, y, 256, 896, false, false);
+			placeTile(sx + 1, y, 4, 14, false, false);
 		}
 		else
 		{
-			placeTile(sx + 1, y, 64, 896, false, false);
+			placeTile(sx + 1, y, 1, 14, false, false);
 		}
 	}
 
@@ -424,36 +470,36 @@ void Chunk::placeHouse4(int sx, int sy) { // sx 15, sy 18
 	{
 		if (x == sx + 3)
 		{
-			placeTile(x, sy - 2, 448, 896, false, false);
+			placeTile(x, sy - 2, 7, 14, false, false);
 		}
 		else
 		{
-			placeTile(x, sy - 2, 64, 896, false, false);
+			placeTile(x, sy - 2, 1, 14, false, false);
 		}
 	}
 
 	// House east wall  2
 	for (int y = sy - 3; y < sy - 1; y++)
 	{
-		placeTile(sx + 4, y, 64, 896, false, false);
+		placeTile(sx + 4, y, 1, 14, false, false); // 64/64 = 1, 896/64 = 14
 	}
 
-	placeTile(sx + 3, sy - 4, 448, 832, true, false);
+	placeTile(sx + 3, sy - 4, 7, 13, true, false); // 448/64 = 7, 832/64 = 13
 
 	// roof
-	placeTile(sx - 1, sy - 1, 320, 832, true, false);
+	placeTile(sx - 1, sy - 1, 5, 13, true, false); // 320/64 = 5, 832/64 = 13
 
-	placeTile(sx, sy - 3, 576, 832, true, false); // corner piece
+	placeTile(sx, sy - 3, 9, 13, true, false);     // 576/64 = 9, 832/64 = 13 (corner piece)
 
 	for (int y = sy - 2; y < sy; y++)
 	{
-		placeTile(sx, y, 128, 832, true, false);
+		placeTile(sx, y, 2, 13, true, false);      // 128/64 = 2, 832/64 = 13
 	}
 
 	// roof
 	for (int x = sx + 1; x < sx + 4; x++)
 	{
-		placeTile(x, sy - 3, 64, 832, true, false);
+		placeTile(x, sy - 3, 1, 13, true, false);  // 64/64 = 1, 832/64 = 13
 	}
 
 
@@ -468,54 +514,85 @@ void Chunk::placeCastle(int sx, int sy) { // sx 15, sy 18
 
 	// FIRST LEVEL
 
-	// House west wall 
+// House west wall 
 	for (int y = sy - 30; y < sy; y++)
 	{
-		placeTile(sx, y, 0, 768, false, false);
+		if (y != 15 && y != 16 && y != 17)
+		{
+			placeTile(sx, y, 0, 12, false, false);
+		}
 	}
+
+	NavBox navboxW1(sx + 1, sy, 1, -17);
+	navBoxes.push_back(navboxW1);
+
+	NavBox navboxW2(sx + 1, sy - 20, 1, -10);
+	navBoxes.push_back(navboxW2);
 
 	// House north wall
 	for (int x = sx + 1; x < sx + 25; x++)
 	{
-		placeTile(x, sy - 30, 0, 768, false, false);
+		placeTile(x, sy - 30, 0, 12, false, false);
 	}
+
+	NavBox navboxN(sx + 1, sy - 30, 25, 1);
+	navBoxes.push_back(navboxN);
 
 	// House east wall 
 	for (int y = sy - 30; y < sy; y++)
 	{
-		placeTile(sx + 24, y, 0, 768, false, false);
+		if (y != 15 && y != 16 && y != 17)
+		{
+			placeTile(sx + 24, y, 0, 12, false, false);
+		}
 	}
+
+
+	NavBox navboxE1(sx + 25, sy, 1, -17);
+	navBoxes.push_back(navboxE1);
+
+	NavBox navboxE2(sx + 25, sy - 20, 1, -10);
+	navBoxes.push_back(navboxE2);
 
 	// House south wall
 	for (int x = sx; x < sx + 25; x++)
 	{
-		placeTile(x, sy, 0, 768, false, false);
+		placeTile(x, sy, 0, 12, false, false);
 	}
+
+	NavBox navboxS(sx + 1, sy, 25, 1);
+	navBoxes.push_back(navboxS);
 
 	// SECOND LEVEL
 
 	// House west wall 
 	for (int y = sy - 31; y < sy; y++)
 	{
-		placeTile(sx-1, y, 0, 768, true, false);
+		if (y != 14 && y != 15 && y != 16)
+		{
+			placeTile(sx - 1, y, 0, 12, true, false);
+		}
 	}
 
 	// House north wall
 	for (int x = sx; x < sx + 24; x++)
 	{
-		placeTile(x, sy - 31, 0, 768, true, false);
+		placeTile(x, sy - 31, 0, 12, true, false);
 	}
 
 	// House east wall 
 	for (int y = sy - 31; y < sy; y++)
 	{
-		placeTile(sx + 23, y, 0, 768, true, false);
+		if (y != 14 && y != 15 && y != 16)
+		{
+			placeTile(sx + 23, y, 0, 12, true, false);
+		}
 	}
 
 	// House south wall
 	for (int x = sx - 1; x < sx + 24; x++)
 	{
-		placeTile(x, sy - 1, 0, 768, true, false);
+		placeTile(x, sy - 1, 0, 12, true, false);
 	}
 
 	// THIRD LEVEL
@@ -523,25 +600,25 @@ void Chunk::placeCastle(int sx, int sy) { // sx 15, sy 18
 	// House west wall 
 	for (int y = sy - 32; y < sy - 1; y++)
 	{
-		placeTile(sx - 2, y, 0, 768, true, false);
+		placeTile(sx - 2, y, 0, 12, true, false);
 	}
 
 	// House north wall
 	for (int x = sx - 1; x < sx + 23; x++)
 	{
-		placeTile(x, sy - 32, 0, 768, true, false);
+		placeTile(x, sy - 32, 0, 12, true, false);
 	}
 
 	// House east wall 
 	for (int y = sy - 32; y < sy - 1; y++)
 	{
-		placeTile(sx + 22, y, 0, 768, true, false);
+		placeTile(sx + 22, y, 0, 12, true, false);
 	}
 
 	// House south wall
 	for (int x = sx - 2; x < sx + 23; x++)
 	{
-		placeTile(x, sy - 2, 0, 768, true, false);
+		placeTile(x, sy - 2, 0, 12, true, false);
 	}
 
 	// FOURTH LEVEL
@@ -550,7 +627,7 @@ void Chunk::placeCastle(int sx, int sy) { // sx 15, sy 18
 	for (int y = sy - 33; y < sy - 1; y++)
 	{
 		if (y % 2 == 0) {
-			placeTile(sx - 3, y, 0, 832, true, false);
+			placeTile(sx - 3, y, 0, 13, true, false); // 832 → 13
 		}
 	}
 
@@ -558,7 +635,7 @@ void Chunk::placeCastle(int sx, int sy) { // sx 15, sy 18
 	for (int x = sx - 1; x < sx + 22; x++)
 	{
 		if (x % 2 == 1) {
-			placeTile(x, sy - 33, 0, 768, true, false);
+			placeTile(x, sy - 33, 0, 13, true, false);
 		}
 	}
 
@@ -566,7 +643,7 @@ void Chunk::placeCastle(int sx, int sy) { // sx 15, sy 18
 	for (int y = sy - 32; y < sy - 1; y++)
 	{
 		if (y % 2 == 0) {
-			placeTile(sx + 21, y, 0, 768, true, false);
+			placeTile(sx + 21, y, 0, 13, true, false);
 		}
 	}
 
@@ -574,7 +651,7 @@ void Chunk::placeCastle(int sx, int sy) { // sx 15, sy 18
 	for (int x = sx - 2; x < sx + 23; x++)
 	{
 		if (x % 2 == 1) {
-			placeTile(x, sy - 3, 0, 768, true, false);
+			placeTile(x, sy - 3, 0, 13, true, false);
 		}
 	}
 
@@ -663,45 +740,48 @@ void Chunk::clearChunk() {
 
 }
 
-void Chunk::createForest(int numTrees, int chunkWidth, int chunkHeight) // create a forest from random tree entities
+void Chunk::createForest() // create a forest from random tree entities
 {
-	for (int i = 0; i < chunkWidth - 2; i++)
+	for (int i = 0; i < CHUNK_SIZE - 2; i++)
 	{
-		for (int j = 0; j < chunkHeight - 2; j++)
+		for (int j = 0; j < CHUNK_SIZE - 2; j++)
 		{
-			int chance = rand() % 2500;
+			if (m_TileType[i][j] == Vector2i(0, 0) || m_TileType[i][j] == Vector2i(1, 0)) // if ground is grass place trees + stuff
+			{
+				int chance = rand() % 2500;
 
-			if (chance <= 200) // 10% chance to spawn tree
-			{
-				int type = 1 + (gen() % 2);
-				string entity = "tree" + to_string(type);
-				CreateEntity(entity, i, j);
-			}
-			else if (chance <= 400) // 10% chance to spawn bush
-			{
-				int type = 1 + (gen() % 5);
-				string entity = "bush" + to_string(type);
-				CreateEntity(entity, i, j);
-			}
-			else if (chance <= 410) // 10% chance to spawn log
-			{
-				int type = 1 + (gen() % 2);
-				string entity = "log" + to_string(type);
-				CreateEntity(entity, i, j);
-			}
-			else if (chance == 500) // 10% chance to spawn big tree
-			{
-				CreateEntity("tree5", i, j);
+				if (chance <= 200) // 10% chance to spawn tree
+				{
+					int type = 1 + (gen() % 2);
+					string entity = "tree" + to_string(type);
+					CreateEntity(entity, i, j);
+				}
+				else if (chance <= 400) // 10% chance to spawn bush
+				{
+					int type = 1 + (gen() % 5);
+					string entity = "bush" + to_string(type);
+					CreateEntity(entity, i, j);
+				}
+				else if (chance <= 410) // 10% chance to spawn log
+				{
+					int type = 1 + (gen() % 2);
+					string entity = "log" + to_string(type);
+					CreateEntity(entity, i, j);
+				}
+				else if (chance == 500) // 10% chance to spawn big tree
+				{
+					CreateEntity("tree5", i, j);
+				}
 			}
 		}
 	}
 }
 
-void Chunk::createBurntForest(int numTrees, int chunkWidth, int chunkHeight) // create a forest from random tree entities
+void Chunk::createBurntForest() // create a forest from random tree entities
 {
-	for (int i = 0; i < chunkWidth - 2; i++)
+	for (int i = 0; i < CHUNK_SIZE - 2; i++)
 	{
-		for (int j = 0; j < chunkHeight - 2; j++)
+		for (int j = 0; j < CHUNK_SIZE - 2; j++)
 		{
 			int chance = rand() % 2500;
 
@@ -789,8 +869,8 @@ void Chunk::loadChunk() // load tile types and entities from file
 				m_TileEntity[x][y] = "";
 			}
 
-			placeTile(x, y, bgx * TILE_SIZE, bgy * TILE_SIZE, false, true);
-			placeTile(x, y, fgx * TILE_SIZE, fgy * TILE_SIZE, true, true);
+			placeTile(x, y, bgx, bgy, false, true);
+			placeTile(x, y, fgx, fgy, true, true);
 		}
 	}
 

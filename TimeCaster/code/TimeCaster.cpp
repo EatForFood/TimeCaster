@@ -1538,21 +1538,14 @@ int main()
 						if (player.getRenderArea().intersects(entity.getSprite().getGlobalBounds())) {
 							drawables.emplace_back(entity.getSprite().getGlobalBounds().top + entity.getSprite().getGlobalBounds().height, entity.getSprite());
 						}
-					}
-				}
-			}
 
-			for (int i = 0; i < world.getWorldSize(); i++)
-			{
-				if (collision.distance(enemy.getCenter(), world.getChunkCenter(i)) < 2000) {
-					for (auto& entity : world.getEntities(i)) {
-						if (enemy.getRenderArea().intersects(entity.getSprite().getGlobalBounds())) {
-							drawables.emplace_back(entity.getSprite().getGlobalBounds().top + entity.getSprite().getGlobalBounds().height, entity.getSprite());
+						if (player.getRenderArea().intersects(enemy.getSprite().getGlobalBounds())) {
+							drawables.emplace_back(enemy.getSprite().getGlobalBounds().top + enemy.getSprite().getGlobalBounds().height, enemy.getSpriteFromSheet()); // place enemy into drawables if in RenderArea
 						}
 					}
 				}
 			}
-			drawables.emplace_back(enemy.getSprite().getGlobalBounds().top + enemy.getSprite().getGlobalBounds().height, enemy.getSpriteFromSheet()); // place enemy into drawables
+
 			drawables.emplace_back(player.getSprite().getGlobalBounds().top + player.getSprite().getGlobalBounds().height, player.getSpriteFromSheet()); // place player armour into drawables
 			drawables.emplace_back(player.getSprite().getGlobalBounds().top + player.getSprite().getGlobalBounds().height + 0.01, player.getHead());
 			drawables.emplace_back(player.getSprite().getGlobalBounds().top + player.getSprite().getGlobalBounds().height + 0.02, player.getTorso());
@@ -1560,13 +1553,13 @@ int main()
 			drawables.emplace_back(player.getSprite().getGlobalBounds().top + player.getSprite().getGlobalBounds().height + 0.04, player.getShoes());
 			
 
-			// Sort by y value using lambda function (ascending = top to bottom)
+			// Sort by y position (smaller y values come first)
 			sort(drawables.begin(), drawables.end(),[](const DrawableItem& a, const DrawableItem& b) 
 				{
 					return a.y < b.y;
 				}
 			);
-
+			
 			// Draw in sorted order
 			for (auto& item : drawables) {
 				window.draw(item.sprite);
