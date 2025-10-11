@@ -36,7 +36,7 @@
     <ClInclude Include="code\TextureHolder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="code\TimeCaster.h">
+    <ClInclude Include="code\Engine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="code\SoundManager.h">
@@ -92,7 +92,7 @@
     <ClCompile Include="code\TextureHolder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="code\TimeCaster.cpp">
+    <ClCompile Include="code\Engine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="code\SoundManager.cpp">
@@ -123,6 +123,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="code\Enemy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

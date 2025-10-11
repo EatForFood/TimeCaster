@@ -1,4 +1,4 @@
-#include "bullet.h"
+#include "Bullet.h"
 #include "Decal.h"
 
 // The constructor

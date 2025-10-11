@@ -1,5 +1,5 @@
 ﻿#include <SFML/Graphics.hpp>
-#include "TimeCaster.h"
+#include "Engine.h"
 #include "Entity.h"
 #include "Chunk.h"
 #include "NavBox.h"
@@ -47,6 +47,23 @@ Chunk::Chunk(String type, Vector2f chunk, bool load)
 
 		if (m_Type == "spawn")
 		{
+			for (int x = 10; x < 35; x++) // create road with pavestones
+			{
+				for (int y = 15; y < 18; y++)
+				{
+					int chance = rand() % 5;
+
+					if (chance <= 2)
+					{
+						placeTile(x, y, 8, 1, false, false);
+					}
+					else
+					{
+						placeTile(x, y, 9, 1, false, false);
+					}
+				}
+			}
+
 			placeHouse4(13, 11);
 			placeHouse3(23, 10);
 			placeHouse2(13, 23);

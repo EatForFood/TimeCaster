@@ -34,7 +34,7 @@
     <ClInclude Include="code\Player.h" />
     <ClInclude Include="code\SoundManager.h" />
     <ClInclude Include="code\TextureHolder.h" />
-    <ClInclude Include="code\TimeCaster.h" />
+    <ClInclude Include="code\Engine.h" />
     <ClInclude Include="code\Weapon.h" />
     <ClInclude Include="code\World.h" />
   </ItemGroup>
@@ -49,12 +49,13 @@
     <ClCompile Include="code\Equipment.cpp" />
     <ClCompile Include="code\Gun.cpp" />
     <ClCompile Include="code\Item.cpp" />
+    <ClCompile Include="code\Main.cpp" />
     <ClCompile Include="code\NavBox.cpp" />
     <ClCompile Include="code\Pickup.cpp" />
     <ClCompile Include="code\Player.cpp" />
     <ClCompile Include="code\SoundManager.cpp" />
     <ClCompile Include="code\TextureHolder.cpp" />
-    <ClCompile Include="code\TimeCaster.cpp" />
+    <ClCompile Include="code\Engine.cpp" />
     <ClCompile Include="code\Weapon.cpp" />
     <ClCompile Include="code\World.cpp" />
   </ItemGroup>

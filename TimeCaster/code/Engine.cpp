@@ -3,7 +3,7 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
-#include "TimeCaster.h"
+#include "Engine.h"
 #include "Player.h"
 #include "TextureHolder.h"
 #include "Bullet.h"
@@ -15,79 +15,28 @@
 #include "CollisionDetection.h"
 #include "Item.h"
 #include "Enemy.h"
+#include <string>;
 
 using namespace std;
 using namespace sf;
 
-string difficultyToString(Difficulty difficulty)
+Engine::Engine()
 {
-	switch (difficulty)
-	{
-	case Difficulty::Easy:   return "Easy";
-	case Difficulty::Medium: return "Medium";
-	case Difficulty::Hard:   return "Hard";
-	}
-	return "Unknown";
-}
-
-Difficulty stringToDifficulty(string str)
-{
-	if (str == "Easy") {return Difficulty::Easy; }
-	else if (str == "Medium") {return Difficulty::Medium; }
-	else if (str == "Hard") { return Difficulty::Hard; }
-	else return Difficulty::Medium;
-}
-
-void moveDraggedIcon(RectangleShape* draggedIcon, Vector2f mousePos)
-{
-	float x = static_cast<float>(mousePos.x);
-	float y = static_cast<float>(mousePos.y);
-	draggedIcon->setPosition(x - 30, y - 30);
-}
-
-int main()
-{
-	CollisionDetection collision;
-
-	// Here is the instance of TextureHolder
-	TextureHolder holder;
-
-	// Start with the MAIN_MENU state
-	State state = State::MAIN_MENU;
-
-	bool windowedMode = false;
-
-	// Start with the Medium difficulty state
-	Difficulty difficulty = Difficulty::Medium;
-
-	Player player;
-	Enemy enemy;
-
-	bool displayFps;
-	bool draggingItem = true;
-
-	float itemLastX = 0;
-	float itemLastY = 0;
-	int itemLastIndex = -1;
-	bool itemPlaced = false;
-
 	player.loadConfigFile();
 
-	difficulty = stringToDifficulty(player.getdifficultyString());
+	difficulty = Difficulty::Medium;
+	//difficulty = stringToDifficulty(player.getdifficultyString());
 	windowedMode = player.getWindowedMode();
 	displayFps = player.getDisplayFps();
 	Listener::setGlobalVolume(player.getVolume());
 
 	// Get the screen resolution and create an SFML window
-	Vector2f resolution;
 	resolution.x = VideoMode::getDesktopMode().width;
 	resolution.y = VideoMode::getDesktopMode().height;
 	resolution.x = 1920;
 	resolution.y = 1080;
 
 	//RenderWindow window(VideoMode(resolution.x, resolution.y), "TimeCaster", Style::Fullscreen);
-
-	RenderWindow window;
 
 	if (windowedMode == true)
 	{
@@ -97,119 +46,65 @@ int main()
 		window.create(VideoMode(resolution.x, resolution.y), "TimeCaster", Style::Fullscreen);
 	}
 
-	// Create a an SFML View for the main action
-	View mainView(sf::FloatRect(0, 0, resolution.x, resolution.y));
-
-	// Zoom view
-	mainView.zoom(0.3f);
-
-	// Here is our clock for timing everything
-	Clock clock;
-
-	// Clock used for tracking fps
-	Clock fpsClock;
-
-	// How long has the PLAYING state been active
-	Time gameTimeTotal;
-
-	// Where is the mouse in relation to world coordinates
-	Vector2f mouseWorldPosition;
-	// Where is the mouse in relation to screen coordinates
-	Vector2i mouseScreenPosition;
-
-	// Create an instance of the Player class
-
-	// Colour filter 
-	RectangleShape filter;
-	filter.setSize(Vector2f(1920, 1080));
+	filter.setSize(resolution);
 	filter.setFillColor(Color(199, 56, 20, 40));
 
 	player.loadConfigFile();
 
+	FloatRect viewRect(0, 0, resolution.x, resolution.y);
+	mainView.reset(viewRect);
+	// Optional: set the center to the middle of the view
+	mainView.setCenter(resolution.x / 2.f, resolution.y / 2.f);
 
-	// The boundaries of the arena
-	IntRect arena;
-
-	// Create an instance of the SoundManager class
-	SoundManager sound;
-
-	// Create an instance of the CreateBackground class
-	//Chunk landscape;
+	// Zoom view
+	mainView.zoom(0.3f);
 
 	// Create the background
 	// VertexArray background;
 	// Load the texture for our background vertex array
-	Texture textureBackground = TextureHolder::GetTexture("graphics/landscape.png");
-
-	/*
-	// 100 bullets should do
-	Bullet bullets[100];
-	int currentBullet = 0;
-	int bulletsSpare = 24;
-	int bulletsInClip = 6;
-	int clipSize = 6;
-	float fireRate = 1;
-	*/
-	World world; // world object to manage chunks
-
-	// FPS float number
-	float fps = 0.f;
+	textureBackground = TextureHolder::GetTexture("graphics/landscape.png");
 
 	// Boolean for whether to display the fps
 //	bool displayFps = false;
 
-	// When was the fire button last pressed?
-	Time lastPressed;
-
-	//Decals 
-	Decal decal[250];
-	int currentDecal = 0;
-
 	// Hide the mouse pointer and replace it with crosshair
 	window.setMouseCursorVisible(true);
-	Sprite spriteCursor;
-	Texture textureCursorOpen = TextureHolder::GetTexture("graphics/knightCursorOpen.png");
-	Texture textureCursorClosed = TextureHolder::GetTexture("graphics/knightCursorClosed.png");
+	textureCursorOpen = TextureHolder::GetTexture("graphics/knightCursorOpen.png");
+	textureCursorClosed = TextureHolder::GetTexture("graphics/knightCursorClosed.png");
 	spriteCursor.setTexture(textureCursorOpen);
 	spriteCursor.setScale(0.4, 0.4);
 	spriteCursor.setOrigin(25, 25);
 
-	// Create a couple of pickups
+	textureMainMenu = TextureHolder::GetTexture("graphics/UI/Castle (edited).jpg");
+	spriteMainMenu.setTexture(textureMainMenu);
+	spriteMainMenu.setPosition(0, 0);
+
+	// Create a view for the HUD
+	FloatRect hudRect(0, 0, resolution.x, resolution.y);
+	hudView.reset(hudRect);
+
 	Pickup healthPickup(1);
 	Pickup ammoPickup(2);
 	Pickup staminaPickup(3);
 	Pickup manaPickup(4);
 
-	// Integer used to set all text font sizes
-	int fontSize = 35;
-
-	// For the home/game over screen
-	Sprite spriteMainMenu;
-	Texture textureMainMenu = TextureHolder::GetTexture("graphics/UI/Castle (edited).jpg");
-	spriteMainMenu.setTexture(textureMainMenu);
-	spriteMainMenu.setPosition(0, 0);
-
-	// Create a view for the HUD
-	View hudView(sf::FloatRect(0, 0, resolution.x, resolution.y));
-
 	// Main font
-	Font font;
 	font.loadFromFile("fonts/PixelifySans-Bold.ttf");
 
 	// Paused text
-	Text pausedText("Press escape \nto continue", font, 130);
+	pausedText.setFont(font);
+	pausedText.setCharacterSize(160);
+	pausedText.setString("Press escape \nto continue");
 	pausedText.setFillColor(Color::White);
-	FloatRect textBounds = pausedText.getLocalBounds();
-	Vector2f viewCentre = mainView.getCenter();
+	textBounds = pausedText.getLocalBounds();
+	viewCentre = mainView.getCenter();
 	pausedText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 400);
 
 	// Levelling up
-	Text levelUpText;
 	levelUpText.setFont(font);
 	levelUpText.setCharacterSize(80);
 	levelUpText.setFillColor(Color::White);
 	levelUpText.setPosition(150, 250);
-	stringstream levelUpStream;
 	levelUpStream <<
 		"1- Increased rate of fire" <<
 		"\n2- Increased clip size(next reload)" <<
@@ -220,69 +115,66 @@ int main()
 	levelUpText.setString(levelUpStream.str());
 
 	// Gold text
-	Text goldCountText("Gold: " + player.getGold(), font, fontSize);
+	goldCountText.setFont(font);
+	goldCountText.setCharacterSize(fontSize);
+	goldCountText.setString("Gold: " + player.getGold());
 	goldCountText.setFillColor(Color::Black);
 	textBounds = goldCountText.getLocalBounds();
 	goldCountText.setPosition(viewCentre.x - 45, 360);
 
 	// FPS text
-	Text fpsText;
 	fpsText.setFont(font);
 	fpsText.setCharacterSize(20);
 	fpsText.setFillColor(Color::White);
 	fpsText.setPosition(1800, 5);
 
 	// Health bar
-	RectangleShape healthBar;
 	healthBar.setFillColor(Color::Red);
-	healthBar.setPosition(10, 10);
+	healthBar.setPosition(10,10);
 
-	// Empty health bar
-	RectangleShape emptyHealthBar;
 	emptyHealthBar.setFillColor(Color::Black);
 	emptyHealthBar.setPosition(10, 10);
 
 	// Stamina bar
-	RectangleShape staminaBar;
 	staminaBar.setFillColor(Color::Green);
 	staminaBar.setPosition(10, 60);
 
 	// Empty Stamina bar
-	RectangleShape emptyStaminaBar;
 	emptyStaminaBar.setFillColor(Color::Black);
 	emptyStaminaBar.setPosition(10, 60);
 
 	// Mana bar
-	RectangleShape manaBar;
 	manaBar.setFillColor(Color::Magenta);
 	manaBar.setPosition(10, 110);
 
 	// Empty mana bar
-	RectangleShape emptyManaBar;
 	emptyManaBar.setFillColor(Color::Black);
 	emptyManaBar.setPosition(10, 110);
 
 	/***********
 	Main Menu UI
 	************/
-	Texture& textureMainMenuButton1 = TextureHolder::GetTexture("graphics/UI/menuButton1.png");
-	Texture& textureMainMenuButton2 = TextureHolder::GetTexture("graphics/UI/menuButton2.png");
+	textureMainMenuButton1 = TextureHolder::GetTexture("graphics/UI/menuButton1.png");
+	textureMainMenuButton2 = TextureHolder::GetTexture("graphics/UI/menuButton2.png");
 
 	// TimeCaster heading text
-	Text mainHeadingText("TimeCaster", font, fontSize + 65);
+	mainHeadingText.setFont(font);
+	mainHeadingText.setCharacterSize(fontSize + 65);
+	mainHeadingText.setString("TimeCaster");
 	mainHeadingText.setFillColor(Color::White);
 	textBounds = mainHeadingText.getLocalBounds();
 	viewCentre = mainView.getCenter();
 	mainHeadingText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 10);
 
 	// New game button
-	RectangleShape newGameButton;
 	newGameButton.setPosition(200, 210);
 	newGameButton.setSize(Vector2f(300, 80));
 	newGameButton.setTexture(&textureMainMenuButton1);
 
 	// New game button text
-	Text newGameButtonText("New Game", font, fontSize);
+	newGameButtonText.setFont(font);
+	newGameButtonText.setCharacterSize(fontSize);
+	newGameButtonText.setString("New Game");
 	newGameButtonText.setFillColor(Color::Yellow);
 	textBounds = newGameButtonText.getLocalBounds();
 	float x = newGameButton.getPosition().x + (newGameButton.getSize().x / 2.f) - (textBounds.width / 2.f);
@@ -290,13 +182,14 @@ int main()
 	newGameButtonText.setPosition(x - textBounds.left, y - textBounds.top - 8);
 
 	// Load game button
-	RectangleShape loadGameButton;
 	loadGameButton.setPosition(200, 320);
 	loadGameButton.setSize(Vector2f(300, 80));
 	loadGameButton.setTexture(&textureMainMenuButton2);
 
 	// Load game button text
-	Text loadGameButtonText("Load Game", font, fontSize);
+	loadGameButtonText.setString("Load Game");  // Set the text
+	loadGameButtonText.setFont(font);           // Set the font
+	loadGameButtonText.setCharacterSize(fontSize); // Set the font size
 	loadGameButtonText.setFillColor(Color::White);
 	textBounds = loadGameButtonText.getLocalBounds();
 	x = loadGameButton.getPosition().x + (loadGameButton.getSize().x / 2.f) - (textBounds.width / 2.f);
@@ -304,13 +197,14 @@ int main()
 	loadGameButtonText.setPosition(x - textBounds.left, y - textBounds.top);
 
 	// Options button
-	RectangleShape optionsButton;
 	optionsButton.setPosition(200, 430);
 	optionsButton.setSize(Vector2f(300, 80));
 	optionsButton.setTexture(&textureMainMenuButton2);
 
 	// options button text
-	Text optionsButtonText("Options", font, fontSize);
+	optionsButtonText.setString("Options"); // Set the text content
+	optionsButtonText.setFont(font);        // Apply the font
+	optionsButtonText.setCharacterSize(fontSize); // Set the size of the text
 	optionsButtonText.setFillColor(Color::White);
 	textBounds = optionsButtonText.getLocalBounds();
 	x = optionsButton.getPosition().x + (optionsButton.getSize().x / 2.f) - (textBounds.width / 2.f);
@@ -318,13 +212,14 @@ int main()
 	optionsButtonText.setPosition(x - textBounds.left, y - textBounds.top);
 
 	// Quit game button
-	RectangleShape quitGameButton;
 	quitGameButton.setPosition(200, 540);
 	quitGameButton.setSize(Vector2f(300, 80));
 	quitGameButton.setTexture(&textureMainMenuButton2);
 
 	// Quit game button text
-	Text quitGameButtonText("Quit Game", font, fontSize);
+	quitGameButtonText.setString("Quit Game");  // Set the displayed text
+	quitGameButtonText.setFont(font);           // Assign the font
+	quitGameButtonText.setCharacterSize(fontSize); // Set the text size
 	quitGameButtonText.setFillColor(Color::White);
 	textBounds = quitGameButtonText.getLocalBounds();
 	x = quitGameButton.getPosition().x + (quitGameButton.getSize().x / 2.f) - (textBounds.width / 2.f);
@@ -336,14 +231,15 @@ int main()
 	***************/
 
 	// Options heading text
-	Text optionsHeadingText("Options", font, fontSize + 15);
+	optionsHeadingText.setString("Options");      // Set the text content
+	optionsHeadingText.setFont(font);             // Assign the font
+	optionsHeadingText.setCharacterSize(fontSize + 15); // Make it larger than regular buttons
 	optionsHeadingText.setFillColor(Color::White);
 	textBounds = optionsHeadingText.getLocalBounds();
 	viewCentre = mainView.getCenter();
 	optionsHeadingText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 10);
 
 	// Main menu button
-	RectangleShape mainMenuButton;
 	mainMenuButton.setSize(Vector2f(300, 80));
 	textBounds = mainMenuButton.getLocalBounds();
 	viewCentre = mainView.getCenter();
@@ -351,22 +247,25 @@ int main()
 	mainMenuButton.setTexture(&textureMainMenuButton2);
 
 	// Main menu button text
-	Text mainMenuButtonText("Save & Exit", font, fontSize - 5);
+	mainMenuButtonText.setString("Save & Exit");    // Set the displayed text
+	mainMenuButtonText.setFont(font);               // Assign the font
+	mainMenuButtonText.setCharacterSize(fontSize - 5); // Slightly smaller than standard text
 	mainMenuButtonText.setFillColor(Color::White);
 	textBounds = mainMenuButtonText.getLocalBounds();
 	x = mainMenuButton.getPosition().x + (mainMenuButton.getSize().x / 2.f) - (textBounds.width / 2.f);
 	y = mainMenuButton.getPosition().y + (mainMenuButton.getSize().y / 2.f) - (textBounds.height / 2.f);
 	mainMenuButtonText.setPosition(x - textBounds.left, y - textBounds.top);
 
-	// Volume slider text
-	Text volumeSliderText("Volume", font, fontSize);
+	volumeSliderText.setString("Volume");   // Set the text label
+	volumeSliderText.setFont(font);         // Assign the font
+	volumeSliderText.setCharacterSize(fontSize); // Apply the text size
 	volumeSliderText.setFillColor(Color::Black);
 	textBounds = volumeSliderText.getLocalBounds();
 	viewCentre = mainView.getCenter();
 	volumeSliderText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 150);
 
 	// Slider track
-	RectangleShape track(Vector2f(400, 5));
+	track.setSize(Vector2f(400, 5));
 	track.setFillColor(sf::Color::Black);
 	textBounds = track.getLocalBounds();
 	viewCentre = mainView.getCenter();
@@ -374,7 +273,7 @@ int main()
 	track.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, trackY);
 
 	// Slider handle
-	CircleShape handle(10);
+	handle.setPointCount(10);
 	handle.setFillColor(Color::Red);
 	handle.setOrigin(10, 10); // Centre the circle
 	textBounds = handle.getLocalBounds();
@@ -382,7 +281,6 @@ int main()
 	handle.setPosition(x - textBounds.left, trackY + 2); // Slider start at 50% volume
 
 	// Display FPS button
-	RectangleShape displayFPSButton;
 	if (displayFps) {
 		displayFPSButton.setFillColor(Color::Green);
 	}
@@ -396,15 +294,15 @@ int main()
 	displayFPSButton.setTexture(&textureMainMenuButton2);
 
 	// Display FPS button text
-	Text displayFPSButtonText("Display FPS", font, fontSize - 5);
+	displayFPSButtonText.setString("Display FPS");    // Set the label text
+	displayFPSButtonText.setFont(font);               // Assign the font
+	displayFPSButtonText.setCharacterSize(fontSize - 5);
 	displayFPSButtonText.setFillColor(Color::Black);
 	textBounds = displayFPSButtonText.getLocalBounds();
 	x = displayFPSButton.getPosition().x + (displayFPSButton.getSize().x / 2.f) - (textBounds.width / 2.f);
 	y = displayFPSButton.getPosition().y + (displayFPSButton.getSize().y / 2.f) - (textBounds.height / 2.f);
 	displayFPSButtonText.setPosition(x - textBounds.left, y - textBounds.top);
 
-	// Windowed mode button 
-	RectangleShape windowedModeButton;
 	if (windowedMode)
 	{
 		windowedModeButton.setFillColor(Color::Green);
@@ -420,7 +318,9 @@ int main()
 	windowedModeButton.setTexture(&textureMainMenuButton2);
 
 	// Windowed mode button text
-	Text windowedModeButtonText("Windowed Mode", font, fontSize - 5);
+	windowedModeButtonText.setString("Windowed Mode");  // Set the display text
+	windowedModeButtonText.setFont(font);               // Assign the font
+	windowedModeButtonText.setCharacterSize(fontSize - 5);
 	windowedModeButtonText.setFillColor(Color::Black);
 	textBounds = windowedModeButtonText.getLocalBounds();
 	x = windowedModeButton.getPosition().x + (windowedModeButton.getSize().x / 2.f) - (textBounds.width / 2.f);
@@ -428,7 +328,6 @@ int main()
 	windowedModeButtonText.setPosition(x - textBounds.left, y - textBounds.top);
 
 	// Display difficulty button
-	RectangleShape difficultyButton;
 	if (difficulty == Difficulty::Easy)
 	{
 		difficultyButton.setFillColor(Color::Green);
@@ -448,7 +347,9 @@ int main()
 	difficultyButton.setTexture(&textureMainMenuButton2);
 
 	// Display difficulty button text
-	Text difficultyButtonText("Difficulty: " + difficultyToString(difficulty), font, fontSize - 5);
+	difficultyButtonText.setString("Difficulty: " + difficultyToString(difficulty)); // Set the label text
+	difficultyButtonText.setFont(font);                              // Assign the font
+	difficultyButtonText.setCharacterSize(fontSize - 5);
 	difficultyButtonText.setFillColor(Color::Black);
 	textBounds = difficultyButtonText.getLocalBounds();
 	x = difficultyButton.getPosition().x + (difficultyButton.getSize().x / 2.f) - (textBounds.width / 2.f);
@@ -456,13 +357,12 @@ int main()
 	difficultyButtonText.setPosition(x - textBounds.left, y - textBounds.top);
 
 	// Story into text
-	Text storyIntroText;
 	storyIntroText.setFont(font);
 	storyIntroText.setCharacterSize(fontSize);
 	storyIntroText.setFillColor(Color::White);
 	storyIntroText.setPosition(150, 150);
 
-	string fullText = "I was not always a man consumed by vengeance. Once, I had a family-warm laughter by the fire, \n"
+	fullText = "I was not always a man consumed by vengeance. Once, I had a family-warm laughter by the fire, \n"
 		"the gentle touch of my children's hands, the steady love of my wife. \n"
 		"All of it was torn from me in a single night, \n"
 		"devoured by the fire of (name), a dragon whose name still burns in my mind. \n"
@@ -471,14 +371,11 @@ int main()
 		"I do not seek glory, nor the hollow praise of men-I seek redemption. \n"
 		"And when the dragon falls, so too shall the weight of my failure. \n\n"
 		"You desire retribution dear player, but what will it cost you?";
-	string displayedText;
-
-	Clock textClock;
-	float delay = 0.05f; // seconds between characters
-	int currentChar = 0;
 
 	// Skip intro text
-	Text skipIntroText("--- Press space to skip ---", font, fontSize - 5);
+	skipIntroText.setString("--- Press space to skip ---"); // Set the text content
+	skipIntroText.setFont(font);                    // Assign the font
+	skipIntroText.setCharacterSize(fontSize - 5);   // Slightly smaller text size
 	skipIntroText.setFillColor(Color::White);
 	textBounds = skipIntroText.getLocalBounds();
 	viewCentre = mainView.getCenter();
@@ -488,29 +385,26 @@ int main()
 	Inventory UI
 	************/
 
-	Texture& textureHeadArmourFrame = TextureHolder::GetTexture("graphics/UI/headFrame.png");
-	Texture& textureChestArmourFrame = TextureHolder::GetTexture("graphics/UI/chestFrame.png");
-	Texture& textureTrousersArmourFrame = TextureHolder::GetTexture("graphics/UI/trousersFrame.png");
-	Texture& textureBootsArmourFrame = TextureHolder::GetTexture("graphics/UI/bootsFrame.png");
-	Texture& textureWeaponFrame = TextureHolder::GetTexture("graphics/UI/weaponFrame.png");
-	Texture& textureEmptyFrame = TextureHolder::GetTexture("graphics/UI/emptyFrame.png");
-	Texture& texturePlayerFrame = TextureHolder::GetTexture("graphics/UI/playerFrame.png");
-	Texture& texturePlayerInFrame = TextureHolder::GetTexture("graphics/UI/player.png");
-	Texture& textureNeckFrame = TextureHolder::GetTexture("graphics/UI/neckFrame.png");
-	Texture& textureRingFrame = TextureHolder::GetTexture("graphics/UI/ringFrame.png");
-
-	Texture& textureItems = TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png");
+	textureHeadArmourFrame = TextureHolder::GetTexture("graphics/UI/headFrame.png");
+	textureChestArmourFrame = TextureHolder::GetTexture("graphics/UI/chestFrame.png");
+	textureTrousersArmourFrame = TextureHolder::GetTexture("graphics/UI/trousersFrame.png");
+	textureBootsArmourFrame = TextureHolder::GetTexture("graphics/UI/bootsFrame.png");
+	textureWeaponFrame = TextureHolder::GetTexture("graphics/UI/weaponFrame.png");
+	textureEmptyFrame = TextureHolder::GetTexture("graphics/UI/emptyFrame.png");
+	texturePlayerFrame = TextureHolder::GetTexture("graphics/UI/playerFrame.png");
+	texturePlayerInFrame = TextureHolder::GetTexture("graphics/UI/player.png");
+	textureNeckFrame = TextureHolder::GetTexture("graphics/UI/neckFrame.png");
+	textureRingFrame = TextureHolder::GetTexture("graphics/UI/ringFrame.png");
+	textureItems = TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png");
 
 
 
 	// Player frame
-	RectangleShape playerFrame;
 	playerFrame.setSize(sf::Vector2f(100.f, 200.f));
 	playerFrame.setTexture(&texturePlayerFrame);
 	playerFrame.setOrigin(playerFrame.getSize() / 2.f);
 	playerFrame.setPosition(viewCentre.x - 200, 400);
 
-	RectangleShape equippedWeaponIcon;
 
 	equippedWeaponIcon.setTexture(&textureItems);
 	//equippedWeaponIcon.setTextureRect(player.getEquippedWeaponIcon());
@@ -519,55 +413,46 @@ int main()
 	equippedWeaponIcon.setPosition(viewCentre.x - 200, 550);
 
 	// Player sprite for frame
-	RectangleShape playerInFrame;
 	playerInFrame.setSize(sf::Vector2f(60.f, 100.f));
 	playerInFrame.setTexture(&texturePlayerInFrame);
 	playerInFrame.setOrigin(playerInFrame.getSize() / 2.f);
 	playerInFrame.setPosition(viewCentre.x - 200, 400);
 
-	RectangleShape headArmourFrame;
 	headArmourFrame.setTexture(&textureHeadArmourFrame);
 	headArmourFrame.setSize(Vector2f(75, 75));
 	headArmourFrame.setOrigin(headArmourFrame.getSize() / 2.f);
 	headArmourFrame.setPosition(viewCentre.x - 300, 350);
 
-	RectangleShape chestArmourFrame;
 	chestArmourFrame.setTexture(&textureChestArmourFrame);
 	chestArmourFrame.setSize(Vector2f(75, 75));
 	chestArmourFrame.setOrigin(chestArmourFrame.getSize() / 2.f);
 	chestArmourFrame.setPosition(viewCentre.x - 100, 350);
 
-	RectangleShape trousersArmourFrame;
 	trousersArmourFrame.setTexture(&textureTrousersArmourFrame);
 	trousersArmourFrame.setSize(Vector2f(75, 75));
 	trousersArmourFrame.setOrigin(trousersArmourFrame.getSize() / 2.f);
 	trousersArmourFrame.setPosition(viewCentre.x - 300, 450);
 
-	RectangleShape bootsArmourFrame;
 	bootsArmourFrame.setTexture(&textureBootsArmourFrame);
 	bootsArmourFrame.setSize(Vector2f(75, 75));
 	bootsArmourFrame.setOrigin(bootsArmourFrame.getSize() / 2.f);
 	bootsArmourFrame.setPosition(viewCentre.x - 100, 450);
 
-	RectangleShape neckFrame;
 	neckFrame.setTexture(&textureNeckFrame);
 	neckFrame.setSize(Vector2f(75, 75));
 	neckFrame.setOrigin(neckFrame.getSize() / 2.f);
 	neckFrame.setPosition(viewCentre.x - 300, 550);
 
-	RectangleShape weaponFrame;
 	weaponFrame.setTexture(&textureWeaponFrame);
 	weaponFrame.setSize(Vector2f(75, 75));
 	weaponFrame.setOrigin(weaponFrame.getSize() / 2.f);
 	weaponFrame.setPosition(viewCentre.x - 200, 550);
 
-	RectangleShape ringFrame;
 	ringFrame.setTexture(&textureRingFrame);
 	ringFrame.setSize(Vector2f(75, 75));
 	ringFrame.setOrigin(ringFrame.getSize() / 2.f);
 	ringFrame.setPosition(viewCentre.x - 100, 550);
 
-	RectangleShape emptyFrames[16];
 	int startX = viewCentre.x - 300;
 	int startY = 650;
 	for (int i = 0; i < sizeof(emptyFrames) / sizeof(emptyFrames[0]); i++) {
@@ -582,7 +467,6 @@ int main()
 		startX += 100;
 	}
 
-	int storedItem[16];
 	for (int i = 0; i < sizeof(storedItem) / sizeof(storedItem[0]); i++) {
 		storedItem[i] = 1; // 0 is for no items, every other number is a different item
 		// TODO: link these numbers to actual items, for now every slot is filled with item 1 (starting sword)
@@ -590,7 +474,6 @@ int main()
 		//in the future we'll probably load this from a save file, but for now slots are manually filled
 	}
 
-	RectangleShape itemIcon[16];
 	startX = viewCentre.x - 300;
 	startY = 650;
 	for (int i = 0; i < sizeof(itemIcon) / sizeof(itemIcon[0]); i++) {
@@ -609,98 +492,92 @@ int main()
 	itemIcon[0].setPosition(9999, 9999); //move the first one so we have an empty slot to start with
 	storedItem[0] = 0; //empty slot
 
-
-	RectangleShape* clickedShape = nullptr;
-
 	// Display kill count inventory text
-	Text killsText("Kills: " + player.getKillCount(), font, fontSize);
+	killsText.setString("Kills: " + std::to_string(player.getKillCount())); // Set the label text
+	killsText.setFont(font);                             // Assign the font
+	killsText.setCharacterSize(fontSize);               // Set the text size
 	killsText.setFillColor(Color::Black);
 	textBounds = killsText.getLocalBounds();
 	killsText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 310);
 
-	RectangleShape invHealthBar;
 	invHealthBar.setFillColor(Color::Red);
 	invHealthBar.setPosition(viewCentre.x - 310, 825);
 
-	RectangleShape backgroundInvHealthBar;
 	backgroundInvHealthBar.setFillColor(Color::Black);
 	backgroundInvHealthBar.setSize(Vector2f(200, 50));
 	backgroundInvHealthBar.setPosition(viewCentre.x - 310, 825);
 
 	// Display invHealthBar text
-	Text invHealthBarText("0 / 0", font, fontSize - 5);
+	invHealthBarText.setString("0 / 0");     // Set the initial text
+	invHealthBarText.setFont(font);          // Assign the font
+	invHealthBarText.setCharacterSize(fontSize - 5); // Slightly smaller text size
 	invHealthBarText.setFillColor(Color::White);
 
-	RectangleShape invStamBar;
 	invStamBar.setFillColor(Color::Green);
 	invStamBar.setPosition(viewCentre.x - 60, 825);
 
-	RectangleShape backgroundInvStamBar;
 	backgroundInvStamBar.setFillColor(Color::Black);
 	backgroundInvStamBar.setSize(Vector2f(200, 50));
 	backgroundInvStamBar.setPosition(viewCentre.x - 60, 825);
 
 	// Display invStamBar text
-	Text invStamBarText("0 / 0", font, fontSize - 5);
+	invStamBarText.setString("0 / 0");        // Set the initial text
+	invStamBarText.setFont(font);             // Assign the font
+	invStamBarText.setCharacterSize(fontSize - 5); // Slightly smaller text size
 	invStamBarText.setFillColor(Color::White);
 
-	RectangleShape invManaBar;
 	invManaBar.setFillColor(Color::Magenta);
 	invManaBar.setPosition(viewCentre.x + 190, 825);
 
-	RectangleShape backgroundInvManaBar;
 	backgroundInvManaBar.setFillColor(Color::Black);
 	backgroundInvManaBar.setSize(Vector2f(200, 50));
 	backgroundInvManaBar.setPosition(viewCentre.x + 190, 825);
 
 	// Display invManaBar text
-	Text invManaBarText("0 / 0", font, fontSize - 5);
+	invManaBarText.setString("0 / 0");        // Set the initial text
+	invManaBarText.setFont(font);             // Assign the font
+	invManaBarText.setCharacterSize(fontSize - 5); // Slightly smaller text size
 	invManaBarText.setFillColor(Color::White);
-	
-	// When did we last update the HUD?
-	int framesSinceLastHUDUpdate = 0;
-
-	// What time was the last update
-	Time timeSinceLastUpdate;
-
-	// How often (in frames) should we update the HUD
-	int fpsMeasurementFrameInterval = 1000;
-
-	// struct to store y values and sprites together and vector to store each object
-	struct DrawableItem {
-		float y;
-		Sprite sprite;
-
-		DrawableItem(float y, const Sprite& sprite)
-			: y(y), sprite(sprite) {}
-	};
-
-	vector<DrawableItem> drawables; 
-
-	vector<Item> items;
-
-	bool debugreset = true; //it's a bit of a hack but it works to stop multiple upgrades from one key press
-	//press numpad0 to reset if you want to test again
-	//remove this in full build
-
-	// Boolean for whether the start game sound has played
-	bool startSoundPlayed = false;
-
-	// Boolean for whether the player is dragging the slider or not
-	bool dragging = false;
-
-	bool isDragging = false;
-
-	// Boolean for whether to draw the inventory or not
-	bool drawInventory = false;
-
-
 
 	// Setting volume to 50 by default
 	Listener::setGlobalVolume(50);
 
 	// Populate soundtrack
 	sound.populateSoundtrack();
+
+}
+
+string Engine::difficultyToString(Difficulty difficulty)
+{
+	switch (difficulty)
+	{
+	case Difficulty::Easy:   return "Easy";
+	case Difficulty::Medium: return "Medium";
+	case Difficulty::Hard:   return "Hard";
+	}
+	return "Unknown";
+}
+
+/*
+Difficulty Engine::stringToDifficulty(std::string str)
+{
+	if (str == "Easy") {return Difficulty::Easy; }
+	else if (str == "Medium") {return Difficulty::Medium; }
+	else if (str == "Hard") { return Difficulty::Hard; }
+	else return Difficulty::Medium;
+}
+*/
+
+void Engine::moveDraggedIcon(RectangleShape* draggedIcon, Vector2f mousePos)
+{
+	float x = static_cast<float>(mousePos.x);
+	float y = static_cast<float>(mousePos.y);
+	draggedIcon->setPosition(x - 30, y - 30);
+}
+
+void Engine::run()
+{
+
 
 	// The main game loop
 	while (window.isOpen())
@@ -737,7 +614,7 @@ int main()
 					{
 						mainView.zoom(0.9f);
 						spriteCursor.scale(0.9f, 0.9f);
-						
+
 					}
 					else if (event.mouseWheelScroll.delta < 0)
 					{
@@ -747,17 +624,17 @@ int main()
 				}
 			}
 
-		if ((event.type == Event::MouseButtonPressed && event.key.code == Mouse::Middle && state == State::PLAYING) ||
-			(event.type == Event::KeyPressed && event.key.code == Keyboard::F && state == State::PLAYING))
-		{
+			if ((event.type == Event::MouseButtonPressed && event.key.code == Mouse::Middle && state == State::PLAYING) ||
+				(event.type == Event::KeyPressed && event.key.code == Keyboard::F && state == State::PLAYING))
+			{
 
-			//cout << " Weapon switched" << endl;
+				//cout << " Weapon switched" << endl;
 
-			player.switchWeapon();
-			equippedWeaponIcon.setTextureRect(player.getEquippedWeaponIcon());
+				player.switchWeapon();
+				equippedWeaponIcon.setTextureRect(player.getEquippedWeaponIcon());
 
 
-		}
+			}
 
 			if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left && state == State::OPTIONS_MENU)
 			{
@@ -790,10 +667,10 @@ int main()
 				}
 
 				// Player hit the new game button in the main menu
-				else if (newGameButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU && event.mouseButton.button == Mouse::Left )
+				else if (newGameButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU && event.mouseButton.button == Mouse::Left)
 				{
 					state = State::STORY_INTRO;
-					
+
 					// Play the start game sound
 					if (!startSoundPlayed) {
 						sound.playStartGameSound();
@@ -802,7 +679,7 @@ int main()
 					sound.playStoryIntroSound();
 
 					startSoundPlayed = true;
-					
+
 					player.createNewSave();
 					player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume());
 					player.loadSaveFile();
@@ -823,23 +700,17 @@ int main()
 					player.spawn(arena, resolution, tileSize, player.getPlayerLevel());
 					enemy.spawn(arena, resolution, tileSize, "Goblin", player.getPlayerLevel());
 
-					// Configure the pick-ups
-					healthPickup.setArena(arena);
-					ammoPickup.setArena(arena);
-					staminaPickup.setArena(arena);
-					manaPickup.setArena(arena);
-
 					// Reset the clock so there isn't a frame jump
 					clock.restart();
-				
-			
+
+
 
 					equippedWeaponIcon.setTextureRect(player.getEquippedWeaponIcon());
 
-					
+
 
 					player.loadConfigFile();
-					difficulty = stringToDifficulty(player.getdifficultyString());
+					difficulty = Difficulty::Medium;
 					windowedMode = player.getWindowedMode();
 					displayFps = player.getDisplayFps();
 					Listener::setGlobalVolume(player.getVolume());
@@ -877,12 +748,6 @@ int main()
 						player.spawn(arena, resolution, tileSize, player.getPlayerLevel());
 						enemy.spawn(arena, resolution, tileSize, "Goblin", player.getPlayerLevel());
 
-						// Configure the pick-ups
-						healthPickup.setArena(arena);
-						ammoPickup.setArena(arena);
-						staminaPickup.setArena(arena);
-						manaPickup.setArena(arena);
-
 						// Reset the clock so there isn't a frame jump
 						clock.restart();
 
@@ -890,7 +755,7 @@ int main()
 
 
 						player.loadConfigFile();
-						difficulty = stringToDifficulty(player.getdifficultyString());
+						difficulty = Difficulty::Medium;
 						windowedMode = player.getWindowedMode();
 						displayFps = player.getDisplayFps();
 						Listener::setGlobalVolume(player.getVolume());
@@ -917,12 +782,6 @@ int main()
 						player.spawn(arena, resolution, tileSize, player.getPlayerLevel());
 						enemy.spawn(arena, resolution, tileSize, "Goblin", player.getPlayerLevel());
 
-						// Configure the pick-ups
-						healthPickup.setArena(arena);
-						ammoPickup.setArena(arena);
-						staminaPickup.setArena(arena);
-						manaPickup.setArena(arena);
-
 						// Reset the clock so there isn't a frame jump
 						clock.restart();
 
@@ -933,7 +792,7 @@ int main()
 						equippedWeaponIcon.setTextureRect(player.getEquippedWeaponIcon());
 
 						player.loadConfigFile();
-						difficulty = stringToDifficulty(player.getdifficultyString());
+						difficulty = Difficulty::Medium;
 						windowedMode = player.getWindowedMode();
 						displayFps = player.getDisplayFps();
 						Listener::setGlobalVolume(player.getVolume());
@@ -941,16 +800,16 @@ int main()
 				}
 
 				// Player hit the options button
-				if (optionsButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU && event.mouseButton.button == Mouse::Left )
+				if (optionsButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU && event.mouseButton.button == Mouse::Left)
 				{
 					sound.playButtonClickSound();
 					world.clearWorld();
 
 					float savedVolume = track.getPosition().x + track.getSize().x * (player.getVolume() / 100.0f);
-						handle.setPosition(savedVolume, handle.getPosition().y);
-						
-				// Map handle position to global volume
-			
+					handle.setPosition(savedVolume, handle.getPosition().y);
+
+					// Map handle position to global volume
+
 					state = State::OPTIONS_MENU;
 				}
 
@@ -1041,7 +900,7 @@ int main()
 					difficultyButtonText.setPosition(x - textBounds.left, y - textBounds.top);
 					sound.playButtonClickSound();
 				}
-				
+
 				if (state == State::STORY_INTRO && event.key.code == Keyboard::Space)
 				{
 					sound.stopStoryIntroSound();
@@ -1068,7 +927,7 @@ int main()
 			// Handle the pressing and releasing of the WASD keys
 			if (Keyboard::isKeyPressed(Keyboard::W))
 			{
-				player.moveUp();					
+				player.moveUp();
 			}
 			else
 			{
@@ -1076,8 +935,8 @@ int main()
 			}
 
 			if (Keyboard::isKeyPressed(Keyboard::S))
-			{				
-				player.moveDown();				
+			{
+				player.moveDown();
 			}
 			else
 			{
@@ -1086,7 +945,7 @@ int main()
 
 			if (Keyboard::isKeyPressed(Keyboard::A))
 			{
-				player.moveLeft();				
+				player.moveLeft();
 			}
 			else
 			{
@@ -1094,7 +953,7 @@ int main()
 			}
 
 			if (Keyboard::isKeyPressed(Keyboard::D))
-			{		
+			{
 				player.moveRight();
 			}
 			else
@@ -1109,7 +968,7 @@ int main()
 			player.stopRight();
 			player.stopLeft();
 			player.stopUp();
-			player.stopDown();	
+			player.stopDown();
 		}
 
 
@@ -1127,7 +986,7 @@ int main()
 			debugreset = true;
 		}
 
-		if (event.key.code == Keyboard::Num2 &&  !debugreset && state == State::PLAYING)
+		if (event.key.code == Keyboard::Num2 && !debugreset && state == State::PLAYING)
 		{
 			// Increase stamina
 			player.upgradeStamina();
@@ -1162,7 +1021,7 @@ int main()
 		}
 
 		// Handle the display fps button changing colour based on boolean
-		if (state == State::OPTIONS_MENU) 
+		if (state == State::OPTIONS_MENU)
 		{
 			// Change colour of displayFPSButton based on displayFps button
 			if (displayFps) {
@@ -1277,7 +1136,7 @@ int main()
 					// player clicked on an item icon and is not already dragging something
 					if (itemIcon[i].getGlobalBounds().contains(worldPos) && Mouse::isButtonPressed(Mouse::Left) && !draggingItem)
 					{
-		
+
 						for (int j = 0; j < sizeof(emptyFrames) / sizeof(emptyFrames[0]); j++) {
 
 							// checks if item grabbed is in an item slot, if so remove it from that slot
@@ -1297,13 +1156,13 @@ int main()
 						//more logic for grabbing items from other places will go here in the future
 
 
-		
-						
 
-							draggingItem = true;
 
-							itemPlaced = false;
-						
+
+						draggingItem = true;
+
+						itemPlaced = false;
+
 					}
 
 					if (draggingItem && clickedShape != NULL)
@@ -1341,47 +1200,7 @@ int main()
 					}
 				}
 			}
-		
 
-			// Update the pickups
-			healthPickup.update(dtAsSeconds);
-			ammoPickup.update(dtAsSeconds);
-			staminaPickup.update(dtAsSeconds);
-			manaPickup.update(dtAsSeconds);
-
-			// Has the player touched health pickup
-			if (player.getGlobalBounds().intersects(healthPickup.getPosition()) && healthPickup.isSpawned())
-			{
-				player.increaseHealthLevel(healthPickup.gotIt());
-			}
-
-			// Has the player touched ammo pickup
-			if (player.getGlobalBounds().intersects(ammoPickup.getPosition()) && ammoPickup.isSpawned())
-			{
-				//bulletsSpare += ammoPickup.gotIt();
-			}
-
-			// Has the player touched stamina pickup
-			if (player.getGlobalBounds().intersects(staminaPickup.getPosition()) && staminaPickup.isSpawned())
-			{
-				player.increaseStaminaLevel(staminaPickup.gotIt()); 
-				// Play a sound
-			}
-
-			// Has the player touched mana pickup
-			if (player.getGlobalBounds().intersects(manaPickup.getPosition()) && manaPickup.isSpawned())
-			{
-				player.increaseManaLevel(manaPickup.gotIt());
-				// Play a sound
-			}
-
-			// Has the player touched mana pickup
-			if (player.getGlobalBounds().intersects(manaPickup.getPosition()) && manaPickup.isSpawned())
-			{
-				player.increaseManaLevel(manaPickup.gotIt());
-				// Play a sound
-			}
-		
 			if (currentDecal > 248)
 			{
 				currentDecal = 0;
@@ -1404,7 +1223,7 @@ int main()
 			// Increment the number of frames since the last HUD calculation
 			framesSinceLastHUDUpdate++;
 			// Calculate FPS every fpsMeasurementFrameInterval frames
-			
+
 			// Update the gold text
 			stringstream ssGoldCount;
 			ssGoldCount << "Gold:" << player.getGold();
@@ -1489,7 +1308,7 @@ int main()
 				}
 			}
 		}
-		
+
 		if (state == State::MAIN_MENU || state == State::OPTIONS_MENU)
 		{
 			if (sound.isSoundtrackPlaying()) {
@@ -1526,7 +1345,7 @@ int main()
 				// Apply to everything
 				Listener::setGlobalVolume(globalVolume);
 				isDragging = true;
-				
+
 			}
 			if (!dragging && isDragging) {
 				// Save volume to config file
@@ -1576,7 +1395,7 @@ int main()
 
 			for (int i = 0; i < world.getWorldSize(); i++)
 			{
-				if (collision.distance(player.getCenter(),world.getChunkCenter(i)) < 2000) {
+				if (collision.distance(player.getCenter(), world.getChunkCenter(i)) < 2000) {
 					for (auto& entity : world.getEntities(i)) {
 						if (player.getRenderArea().intersects(entity.getSprite().getGlobalBounds())) {
 							drawables.emplace_back(entity.getSprite().getGlobalBounds().top + entity.getSprite().getGlobalBounds().height, entity.getSprite());
@@ -1594,39 +1413,21 @@ int main()
 			drawables.emplace_back(player.getSprite().getGlobalBounds().top + player.getSprite().getGlobalBounds().height + 0.02, player.getTorso());
 			drawables.emplace_back(player.getSprite().getGlobalBounds().top + player.getSprite().getGlobalBounds().height + 0.03, player.getPants());
 			drawables.emplace_back(player.getSprite().getGlobalBounds().top + player.getSprite().getGlobalBounds().height + 0.04, player.getShoes());
-			
+
 
 			// Sort by y position (smaller y values come first)
-			sort(drawables.begin(), drawables.end(),[](const DrawableItem& a, const DrawableItem& b) 
+			sort(drawables.begin(), drawables.end(), [](const DrawableItem& a, const DrawableItem& b)
 				{
 					return a.y < b.y;
 				}
 			);
-			
+
 			// Draw in sorted order
 			for (auto& item : drawables) {
 				window.draw(item.sprite);
 			}
 
 			drawables.clear();
-
-			// Draw the pickups that are currently spawned
-			if (ammoPickup.isSpawned())
-			{
-				window.draw(ammoPickup.getSprite());
-			}
-			if (healthPickup.isSpawned())
-			{
-				window.draw(healthPickup.getSprite());
-			}
-			if (staminaPickup.isSpawned())
-			{
-				window.draw(staminaPickup.getSprite());
-			}
-			if (manaPickup.isSpawned())
-			{
-				window.draw(manaPickup.getSprite());
-			}
 
 			for (int i = 0; i < world.getWorldSize(); i++)
 			{
@@ -1658,13 +1459,13 @@ int main()
 			else {
 				spriteCursor.setTexture(textureCursorOpen);
 			}
-			
+
 			//Draw the crosshair
 			//window.draw(spriteCursor);
 
 			// Switch to the HUD view
 			window.setView(hudView);
-			
+
 			if (drawInventory) {
 
 				window.draw(filter);
@@ -1676,7 +1477,7 @@ int main()
 				window.draw(bootsArmourFrame);
 				window.draw(neckFrame);
 				window.draw(weaponFrame);
-				
+
 				window.draw(ringFrame);
 				for (int i = 0; i < sizeof(emptyFrames) / sizeof(emptyFrames[0]); i++) {
 					window.draw(emptyFrames[i]);
@@ -1692,19 +1493,19 @@ int main()
 				window.draw(backgroundInvManaBar);
 				window.draw(invManaBar);
 				window.draw(invManaBarText);
-			
+
 				// draw icons last 
-								
+
 				for (int i = 0; i < sizeof(itemIcon) / sizeof(itemIcon[0]); i++) {
 					window.draw(itemIcon[i]);
 				}
 
 				window.draw(equippedWeaponIcon);
-				
+
 				window.setView(mainView);
 				window.draw(spriteCursor);
 				window.setView(hudView);
-				
+
 			}
 			else {
 				// Draw all the HUD elements
@@ -1763,7 +1564,7 @@ int main()
 			window.draw(windowedModeButtonText);
 		}
 
-		if (state == State::STORY_INTRO) 
+		if (state == State::STORY_INTRO)
 		{
 			window.clear();
 			window.draw(storyIntroText);
@@ -1781,6 +1582,5 @@ int main()
 
 	}// End game loop
 
-	return 0;
 }
 
