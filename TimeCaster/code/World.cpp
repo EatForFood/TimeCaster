@@ -50,23 +50,23 @@ void World::newWorld() // create new world and save chunks to file
 
 void World::loadWorld() // load world from file
 {
-    std::ifstream in("gamedata/TCWorld.txt");
+    ifstream in("gamedata/TCWorld.txt");
     if (!in.is_open())
         return;
 
     chunks.clear();
 
-    std::string line;
-    while (std::getline(in, line))
+    string line;
+    while (getline(in, line))
     {
-        std::istringstream ss(line);
-        std::string type;
+        istringstream ss(line);
+        string type;
         float x, y;
 
         ss >> type >> x >> y;
 
         // Recreate chunk, mark as loaded
-        chunks.emplace_back(type, sf::Vector2f(x, y), true);
+        chunks.emplace_back(type, Vector2f(x, y), true);
     }
 
     in.close();

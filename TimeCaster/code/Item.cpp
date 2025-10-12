@@ -3,16 +3,33 @@
 using namespace sf;
 using namespace std;
 
+
 Item::Item(String type, Vector2f position)
 {
 	// Store the type of this pickup
 	m_Type = type;
 	m_Position = position;
 
-	// Associate the texture with the sprite
+	if (m_Type == "null") // empty item for inventory
+	{
+		//m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/goldCoin.png"));
+
+		// How much is item worth
+		m_Value = 0;
+
+		m_Sprite.setOrigin(5, 5);
+
+		m_NullItem = true;
+
+	}
+
 	if (m_Type == "gold")
 	{
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/goldCoin.png"));
+		m_Icon.setTexture(TextureHolder::GetTexture("graphics/items/goldCoinIcon.png"));
+		//m_Icon.setScale(5,5);
+		FloatRect bounds = m_Icon.getLocalBounds();
+		m_Icon.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
 
 		// How much is item worth
 		m_Value = 1;
@@ -48,6 +65,11 @@ Sprite Item::getSprite()
 	return m_Sprite;
 }
 
+Sprite& Item::getIcon()
+{
+	return m_Icon;
+}
+
 int Item::getValue()
 {
 	return m_Value;
@@ -56,6 +78,11 @@ int Item::getValue()
 bool Item::isSpawned()
 {
 	return m_Spawned;
+}
+
+bool Item::isNull()
+{
+	return m_NullItem;
 }
 
 int Item::gotIt()

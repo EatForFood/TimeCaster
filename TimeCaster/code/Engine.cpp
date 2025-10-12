@@ -453,44 +453,8 @@ Engine::Engine()
 	ringFrame.setOrigin(ringFrame.getSize() / 2.f);
 	ringFrame.setPosition(viewCentre.x - 100, 550);
 
-	int startX = viewCentre.x - 300;
-	int startY = 650;
-	for (int i = 0; i < sizeof(emptyFrames) / sizeof(emptyFrames[0]); i++) {
-		emptyFrames[i].setTexture(&textureEmptyFrame);
-		emptyFrames[i].setSize(Vector2f(75, 75));
-		emptyFrames[i].setOrigin(emptyFrames[i].getSize() / 2.f);
-		if (i != 0 && i % 8 == 0) {
-			startY += 100;
-			startX = viewCentre.x - 300;
-		}
-		emptyFrames[i].setPosition(startX, startY);
-		startX += 100;
-	}
-
-	for (int i = 0; i < sizeof(storedItem) / sizeof(storedItem[0]); i++) {
-		storedItem[i] = 1; // 0 is for no items, every other number is a different item
-		// TODO: link these numbers to actual items, for now every slot is filled with item 1 (starting sword)
-
-		//in the future we'll probably load this from a save file, but for now slots are manually filled
-	}
-
-	startX = viewCentre.x - 300;
-	startY = 650;
-	for (int i = 0; i < sizeof(itemIcon) / sizeof(itemIcon[0]); i++) {
-		itemIcon[i].setTexture(&textureItems);
-		itemIcon[i].setTextureRect(sf::IntRect(961, 896, 32, 32)); // default to this until we expand the weapon/item features
-		itemIcon[i].setSize(Vector2f(75, 75));
-		itemIcon[i].setOrigin(itemIcon[i].getSize() / 2.f);
-		if (i != 0 && i % 8 == 0) {
-			startY += 100;
-			startX = viewCentre.x - 300;
-		}
-		itemIcon[i].setPosition(startX, startY);
-		startX += 100;
-	}
-
 	itemIcon[0].setPosition(9999, 9999); //move the first one so we have an empty slot to start with
-	storedItem[0] = 0; //empty slot
+	//storedItem[0] = 0; //empty slot
 
 	// Display kill count inventory text
 	killsText.setString("Kills: " + std::to_string(player.getKillCount())); // Set the label text
@@ -545,6 +509,55 @@ Engine::Engine()
 	// Populate soundtrack
 	sound.populateSoundtrack();
 
+
+}
+
+void Engine::initializeInventory()
+{
+	int startX = viewCentre.x - 300;
+	int startY = 650;
+
+	emptyFrames.resize(16);
+
+	for (int i = 0; i < emptyFrames.size(); i++) {
+		emptyFrames[i].setTexture(&textureEmptyFrame);
+		emptyFrames[i].setSize(Vector2f(75, 75));
+		emptyFrames[i].setOrigin(emptyFrames[i].getSize() / 2.f);
+
+		if (i != 0 && i % 8 == 0) {
+			startY += 100;
+			startX = viewCentre.x - 300;
+		}
+
+		emptyFrames[i].setPosition(startX, startY);
+		startX += 100;
+	}
+
+	storedItems.resize(16, Item("null", Vector2f(0,0)));
+
+	startX = viewCentre.x - 300;
+	startY = 650;
+	for (int i = 0; i < sizeof(itemIcon) / sizeof(itemIcon[0]); i++) {
+		itemIcon[i].setTexture(&textureItems);
+		itemIcon[i].setTextureRect(sf::IntRect(961, 896, 32, 32));
+		itemIcon[i].setSize(Vector2f(75, 75));
+		itemIcon[i].setOrigin(itemIcon[i].getSize() / 2.f);
+
+		if (i != 0 && i % 8 == 0) {
+			startY += 100;
+			startX = viewCentre.x - 300;
+		}
+
+		itemIcon[i].setPosition(startX, startY);
+		startX += 100;
+	}
+
+	// Position icons for items that actually exist
+	for (int i = 0; i < storedItems.size(); i++) {
+		if (!storedItems[i].isNull()) {
+			storedItems[i].getIcon().setPosition(emptyFrames[i].getPosition());
+		}
+	}
 }
 
 string Engine::difficultyToString(Difficulty difficulty)
@@ -568,11 +581,11 @@ Difficulty Engine::stringToDifficulty(std::string str)
 }
 */
 
-void Engine::moveDraggedIcon(RectangleShape* draggedIcon, Vector2f mousePos)
+void Engine::moveDraggedIcon(Sprite& draggedIcon, Vector2f mousePos)
 {
 	float x = static_cast<float>(mousePos.x);
 	float y = static_cast<float>(mousePos.y);
-	draggedIcon->setPosition(x - 30, y - 30);
+	draggedIcon.setPosition(x - 30, y - 30);
 }
 
 void Engine::run()
@@ -589,6 +602,7 @@ void Engine::run()
 			fpsText.setString("FPS: " + to_string((int)fps));
 		}
 
+		initializeInventory();
 
 		// Getting the mouse position and mapping those pixels to coordinates
 		Vector2i mousePos = Mouse::getPosition(window);
@@ -1015,7 +1029,7 @@ void Engine::run()
 		if (event.key.code == Keyboard::G && !debugreset && state == State::PLAYING)
 		{
 			for (int i = 0; i < (rand() % 10); i++) {
-				items.emplace_back("gold", Vector2f(0, 300));
+				items.emplace_back("gold", Vector2f(0, 0));
 			}
 			debugreset = true;
 		}
@@ -1118,86 +1132,80 @@ void Engine::run()
 			// Drag items the player clicks on
 			if (drawInventory)
 			{
+				bool draggingFromInventory = false;
+				int draggedIndex = -1;
 
-				/*	if (equippedWeaponIcon.getGlobalBounds().contains(worldPos) && Mouse::isButtonPressed(Mouse::Left) && !draggingItem)
+				// Check clicks on inventory items
+				for (int i = 0; i < storedItems.size(); i++)
+				{
+					if (!storedItems[i].isNull() &&
+						storedItems[i].getIcon().getGlobalBounds().contains(worldPos.x - 25, worldPos.y - 25) &&
+						Mouse::isButtonPressed(Mouse::Left) && !draggingItem)
 					{
+						clickedItem = storedItems[i];          // copy to clickedItem
+						itemLastIndex = i;                     // save original slot
+						itemLastX = clickedItem.getIcon().getPosition().x;
+						itemLastY = clickedItem.getIcon().getPosition().y;
 
-						itemLastX = equippedWeaponIcon.getPosition().x;
-						itemLastY = equippedWeaponIcon.getPosition().y;
-						clickedShape = &equippedWeaponIcon;
+						storedItems[i] = Item("null", Vector2f(0, 0)); // empty original slot
+						draggingItem = true;
+						itemPlaced = false;
+						draggingFromInventory = true;
+						draggedIndex = i;
+						break;
+					}
+				}
 
+				// Check clicks on world items
+				for (int i = 0; i < allItems.size(); i++)
+				{
+					if (allItems[i].getIcon().getGlobalBounds().contains(worldPos.x - 25, worldPos.y - 25) &&
+						Mouse::isButtonPressed(Mouse::Left) && !draggingItem)
+					{
+						clickedItem = allItems[i];           // copy to clickedItem
+						itemLastIndex = -1;                   // world item
+						itemLastX = clickedItem.getIcon().getPosition().x;
+						itemLastY = clickedItem.getIcon().getPosition().y;
 
 						draggingItem = true;
 						itemPlaced = false;
-					} */ //equipped weapon will use different logic in the future
-
-				for (int i = 0; i < sizeof(itemIcon) / sizeof(itemIcon[0]); i++) {
-
-					// player clicked on an item icon and is not already dragging something
-					if (itemIcon[i].getGlobalBounds().contains(worldPos) && Mouse::isButtonPressed(Mouse::Left) && !draggingItem)
-					{
-
-						for (int j = 0; j < sizeof(emptyFrames) / sizeof(emptyFrames[0]); j++) {
-
-							// checks if item grabbed is in an item slot, if so remove it from that slot
-							if (itemIcon[i].getGlobalBounds().intersects(emptyFrames[j].getGlobalBounds()) && storedItem[j] != 0)
-							{
-								storedItem[j] = 0;
-								itemLastIndex = j;  //remove item from slot while dragging and save index in case we need to put it back
-								cout << "this index was set to 0: " << j << endl;
-
-								itemLastX = itemIcon[i].getPosition().x;
-								itemLastY = itemIcon[i].getPosition().y;
-								clickedShape = &itemIcon[i];
-
-							}
-
-						}
-						//more logic for grabbing items from other places will go here in the future
-
-
-
-
-
-						draggingItem = true;
-
-						itemPlaced = false;
-
+						draggingFromInventory = false;
+						draggedIndex = i;
+						break;
 					}
+				}
 
-					if (draggingItem && clickedShape != NULL)
+				// Move the dragged item
+				if (draggingItem)
+					moveDraggedIcon(clickedItem.getIcon(), Vector2f(worldPos));
+
+				// Drop the item
+				if (draggingItem && !Mouse::isButtonPressed(Mouse::Left))
+				{
+					bool placed = false;
+
+					// Try to drop in the first empty slot
+					for (int i = 0; i < storedItems.size(); i++)
 					{
-
-						moveDraggedIcon(clickedShape, worldPos);
-					}
-
-					if (draggingItem && !Mouse::isButtonPressed(Mouse::Left))
-					{
-						if (clickedShape != NULL)
+						if (storedItems[i].isNull() &&
+							clickedItem.getIcon().getGlobalBounds().intersects(emptyFrames[i].getGlobalBounds()))
 						{
-							for (int i = 0; i < sizeof(emptyFrames) / sizeof(emptyFrames[0]); i++) {
-
-								if (clickedShape->getGlobalBounds().intersects(emptyFrames[i].getGlobalBounds()) && storedItem[i] == 0)
-								{
-									clickedShape->setPosition(emptyFrames[i].getPosition());
-									itemPlaced = true;
-									storedItem[i] = 1; //in future link to actual item
-								}
-
-							}
-
-							if (!itemPlaced)
-							{
-
-								clickedShape->setPosition(itemLastX, itemLastY);
-								storedItem[itemLastIndex] = 1; //put item back in original slot
-								cout << "this index was set to 1: " << itemLastIndex << endl;
-								itemPlaced = true;
-
-							}
+							storedItems[i] = clickedItem;                  // copy item into slot
+							clickedItem.getIcon().setPosition(emptyFrames[i].getPosition());
+							placed = true;
+							break;
 						}
-						draggingItem = false;
 					}
+
+					// If no slot found, return to original position
+					if (!placed)
+					{
+						clickedItem.getIcon().setPosition(itemLastX, itemLastY);
+						if (draggingFromInventory && draggedIndex >= 0 && draggedIndex < storedItems.size())
+							storedItems[draggedIndex] = clickedItem; // restore in original slot
+					}
+
+					draggingItem = false;
 				}
 			}
 
@@ -1268,16 +1276,27 @@ void Engine::run()
 			timeSinceLastUpdate = Time::Zero;
 			// End HUD update
 
-			// update items
-			for (size_t i = 0; i < items.size(); )
+			size_t i = 0;
+			while (i < items.size())
 			{
 				items[i].update(dtAsSeconds);
 
 				if (player.getGlobalBounds().intersects(items[i].getPosition()))
 				{
-					// give gold and remove gold from vector
-					player.setGold(items[i].getValue());
-					items.erase(items.begin() + i);
+					bool placed = false;
+					for (size_t j = 0; j < storedItems.size(); j++)
+					{
+						if (storedItems[j].isNull())
+						{
+							storedItems[j] = move(items[i]);
+							storedItems[j].getIcon().setPosition(emptyFrames[j].getPosition());
+							currentItems++;
+							items.erase(items.begin() + i);
+							placed = true;
+							break;
+						}
+					}
+					if (!placed) ++i;
 				}
 				else
 				{
@@ -1479,9 +1498,10 @@ void Engine::run()
 				window.draw(weaponFrame);
 
 				window.draw(ringFrame);
-				for (int i = 0; i < sizeof(emptyFrames) / sizeof(emptyFrames[0]); i++) {
-					window.draw(emptyFrames[i]);
+				for (auto& frame : emptyFrames) {
+					window.draw(frame);
 				}
+
 				window.draw(killsText);
 				window.draw(goldCountText);
 				window.draw(backgroundInvHealthBar);
@@ -1496,9 +1516,11 @@ void Engine::run()
 
 				// draw icons last 
 
-				for (int i = 0; i < sizeof(itemIcon) / sizeof(itemIcon[0]); i++) {
-					window.draw(itemIcon[i]);
+				for (auto& icons : storedItems) {
+					window.draw(icons.getIcon());
 				}
+
+				window.draw(clickedItem.getIcon());
 
 				window.draw(equippedWeaponIcon);
 

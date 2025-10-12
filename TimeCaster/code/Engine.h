@@ -216,9 +216,15 @@ private:
 	RectangleShape neckFrame;
 	RectangleShape weaponFrame;
 	RectangleShape ringFrame;
-	RectangleShape emptyFrames[16];
+	//RectangleShape emptyFrames[16];
 
-	int storedItem[16];
+	int maxItems = 16; // max amount of item slots
+	vector<Item> storedItems;
+	vector<RectangleShape> emptyFrames;
+	vector<Item> allItems;     // all possible ite
+	int currentItems = 0; // current item amount
+	Item clickedItem = Item("null",Vector2f(0,0));
+
 	RectangleShape itemIcon[16];
 	RectangleShape* clickedShape = nullptr;
 
@@ -281,9 +287,11 @@ public:
 
 	void run();
 
+	void initializeInventory();
+
 	//Difficulty stringToDifficulty(std::string str);
 
 	string difficultyToString(Difficulty difficulty);
 
-	void moveDraggedIcon(RectangleShape* draggedIcon, Vector2f mousePos);
+	void moveDraggedIcon(Sprite& draggedIcon, Vector2f mousePos);
 };

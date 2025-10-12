@@ -16,6 +16,8 @@ protected:
 
 	// The sprite that represents this pickup
 	Sprite m_Sprite;
+	
+	Sprite m_Icon;
 
 	// Handle spawning and disappearing
 	bool m_Spawned;
@@ -31,16 +33,20 @@ protected:
 
 	Vector2f m_Position;
 
+	bool m_NullItem = false;
+
 	// Public prototypes go here
 public:
 
-	Item(String type, sf::Vector2f position);
+	Item(String type, Vector2f position);
 
 	// Check the position of a pickup
 	FloatRect getPosition();
 
 	// Get the sprite for drawing
 	Sprite getSprite();
+
+	Sprite& getIcon();
 
 	int getValue();
 
@@ -49,6 +55,8 @@ public:
 
 	// Is this pickup currently spawned?
 	bool isSpawned();
+
+	bool isNull();
 
 	// Get the goodness from the pickup
 	int gotIt();
