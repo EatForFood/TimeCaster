@@ -125,7 +125,7 @@ Engine::Engine()
 	// FPS text
 	fpsText.setFont(font);
 	fpsText.setCharacterSize(20);
-	fpsText.setFillColor(Color::White);
+	fpsText.setFillColor(Color::Yellow);
 	fpsText.setPosition(1800, 5);
 
 	// Health bar
@@ -408,14 +408,11 @@ Engine::Engine()
 	textureRingFrame = TextureHolder::GetTexture("graphics/UI/ringFrame.png");
 	textureItems = TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png");
 
-
-
 	// Player frame
 	playerFrame.setSize(sf::Vector2f(100.f, 200.f));
 	playerFrame.setTexture(&texturePlayerFrame);
 	playerFrame.setOrigin(playerFrame.getSize() / 2.f);
 	playerFrame.setPosition(viewCentre.x - 200, 400);
-
 
 	equippedWeaponIcon.setTexture(&textureItems);
 	//equippedWeaponIcon.setTextureRect(player.getEquippedWeaponIcon());
@@ -521,8 +518,6 @@ Engine::Engine()
 
 	// Populate soundtrack
 	sound.populateSoundtrack();
-
-
 }
 
 void Engine::initializeInventory()
@@ -611,15 +606,13 @@ void Engine::moveDraggedIcon(Sprite& draggedIcon, Vector2f mousePos)
 
 void Engine::run()
 {
-	
-
 	// The main game loop
 	while (window.isOpen())
 	{
 		if (displayFps) {
 			// Calculating fps
 			float deltaTime = fpsClock.restart().asSeconds();
-			fps = 1.f / deltaTime;
+			fps = fps * 0.9f + (1.f / deltaTime) * 0.1f;
 			fpsText.setString("FPS: " + to_string((int)fps));
 		}
 
@@ -662,13 +655,10 @@ void Engine::run()
 			if ((event.type == Event::MouseButtonPressed && event.key.code == Mouse::Middle && state == State::PLAYING) ||
 				(event.type == Event::KeyPressed && event.key.code == Keyboard::F && state == State::PLAYING))
 			{
-
 				//cout << " Weapon switched" << endl;
 
 				player.switchWeapon();
 				equippedWeaponIcon.setTextureRect(player.getEquippedWeaponIcon());
-
-
 			}
 
 			if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left && state == State::OPTIONS_MENU)
@@ -719,8 +709,6 @@ void Engine::run()
 					player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume());
 					player.loadSaveFile();
 
-
-
 					// We will modify the next two lines later
 					arena.width = 1900;
 					arena.height = 800;
@@ -733,16 +721,16 @@ void Engine::run()
 
 					// Spawn the player in the middle of the arena
 					player.spawn(arena, resolution, tileSize, player.getPlayerLevel());
-					enemy.spawn(arena, resolution, tileSize, "Goblin", player.getPlayerLevel());
+					
+					for (int i = 0; i < size(enemyArr); ++i)
+					{
+						enemyArr[i].spawn(arena, resolution, tileSize, "Goblin", player.getPlayerLevel());
+					}
 
 					// Reset the clock so there isn't a frame jump
 					clock.restart();
 
-
-
 					equippedWeaponIcon.setTextureRect(player.getEquippedWeaponIcon());
-
-
 
 					player.loadConfigFile();
 					difficulty = Difficulty::Medium;
@@ -781,7 +769,11 @@ void Engine::run()
 
 						// Spawn the player in the middle of the arena
 						player.spawn(arena, resolution, tileSize, player.getPlayerLevel());
-						enemy.spawn(arena, resolution, tileSize, "Goblin", player.getPlayerLevel());
+
+						for (int i = 0; i < size(enemyArr); ++i)
+						{
+							enemyArr[i].spawn(arena, resolution, tileSize, "Goblin", player.getPlayerLevel());
+						}
 
 						// Reset the clock so there isn't a frame jump
 						clock.restart();
@@ -815,14 +807,14 @@ void Engine::run()
 
 						// Spawn the player in the middle of the arena
 						player.spawn(arena, resolution, tileSize, player.getPlayerLevel());
-						enemy.spawn(arena, resolution, tileSize, "Goblin", player.getPlayerLevel());
+						
+						for (int i = 0; i < size(enemyArr); ++i)
+						{
+							enemyArr[i].spawn(arena, resolution, tileSize, "Goblin", player.getPlayerLevel());
+						}
 
 						// Reset the clock so there isn't a frame jump
 						clock.restart();
-
-
-
-
 
 						equippedWeaponIcon.setTextureRect(player.getEquippedWeaponIcon());
 
@@ -1130,7 +1122,14 @@ void Engine::run()
 			if (!drawInventory && state == State::PLAYING) {
 				// Update the player
 				player.update(dtAsSeconds, Mouse::getPosition(), world.getNavBoxes(player.getChunk()));
-				enemy.update(dtAsSeconds, world.getNavBoxes(enemy.getChunk()));
+				
+				// Update the array of enemies if within render area
+				for (int i = 0; i < size(enemyArr); ++i)
+				{
+					if (player.getRenderArea().intersects(enemyArr[i].getSprite().getGlobalBounds())) {
+						enemyArr[i].update(dtAsSeconds, world.getNavBoxes(enemy.getChunk()));
+					}
+				}
 			}
 
 			filter.setOrigin(player.getPosition());
@@ -1445,11 +1444,14 @@ void Engine::run()
 						if (player.getRenderArea().intersects(entity.getSprite().getGlobalBounds())) {
 							drawables.emplace_back(entity.getSprite().getGlobalBounds().top + entity.getSprite().getGlobalBounds().height, entity.getSprite());
 						}
-
-						if (player.getRenderArea().intersects(enemy.getSprite().getGlobalBounds())) {
-							drawables.emplace_back(enemy.getSprite().getGlobalBounds().top + enemy.getSprite().getGlobalBounds().height, enemy.getSpriteFromSheet()); // place enemy into drawables if in RenderArea
-						}
 					}
+				}
+			}
+
+			for (int i = 0; i < size(enemyArr); ++i)
+			{
+				if (player.getRenderArea().intersects(enemyArr[i].getSprite().getGlobalBounds())) {
+					drawables.emplace_back(enemyArr[i].getSprite().getGlobalBounds().top + enemyArr[i].getSprite().getGlobalBounds().height, enemyArr[i].getSpriteFromSheet()); // place enemy into drawables if in RenderArea
 				}
 			}
 
@@ -1545,11 +1547,8 @@ void Engine::run()
 				for (auto& icons : storedItems) {
 					window.draw(icons.getIcon());
 				}
-
 				window.draw(clickedItem.getIcon());
-
 				window.draw(equippedWeaponIcon);
-
 				window.setView(mainView);
 				window.draw(spriteCursor);
 				window.setView(hudView);
@@ -1566,16 +1565,10 @@ void Engine::run()
 				if (displayFps) {
 					window.draw(fpsText);
 				}
-
-
 				window.draw(filter);
-
-
 				window.setView(mainView);
 				window.draw(spriteCursor);
 				window.setView(hudView);
-
-
 			}
 		}
 

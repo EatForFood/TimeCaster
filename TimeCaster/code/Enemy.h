@@ -3,6 +3,7 @@
 #include "Character.h"
 #include "NavBox.h"
 #include "CollisionDetection.h"
+#include "Player.h"
 
 using namespace std;
 using namespace sf;
@@ -28,6 +29,10 @@ private:
 	int m_Chunk; // Enemy's current chunk
 
 	Clock movementTimer;
+
+	float m_Damage = 4; // Change this later to be set dynamically
+
+	void move();
 public:
 	Enemy();
 
@@ -60,4 +65,6 @@ public:
 	int getChunk();
 
 	FloatRect getRenderArea();
+
+	float getDamage();
 };

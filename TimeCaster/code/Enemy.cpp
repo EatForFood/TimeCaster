@@ -126,6 +126,8 @@ void Enemy::update(float elapsedTime, vector<NavBox> navBox) {
 		m_IsMoving = true;
 	}
 
+	// move();
+	
 	if (m_Type == "Knight") {
 
 	}
@@ -305,4 +307,14 @@ int Enemy::getChunk()
 FloatRect Enemy::getRenderArea()
 {
 	return m_RenderArea;
+}
+
+float Enemy::getDamage()
+{
+	return m_Damage;
+}
+
+void move()
+{
+	// A* here
 }
