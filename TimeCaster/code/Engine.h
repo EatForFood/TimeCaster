@@ -217,7 +217,7 @@ private:
 	RectangleShape weaponFrame;
 	RectangleShape ringFrame;
 	//RectangleShape emptyFrames[16];
-
+	int draggedIndex = -1;
 	int maxItems = 16; // max amount of item slots
 	vector<Item> storedItems;
 	vector<RectangleShape> emptyFrames;

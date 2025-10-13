@@ -1,5 +1,6 @@
 #include "Item.h"
 #include "TextureHolder.h"
+#include <iostream>
 using namespace sf;
 using namespace std;
 
@@ -15,6 +16,13 @@ Item::Item(String type, Vector2f position)
 		//m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/goldCoin.png"));
 
 		// How much is item worth
+
+		/*
+		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
+		m_Sprite.setTextureRect(IntRect(961, 896, 32, 32));
+		m_Icon.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
+		m_Icon.setTextureRect(IntRect(961, 896, 32, 32));
+		*/
 		m_Value = 0;
 
 		m_Sprite.setOrigin(5, 5);
@@ -35,6 +43,40 @@ Item::Item(String type, Vector2f position)
 		m_Value = 1;
 
 		m_Sprite.setOrigin(5, 5);
+
+	}
+
+	if (m_Type == "StartingSword")
+	{
+		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
+		m_Sprite.setTextureRect(IntRect(961, 896, 32, 32));
+		m_Icon.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
+		m_Icon.setTextureRect(IntRect(961, 896, 32, 32));
+		FloatRect bounds = m_Icon.getLocalBounds();
+		m_Icon.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
+		cout << "Item set as starting sword" << endl;
+		// How much is item worth
+		m_Value = 5;
+
+		m_Sprite.setOrigin(5, 5);
+		m_Icon.setScale(2.34, 2.34);
+		
+
+	}
+
+	if (m_Type == "StartingWand")
+	{
+		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
+		m_Icon.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
+		m_Icon.setTextureRect(IntRect(194, 864, 32, 32));
+		FloatRect bounds = m_Icon.getLocalBounds();
+		m_Icon.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
+
+		// How much is item worth
+		m_Value = 5;
+	//	cout << "Item set as starting wand" << endl;
+		m_Sprite.setOrigin(5, 5);
+		m_Icon.setScale(2.34, 2.34);
 
 	}
 	
@@ -67,6 +109,7 @@ Sprite Item::getSprite()
 
 Sprite& Item::getIcon()
 {
+
 	return m_Icon;
 }
 
@@ -124,4 +167,3 @@ void Item::update(float elapsedTime)
 		m_MovementElapsed += elapsedTime;
 	}
 }
-
