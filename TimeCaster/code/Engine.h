@@ -282,6 +282,8 @@ private:
 	int x;
 	int y;
 
+	Enemy enemyArr[5];
+
 public:
 	Engine();
 

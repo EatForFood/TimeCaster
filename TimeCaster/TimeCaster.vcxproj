@@ -30,6 +30,7 @@
     <ClInclude Include="code\Gun.h" />
     <ClInclude Include="code\Item.h" />
     <ClInclude Include="code\NavBox.h" />
+    <ClInclude Include="code\Node.h" />
     <ClInclude Include="code\Pickup.h" />
     <ClInclude Include="code\Player.h" />
     <ClInclude Include="code\SoundManager.h" />
