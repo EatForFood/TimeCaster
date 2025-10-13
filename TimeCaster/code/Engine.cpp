@@ -1443,18 +1443,14 @@ void Engine::run()
 						if (player.getRenderArea().intersects(entity.getSprite().getGlobalBounds())) {
 							drawables.emplace_back(entity.getSprite().getGlobalBounds().top + entity.getSprite().getGlobalBounds().height, entity.getSprite());
 						}
-
-						for (int i = 0; i < size(enemyArr); ++i)
-						{
-							if (player.getRenderArea().intersects(enemyArr[i].getSprite().getGlobalBounds())) {
-								drawables.emplace_back(enemyArr[i].getSprite().getGlobalBounds().top + enemyArr[i].getSprite().getGlobalBounds().height, enemyArr[i].getSpriteFromSheet()); // place enemy into drawables if in RenderArea
-							}
-						}
-
-						if (player.getRenderArea().intersects(enemy.getSprite().getGlobalBounds())) {
-							drawables.emplace_back(enemy.getSprite().getGlobalBounds().top + enemy.getSprite().getGlobalBounds().height, enemy.getSpriteFromSheet()); // place enemy into drawables if in RenderArea
-						}
 					}
+				}
+			}
+
+			for (int i = 0; i < size(enemyArr); ++i)
+			{
+				if (player.getRenderArea().intersects(enemyArr[i].getSprite().getGlobalBounds())) {
+					drawables.emplace_back(enemyArr[i].getSprite().getGlobalBounds().top + enemyArr[i].getSprite().getGlobalBounds().height, enemyArr[i].getSpriteFromSheet()); // place enemy into drawables if in RenderArea
 				}
 			}
 
