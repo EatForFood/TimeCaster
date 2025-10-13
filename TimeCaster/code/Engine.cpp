@@ -147,6 +147,12 @@ Engine::Engine()
 	manaBar.setFillColor(Color::Magenta);
 	manaBar.setPosition(10, 110);
 
+	storedItems.resize(16, Item("null", Vector2f(300, 650)));
+
+	
+
+	storedItems[0] = Item("StartingWand", Vector2f(300, 650));
+	storedItems[1] = Item("StartingSword", Vector2f(600, 650));
 	// Empty mana bar
 	emptyManaBar.setFillColor(Color::Black);
 	emptyManaBar.setPosition(10, 110);
@@ -246,6 +252,8 @@ Engine::Engine()
 	mainMenuButton.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 975);
 	mainMenuButton.setTexture(&textureMainMenuButton2);
 
+	
+
 	// Main menu button text
 	mainMenuButtonText.setString("Save & Exit");    // Set the displayed text
 	mainMenuButtonText.setFont(font);               // Assign the font
@@ -316,6 +324,8 @@ Engine::Engine()
 	viewCentre = mainView.getCenter();
 	windowedModeButton.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 500);
 	windowedModeButton.setTexture(&textureMainMenuButton2);
+
+
 
 	// Windowed mode button text
 	windowedModeButtonText.setString("Windowed Mode");  // Set the display text
@@ -412,6 +422,8 @@ Engine::Engine()
 	equippedWeaponIcon.setOrigin(equippedWeaponIcon.getSize() / 2.f);
 	equippedWeaponIcon.setPosition(viewCentre.x - 200, 550);
 
+
+
 	// Player sprite for frame
 	playerInFrame.setSize(sf::Vector2f(60.f, 100.f));
 	playerInFrame.setTexture(&texturePlayerInFrame);
@@ -455,7 +467,7 @@ Engine::Engine()
 
 	itemIcon[0].setPosition(9999, 9999); //move the first one so we have an empty slot to start with
 	//storedItem[0] = 0; //empty slot
-
+	
 	// Display kill count inventory text
 	killsText.setString("Kills: " + std::to_string(player.getKillCount())); // Set the label text
 	killsText.setFont(font);                             // Assign the font
@@ -483,7 +495,7 @@ Engine::Engine()
 	backgroundInvStamBar.setFillColor(Color::Black);
 	backgroundInvStamBar.setSize(Vector2f(200, 50));
 	backgroundInvStamBar.setPosition(viewCentre.x - 60, 825);
-
+	//storedItems[0].getIcon().setSize(Vector2f(75, 75));
 	// Display invStamBar text
 	invStamBarText.setString("0 / 0");        // Set the initial text
 	invStamBarText.setFont(font);             // Assign the font
@@ -533,8 +545,11 @@ void Engine::initializeInventory()
 		startX += 100;
 	}
 
-	storedItems.resize(16, Item("null", Vector2f(0,0)));
 
+	//storedItems.resize(16, Item("DefaultSword", Vector2f(300,650)));
+	//storedItems[0] = Item("DefaultSword", Vector2f(300, 650));
+
+	//storedItems[0] = Item("DefaultSword", Vector2f(300, 650));
 	startX = viewCentre.x - 300;
 	startY = 650;
 	for (int i = 0; i < sizeof(itemIcon) / sizeof(itemIcon[0]); i++) {
@@ -552,6 +567,11 @@ void Engine::initializeInventory()
 		startX += 100;
 	}
 
+	/*if (storedItems.size() > 1)
+	{
+		storedItems[1] = Item("DefaultSword", Vector2f(300, 650));
+	}
+	*/
 	// Position icons for items that actually exist
 	for (int i = 0; i < storedItems.size(); i++) {
 		if (!storedItems[i].isNull()) {
@@ -590,7 +610,7 @@ void Engine::moveDraggedIcon(Sprite& draggedIcon, Vector2f mousePos)
 
 void Engine::run()
 {
-
+	
 
 	// The main game loop
 	while (window.isOpen())
@@ -969,6 +989,7 @@ void Engine::run()
 			if (Keyboard::isKeyPressed(Keyboard::D))
 			{
 				player.moveRight();
+				
 			}
 			else
 			{
@@ -991,12 +1012,14 @@ void Engine::run()
 		if (event.key.code == Keyboard::Num0 && state == State::PLAYING)
 		{
 			debugreset = false;
+		
+			
 		}
 		if (event.key.code == Keyboard::Num1 && !debugreset && state == State::PLAYING)
 		{
 			// Increase health
 			player.upgradeHealth();
-
+			
 			debugreset = true;
 		}
 
@@ -1133,7 +1156,7 @@ void Engine::run()
 			if (drawInventory)
 			{
 				bool draggingFromInventory = false;
-				int draggedIndex = -1;
+				//int draggedIndex = -1;
 
 				// Check clicks on inventory items
 				for (int i = 0; i < storedItems.size(); i++)
@@ -1201,8 +1224,10 @@ void Engine::run()
 					if (!placed)
 					{
 						clickedItem.getIcon().setPosition(itemLastX, itemLastY);
-						if (draggingFromInventory && draggedIndex >= 0 && draggedIndex < storedItems.size())
+						if (draggingItem && draggedIndex >= 0 && draggedIndex < storedItems.size())
 							storedItems[draggedIndex] = clickedItem; // restore in original slot
+						placed = true;
+						
 					}
 
 					draggingItem = false;
