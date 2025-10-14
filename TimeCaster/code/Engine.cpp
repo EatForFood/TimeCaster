@@ -14,6 +14,8 @@
 #include "SoundManager.h"
 #include "CollisionDetection.h"
 #include "Item.h"
+#include "Weapon.h"
+#include "Equipment.h"
 #include "Enemy.h"
 #include <string>;
 
@@ -152,7 +154,7 @@ Engine::Engine()
 	
 
 	storedItems[0] = Item("StartingWand", Vector2f(300, 650));
-	storedItems[1] = Item("StartingSword", Vector2f(600, 650));
+	storedItems[2] = Weapon("StartingSword", Vector2f(600, 650));
 	// Empty mana bar
 	emptyManaBar.setFillColor(Color::Black);
 	emptyManaBar.setPosition(10, 110);
