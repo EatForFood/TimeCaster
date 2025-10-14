@@ -1052,6 +1052,12 @@ void Engine::run()
 			debugreset = true;
 		}
 
+		if (event.key.code == Keyboard::C && !debugreset && state == State::PLAYING)
+		{
+			player.setInCell();
+			debugreset = true;
+		}
+
 		// Handle the display fps button changing colour based on boolean
 		if (state == State::OPTIONS_MENU)
 		{
@@ -1412,10 +1418,20 @@ void Engine::run()
 			window.setView(mainView);
 
 			// Draw the background
-			for (int i = 0; i < world.getWorldSize(); i++)
+			if (!player.getInCell())
 			{
-				if (collision.distance(player.getCenter(), world.getChunkCenter(i)) < 2000) { // check player distance to chunk
-					window.draw(world.getBackground(i), &textureBackground);
+				for (int i = 0; i < world.getWorldSize(); i++)
+				{
+					if (collision.distance(player.getCenter(), world.getChunkCenter(i)) < 2000) { // check player distance to chunk
+						window.draw(world.getBackground(i), &textureBackground);
+					}
+				}
+			}
+
+			if (player.getInCell())
+			{
+				for (auto& cells : world.getChunk(player.getChunk()).getCells()) {
+					window.draw(cells.getBackground(), &textureBackground);
 				}
 			}
 
@@ -1439,12 +1455,15 @@ void Engine::run()
 				window.draw(item.getSprite());
 			}
 
-			for (int i = 0; i < world.getWorldSize(); i++)
+			if (!player.getInCell())
 			{
-				if (collision.distance(player.getCenter(), world.getChunkCenter(i)) < 2000) {
-					for (auto& entity : world.getEntities(i)) {
-						if (player.getRenderArea().intersects(entity.getSprite().getGlobalBounds())) {
-							drawables.emplace_back(entity.getSprite().getGlobalBounds().top + entity.getSprite().getGlobalBounds().height, entity.getSprite());
+				for (int i = 0; i < world.getWorldSize(); i++)
+				{
+					if (collision.distance(player.getCenter(), world.getChunkCenter(i)) < 2000) {
+						for (auto& entity : world.getEntities(i)) {
+							if (player.getRenderArea().intersects(entity.getSprite().getGlobalBounds())) {
+								drawables.emplace_back(entity.getSprite().getGlobalBounds().top + entity.getSprite().getGlobalBounds().height, entity.getSprite());
+							}
 						}
 					}
 				}
@@ -1478,13 +1497,15 @@ void Engine::run()
 
 			drawables.clear();
 
-			for (int i = 0; i < world.getWorldSize(); i++)
+			if (!player.getInCell())
 			{
-				if (collision.distance(player.getCenter(), world.getChunkCenter(i)) < 2000) {
-					window.draw(world.getForground(i), &textureBackground);
+				for (int i = 0; i < world.getWorldSize(); i++)
+				{
+					if (collision.distance(player.getCenter(), world.getChunkCenter(i)) < 2000) {
+						window.draw(world.getForground(i), &textureBackground);
+					}
 				}
 			}
-
 			/*
 			for (auto& txt : chunks[0].getDebugText()) { // draw debug text showing tile location
 				window.draw(txt);

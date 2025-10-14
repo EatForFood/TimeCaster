@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "Entity.h"
 #include "NavBox.h"
+#include "Cell.h"
 
 using namespace sf;
 using namespace std;
@@ -47,6 +48,8 @@ protected:
 	NavBox chunkArea;
 	vector<NavBox> navBoxes;
 
+	vector<Cell> cells;
+
 
 public:
 
@@ -67,6 +70,8 @@ public:
 	vector<Entity> getEntities();
 
 	vector<NavBox> getNavBoxes();
+
+	vector<Cell> getCells();
 
 	NavBox getChunkArea();
 	Vector2f getChunkCenter();

@@ -585,6 +585,23 @@ void Player::setChunk(int chunk)
 	m_Chunk = chunk;
 }
 
+void Player::setInCell()
+{
+	if (inCell)
+	{
+		inCell = false;
+	}
+	else
+	{
+		inCell = true;
+	}
+}
+
+bool Player::getInCell()
+{
+	return inCell;
+}
+
 int Player::getChunk()
 {
 	return m_Chunk;

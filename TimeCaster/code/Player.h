@@ -73,6 +73,8 @@ private:
 
 	IntRect m_EquippedWeaponIcon;
 
+	bool inCell = false;
+
 public:
 
 	Player();
@@ -173,4 +175,7 @@ public:
 	void switchWeapon();
 
 	IntRect getEquippedWeaponIcon();
+
+	void setInCell();
+	bool getInCell();
 };

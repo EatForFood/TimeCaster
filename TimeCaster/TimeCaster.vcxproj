@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\Bullet.h" />
+    <ClInclude Include="code\Cell.h" />
     <ClInclude Include="code\Character.h" />
     <ClInclude Include="code\CollisionDetection.h" />
     <ClInclude Include="code\Chunk.h" />
@@ -41,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="code\Bullet.cpp" />
+    <ClCompile Include="code\Cell.cpp" />
     <ClCompile Include="code\Character.cpp" />
     <ClCompile Include="code\CollisionDetection.cpp" />
     <ClCompile Include="code\Chunk.cpp" />

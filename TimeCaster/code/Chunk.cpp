@@ -3,6 +3,7 @@
 #include "Entity.h"
 #include "Chunk.h"
 #include "NavBox.h"
+#include "Cell.h"
 #include <random>
 #include <iostream>
 #include <fstream>
@@ -426,6 +427,8 @@ void Chunk::placeHouse2(int sx, int sy) { // sx 15, sy 18
 
 	NavBox navbox(sx + 1, sy - 2, 2, 3);
 	navBoxes.push_back(navbox);
+
+	cells.emplace_back("house2", Vector2f(sx, sy), m_Chunk);
 }
 
 void Chunk::placeHouse3(int sx, int sy) { // sx 15, sy 18
@@ -735,6 +738,11 @@ vector<Entity> Chunk::getEntities() {
 vector<NavBox> Chunk::getNavBoxes() {
 
 	return navBoxes;
+}
+
+vector<Cell> Chunk::getCells() {
+
+	return cells;
 }
 
 NavBox Chunk::getChunkArea() {
