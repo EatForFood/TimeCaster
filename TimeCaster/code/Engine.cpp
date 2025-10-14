@@ -283,6 +283,7 @@ Engine::Engine()
 	track.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, trackY);
 
 	// Slider handle
+	handle.setRadius(10);
 	handle.setPointCount(10);
 	handle.setFillColor(Color::Red);
 	handle.setOrigin(10, 10); // Centre the circle
