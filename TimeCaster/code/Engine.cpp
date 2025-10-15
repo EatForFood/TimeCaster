@@ -527,7 +527,7 @@ void Engine::initializeInventory()
 	int startX = viewCentre.x - 300;
 	int startY = 650;
 
-	// create empty item frames
+	// create empty item r
 	emptyFrames.resize(16);
 	for (int i = 0; i < emptyFrames.size(); i++) {
 		emptyFrames[i].setTexture(&textureEmptyFrame);
@@ -1043,6 +1043,20 @@ void Engine::run()
 			{
 				std::cout << "No space in inventory" << std::endl;
 			}
+			debugreset = true;
+		}
+
+		if (event.key.code == Keyboard::Num5 && !debugreset && state == State::PLAYING)
+		{
+
+			//Selling item example, the storedItems index will need to be set somehow but the rest can be copy and pasted 
+			// I can make a function for it if needed	
+			if (storedItems[0].isNull())	cout << "null item attempted to be sold" << endl;
+
+			player.setGold(player.getGold() + storedItems[0].getValue());
+			cout << "Sold " << " for " << storedItems[0].getValue() << " gold." << endl;
+			cout << "You now have " << player.getGold() << " gold." << endl;
+			storedItems[0] = Item("null", Vector2f(0, 0));
 			debugreset = true;
 		}
 
