@@ -225,7 +225,7 @@ private:
 	int currentItems = 0; // current item amount
 	Item clickedItem = Item("null",Vector2f(0,0));
 
-	RectangleShape itemIcon[16];
+
 	RectangleShape* clickedShape = nullptr;
 
 	Text killsText;                                      // Create the Text objec

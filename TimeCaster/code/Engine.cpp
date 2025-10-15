@@ -465,7 +465,7 @@ Engine::Engine()
 	ringFrame.setOrigin(ringFrame.getSize() / 2.f);
 	ringFrame.setPosition(viewCentre.x - 100, 550);
 
-	itemIcon[0].setPosition(9999, 9999); //move the first one so we have an empty slot to start with
+
 	//storedItem[0] = 0; //empty slot
 	
 	// Display kill count inventory text
@@ -527,8 +527,8 @@ void Engine::initializeInventory()
 	int startX = viewCentre.x - 300;
 	int startY = 650;
 
+	// create empty item frames
 	emptyFrames.resize(16);
-
 	for (int i = 0; i < emptyFrames.size(); i++) {
 		emptyFrames[i].setTexture(&textureEmptyFrame);
 		emptyFrames[i].setSize(Vector2f(75, 75));
@@ -542,34 +542,10 @@ void Engine::initializeInventory()
 		emptyFrames[i].setPosition(startX, startY);
 		startX += 100;
 	}
-
-
-	//storedItems.resize(16, Item("DefaultSword", Vector2f(300,650)));
-	//storedItems[0] = Item("DefaultSword", Vector2f(300, 650));
-
-	//storedItems[0] = Item("DefaultSword", Vector2f(300, 650));
 	startX = viewCentre.x - 300;
 	startY = 650;
-	for (int i = 0; i < sizeof(itemIcon) / sizeof(itemIcon[0]); i++) {
-		itemIcon[i].setTexture(&textureItems);
-		itemIcon[i].setTextureRect(sf::IntRect(961, 896, 32, 32));
-		itemIcon[i].setSize(Vector2f(75, 75));
-		itemIcon[i].setOrigin(itemIcon[i].getSize() / 2.f);
 
-		if (i != 0 && i % 8 == 0) {
-			startY += 100;
-			startX = viewCentre.x - 300;
-		}
 
-		itemIcon[i].setPosition(startX, startY);
-		startX += 100;
-	}
-
-	/*if (storedItems.size() > 1)
-	{
-		storedItems[1] = Item("DefaultSword", Vector2f(300, 650));
-	}
-	*/
 	// Position icons for items that actually exist
 	for (int i = 0; i < storedItems.size(); i++) {
 		if (!storedItems[i].isNull()) {
