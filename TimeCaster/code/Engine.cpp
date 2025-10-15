@@ -606,6 +606,28 @@ void Engine::moveDraggedIcon(Sprite& draggedIcon, Vector2f mousePos)
 	draggedIcon.setPosition(x - 30, y - 30);
 }
 
+bool Engine::addItemToInventory(String itemType)
+{
+	int startX = viewCentre.x - 300;
+	int startY = 650;
+	
+	for (int i = 0; i < storedItems.size(); i++)
+	{
+		if (i != 0 && i % 8 == 0) {
+			startY += 100;
+			startX = viewCentre.x - 300;
+		}
+		if (storedItems[i].isNull())
+		{
+			storedItems[i] = Item(itemType, Vector2f(startX, startY));
+			return true;
+		}
+		startX += 100;
+	}
+
+	return false;
+}
+
 void Engine::run()
 {
 	// The main game loop
@@ -1003,18 +1025,21 @@ void Engine::run()
 
 
 		/* below are debug functions, comment them out in full build / when needed
-		if you add any more, make sure they check if debug reset is false and set it to true or else it will run every loop while the key is pressed */
-		if (event.key.code == Keyboard::Num0 && state == State::PLAYING)
+		if you add any more, make sure they check if debug reset is false and set it to true or else it will run every loop while the key is pressed
+		Press tilde to activate debug commands */
+		if (event.key.code == Keyboard::Tilde && state == State::PLAYING)
 		{
 			debugreset = false;
-		
-			
+		//	storedItems[2] = Weapon("StartingWand", Vector2f(600, 650));
+					
 		}
 		if (event.key.code == Keyboard::Num1 && !debugreset && state == State::PLAYING)
 		{
 			// Increase health
 			player.upgradeHealth();
-			
+		//	storedItems[2] = Weapon("StartingSword", Vector2f(600, 650));
+
+
 			debugreset = true;
 		}
 
@@ -1029,6 +1054,19 @@ void Engine::run()
 		{
 			// Increase health
 			player.upgradeMana();
+			debugreset = true;
+		}
+
+		if (event.key.code == Keyboard::Num4 && !debugreset && state == State::PLAYING)
+		{
+			if (addItemToInventory("StartingSword"))
+			{
+				std::cout << "Item added to inventory" << std::endl;
+			}
+			else
+			{
+				std::cout << "No space in inventory" << std::endl;
+			}
 			debugreset = true;
 		}
 

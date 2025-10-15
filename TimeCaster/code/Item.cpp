@@ -44,6 +44,7 @@ Item::Item(String type, Vector2f position)
 
 		m_Sprite.setOrigin(5, 5);
 
+		m_NullItem = false;
 	}
 
 	if (m_Type == "StartingSword")
@@ -60,7 +61,7 @@ Item::Item(String type, Vector2f position)
 
 		m_Sprite.setOrigin(5, 5);
 		m_Icon.setScale(2.34, 2.34);
-		
+		m_NullItem = false;
 
 	}
 
@@ -77,7 +78,7 @@ Item::Item(String type, Vector2f position)
 	//	cout << "Item set as starting wand" << endl;
 		m_Sprite.setOrigin(5, 5);
 		m_Icon.setScale(2.34, 2.34);
-
+		m_NullItem = false;
 	}
 	
 	m_SecondsSinceSpawn = 0;

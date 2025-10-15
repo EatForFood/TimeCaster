@@ -296,4 +296,6 @@ public:
 	string difficultyToString(Difficulty difficulty);
 
 	void moveDraggedIcon(Sprite& draggedIcon, Vector2f mousePos);
+
+	bool addItemToInventory(String itemType);
 };
