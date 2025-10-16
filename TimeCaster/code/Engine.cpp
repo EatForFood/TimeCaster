@@ -416,11 +416,11 @@ Engine::Engine()
 	playerFrame.setOrigin(playerFrame.getSize() / 2.f);
 	playerFrame.setPosition(viewCentre.x - 200, 400);
 
-	equippedWeaponIcon.setTexture(&textureItems);
+	//equippedWeaponIcon.setTexture(&textureItems);
 	//equippedWeaponIcon.setTextureRect(player.getEquippedWeaponIcon());
-	equippedWeaponIcon.setSize(Vector2f(75, 75));
-	equippedWeaponIcon.setOrigin(equippedWeaponIcon.getSize() / 2.f);
-	equippedWeaponIcon.setPosition(viewCentre.x - 200, 550);
+	//equippedWeaponIcon.setSize(Vector2f(75, 75));
+	//equippedWeaponIcon.setOrigin(equippedWeaponIcon.getSize() / 2.f);
+	//equippedWeaponIcon.setPosition(viewCentre.x - 200, 550);
 
 
 
