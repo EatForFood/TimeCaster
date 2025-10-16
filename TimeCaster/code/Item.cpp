@@ -27,7 +27,9 @@ Item::Item(String type, Vector2f position)
 
 		m_Sprite.setOrigin(5, 5);
 
-		m_NullItem = true;
+		//m_NullItem = true;
+
+		m_ItemType = null;
 
 	}
 
@@ -44,7 +46,8 @@ Item::Item(String type, Vector2f position)
 
 		m_Sprite.setOrigin(5, 5);
 
-		m_NullItem = false;
+		//m_NullItem = false;
+		m_ItemType = Consumable;
 	}
 
 	if (m_Name == "StartingSword")
@@ -62,7 +65,10 @@ Item::Item(String type, Vector2f position)
 
 
 		m_Icon.setScale(2.34, 2.34);
-		m_NullItem = false;
+		//m_NullItem = false;
+
+		m_ItemType = MeleeWeapon;
+
 
 	}
 
@@ -80,7 +86,8 @@ Item::Item(String type, Vector2f position)
 		m_Value = 5;
 
 		m_Icon.setScale(2.34, 2.34);
-		m_NullItem = false;
+		//m_NullItem = false;
+		m_ItemType = MagicWeapon;
 	}
 	
 	m_SecondsSinceSpawn = 0;
@@ -116,6 +123,11 @@ Sprite& Item::getIcon()
 	return m_Icon;
 }
 
+IntRect Item::getTextureRect()
+{
+	return m_Sprite.getTextureRect();
+}
+
 int Item::getValue()
 {
 	return m_Value;
@@ -128,7 +140,14 @@ bool Item::isSpawned()
 
 bool Item::isNull()
 {
-	return m_NullItem;
+	if (m_ItemType == null)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 int Item::gotIt()
@@ -174,4 +193,9 @@ void Item::update(float elapsedTime)
 
 		m_MovementElapsed += elapsedTime;
 	}
+}
+
+Item::ItemType Item::getType()
+{
+	return m_ItemType;
 }

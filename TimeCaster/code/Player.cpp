@@ -5,6 +5,7 @@
 #include <fstream>
 #include <iomanip>
 #include "CollisionDetection.h"
+#include "Item.h"
 
 using namespace std;
 using namespace sf;
@@ -646,4 +647,24 @@ void Player::switchWeapon()
 		m_EquippedWeaponName = m_SavedSwordName;
 	}
 
+}
+
+bool Player::equipWeapon(Item weaponToEquip)
+{
+	if (weaponToEquip.getType() == Item::MeleeWeapon)
+	{
+		m_SavedSwordName = weaponToEquip.getName();
+		m_EquippedWeaponName = m_SavedSwordName;
+		return true;
+	}
+	else if (weaponToEquip.getType() == Item::MagicWeapon)
+	{
+		m_SavedWandName = weaponToEquip.getName();
+		m_EquippedWeaponName = m_SavedWandName;
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }

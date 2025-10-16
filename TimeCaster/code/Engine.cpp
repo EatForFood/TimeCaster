@@ -151,6 +151,7 @@ Engine::Engine()
 
 	storedItems.resize(16, Item("null", Vector2f(300, 650)));
 
+
 	
 
 	storedItems[0] = Item("StartingWand", Vector2f(300, 650));
@@ -416,11 +417,11 @@ Engine::Engine()
 	playerFrame.setOrigin(playerFrame.getSize() / 2.f);
 	playerFrame.setPosition(viewCentre.x - 200, 400);
 
-	//equippedWeaponIcon.setTexture(&textureItems);
-	//equippedWeaponIcon.setTextureRect(player.getEquippedWeaponIcon());
-	//equippedWeaponIcon.setSize(Vector2f(75, 75));
-	//equippedWeaponIcon.setOrigin(equippedWeaponIcon.getSize() / 2.f);
-	//equippedWeaponIcon.setPosition(viewCentre.x - 200, 550);
+	equippedWeaponIcon.setTexture(&textureItems);
+	equippedWeaponIcon.setTextureRect(IntRect(0,0,0,0));
+	equippedWeaponIcon.setSize(Vector2f(75, 75));
+	equippedWeaponIcon.setOrigin(equippedWeaponIcon.getSize() / 2.f);
+	equippedWeaponIcon.setPosition(viewCentre.x - 200, 550);
 
 
 
@@ -658,7 +659,8 @@ void Engine::run()
 				//cout << " Weapon switched" << endl;
 
 				player.switchWeapon();
-				//equippedWeaponIcon.setTextureRect(player.getEquippedWeaponIcon());
+			
+				//equippedWeaponIcon.setTextureRect(player.getEq());
 			}
 
 			if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left && state == State::OPTIONS_MENU)
@@ -1254,6 +1256,16 @@ void Engine::run()
 							placed = true;
 							break;
 						}
+					}
+
+					// Try to equip item if dropped on equipment slot
+
+					if (clickedItem.getIcon().getGlobalBounds().intersects(weaponFrame.getGlobalBounds()))
+					{
+						clickedItem.getIcon().setPosition(weaponFrame.getPosition());
+						player.equipWeapon(clickedItem);
+						equippedWeaponIcon.setTextureRect(clickedItem.getTextureRect());
+						//placed = true;
 					}
 
 					// If no slot found, return to original position

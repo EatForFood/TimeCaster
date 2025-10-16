@@ -264,6 +264,7 @@ private:
 
 	vector<Item> items;
 
+
 	bool debugreset = true; //it's a bit of a hack but it works to stop multiple upgrades from one key press
 	//press numpad0 to reset if you want to test again
 	//remove this in full build
