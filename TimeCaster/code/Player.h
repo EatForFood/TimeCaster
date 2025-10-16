@@ -72,6 +72,7 @@ private:
 
 	CollisionDetection collision;
 	vector<NavBox> navBoxes;
+//	vector<Item> equippedItems;
 	int m_Chunk; // player's current chunk
 
 	FloatRect m_RenderArea;
@@ -173,11 +174,12 @@ public:
 	void incrementKillCount();
 	int getKillCount();
 
-	Item getSavedSword();
-	Item getSavedWand();
-	Item getEquippedWeapon();
+	//Item getSavedSword();
+	//Item getSavedWand();
+	//Item getEquippedWeapon();
 
 	void switchWeapon();
+	bool equipWeapon(Item weaponToEquip);
 
 
 	void setInCell();

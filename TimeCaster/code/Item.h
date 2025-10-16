@@ -7,43 +7,20 @@ using namespace std;
 
 class Item
 {
-protected:
-
-	int m_Value;
-	float m_Weight; 
-	int SECONDS_TO_DESPAWN = 120;
-	String m_Name;
-
-	// The sprite that represents this pickup
-	Sprite m_Sprite;
-	
-	Sprite m_Icon;
-
-	// Handle spawning and disappearing
-	bool m_Spawned;
-	float m_SecondsSinceSpawn;
-	float m_SecondsSinceDeSpawn;
-	float m_SecondsToLive;
-	float m_SecondsToWait;
-
-	float m_MovementElapsed = 0;
-	float m_MovementDuration = 2;
-
-	Vector2f m_Velocity;
-
-	Vector2f m_Position;
-
-	bool m_NullItem = false;
-
-	// Public prototypes go here
 public:
 
+	enum ItemType { MeleeWeapon, MagicWeapon, Consumable, null };
+
 	Item(String type, Vector2f position);
+
+	ItemType getType();
 
 
 
 	// Check the position of a pickup
 	FloatRect getPosition();
+
+	IntRect getTextureRect();
 
 	// Get the sprite for drawing
 	Sprite getSprite();
@@ -64,6 +41,38 @@ public:
 
 	// Get the goodness from the pickup
 	int gotIt();
+
+protected:
+
+	int m_Value;
+	float m_Weight; 
+	int SECONDS_TO_DESPAWN = 120;
+	String m_Name;
+
+
+
+	ItemType m_ItemType;
+
+	// The sprite that represents this pickup
+	Sprite m_Sprite;
+	
+	Sprite m_Icon;
+
+	// Handle spawning and disappearing
+	bool m_Spawned;
+	float m_SecondsSinceSpawn;
+	float m_SecondsSinceDeSpawn;
+	float m_SecondsToLive;
+	float m_SecondsToWait;
+
+	float m_MovementElapsed = 0;
+	float m_MovementDuration = 2;
+
+	Vector2f m_Velocity;
+
+	Vector2f m_Position;
+
+	
 
 };
 
