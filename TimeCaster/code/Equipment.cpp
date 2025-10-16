@@ -7,7 +7,7 @@ Equipment::Equipment(String type, sf::Vector2f position)
 	: Item(type, position) // call base constructor
 {
 	// Associate the texture with the sprite
-	if (m_Type == "cloakBody")
+	if (m_Name == "cloakBody")
 	{
 		m_Sprite = Sprite(TextureHolder::GetTexture(
 			"graphics/health_pickup.png"));

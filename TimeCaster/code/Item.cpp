@@ -8,10 +8,10 @@ using namespace std;
 Item::Item(String type, Vector2f position)
 {
 	// Store the type of this pickup
-	m_Type = type;
+	m_Name = type;
 	m_Position = position;
 
-	if (m_Type == "null") // empty item for inventory
+	if (m_Name == "null") // empty item for inventory
 	{
 		//m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/goldCoin.png"));
 
@@ -31,7 +31,7 @@ Item::Item(String type, Vector2f position)
 
 	}
 
-	if (m_Type == "gold")
+	if (m_Name == "gold")
 	{
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/goldCoin.png"));
 		m_Icon.setTexture(TextureHolder::GetTexture("graphics/items/goldCoinIcon.png"));
@@ -47,7 +47,7 @@ Item::Item(String type, Vector2f position)
 		m_NullItem = false;
 	}
 
-	if (m_Type == "StartingSword")
+	if (m_Name == "StartingSword")
 	{
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
 		m_Sprite.setTextureRect(IntRect(961, 896, 32, 32));
@@ -55,28 +55,30 @@ Item::Item(String type, Vector2f position)
 		m_Icon.setTextureRect(IntRect(961, 896, 32, 32));
 		FloatRect bounds = m_Icon.getLocalBounds();
 		m_Icon.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
+		//m_Sprite.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
 		cout << "Item set as starting sword" << endl;
 		// How much is item worth
 		m_Value = 5;
 
-		m_Sprite.setOrigin(5, 5);
+
 		m_Icon.setScale(2.34, 2.34);
 		m_NullItem = false;
 
 	}
 
-	if (m_Type == "StartingWand")
+	if (m_Name == "StartingWand")
 	{
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
+		m_Sprite.setTextureRect(IntRect(194, 864, 32, 32));
 		m_Icon.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
 		m_Icon.setTextureRect(IntRect(194, 864, 32, 32));
 		FloatRect bounds = m_Icon.getLocalBounds();
 		m_Icon.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
+	//	m_Sprite.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
 
 		// How much is item worth
 		m_Value = 5;
-	//	cout << "Item set as starting wand" << endl;
-		m_Sprite.setOrigin(5, 5);
+
 		m_Icon.setScale(2.34, 2.34);
 		m_NullItem = false;
 	}
@@ -134,6 +136,11 @@ int Item::gotIt()
 	m_Spawned = false;
 	m_SecondsSinceDeSpawn = 0;
 	return m_Value;
+}
+
+string Item::getName()
+{
+	return m_Name;
 }
 
 void Item::update(float elapsedTime)

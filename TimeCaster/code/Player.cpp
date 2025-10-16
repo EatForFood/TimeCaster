@@ -484,8 +484,8 @@ void Player::updateSaveFile()
 	std::ofstream saveFile("gamedata/TCSave.txt");
 
 	saveFile << std::fixed << std::setprecision(5) << m_Speed << " " << m_Health << " " << m_MaxHealth << " " << m_Stamina << " "
-	<< m_MaxStamina << " " << m_StaminaRecharge << " " << m_Mana << " " << m_MaxMana << " " << m_Gold << " " << m_Kills << " " << m_Level << " "
-	<< m_EquippedWeapon << " " << m_SavedSword << " " << m_SavedWand << " " << m_Position.x << " " << m_Position.y << std::endl;
+    << m_MaxStamina << " " << m_StaminaRecharge << " " << m_Mana << " " << m_MaxMana << " " << m_Gold << " " << m_Kills << " " << m_Level << " "
+    << m_EquippedWeaponName << " " << m_SavedSwordName << " " << m_SavedWandName << " " << m_Position.x << " " << m_Position.y << std::endl;
 
 	saveFile.close();
 }
@@ -507,9 +507,9 @@ bool Player::loadSaveFile()
 		loadFile >> m_Gold;
 		loadFile >> m_Kills;
 		loadFile >> m_Level;
-		loadFile >> m_EquippedWeapon;
-		loadFile >> m_SavedSword;
-		loadFile >> m_SavedWand;
+		loadFile >> m_EquippedWeaponName;
+		loadFile >> m_SavedSwordName;
+		loadFile >> m_SavedWandName;
 		loadFile >> m_Position.x;
 		loadFile >> m_Position.y;
 		return true;
@@ -635,50 +635,15 @@ int Player::getKillCount() {
 	return m_Kills;
 }
 
-int Player::getSavedSword()
-{
-	return m_SavedSword;
-}
-
-int Player::getSavedWand()
-{
-	return m_SavedWand;
-}
-
-int Player::getEquippedWeapon()
-{
-	return m_EquippedWeapon;
-}
-
 void Player::switchWeapon()
 {
-	if (m_EquippedWeapon == m_SavedSword)
+	if (m_EquippedWeaponName == m_SavedSwordName)
 	{
-		m_EquippedWeapon = m_SavedWand;
+		m_EquippedWeaponName = m_SavedWandName;
 	}
 	else
 	{
-		m_EquippedWeapon = m_SavedSword;
+		m_EquippedWeaponName = m_SavedSwordName;
 	}
 
-}
-
-IntRect Player::getEquippedWeaponIcon()
-{
-
-	switch (m_EquippedWeapon) {
-	case 0:
-		m_EquippedWeaponIcon = { 0, 0, 0, 0 };
-		break;
-	case 1:
-		m_EquippedWeaponIcon = { 961, 896, 32,32 };
-		break;
-	case 11:
-		m_EquippedWeaponIcon = { 194, 864, 32,32 };
-		break;
-	default:
-		m_EquippedWeaponIcon = { 0, 0, 0, 0 };
-		break;
-	}
-	return m_EquippedWeaponIcon;
 }

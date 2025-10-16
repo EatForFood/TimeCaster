@@ -12,7 +12,7 @@ protected:
 	int m_Value;
 	float m_Weight; 
 	int SECONDS_TO_DESPAWN = 120;
-	String m_Type;
+	String m_Name;
 
 	// The sprite that represents this pickup
 	Sprite m_Sprite;
@@ -40,6 +40,8 @@ public:
 
 	Item(String type, Vector2f position);
 
+
+
 	// Check the position of a pickup
 	FloatRect getPosition();
 
@@ -57,6 +59,8 @@ public:
 	bool isSpawned();
 
 	bool isNull();
+
+	string getName();
 
 	// Get the goodness from the pickup
 	int gotIt();

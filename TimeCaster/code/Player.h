@@ -3,6 +3,7 @@
 #include "Character.h"
 #include "NavBox.h"
 #include "CollisionDetection.h"
+#include "Item.h"
 
 using namespace sf;
 using namespace std;
@@ -18,9 +19,9 @@ private:
 	const int START_GOLD = 0;
 	const int START_KILLS = 0;
 	const int START_LEVEL = 1;
-	const int START_EQUIPPED_WEAPON = 1;
-	const int START_SWORD = 1;
-	const int START_WAND = 11;
+	const string START_EQUIPPED_WEAPON = "StartingSword";
+	const string START_SWORD = "StartingSword";
+	const string START_WAND = "StartingWand";
 
 	// Which directions is the player currently moving in
 	bool m_UpPressed;
@@ -35,9 +36,13 @@ private:
 	float m_StaminaRecharge;
 	int m_Gold;
 	int m_Kills;
-	int m_SavedSword;
-	int m_SavedWand;
-	int m_EquippedWeapon;
+	//Item m_SavedSword;
+	//Item m_SavedWand;
+	//Item m_EquippedWeapon;
+
+	string m_EquippedWeaponName;
+	string m_SavedSwordName;
+	string m_SavedWandName;
 
 	bool m_WindowedMode;
 
@@ -71,7 +76,7 @@ private:
 
 	FloatRect m_RenderArea;
 
-	IntRect m_EquippedWeaponIcon;
+	//IntRect m_EquippedWeaponIcon;
 
 	bool inCell = false;
 
@@ -168,13 +173,12 @@ public:
 	void incrementKillCount();
 	int getKillCount();
 
-	int getSavedSword();
-	int getSavedWand();
-	int getEquippedWeapon();
+	Item getSavedSword();
+	Item getSavedWand();
+	Item getEquippedWeapon();
 
 	void switchWeapon();
 
-	IntRect getEquippedWeaponIcon();
 
 	void setInCell();
 	bool getInCell();

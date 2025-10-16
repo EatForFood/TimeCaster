@@ -6,10 +6,10 @@ using namespace std;
 Weapon::Weapon(String type, Vector2f position)
 	: Item(type, position) // call base constructor
 {
-	m_Type = type;
+	m_Name = type;
 
 	// Associate the texture with the sprite
-	if (m_Type == "staff")
+	if (m_Name == "staff")
 	{
 		m_Sprite = Sprite(TextureHolder::GetTexture(
 			"graphics/health_pickup.png"));
@@ -20,7 +20,7 @@ Weapon::Weapon(String type, Vector2f position)
 		m_Sprite.setOrigin(25, 25);
 	}
 
-	if (m_Type == "StartingSword")
+	if (m_Name == "StartingSword")
 	{
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
 		m_Sprite.setTextureRect(IntRect(961, 896, 32, 32));

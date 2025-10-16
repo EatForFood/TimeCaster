@@ -658,7 +658,7 @@ void Engine::run()
 				//cout << " Weapon switched" << endl;
 
 				player.switchWeapon();
-				equippedWeaponIcon.setTextureRect(player.getEquippedWeaponIcon());
+				//equippedWeaponIcon.setTextureRect(player.getEquippedWeaponIcon());
 			}
 
 			if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left && state == State::OPTIONS_MENU)
@@ -730,7 +730,7 @@ void Engine::run()
 					// Reset the clock so there isn't a frame jump
 					clock.restart();
 
-					equippedWeaponIcon.setTextureRect(player.getEquippedWeaponIcon());
+				//	equippedWeaponIcon.setTextureRect(player.getEquippedWeaponIcon());
 
 					player.loadConfigFile();
 					difficulty = Difficulty::Medium;
@@ -778,7 +778,7 @@ void Engine::run()
 						// Reset the clock so there isn't a frame jump
 						clock.restart();
 
-						equippedWeaponIcon.setTextureRect(player.getEquippedWeaponIcon());
+						//equippedWeaponIcon.setTextureRect(player.getEquippedWeaponIcon());
 
 
 						player.loadConfigFile();
@@ -816,7 +816,7 @@ void Engine::run()
 						// Reset the clock so there isn't a frame jump
 						clock.restart();
 
-						equippedWeaponIcon.setTextureRect(player.getEquippedWeaponIcon());
+						//equippedWeaponIcon.setTextureRect(player.getEquippedWeaponIcon());
 
 						player.loadConfigFile();
 						difficulty = Difficulty::Medium;
@@ -1599,7 +1599,7 @@ void Engine::run()
 					window.draw(icons.getIcon());
 				}
 				window.draw(clickedItem.getIcon());
-				window.draw(equippedWeaponIcon);
+			//	window.draw(equippedWeaponIcon);
 				window.setView(mainView);
 				window.draw(spriteCursor);
 				window.setView(hudView);
