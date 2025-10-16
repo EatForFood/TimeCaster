@@ -37,18 +37,14 @@ void Enemy::spawn(IntRect arena, Vector2f resolution, int tileSize, String type,
 	// Associate a texture with the sprite
 	if (type == "Knight") {
 		m_Sprite = Sprite(TextureHolder::GetTexture("graphics/player/playerWalk.png"));
-		// Set the origin of the sprite to the centre, 
-		m_Sprite.setOrigin(32, 32);
-		m_Sprite.setScale(0.75, 0.75);
 	}
 	else if (type == "Goblin") {
-		// Associate a texture with the sprite
 		m_Sprite = Sprite(TextureHolder::GetTexture("graphics/Enemies/swordGoblin.png"));
-		
-		// Set the origin of the sprite to the centre, 
-		m_Sprite.setOrigin(32, 32);
-		m_Sprite.setScale(0.75, 0.75);
 	}
+
+	// Set the origin of the sprite to the centre, 
+	m_Sprite.setOrigin(32, 32);
+	m_Sprite.setScale(0.75, 0.75);
 
 	m_RenderArea = FloatRect(0, 0, 1920, 1080);
 }
@@ -126,6 +122,7 @@ void Enemy::update(float elapsedTime, vector<NavBox> navBox) {
 		m_IsMoving = true;
 	}
 
+	// Moves enemy using A*
 	// move();
 	
 	if (m_Type == "Knight") {

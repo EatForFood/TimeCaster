@@ -928,7 +928,7 @@ void Engine::run()
 					sound.playButtonClickSound();
 				}
 
-				if (state == State::STORY_INTRO && event.key.code == Keyboard::Space)
+				if (state == State::STORY_INTRO && event.key.code == Keyboard::Space || state == State::STORY_INTRO && event.key.code == Keyboard::Escape && drawInventory)
 				{
 					sound.stopStoryIntroSound();
 					state = State::PLAYING;
