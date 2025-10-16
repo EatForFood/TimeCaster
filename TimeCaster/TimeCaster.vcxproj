@@ -47,6 +47,7 @@
     <ClCompile Include="code\CollisionDetection.cpp" />
     <ClCompile Include="code\Chunk.cpp" />
     <ClCompile Include="code\Decal.cpp" />
+    <ClCompile Include="code\Draw.cpp" />
     <ClCompile Include="code\Enemy.cpp" />
     <ClCompile Include="code\Entity.cpp" />
     <ClCompile Include="code\Equipment.cpp" />
