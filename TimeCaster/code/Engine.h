@@ -72,6 +72,7 @@ private:
 	SoundManager sound;
 
 	Texture textureBackground;
+	Texture textureBackground2;
 
 	World world; // world object to manage chunks
 

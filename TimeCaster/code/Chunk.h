@@ -73,6 +73,8 @@ public:
 
 	vector<Cell> getCells();
 
+	String getChunkType();
+
 	NavBox getChunkArea();
 	Vector2f getChunkCenter();
 

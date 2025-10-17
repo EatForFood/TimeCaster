@@ -243,6 +243,85 @@ Chunk::Chunk(String type, Vector2f chunk, bool load)
 			createForest(); // create a forest
 		}
 
+		if (m_Type == "goblinVillage") {
+
+			// Grass 
+			for (int x = 0; x < 50; x++)
+			{
+				for (int y = 0; y < 50; y++)
+				{
+					int chance = rand() % 2500;
+
+					if (chance <= 1200)
+					{
+						placeTile(x, y, 0, 0, false, true);
+					}
+					else if (chance <= 2400)
+					{
+						placeTile(x, y, 1, 0, false, true);
+					}
+					else if (chance <= 2500)
+					{
+						placeTile(x, y, 6, 0, false, true);
+					}
+				}
+			}
+
+			// Forground empty
+			for (int x = 0; x < 50; x++)
+			{
+				for (int y = 0; y < 50; y++)
+				{
+
+					placeTile(x, y, 6, 2, true, true);
+
+				}
+			}
+
+			for (int x = 15; x < 35; x += 6)
+			{
+				for (int y = 15; y < 35; y += 6)
+				{
+					int chance = rand() % 15;
+
+					if (chance < 3) // if spawning a house create grass that trees cant spawn on around house
+					{
+						for (int i = x - 1; i < x + 5; i++)
+						{
+							for (int j = y - 4; j < y + 1; j++)
+							{
+								int chance2 = rand() % 5;
+
+								if (chance2 <= 2)
+								{
+									placeTile(i, j, 4, 2, false, true);
+								}
+								else
+								{
+									placeTile(i, j, 5, 2, false, true);
+								}
+							}
+						}
+					}
+
+					if (chance == 0)
+					{
+						placeHouse2(x, y);
+					}
+					else if (chance == 1)
+					{
+						placeHouse3(x, y);
+					}
+					else if (chance == 2)
+					{
+						placeHouse4(x, y);
+					}
+				}
+			}
+
+			createForest(); // create a forest
+		}
+
 		if (m_Type == "scorchedForest") {
 
 			// Grass 
@@ -900,4 +979,9 @@ void Chunk::loadChunk() // load tile types and entities from file
 	}
 
 	inFile.close();
+}
+
+String Chunk::getChunkType()
+{
+	return m_Type;
 }

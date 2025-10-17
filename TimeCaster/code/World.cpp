@@ -34,6 +34,14 @@ void World::newWorld() // create new world and save chunks to file
                     << y << "\n";
                 chunks.emplace_back("spawn", Vector2f(x, y), false);
             }
+            else if (x == -1 && y == 0)
+            {
+                string type = "goblinVillage";
+                out << type << " "
+                    << x << " "
+                    << y << "\n";
+                chunks.emplace_back("goblinVillage", Vector2f(x, y), false);
+            }
             else
             {
                 string type = "forest";

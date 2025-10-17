@@ -65,6 +65,7 @@ Engine::Engine()
 	// VertexArray background;
 	// Load the texture for our background vertex array
 	textureBackground = TextureHolder::GetTexture("graphics/landscape.png");
+	textureBackground2 = TextureHolder::GetTexture("graphics/landscape2.png");
 
 	// Boolean for whether to display the fps
 //	bool displayFps = false;

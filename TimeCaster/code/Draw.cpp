@@ -22,7 +22,14 @@ void Engine::draw()
 			for (int i = 0; i < world.getWorldSize(); i++)
 			{
 				if (collision.distance(player.getCenter(), world.getChunkCenter(i)) < 2000) { // check player distance to chunk
-					window.draw(world.getBackground(i), &textureBackground);
+					if (world.getChunk(i).getChunkType() == "goblinVillage")
+					{
+						window.draw(world.getBackground(i), &textureBackground2);
+					}
+					else
+					{
+						window.draw(world.getBackground(i), &textureBackground);
+					}
 				}
 			}
 		}
@@ -100,8 +107,16 @@ void Engine::draw()
 		{
 			for (int i = 0; i < world.getWorldSize(); i++)
 			{
-				if (collision.distance(player.getCenter(), world.getChunkCenter(i)) < 2000) {
-					window.draw(world.getForground(i), &textureBackground);
+				if (collision.distance(player.getCenter(), world.getChunkCenter(i)) < 2000) 
+				{
+					if (world.getChunk(i).getChunkType() == "goblinVillage")
+					{
+						window.draw(world.getForground(i), &textureBackground2);
+					}
+					else
+					{
+						window.draw(world.getForground(i), &textureBackground);
+					}	
 				}
 			}
 		}
