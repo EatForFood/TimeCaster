@@ -10,82 +10,14 @@ using namespace std;
 
 class Player : public Character
 {
-private:
-	const float START_SPEED = 100;
-	const float START_HEALTH = 100;
-	const float START_MANA = 100;
-	const float START_STAMINA = 100;
-	const float START_STAMINA_RECHARGE = 0.05;
-	const int START_GOLD = 0;
-	const int START_KILLS = 0;
-	const int START_LEVEL = 1;
-	const string START_EQUIPPED_WEAPON = "StartingSword";
-	const string START_SWORD = "StartingSword";
-	const string START_WAND = "StartingWand";
-
-	// Which directions is the player currently moving in
-	bool m_UpPressed;
-	bool m_DownPressed;
-	bool m_LeftPressed;
-	bool m_RightPressed;
-
-	float m_Mana;
-	float m_MaxMana;
-	float m_Stamina;
-	float m_MaxStamina;
-	float m_StaminaRecharge;
-	int m_Gold;
-	int m_Kills;
-	//Item m_SavedSword;
-	//Item m_SavedWand;
-	//Item m_EquippedWeapon;
-
-	string m_EquippedWeaponName;
-	string m_SavedSwordName;
-	string m_SavedWandName;
-
-	bool m_WindowedMode;
-
-	// Dodge variables
-	bool m_IsDodging = false;
-	bool m_CanDodge = false;
-	Clock m_DodgeClock;
-	Clock m_CooldownClock;
-	float m_DodgeDuration = 0.2f; // 200ms dodge
-	float m_DodgeCooldown = 1.0f; // 1 second cooldown on dodge
-	string m_DifficultyString;
-	bool m_DisplayFPS;
-	float m_Volume;
-	
-	// When was the player last hit
-	Time m_LastHit;
-	// How many iFrames the player has after being hit
-	int m_IFrames = 0;
-	
-	// If the player is moving or not
-	bool m_IsMoving = false;
-
-	bool upDisabled = false;
-	bool downDisabled = false;
-	bool rightDisabled = false;
-	bool leftDisabled = false;
-
-	CollisionDetection collision;
-	vector<NavBox> navBoxes;
-//	vector<Item> equippedItems;
-	int m_Chunk; // player's current chunk
-
-	FloatRect m_RenderArea;
-
-	//IntRect m_EquippedWeaponIcon;
-
-	bool inCell = false;
 
 public:
 
 	Player();
 
 	void spawn(IntRect arena, Vector2f resolution, int tileSize, int level);
+
+	enum CombatType { Melee, Magic };
 
 	// Handle the player getting hit by an enemy
 	bool hit(Time timeHit, float damage, int iFrames);
@@ -104,6 +36,7 @@ public:
 	void stopRight();
 	void stopUp();
 	void stopDown();
+	CombatType getCombatType();
 
 	// We will call this function once every frame
 	void update(float elapsedTime, Vector2i mousePosition, vector<NavBox> navBox);
@@ -169,6 +102,8 @@ public:
 	void setChunk(int chunk);
 	int getChunk();
 
+	vector<Item>& getEquippedWeapons();
+	vector<Item>& getEquippedWeapon();
 	FloatRect getRenderArea();
 
 	void incrementKillCount();
@@ -184,4 +119,82 @@ public:
 
 	void setInCell();
 	bool getInCell();
+private:
+	const float START_SPEED = 100;
+	const float START_HEALTH = 100;
+	const float START_MANA = 100;
+	const float START_STAMINA = 100;
+	const float START_STAMINA_RECHARGE = 0.05;
+	const int START_GOLD = 0;
+	const int START_KILLS = 0;
+	const int START_LEVEL = 1;
+	const string START_EQUIPPED_WEAPON = "StartingSword";
+	const string START_SWORD = "StartingSword";
+	const string START_WAND = "StartingWand";
+
+	
+
+	// Which directions is the player currently moving in
+	bool m_UpPressed;
+	bool m_DownPressed;
+	bool m_LeftPressed;
+	bool m_RightPressed;
+
+	float m_Mana;
+	float m_MaxMana;
+	float m_Stamina;
+	float m_MaxStamina;
+	float m_StaminaRecharge;
+	int m_Gold;
+	int m_Kills;
+	//Item m_SavedSword;
+	//Item m_SavedWand;
+	//Item m_EquippedWeapon;
+
+	string m_EquippedSwordName;
+	string m_EquippedWandName;
+	string m_SavedWandName;
+
+	bool m_WindowedMode;
+
+	// Dodge variables
+	bool m_IsDodging = false;
+	bool m_CanDodge = false;
+	Clock m_DodgeClock;
+	Clock m_CooldownClock;
+	float m_DodgeDuration = 0.2f; // 200ms dodge
+	float m_DodgeCooldown = 1.0f; // 1 second cooldown on dodge
+	string m_DifficultyString;
+	bool m_DisplayFPS;
+	float m_Volume;
+
+	CombatType m_CombatType = Melee;
+	
+	// When was the player last hit
+	Time m_LastHit;
+	// How many iFrames the player has after being hit
+	int m_IFrames = 0;
+	
+	// If the player is moving or not
+	bool m_IsMoving = false;
+
+	bool upDisabled = false;
+	bool downDisabled = false;
+	bool rightDisabled = false;
+	bool leftDisabled = false;
+
+	CollisionDetection collision;
+	vector<NavBox> navBoxes;
+//	vector<Item> equippedItems;
+	// always store the sword at index 0 and wand at index 1
+	vector<Item> m_EquippedWeapons;
+	int m_Chunk; // player's current chunk
+
+	FloatRect m_RenderArea;
+
+	//IntRect m_EquippedWeaponIcon;
+
+	bool inCell = false;
+
+
 };

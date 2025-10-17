@@ -1,4 +1,4 @@
-#include "player.h"
+#include "Player.h"
 #include "TextureHolder.h"
 #include "Engine.h"
 #include <iostream>
@@ -6,6 +6,7 @@
 #include <iomanip>
 #include "CollisionDetection.h"
 #include "Item.h"
+#include "Weapon.h"
 
 using namespace std;
 using namespace sf;
@@ -452,8 +453,9 @@ void Player::createNewSave()
 	std::ofstream saveFile("gamedata/TCSave.txt");
 
 	saveFile << std::fixed << std::setprecision(5) << START_SPEED << " " << START_HEALTH << " " << START_HEALTH << " " << START_STAMINA << " "
-		<< START_STAMINA << " " << START_STAMINA_RECHARGE << " " << START_MANA << " " << START_MANA << " " << START_GOLD << " " << START_KILLS << " " << START_LEVEL << " "  << START_EQUIPPED_WEAPON << " " << START_SWORD << " " << START_WAND << " " << 64 << " " << 64 << std::endl;
-
+		<< START_STAMINA << " " << START_STAMINA_RECHARGE << " " << START_MANA << " " << START_MANA << " " << START_GOLD << " " << START_KILLS << " " << START_LEVEL << " " << START_SWORD << " " << START_WAND << " " << 64 << " " << 64 << std::endl;
+	m_EquippedWeapons[0] = (Weapon(START_SWORD, Vector2f(760, 550)));
+	m_EquippedWeapons[1] = (Weapon(START_WAND, Vector2f(860, 550)));
 	saveFile.close();
 }
 void Player::createConfigFile(string difficultyString, bool windowedMode, bool displayFPS, float volume)
@@ -486,7 +488,7 @@ void Player::updateSaveFile()
 
 	saveFile << std::fixed << std::setprecision(5) << m_Speed << " " << m_Health << " " << m_MaxHealth << " " << m_Stamina << " "
     << m_MaxStamina << " " << m_StaminaRecharge << " " << m_Mana << " " << m_MaxMana << " " << m_Gold << " " << m_Kills << " " << m_Level << " "
-    << m_EquippedWeaponName << " " << m_SavedSwordName << " " << m_SavedWandName << " " << m_Position.x << " " << m_Position.y << std::endl;
+    << m_EquippedWeapons[0].getName() << " " << m_EquippedWeapons[1].getName() << " " << m_Position.x << " " << m_Position.y << std::endl;
 
 	saveFile.close();
 }
@@ -508,11 +510,12 @@ bool Player::loadSaveFile()
 		loadFile >> m_Gold;
 		loadFile >> m_Kills;
 		loadFile >> m_Level;
-		loadFile >> m_EquippedWeaponName;
-		loadFile >> m_SavedSwordName;
-		loadFile >> m_SavedWandName;
+		loadFile >> m_EquippedSwordName;
+		loadFile >> m_EquippedWandName;
 		loadFile >> m_Position.x;
 		loadFile >> m_Position.y;
+		m_EquippedWeapons[0] = (Weapon(m_EquippedSwordName, Vector2f(760, 550)));
+		m_EquippedWeapons[1] = (Weapon(m_EquippedWandName, Vector2f(860, 550)));
 		return true;
 	}
 	else
@@ -638,13 +641,14 @@ int Player::getKillCount() {
 
 void Player::switchWeapon()
 {
-	if (m_EquippedWeaponName == m_SavedSwordName)
+
+	if (m_CombatType == Melee)
 	{
-		m_EquippedWeaponName = m_SavedWandName;
+		m_CombatType = Magic;
 	}
 	else
 	{
-		m_EquippedWeaponName = m_SavedSwordName;
+		m_CombatType = Melee;
 	}
 
 }
@@ -653,18 +657,30 @@ bool Player::equipWeapon(Item weaponToEquip)
 {
 	if (weaponToEquip.getType() == Item::MeleeWeapon)
 	{
-		m_SavedSwordName = weaponToEquip.getName();
-		m_EquippedWeaponName = m_SavedSwordName;
+		m_EquippedSwordName = weaponToEquip.getName();
+		m_EquippedWeapons[0] = weaponToEquip;
+		m_CombatType = Melee;
 		return true;
 	}
 	else if (weaponToEquip.getType() == Item::MagicWeapon)
 	{
-		m_SavedWandName = weaponToEquip.getName();
-		m_EquippedWeaponName = m_SavedWandName;
+		m_EquippedWandName = weaponToEquip.getName();
+		m_EquippedWeapons[1] = weaponToEquip;
+		m_CombatType = Magic;
 		return true;
 	}
 	else
 	{
 		return false;
 	}
+}
+
+vector<Item>& Player::getEquippedWeapons()
+{
+	return m_EquippedWeapons;
+}
+
+Player::CombatType Player::getCombatType()
+{
+	return m_CombatType;
 }

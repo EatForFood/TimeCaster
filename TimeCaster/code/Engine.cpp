@@ -22,7 +22,7 @@
 using namespace std;
 using namespace sf;
 
-Engine::Engine()
+Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons())
 {
 	player.loadConfigFile();
 
@@ -152,11 +152,16 @@ Engine::Engine()
 
 	storedItems.resize(16, Item("null", Vector2f(300, 650)));
 
+	//Item 0 is sword (melee combat), item 1 is wand (magic combat)
+	m_EquippedWeapons.resize(2, Weapon("null", Vector2f(0, 0)));
+
 
 	
 
-	storedItems[0] = Item("StartingWand", Vector2f(300, 650));
+	storedItems[0] = Weapon("StartingWand", Vector2f(300, 650));
+	storedItems[1] = Weapon("UpgradedSword", Vector2f(450, 650));
 	storedItems[2] = Weapon("StartingSword", Vector2f(600, 650));
+	storedItems[3] = Weapon("UpgradedWand", Vector2f(750, 650));
 	// Empty mana bar
 	emptyManaBar.setFillColor(Color::Black);
 	emptyManaBar.setPosition(10, 110);
@@ -409,7 +414,7 @@ Engine::Engine()
 	texturePlayerFrame = TextureHolder::GetTexture("graphics/UI/playerFrame.png");
 	texturePlayerInFrame = TextureHolder::GetTexture("graphics/UI/player.png");
 	textureNeckFrame = TextureHolder::GetTexture("graphics/UI/neckFrame.png");
-	textureRingFrame = TextureHolder::GetTexture("graphics/UI/ringFrame.png");
+	textureWandFrame = TextureHolder::GetTexture("graphics/UI/ringFrame.png");
 	textureItems = TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png");
 
 	// Player frame
@@ -418,13 +423,19 @@ Engine::Engine()
 	playerFrame.setOrigin(playerFrame.getSize() / 2.f);
 	playerFrame.setPosition(viewCentre.x - 200, 400);
 
-	equippedWeaponIcon.setTexture(&textureItems);
-	equippedWeaponIcon.setTextureRect(IntRect(0,0,0,0));
-	equippedWeaponIcon.setSize(Vector2f(75, 75));
-	equippedWeaponIcon.setOrigin(equippedWeaponIcon.getSize() / 2.f);
-	equippedWeaponIcon.setPosition(viewCentre.x - 200, 550);
+	equippedSwordIcon.setTexture(&textureItems);
+	equippedSwordIcon.setTextureRect(IntRect(0,0,0,0));
+	equippedSwordIcon.setSize(Vector2f(75, 75));
+	equippedSwordIcon.setOrigin(equippedSwordIcon.getSize() / 2.f);
+	equippedSwordIcon.setPosition(viewCentre.x - 200, 550);
 
+	equippedWandIcon.setTexture(&textureItems);
+	equippedWandIcon.setTextureRect(IntRect(0, 0, 0, 0));
+	equippedWandIcon.setSize(Vector2f(75, 75));
+	equippedWandIcon.setOrigin(equippedWandIcon.getSize() / 2.f);
+	equippedWandIcon.setPosition(viewCentre.x - 100, 550);
 
+	
 
 	// Player sprite for frame
 	playerInFrame.setSize(sf::Vector2f(60.f, 100.f));
@@ -462,10 +473,10 @@ Engine::Engine()
 	weaponFrame.setOrigin(weaponFrame.getSize() / 2.f);
 	weaponFrame.setPosition(viewCentre.x - 200, 550);
 
-	ringFrame.setTexture(&textureRingFrame);
-	ringFrame.setSize(Vector2f(75, 75));
-	ringFrame.setOrigin(ringFrame.getSize() / 2.f);
-	ringFrame.setPosition(viewCentre.x - 100, 550);
+	wandFrame.setTexture(&textureWandFrame);
+	wandFrame.setSize(Vector2f(75, 75));
+	wandFrame.setOrigin(wandFrame.getSize() / 2.f);
+	wandFrame.setPosition(viewCentre.x - 100, 550);
 
 
 	//storedItem[0] = 0; //empty slot
@@ -712,6 +723,12 @@ void Engine::run()
 					player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume());
 					player.loadSaveFile();
 
+					equippedSwordIcon.setTextureRect(player.getEquippedWeapons().at(0).getTextureRect());
+					equippedWandIcon.setTextureRect(player.getEquippedWeapons().at(1).getTextureRect());
+
+			
+					//equippedWeaponIcon.setTextureRect(player.getEquippedWeapons());
+
 					// We will modify the next two lines later
 					arena.width = 1900;
 					arena.height = 800;
@@ -760,6 +777,12 @@ void Engine::run()
 						// Player loaded successfully
 						world.loadWorld();
 
+
+						equippedSwordIcon.setTextureRect(player.getEquippedWeapons().at(0).getTextureRect());
+						equippedWandIcon.setTextureRect(player.getEquippedWeapons().at(1).getTextureRect());
+						
+
+
 						// We will modify the next two lines later
 						arena.width = 1900;
 						arena.height = 800;
@@ -795,6 +818,9 @@ void Engine::run()
 						player.createNewSave();
 						player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume());
 						player.loadSaveFile();
+
+						equippedSwordIcon.setTextureRect(player.getEquippedWeapons().at(0).getTextureRect());
+						equippedWandIcon.setTextureRect(player.getEquippedWeapons().at(1).getTextureRect());
 
 
 
@@ -1259,14 +1285,38 @@ void Engine::run()
 						}
 					}
 
-					// Try to equip item if dropped on equipment slot
-
+					// Try to equip as sword if dropped on sword slot
 					if (clickedItem.getIcon().getGlobalBounds().intersects(weaponFrame.getGlobalBounds()))
 					{
-						clickedItem.getIcon().setPosition(weaponFrame.getPosition());
-						player.equipWeapon(clickedItem);
-						equippedWeaponIcon.setTextureRect(clickedItem.getTextureRect());
-						//placed = true;
+						if (clickedItem.getType() == Item::MeleeWeapon)
+						{
+						if (player.equipWeapon(clickedItem));
+							{
+							equippedSwordIcon.setTextureRect(clickedItem.getTextureRect());
+							//clickedItem.getIcon().setPosition(weaponFrame.getPosition());
+
+							//cout << m_EquippedWeapons[0].getName();
+							// placed is not being made true on purpose, the player will still need to carry the items they equip
+							// we can change this later though
+							}
+						}
+						
+					}
+
+					// Try to equip as wand if dropped on wand slot
+					if (clickedItem.getIcon().getGlobalBounds().intersects(wandFrame.getGlobalBounds()))
+					{
+						if (clickedItem.getType() == Item::MagicWeapon)
+						{
+							if (player.equipWeapon(clickedItem));
+							{
+								equippedWandIcon.setTextureRect(clickedItem.getTextureRect());
+								//clickedItem.getIcon().setPosition(wandFrame.getPosition());
+								//cout << m_EquippedWeapons[1].getName();
+								// placed is not being made true on purpose, the player will still need to carry the items they equip
+								// we can change this later though
+							}
+						}
 					}
 
 					// If no slot found, return to original position

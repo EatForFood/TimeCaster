@@ -204,11 +204,12 @@ private:
 	Texture texturePlayerFrame;
 	Texture texturePlayerInFrame;
 	Texture textureNeckFrame;
-	Texture textureRingFrame;
+	Texture textureWandFrame;
 	Texture textureItems;
 
 	RectangleShape playerFrame;
-	RectangleShape equippedWeaponIcon;
+	RectangleShape equippedSwordIcon;
+	RectangleShape equippedWandIcon;
 	RectangleShape playerInFrame;
 	RectangleShape headArmourFrame;
 	RectangleShape chestArmourFrame;
@@ -216,13 +217,14 @@ private:
 	RectangleShape bootsArmourFrame;
 	RectangleShape neckFrame;
 	RectangleShape weaponFrame;
-	RectangleShape ringFrame;
+	RectangleShape wandFrame;
 	//RectangleShape emptyFrames[16];
 	int draggedIndex = -1;
 	int maxItems = 16; // max amount of item slots
 	vector<Item> storedItems;
 	vector<RectangleShape> emptyFrames;
 	vector<Item> allItems;     // all possible ite
+	vector<Item>& m_EquippedWeapons;
 	int currentItems = 0; // current item amount
 	Item clickedItem = Item("null",Vector2f(0,0));
 

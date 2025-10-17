@@ -162,7 +162,7 @@ void Engine::draw()
 			window.draw(neckFrame);
 			window.draw(weaponFrame);
 
-			window.draw(ringFrame);
+			window.draw(wandFrame);
 			for (auto& frame : emptyFrames) {
 				window.draw(frame);
 			}
@@ -184,8 +184,10 @@ void Engine::draw()
 			for (auto& icons : storedItems) {
 				window.draw(icons.getIcon());
 			}
+			window.draw(equippedSwordIcon);
+			window.draw(equippedWandIcon);
 			window.draw(clickedItem.getIcon());
-			window.draw(equippedWeaponIcon);
+		
 			window.setView(mainView);
 			window.draw(spriteCursor);
 			window.setView(hudView);
