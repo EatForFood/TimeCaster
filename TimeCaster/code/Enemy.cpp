@@ -2,6 +2,8 @@
 #include "Enemy.h"
 #include "TextureHolder.h"
 #include "CollisionDetection.h"
+#include "Pathfinder.h"
+#include "Chunk.h"
 
 using namespace std;
 using namespace sf;
@@ -10,7 +12,6 @@ Enemy::Enemy() {
 	m_Speed = START_SPEED;
 	m_Health = START_HEALTH;
 	m_MaxHealth = START_HEALTH;
-	movementTimer.restart();
 }
 
 void Enemy::spawn(IntRect arena, Vector2f resolution, int tileSize, String type, int level) {
@@ -93,7 +94,7 @@ void Enemy::stopMoving() {
 	m_MoveLeft = false;
 	m_MoveRight = false;
 	m_MoveUp = false;
-	m_MoveUp = false;
+	m_MoveDown = false;
 }
 
 void Enemy::revertPosition() {
@@ -108,65 +109,48 @@ bool Enemy::isEnemyMoving() {
 	return false;
 }
 
-void Enemy::update(float elapsedTime, vector<NavBox> navBox) {
-	
-	navBoxes = navBox;
-	
+void Enemy::update(float elapsedTime, const Vector2f& playerPos, Chunk* chunk) {
+
 	m_TimeElapsed = elapsedTime;
 
-	if (!m_UpPressed && !m_DownPressed && !m_LeftPressed && !m_RightPressed)
-	{
-		m_IsMoving = false;
+	Vector2i enemyTile(int(m_Position.x / TILE_SIZE), int(m_Position.y / TILE_SIZE));
+	Vector2i playerTile(int(playerPos.x / TILE_SIZE), int(playerPos.y / TILE_SIZE));
+
+	int distanceMoved = max(abs(playerTile.x - lastPlayerTile.x), abs(playerTile.y - lastPlayerTile.y));
+
+	// Recalculate path only if player moved > 3 tiles or path empty
+	if (cachedPath.empty() || distanceMoved > 3) {
+		cachedPath = Pathfinder::findPath(chunk, enemyTile, playerTile, 20);
+		lastPlayerTile = playerTile;
 	}
-	else {
-		m_IsMoving = true;
-	}
 
-	// Moves enemy using A*
-	// move();
-	
-	if (m_Type == "Knight") {
+	// --- Follow path ---
+	if (cachedPath.size() > 1) {
+		Vector2f nextPoint(
+			cachedPath[1].x * TILE_SIZE + TILE_SIZE / 2,
+			cachedPath[1].y * TILE_SIZE + TILE_SIZE / 2
+		);
 
-	}
-	else if (m_Type == "Goblin") 
-	{
-		if (movementTimer.getElapsedTime().asSeconds() > 3) 
-		{
-			movementTimer.restart();
-			int randMove = rand() % 5;
-			switch (randMove) {
-			case 0: // Up
-				stopLeft();
-				stopRight();
-				stopDown();
-				moveUp();
-				break;
+		Vector2f dir = nextPoint - m_Position;
+		float length = sqrt(dir.x * dir.x + dir.y * dir.y);
 
-			case 1: // Down
-				stopLeft();
-				stopRight();
-				stopUp();
-				moveDown();
-				break;
+		if (length > 0.01f) {
+			dir /= length;
+			m_PositionLast = m_Position;
+			m_Position += dir * m_Speed * elapsedTime;
+			direction = dir;
+		}
 
-			case 2: // Left
-				stopUp();
-				stopRight();
-				stopDown();
-				moveLeft();
-				break;
+		// If close enough to next tile, pop it from path
+		if (length < 8.f && cachedPath.size() > 1) {
+			cachedPath.erase(cachedPath.begin());
+		}
 
-			case 3: // Right
-				stopLeft();
-				stopUp();
-				stopDown();
-				moveRight();
-				break;
-
-			case 4:
-				stopMoving();
-				break;
-			}
+		if (cachedPath.size() > 1) {
+			m_IsMoving = true;
+		}
+		else {
+			m_IsMoving = false;
 		}
 	}
 
@@ -193,85 +177,13 @@ void Enemy::update(float elapsedTime, vector<NavBox> navBox) {
 		}
 	}
 
-	if (m_MoveUp)
-	{
-		m_PositionLast = m_Position;
-		m_Position.y -= m_Speed * elapsedTime;
-		setSpriteFromSheet(IntRect(0, 128, 448, 62), 65);
-		direction = Vector2f(0, 1);
-	}
-
-	for (auto& nav : navBoxes) { // if enemy walks into navBox 
-		if (m_CollisionBox.intersects(nav.getShape().getGlobalBounds()))
-		{
-			if (collision.pointInShape(m_Position, nav.getShape())) {
-				stopMoving();
-				moveDown();
-			}
-		}
-	}
-
-	if (m_MoveDown)
-	{
-		m_PositionLast = m_Position;
-		m_Position.y += m_Speed * elapsedTime;
-		setSpriteFromSheet(IntRect(0, 0, 448, 62), 65); // set sprite depending on direction
-		direction = Vector2f(0, -1);
-	}
-
-	for (auto& nav : navBoxes) { // if enemy walks into navBox 
-		if (m_CollisionBox.intersects(nav.getShape().getGlobalBounds()))
-		{
-			if (collision.pointInShape(m_Position, nav.getShape())) {
-				stopMoving();
-				moveUp();
-			}
-		}
-	}
-
-	if (m_MoveRight)
-	{
-		m_PositionLast = m_Position;
-		m_Position.x += m_Speed * elapsedTime;
-		setSpriteFromSheet(IntRect(0, 64, 448, 62), 65);
-		direction = Vector2f(1, 0);
-	}
-
-	for (auto& nav : navBoxes) { // if enemy walks into navBox 
-		if (m_CollisionBox.intersects(nav.getShape().getGlobalBounds()))
-		{
-			if (collision.pointInShape(m_Position, nav.getShape())) {
-				stopMoving();
-				moveLeft();
-			}
-		}
-	}
-
-	if (m_MoveLeft)
-	{
-		m_PositionLast = m_Position;
-		m_Position.x -= m_Speed * elapsedTime;
-		setSpriteFromSheet(IntRect(0, 192, 576, 64), 65);
-		direction = Vector2f(-1, 0);
-	}
-
-	for (auto& nav : navBoxes) { // if enemy walks into navBox 
-		if (m_CollisionBox.intersects(nav.getShape().getGlobalBounds()))
-		{
-			if (collision.pointInShape(m_Position, nav.getShape())) {
-				stopMoving();
-				moveRight();
-			}
-		}
-	}
-
 	m_Sprite.setPosition(m_Position);
 	m_CollisionBox.left = m_Position.x - 100;
 	m_CollisionBox.top = m_Position.y - 100;
 	m_CollisionBox.width = 200;
 	m_CollisionBox.height = 200;
 
-	if (m_MoveUp || m_MoveDown || m_MoveLeft || m_MoveRight) // animate sprite if player is moving
+	if (isEnemyMoving()) // animate sprite if player is moving
 	{
 		moveTextureRect();
 	}
@@ -309,9 +221,4 @@ FloatRect Enemy::getRenderArea()
 float Enemy::getDamage()
 {
 	return m_Damage;
-}
-
-void move()
-{
-	// A* here
 }

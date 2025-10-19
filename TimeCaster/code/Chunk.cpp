@@ -8,6 +8,7 @@
 #include <iostream>
 #include <fstream>
 #include <filesystem>
+#include <algorithm>
 
 using namespace std;
 using namespace sf;
@@ -41,6 +42,10 @@ Chunk::Chunk(String type, Vector2f chunk, bool load)
 	// Set the size of the vertex array
 	rVABG.resize(100 * 100 * VERTS_IN_QUAD);
 	rVAFG.resize(200 * 200 * VERTS_IN_QUAD);
+
+	for (int x = 0; x < 50; ++x)
+		for (int y = 0; y < 50; ++y)
+			blockedTiles[x][y] = false;
 
 	if (m_LoadChunk)
 	{
@@ -564,6 +569,14 @@ void Chunk::placeHouse4(int sx, int sy) { // sx 15, sy 18
 		}
 	}
 
+	NavBox navbox1(sx + 1, sy - 2, 2, 3);
+	navBoxes.push_back(navbox1);
+	markNavBoxAsBlocked(navbox1);
+
+	NavBox navbox2(sx + 3, sy - 3, 3, 2);
+	navBoxes.push_back(navbox2);
+	markNavBoxAsBlocked(navbox2);
+
 	// House west wall 2
 	for (int x = sx + 2; x < sx + 5; x++)
 	{
@@ -600,13 +613,6 @@ void Chunk::placeHouse4(int sx, int sy) { // sx 15, sy 18
 	{
 		placeTile(x, sy - 3, 1, 13, true, false);  // 64/64 = 1, 832/64 = 13
 	}
-
-
-	NavBox navbox(sx + 1, sy - 2, 2, 3);
-	navBoxes.push_back(navbox);
-
-	NavBox navbox2(sx + 3, sy - 3, 3, 2);
-	navBoxes.push_back(navbox2);
 }
 
 void Chunk::placeCastle(int sx, int sy) { // sx 15, sy 18
@@ -775,12 +781,14 @@ void Chunk::CreateEntity(String type, int x, int y) {
 		NavBox nav(x, y, 1, 1);
 		nav.NavTree();
 		navBoxes.push_back(nav);
+		markNavBoxAsBlocked(nav);
 	}
 	else if (type == "tree5" || type == "tree8")
 	{
 		NavBox nav(x, y, 1, 1);
 		nav.NavTreeLarge();
 		navBoxes.push_back(nav);
+		markNavBoxAsBlocked(nav);
 	}
 	else
 	{
@@ -841,7 +849,6 @@ void Chunk::clearChunk() {
 	currentVertexFG = 0;
 	entities.clear();
 	navBoxes.clear();
-
 }
 
 void Chunk::createForest() // create a forest from random tree entities
@@ -984,4 +991,47 @@ void Chunk::loadChunk() // load tile types and entities from file
 String Chunk::getChunkType()
 {
 	return m_Type;
+}
+
+bool Chunk::isTileBlocked(int tileX, int tileY)
+{
+	// Convert tile coordinate to world coordinate
+	float ix = (tileX - tileY) * (TILE_SIZE / 2);
+	float iy = (tileX + tileY) * (TILE_SIZE / 4);
+	Vector2f pos(ix, iy);
+
+	// Check collision with any NavBox obstacle
+	for (auto& nav : navBoxes)
+	{
+		ConvexShape shape = nav.getShape();
+		if (shape.getGlobalBounds().contains(pos))
+			return true;
+	}
+	return false;
+}
+
+void Chunk::markNavBoxAsBlocked(const NavBox& nav)
+{
+	FloatRect bounds = nav.getShape().getGlobalBounds();
+
+	for (int x = 0; x < 50; ++x)
+	{
+		for (int y = 0; y < 50; ++y)
+		{
+			float ix = (x - y) * (TILE_SIZE / 2) + TILE_SIZE / 2;
+			float iy = (x + y) * (TILE_SIZE / 4) + TILE_SIZE / 2;
+			Vector2f pos(ix, iy);
+
+			if (bounds.contains(pos))
+				blockedTiles[x][y] = true;
+		}
+	}
+}
+
+bool Chunk::blockEdges(int tileX, int tileY)
+{
+	if (tileX < 0 || tileY < 0 || tileX >= 50 || tileY >= 50)
+		return true; // treat out-of-bounds as blocked
+
+	return blockedTiles[tileX][tileY];
 }

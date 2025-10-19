@@ -65,7 +65,7 @@ Vector2f NavBox::getPosition()
     return m_Position;
 }
 
-ConvexShape NavBox::getShape()
+const ConvexShape& NavBox::getShape() const
 {
     return navArea;
 }

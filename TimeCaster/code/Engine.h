@@ -12,9 +12,7 @@
 #include "CollisionDetection.h"
 #include "Item.h"
 #include "Enemy.h"
-#include <string>;
-
-using namespace sf;
+#include <string>
 
 class Engine
 {
@@ -40,7 +38,6 @@ private:
 	Difficulty difficulty;
 
 	Player player;
-	Enemy enemy;
 
 	FloatRect viewRect;
 	RenderWindow window;
@@ -89,6 +86,7 @@ private:
 	int itemLastIndex = -1;
 	bool itemPlaced = false;
 
+	Enemy enemy;
 
 	//Decals 
 	Decal decal[250];
@@ -286,7 +284,9 @@ private:
 	int x;
 	int y;
 
-	Enemy enemyArr[5];
+	vector<Enemy> enemyArr;
+
+	vector<Chunk> chunks;
 
 public:
 	Engine();
@@ -304,4 +304,6 @@ public:
 	bool addItemToInventory(String itemType);
 
 	void draw();
+
+	Chunk* getCurrentChunk(float x, float y);
 };

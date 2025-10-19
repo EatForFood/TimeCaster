@@ -31,7 +31,7 @@
     <ClInclude Include="code\Gun.h" />
     <ClInclude Include="code\Item.h" />
     <ClInclude Include="code\NavBox.h" />
-    <ClInclude Include="code\Node.h" />
+    <ClInclude Include="code\Pathfinder.h" />
     <ClInclude Include="code\Pickup.h" />
     <ClInclude Include="code\Player.h" />
     <ClInclude Include="code\SoundManager.h" />
@@ -55,6 +55,7 @@
     <ClCompile Include="code\Item.cpp" />
     <ClCompile Include="code\Main.cpp" />
     <ClCompile Include="code\NavBox.cpp" />
+    <ClCompile Include="code\Pathfinder.cpp" />
     <ClCompile Include="code\Pickup.cpp" />
     <ClCompile Include="code\Player.cpp" />
     <ClCompile Include="code\SoundManager.cpp" />

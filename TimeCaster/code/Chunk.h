@@ -50,7 +50,7 @@ protected:
 
 	vector<Cell> cells;
 
-
+	bool blockedTiles[50][50];
 public:
 
 	Chunk(String type, Vector2f chunk, bool load);
@@ -89,4 +89,9 @@ public:
 	void createForest();
 	void createBurntForest();
 
+	bool isTileBlocked(int tileX, int tileY);
+
+	void markNavBoxAsBlocked(const NavBox& nav);
+
+	bool blockEdges(int tileX, int tileY);
 };

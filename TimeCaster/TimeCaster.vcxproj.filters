@@ -69,10 +69,10 @@
     <ClInclude Include="code\Enemy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="code\Node.h">
+    <ClInclude Include="code\Cell.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="code\Cell.h">
+    <ClInclude Include="code\Pathfinder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -135,6 +135,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="code\Cell.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\Draw.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\Pathfinder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

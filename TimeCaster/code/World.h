@@ -2,9 +2,6 @@
 #include <SFML/Graphics.hpp>
 #include "Chunk.h"
 
-using namespace sf;
-using namespace std;
-
 class World
 {
 private:

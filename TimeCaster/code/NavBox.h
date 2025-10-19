@@ -26,7 +26,7 @@ public:
 
 	Vector2f getPosition();
 
-	ConvexShape getShape();
+	const ConvexShape& getShape() const;
 
 	void NavTree();
 

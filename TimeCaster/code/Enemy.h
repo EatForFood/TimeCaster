@@ -4,9 +4,7 @@
 #include "NavBox.h"
 #include "CollisionDetection.h"
 #include "Player.h"
-
-using namespace std;
-using namespace sf;
+#include "Chunk.h"
 
 class Enemy : public Character
 {
@@ -28,17 +26,20 @@ private:
 
 	int m_Chunk; // Enemy's current chunk
 
-	Clock movementTimer;
-
 	float m_Damage = 4; // Change this later to be set dynamically
 
-	void move();
+	Chunk* m_ChunkPtr = nullptr;
+
+	const int TILE_SIZE = 64;
+
+	Vector2i lastPlayerTile = { -999, -999 };
+	vector<Vector2i> cachedPath;
 public:
 	Enemy();
 
 	void spawn(IntRect arena, Vector2f resolution, int tileSize, String type, int level);
 
-	void update(float elapsedTime, vector<NavBox> navBox);
+	void update(float elapsedTime, const Vector2f& playerPos, Chunk* chunk);
 
 	float getCurrentHP();
 
