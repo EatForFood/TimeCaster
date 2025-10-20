@@ -6,33 +6,40 @@
 using namespace sf;
 using namespace std;
 
-float Pathfinder::heuristic(Vector2i a, Vector2i b)
-{
-    return static_cast<float>(abs(a.x - b.x) + abs(a.y - b.y));
+float Pathfinder::heuristic(Vector2i a, Vector2i b) {
+    int dx = abs(a.x - b.x);
+    int dy = abs(a.y - b.y);
+    float F = 1.4142f - 1.f; // sqrt(2) - 1
+    return (dx < dy) ? F * dx + dy : F * dy + dx;
 }
 
-vector<Vector2i> Pathfinder::findPath(Chunk* chunk, Vector2i start, Vector2i goal, int radius)
-{
+vector<Vector2i> Pathfinder::findPath(Chunk* chunk, Vector2i start, Vector2i goal, int radius) {
     auto cmp = [](Node* a, Node* b) { return a->fCost() > b->fCost(); };
     priority_queue<Node*, vector<Node*>, decltype(cmp)> open(cmp);
     unordered_map<int, Node*> allNodes;
     set<int> closed;
 
-    auto hash = [](Vector2i p) { return p.x * 1000 + p.y; };
+    auto hash = [](Vector2i p) { return (p.x << 16) ^ p.y; };
 
     Node* startNode = new Node(start, 0, heuristic(start, goal));
     open.push(startNode);
     allNodes[hash(start)] = startNode;
 
-    const Vector2i dirs[4] = { {1,0}, {-1,0}, {0,1}, {0,-1} };
+    // 8 directions (4 cardinal + 4 diagonal)
+    const Vector2i dirs[8] = {
+        {1,0}, {-1,0}, {0,1}, {0,-1},
+        {1,1}, {-1,1}, {1,-1}, {-1,-1}
+    };
 
-    while (!open.empty())
-    {
+    while (!open.empty()) {
         Node* current = open.top();
         open.pop();
 
-        if (current->pos == goal)
-        {
+        if (closed.count(hash(current->pos)))
+            continue;
+        closed.insert(hash(current->pos));
+
+        if (current->pos == goal) {
             vector<Vector2i> path;
             for (Node* n = current; n; n = n->parent)
                 path.push_back(n->pos);
@@ -41,30 +48,26 @@ vector<Vector2i> Pathfinder::findPath(Chunk* chunk, Vector2i start, Vector2i goa
             return path;
         }
 
-        closed.insert(hash(current->pos));
-
-        for (auto dir : dirs)
-        {
+        for (auto dir : dirs) {
             Vector2i neighbor = current->pos + dir;
 
-            // Limit search to a local 20x20 radius
+            // Limit search to a local radius
             if (abs(neighbor.x - start.x) > radius || abs(neighbor.y - start.y) > radius)
                 continue;
 
             if (chunk->isTileBlocked(neighbor.x, neighbor.y))
                 continue;
 
-            if (closed.count(hash(neighbor)))
-                continue;
-
-            float gCost = current->gCost + 1;
+            // Movement cost: diagonal = sqrt(2), straight = 1
+            float moveCost = (dir.x != 0 && dir.y != 0) ? 1.4142f : 1.f;
+            float gCost = current->gCost + moveCost;
             float hCost = heuristic(neighbor, goal);
+            int hashVal = hash(neighbor);
 
-            if (!allNodes.count(hash(neighbor)) || gCost < allNodes[hash(neighbor)]->gCost)
-            {
+            if (!allNodes.count(hashVal) || gCost < allNodes[hashVal]->gCost) {
                 Node* next = new Node(neighbor, gCost, hCost, current);
                 open.push(next);
-                allNodes[hash(neighbor)] = next;
+                allNodes[hashVal] = next;
             }
         }
     }
@@ -73,3 +76,4 @@ vector<Vector2i> Pathfinder::findPath(Chunk* chunk, Vector2i start, Vector2i goa
     for (auto& kv : allNodes) delete kv.second;
     return {};
 }
+
