@@ -117,7 +117,7 @@ void Engine::draw()
 					Chunk* currentChunk = world.getChunk(i);
 					if (currentChunk && currentChunk->getChunkType() == "goblinVillage")
 					{
-						window.draw(world.getBackground(i), &textureBackground2);
+						window.draw(world.getForground(i), &textureBackground2);
 					}
 					else
 					{
