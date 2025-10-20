@@ -619,8 +619,9 @@ bool Engine::addItemToInventory(String itemType)
 
 void Engine::populateChunkVector()
 {
+
 	for (int i = 0; i < world.getWorldSize(); i++) {
-		chunks.push_back(world.getChunk(i));
+		chunks.push_back(*world.getChunk(i));
 	}
 }
 
