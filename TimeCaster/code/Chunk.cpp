@@ -476,7 +476,8 @@ void Chunk::placeHouse1(int sx, int sy) { // sx 15, sy 18
 		placeTile(x, sy - 3, 1, 13, true, false);
 	}
 
-
+	sx += offset.x;
+	sy += offset.y;
 	NavBox navbox(sx + 1, sy - 3, 5, 4);
 	navBoxes.push_back(navbox);
 }
@@ -509,6 +510,8 @@ void Chunk::placeHouse2(int sx, int sy) { // sx 15, sy 18
 		placeTile(sx, y, 2, 13, true, false);
 	}
 
+	sx += offset.x;
+	sy += offset.y;
 	NavBox navbox(sx + 1, sy - 2, 2, 3);
 	navBoxes.push_back(navbox);
 
@@ -544,6 +547,8 @@ void Chunk::placeHouse3(int sx, int sy) { // sx 15, sy 18
 		placeTile(x, sy - 1, 1, 13, true, false);
 	}
 
+	sx += offset.x;
+	sy += offset.y;
 	NavBox navbox(sx + 1, sy - 1, 3, 2);
 	navBoxes.push_back(navbox);
 }
@@ -568,14 +573,6 @@ void Chunk::placeHouse4(int sx, int sy) { // sx 15, sy 18
 			placeTile(sx + 1, y, 1, 14, false, false);
 		}
 	}
-
-	NavBox navbox1(sx + 1, sy - 2, 2, 3);
-	navBoxes.push_back(navbox1);
-	markNavBoxAsBlocked(navbox1);
-
-	NavBox navbox2(sx + 3, sy - 3, 3, 2);
-	navBoxes.push_back(navbox2);
-	markNavBoxAsBlocked(navbox2);
 
 	// House west wall 2
 	for (int x = sx + 2; x < sx + 5; x++)
@@ -613,6 +610,16 @@ void Chunk::placeHouse4(int sx, int sy) { // sx 15, sy 18
 	{
 		placeTile(x, sy - 3, 1, 13, true, false);  // 64/64 = 1, 832/64 = 13
 	}
+
+	sx += offset.x;
+	sy += offset.y;
+	NavBox navbox1(sx + 1, sy - 2, 2, 3);
+	navBoxes.push_back(navbox1);
+	markNavBoxAsBlocked(navbox1);
+
+	NavBox navbox2(sx + 3, sy - 3, 3, 2);
+	navBoxes.push_back(navbox2);
+	markNavBoxAsBlocked(navbox2);
 }
 
 void Chunk::placeCastle(int sx, int sy) { // sx 15, sy 18
@@ -628,20 +635,11 @@ void Chunk::placeCastle(int sx, int sy) { // sx 15, sy 18
 		}
 	}
 
-	NavBox navboxW1(sx + 1, sy, 1, -17);
-	navBoxes.push_back(navboxW1);
-
-	NavBox navboxW2(sx + 1, sy - 20, 1, -10);
-	navBoxes.push_back(navboxW2);
-
 	// House north wall
 	for (int x = sx + 1; x < sx + 25; x++)
 	{
 		placeTile(x, sy - 30, 0, 12, false, false);
 	}
-
-	NavBox navboxN(sx + 1, sy - 30, 25, 1);
-	navBoxes.push_back(navboxN);
 
 	// House east wall 
 	for (int y = sy - 30; y < sy; y++)
@@ -652,21 +650,11 @@ void Chunk::placeCastle(int sx, int sy) { // sx 15, sy 18
 		}
 	}
 
-
-	NavBox navboxE1(sx + 25, sy, 1, -17);
-	navBoxes.push_back(navboxE1);
-
-	NavBox navboxE2(sx + 25, sy - 20, 1, -10);
-	navBoxes.push_back(navboxE2);
-
 	// House south wall
 	for (int x = sx; x < sx + 25; x++)
 	{
 		placeTile(x, sy, 0, 12, false, false);
 	}
-
-	NavBox navboxS(sx + 1, sy, 25, 1);
-	navBoxes.push_back(navboxS);
 
 	// SECOND LEVEL
 
@@ -760,6 +748,26 @@ void Chunk::placeCastle(int sx, int sy) { // sx 15, sy 18
 		}
 	}
 
+	sx += offset.x;
+	sy += offset.y;
+
+	NavBox navboxW1(sx + 1, sy, 1, -17);
+	navBoxes.push_back(navboxW1);
+
+	NavBox navboxW2(sx + 1, sy - 20, 1, -10);
+	navBoxes.push_back(navboxW2);
+
+	NavBox navboxN(sx + 1, sy - 30, 25, 1);
+	navBoxes.push_back(navboxN);
+
+	NavBox navboxE1(sx + 25, sy, 1, -17);
+	navBoxes.push_back(navboxE1);
+
+	NavBox navboxE2(sx + 25, sy - 20, 1, -10);
+	navBoxes.push_back(navboxE2);
+
+	NavBox navboxS(sx + 1, sy, 25, 1);
+	navBoxes.push_back(navboxS);
 }
 
 void Chunk::CreateEntity(String type, int x, int y) {
