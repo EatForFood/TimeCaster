@@ -617,6 +617,14 @@ bool Engine::addItemToInventory(String itemType)
 	return false;
 }
 
+void Engine::populateChunkVector()
+{
+
+	for (int i = 0; i < world.getWorldSize(); i++) {
+		chunks.push_back(*world.getChunk(i));
+	}
+}
+
 Chunk* Engine::getCurrentChunk(float x, float y) {
 	for (Chunk& chunk : chunks) {
 		FloatRect area = chunk.getChunkArea().getShape().getGlobalBounds();
@@ -752,7 +760,7 @@ void Engine::run()
 					// Spawn the player in the middle of the arena
 					player.spawn(arena, resolution, tileSize, player.getPlayerLevel());
 
-					for (int i = 0; i < 5; ++i)
+					for (int i = 0; i < 1; ++i)
 					{
 						Enemy e;
 						e.spawn(arena, resolution, tileSize, "Goblin", player.getPlayerLevel());
@@ -762,7 +770,7 @@ void Engine::run()
 					// Reset the clock so there isn't a frame jump
 					clock.restart();
 
-				//	equippedWeaponIcon.setTextureRect(player.getEquippedWeaponIcon());
+					// equippedWeaponIcon.setTextureRect(player.getEquippedWeaponIcon());
 
 					player.loadConfigFile();
 					difficulty = Difficulty::Medium;
@@ -770,7 +778,7 @@ void Engine::run()
 					displayFps = player.getDisplayFps();
 					Listener::setGlobalVolume(player.getVolume());
 					world.newWorld();
-					chunks = world.getChunks();
+					populateChunkVector();
 				}
 
 				// Player hit the load game button in the main menu
@@ -822,7 +830,7 @@ void Engine::run()
 						windowedMode = player.getWindowedMode();
 						displayFps = player.getDisplayFps();
 						Listener::setGlobalVolume(player.getVolume());
-						chunks = world.getChunks();
+						populateChunkVector();
 					}
 					else {
 						// No save file so create a new one with default values and load it	
@@ -863,7 +871,7 @@ void Engine::run()
 						windowedMode = player.getWindowedMode();
 						displayFps = player.getDisplayFps();
 						Listener::setGlobalVolume(player.getVolume());
-						chunks = world.getChunks();
+						populateChunkVector();
 					}
 				}
 
@@ -1189,11 +1197,6 @@ void Engine::run()
 				{
 					player.setChunk(i);
 				}
-
-				if (collision.pointInShape(enemy.getPosition(), world.getChunkArea(i).getShape())) // find enemy's current chunk
-				{
-					enemy.setChunk(i);
-				}
 			}
 
 			if (!drawInventory && state == State::PLAYING) {
@@ -1206,7 +1209,7 @@ void Engine::run()
 					if (player.getRenderArea().intersects(enemies.getSprite().getGlobalBounds()))
 					{
 						enemies.update(dtAsSeconds, player.getPosition(), getCurrentChunk(enemies.getPosition().x, enemies.getPosition().y));
-						cout << "x: " << enemies.getPosition().x << " y: " << enemies.getPosition().y << endl;
+						cout << "Enemy x: " << enemies.getPosition().x << " Enemy y: " << enemies.getPosition().y << endl;
 					}
 				}
 			}

@@ -22,9 +22,7 @@ public:
 
 	void loadWorld();
 
-	vector<Chunk> getChunks();
-
-	Chunk getChunk(int i);
+	Chunk* getChunk(int i);
 
 	vector<NavBox> getNavBoxes(int i);
 

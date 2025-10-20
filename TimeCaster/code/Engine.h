@@ -86,8 +86,6 @@ private:
 	int itemLastIndex = -1;
 	bool itemPlaced = false;
 
-	Enemy enemy;
-
 	//Decals 
 	Decal decal[250];
 	int currentDecal = 0;
@@ -306,4 +304,6 @@ public:
 	void draw();
 
 	Chunk* getCurrentChunk(float x, float y);
+
+	void populateChunkVector();
 };

@@ -5,6 +5,9 @@
 #include <unordered_map>
 #include <cmath>
 
+using namespace std;
+using namespace sf;
+
 class Chunk;
 
 struct Node
@@ -22,7 +25,7 @@ struct Node
 class Pathfinder
 {
 public:
-    static std::vector<sf::Vector2i> findPath(Chunk* chunk, sf::Vector2i start, sf::Vector2i goal, int radius = 20);
+    static vector<Vector2i> findPath(Chunk* chunk, sf::Vector2i start, sf::Vector2i goal, int radius = 20);
 
 private:
     static float heuristic(sf::Vector2i a, sf::Vector2i b);
