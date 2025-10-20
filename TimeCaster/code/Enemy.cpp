@@ -40,7 +40,7 @@ void Enemy::spawn(IntRect arena, Vector2f resolution, int tileSize, String type,
 		m_Sprite = Sprite(TextureHolder::GetTexture("graphics/player/playerWalk.png"));
 	}
 	else if (type == "Goblin") {
-		m_Sprite = Sprite(TextureHolder::GetTexture("graphics/Enemies/swordGoblin.png"));
+		m_Sprite = Sprite(TextureHolder::GetTexture("graphics/enemies/goblin.png"));
 	}
 
 	// Set the origin of the sprite to the centre, 
@@ -48,6 +48,9 @@ void Enemy::spawn(IntRect arena, Vector2f resolution, int tileSize, String type,
 	m_Sprite.setScale(0.75, 0.75);
 
 	m_RenderArea = FloatRect(0, 0, 1920, 1080);
+
+	m_Position.x = 100;
+	m_Position.y = 100;
 }
 
 void Enemy::moveLeft()
@@ -110,7 +113,6 @@ bool Enemy::isEnemyMoving() {
 }
 
 void Enemy::update(float elapsedTime, const Vector2f& playerPos, Chunk* chunk) {
-
 	m_TimeElapsed = elapsedTime;
 
 	Vector2i enemyTile(int(m_Position.x / TILE_SIZE), int(m_Position.y / TILE_SIZE));
@@ -118,8 +120,8 @@ void Enemy::update(float elapsedTime, const Vector2f& playerPos, Chunk* chunk) {
 
 	int distanceMoved = max(abs(playerTile.x - lastPlayerTile.x), abs(playerTile.y - lastPlayerTile.y));
 
-	// Recalculate path only if player moved > 3 tiles or path empty
-	if (cachedPath.empty() || distanceMoved > 3) {
+	// Recalculate path only if player moved > 2 tiles or path empty
+	if (cachedPath.empty() || distanceMoved > 2) {
 		cachedPath = Pathfinder::findPath(chunk, enemyTile, playerTile, 20);
 		lastPlayerTile = playerTile;
 	}
@@ -135,46 +137,34 @@ void Enemy::update(float elapsedTime, const Vector2f& playerPos, Chunk* chunk) {
 		float length = sqrt(dir.x * dir.x + dir.y * dir.y);
 
 		if (length > 0.01f) {
-			dir /= length;
+			dir /= length; // Normalize
 			m_PositionLast = m_Position;
 			m_Position += dir * m_Speed * elapsedTime;
 			direction = dir;
+			m_IsMoving = true;
 		}
 
 		// If close enough to next tile, pop it from path
 		if (length < 8.f && cachedPath.size() > 1) {
 			cachedPath.erase(cachedPath.begin());
 		}
-
-		if (cachedPath.size() > 1) {
-			m_IsMoving = true;
-		}
-		else {
-			m_IsMoving = false;
-		}
+	}
+	else {
+		m_IsMoving = false;
 	}
 
-	if (!isEnemyMoving()) // if enemy is not moving set sprite to standing frame in last direction faced
-	{
-		if (direction == Vector2f(0, -1)) // up
-		{
-			setSpriteFromSheet(IntRect(0, 0, 576, 64), 65);
-		}
+	// Set sprite based on movement direction
+	if (!isEnemyMoving()) {
+		float angle = atan2(direction.y, direction.x) * 180.f / 3.14159265f;
 
-		if (direction == Vector2f(0, 1)) // down
-		{
-			setSpriteFromSheet(IntRect(0, 128, 576, 64), 65);
-		}
-
-		if (direction == Vector2f(-1, 0)) // right
-		{
-			setSpriteFromSheet(IntRect(0, 192, 576, 64), 65);
-		}
-
-		if (direction == Vector2f(1, 0)) // left
-		{
-			setSpriteFromSheet(IntRect(0, 64, 576, 64), 65);
-		}
+		if (angle >= -22.5f && angle < 22.5f)          setSpriteFromSheet(IntRect(0, 192, 576, 64), 65); // right
+		else if (angle >= 22.5f && angle < 67.5f)      setSpriteFromSheet(IntRect(0, 0, 576, 64), 65);   // up-right
+		else if (angle >= 67.5f && angle < 112.5f)     setSpriteFromSheet(IntRect(0, 0, 576, 64), 65);   // up
+		else if (angle >= 112.5f && angle < 157.5f)    setSpriteFromSheet(IntRect(0, 0, 576, 64), 65);   // up-left
+		else if (angle >= 157.5f || angle < -157.5f)   setSpriteFromSheet(IntRect(0, 64, 576, 64), 65);  // left
+		else if (angle >= -157.5f && angle < -112.5f)  setSpriteFromSheet(IntRect(0, 64, 576, 64), 65);  // down-left
+		else if (angle >= -112.5f && angle < -67.5f)   setSpriteFromSheet(IntRect(0, 128, 576, 64), 65); // down
+		else if (angle >= -67.5f && angle < -22.5f)    setSpriteFromSheet(IntRect(0, 128, 576, 64), 65); // down-right
 	}
 
 	m_Sprite.setPosition(m_Position);
@@ -183,11 +173,20 @@ void Enemy::update(float elapsedTime, const Vector2f& playerPos, Chunk* chunk) {
 	m_CollisionBox.width = 200;
 	m_CollisionBox.height = 200;
 
-	if (isEnemyMoving()) // animate sprite if player is moving
-	{
+	if (isEnemyMoving()) { // animate sprite if enemy is moving
 		moveTextureRect();
 	}
+
+	// Prevent moving into navBoxes
+	for (auto& nav : navBoxes) { 
+		if (m_CollisionBox.intersects(nav.getShape().getGlobalBounds())) {
+			if (collision.pointInShape(m_Position, nav.getShape())) {
+				revertPosition();
+			}
+		}
+	}
 }
+
 
 float Enemy::getCurrentHP() {
 	return m_Health;

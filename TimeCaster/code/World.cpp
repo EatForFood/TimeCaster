@@ -80,11 +80,6 @@ void World::loadWorld() // load world from file
     in.close();
 }
 
-vector<Chunk> World::getChunks()
-{
-	return chunks;
-}
-
 Chunk World::getChunk(int i)
 {
 	return chunks[i];

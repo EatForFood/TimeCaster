@@ -306,4 +306,6 @@ public:
 	void draw();
 
 	Chunk* getCurrentChunk(float x, float y);
+
+	void populateChunkVector();
 };
