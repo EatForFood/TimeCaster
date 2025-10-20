@@ -120,8 +120,8 @@ void Enemy::update(float elapsedTime, const Vector2f& playerPos, Chunk* chunk) {
 
 	int distanceMoved = max(abs(playerTile.x - lastPlayerTile.x), abs(playerTile.y - lastPlayerTile.y));
 
-	// Recalculate path only if player moved > 2 tiles or path empty
-	if (cachedPath.empty() || distanceMoved > 2) {
+	// Recalculate path only if player moved > 1 tiles or path empty
+	if (cachedPath.empty() || distanceMoved > 1) {
 		cachedPath = Pathfinder::findPath(chunk, enemyTile, playerTile, 20);
 		lastPlayerTile = playerTile;
 	}

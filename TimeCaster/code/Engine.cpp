@@ -759,7 +759,7 @@ void Engine::run()
 					// Spawn the player in the middle of the arena
 					player.spawn(arena, resolution, tileSize, player.getPlayerLevel());
 
-					for (int i = 0; i < 5; ++i)
+					for (int i = 0; i < 1; ++i)
 					{
 						Enemy e;
 						e.spawn(arena, resolution, tileSize, "Goblin", player.getPlayerLevel());
@@ -1195,11 +1195,6 @@ void Engine::run()
 				if (collision.pointInShape(player.getPosition(), world.getChunkArea(i).getShape())) // find players current chunk
 				{
 					player.setChunk(i);
-				}
-
-				if (collision.pointInShape(enemy.getPosition(), world.getChunkArea(i).getShape())) // find enemy's current chunk
-				{
-					enemy.setChunk(i);
 				}
 			}
 
