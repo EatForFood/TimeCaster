@@ -26,14 +26,14 @@ Equipment::Equipment(String type, sf::Vector2f position)
 		m_Sprite.setOrigin(25, 25);
 
 	}
-	else if (m_Name == "UpgradedArmour")
+	else if (m_Name == "LeatherArmour")
 	{
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
-		m_Sprite.setTextureRect(IntRect(128, 674, 32, 32));
+		m_Sprite.setTextureRect(IntRect(290, 672, 32, 32));
 		m_Icon.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
-		m_Icon.setTextureRect(IntRect(128, 674, 32, 32));
+		m_Icon.setTextureRect(IntRect(290, 672, 32, 32));
 		FloatRect bounds = m_Icon.getLocalBounds();
-		m_Icon.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
+		m_Icon.setOrigin(bounds.width / 2.f, bounds.height / 2.f);	
 
 		m_Icon.setScale(2.34, 2.34);
 		m_Value = 10;

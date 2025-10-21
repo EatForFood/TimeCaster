@@ -501,6 +501,7 @@ bool Player::loadSaveFile()
 
 	if (loadFile.is_open())
 	{
+		// load in all player stats
 		loadFile >> m_Speed;
 		loadFile >> m_Health;
 		loadFile >> m_MaxHealth;
@@ -517,9 +518,10 @@ bool Player::loadSaveFile()
 		loadFile >> m_EquippedArmourName;
 		loadFile >> m_Position.x;
 		loadFile >> m_Position.y;
-		m_EquippedWeapons[0] = (Weapon(m_EquippedSwordName, Vector2f(0, 0)));
-		m_EquippedWeapons[1] = (Weapon(m_EquippedWandName, Vector2f(0, 0)));
-		m_EquippedArmour = (Equipment(m_EquippedArmourName, Vector2f(0, 0)));
+		// equip saved weapons and armour
+		equipArmour(m_EquippedArmourName);
+		equipWeapon(m_EquippedWandName);
+		equipWeapon(m_EquippedSwordName); // equip sword last so that melee is the default combat type
 		return true;
 	}
 	else
@@ -686,7 +688,32 @@ bool Player::equipArmour(string armourNameToEquip)
 	Equipment armourToEquip(armourNameToEquip, Vector2f(0, 0));
 	if (armourToEquip.getType() == Item::Armour)
 	{
+		// equip the armour
 		m_EquippedArmour = armourToEquip;
+		// set the appropriate sprites
+		
+		if (m_EquippedArmour.getName() == "LeatherArmour") {
+			m_SpriteHead = Sprite(TextureHolder::GetTexture("graphics/player/armour/leather/Head_leather_armor_hat.png"));
+			m_SpriteHead.setOrigin(32, 32);		m_SpriteHead.setScale(0.75, 0.75);
+			m_SpriteTorso = Sprite(TextureHolder::GetTexture("graphics/player/armour/leather/Torso_leather_armor_torso.png"));
+			m_SpriteTorso.setOrigin(32, 32);	m_SpriteTorso.setScale(0.75, 0.75);
+			m_SpritePants = Sprite(TextureHolder::GetTexture("graphics/player/armour/plate/Legs_plate_armor_pants.png"));
+			m_SpritePants.setOrigin(32, 32);	m_SpritePants.setScale(0.75, 0.75);
+			m_SpriteShoes = Sprite(TextureHolder::GetTexture("graphics/player/armour/robe/Feet_shoes_brown.png"));
+			m_SpriteShoes.setOrigin(32, 32);	m_SpriteShoes.setScale(0.75, 0.75);
+		}
+		else if (m_EquippedArmour.getName() == "StartingArmour") {
+			m_SpriteHead = Sprite(TextureHolder::GetTexture("graphics/player/armour/robe/Head_robe_hood.png"));
+			m_SpriteHead.setOrigin(32, 32);		m_SpriteHead.setScale(0.75, 0.75);
+			m_SpriteTorso = Sprite(TextureHolder::GetTexture("graphics/player/armour/robe/Torso_robe_shirt_brown.png"));
+			m_SpriteTorso.setOrigin(32, 32);	m_SpriteTorso.setScale(0.75, 0.75);
+			m_SpritePants = Sprite(TextureHolder::GetTexture("graphics/player/armour/robe/Legs_robe_skirt.png"));
+			m_SpritePants.setOrigin(32, 32);		m_SpritePants.setScale(0.75, 0.75);
+			m_SpriteShoes = Sprite(TextureHolder::GetTexture("graphics/player/armour/robe/Feet_shoes_brown.png"));
+			m_SpriteShoes.setOrigin(32, 32);	m_SpriteShoes.setScale(0.75, 0.75);
+		}
+		
+
 		return true;
 	}
 	else
@@ -709,3 +736,4 @@ Equipment Player::getEquippedArmour()
 {
 	return m_EquippedArmour;
 }
+

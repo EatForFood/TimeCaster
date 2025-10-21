@@ -163,7 +163,7 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons())
 	storedItems[2] = Weapon("StartingSword", Vector2f(600, 650));
 	storedItems[3] = Weapon("UpgradedWand", Vector2f(750, 650));
 	storedItems[4] = Equipment("StartingArmour", Vector2f(900, 650));
-	storedItems[5] = Equipment("UpgradedArmour", Vector2f(1050, 650));
+	storedItems[5] = Equipment("LeatherArmour", Vector2f(1050, 650));
 
 
 	// Empty mana bar
@@ -459,6 +459,7 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons())
 	playerInFrame.setTexture(&texturePlayerInFrame);
 	playerInFrame.setOrigin(playerInFrame.getSize() / 2.f);
 	playerInFrame.setPosition(viewCentre.x - 200, 400);
+	
 
 	neckFrame.setTexture(&textureNeckFrame);
 	neckFrame.setSize(Vector2f(75, 75));
