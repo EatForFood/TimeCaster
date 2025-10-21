@@ -120,7 +120,7 @@ public:
 
 	bool equipArmour(string armourNameToEquip);
 
-	Item getEquippedArmour();
+	Equipment getEquippedArmour();
 
 
 	void setInCell();
@@ -154,9 +154,6 @@ private:
 	float m_StaminaRecharge;
 	int m_Gold;
 	int m_Kills;
-	//Item m_SavedSword;
-	//Item m_SavedWand;
-	//Item m_EquippedWeapon;
 
 	string m_EquippedSwordName;
 	string m_EquippedWandName;
@@ -201,7 +198,6 @@ private:
 
 	FloatRect m_RenderArea;
 
-	//IntRect m_EquippedWeaponIcon;
 
 	bool inCell = false;
 

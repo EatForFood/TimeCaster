@@ -453,9 +453,10 @@ void Player::createNewSave()
 	std::ofstream saveFile("gamedata/TCSave.txt");
 
 	saveFile << std::fixed << std::setprecision(5) << START_SPEED << " " << START_HEALTH << " " << START_HEALTH << " " << START_STAMINA << " "
-		<< START_STAMINA << " " << START_STAMINA_RECHARGE << " " << START_MANA << " " << START_MANA << " " << START_GOLD << " " << START_KILLS << " " << START_LEVEL << " " << START_SWORD << " " << START_WAND << " " << 64 << " " << 64 << std::endl;
-	m_EquippedWeapons[0] = (Weapon(START_SWORD, Vector2f(760, 550)));
-	m_EquippedWeapons[1] = (Weapon(START_WAND, Vector2f(860, 550)));
+		<< START_STAMINA << " " << START_STAMINA_RECHARGE << " " << START_MANA << " " << START_MANA << " " << START_GOLD << " " << START_KILLS << " " << START_LEVEL << " " << START_SWORD << " " << START_WAND << " " << START_ARMOUR << " " << 64 << " " << 64 << std::endl;
+	m_EquippedWeapons[0] = (Weapon(START_SWORD, Vector2f(0, 0)));
+	m_EquippedWeapons[1] = (Weapon(START_WAND, Vector2f(0, 0)));
+	m_EquippedArmour = (Equipment(START_ARMOUR, Vector2f(0, 0)));
 	saveFile.close();
 }
 void Player::createConfigFile(string difficultyString, bool windowedMode, bool displayFPS, float volume)
@@ -488,7 +489,8 @@ void Player::updateSaveFile()
 
 	saveFile << std::fixed << std::setprecision(5) << m_Speed << " " << m_Health << " " << m_MaxHealth << " " << m_Stamina << " "
     << m_MaxStamina << " " << m_StaminaRecharge << " " << m_Mana << " " << m_MaxMana << " " << m_Gold << " " << m_Kills << " " << m_Level << " "
-    << m_EquippedWeapons[0].getName() << " " << m_EquippedWeapons[1].getName() << " " << m_Position.x << " " << m_Position.y << std::endl;
+    << m_EquippedWeapons[0].getName() << " " << m_EquippedWeapons[1].getName() << " " << m_EquippedArmour.getName() << " "
+	<< m_Position.x << " " << m_Position.y << std::endl;
 
 	saveFile.close();
 }
@@ -512,10 +514,12 @@ bool Player::loadSaveFile()
 		loadFile >> m_Level;
 		loadFile >> m_EquippedSwordName;
 		loadFile >> m_EquippedWandName;
+		loadFile >> m_EquippedArmourName;
 		loadFile >> m_Position.x;
 		loadFile >> m_Position.y;
-		m_EquippedWeapons[0] = (Weapon(m_EquippedSwordName, Vector2f(760, 550)));
-		m_EquippedWeapons[1] = (Weapon(m_EquippedWandName, Vector2f(860, 550)));
+		m_EquippedWeapons[0] = (Weapon(m_EquippedSwordName, Vector2f(0, 0)));
+		m_EquippedWeapons[1] = (Weapon(m_EquippedWandName, Vector2f(0, 0)));
+		m_EquippedArmour = (Equipment(m_EquippedArmourName, Vector2f(0, 0)));
 		return true;
 	}
 	else
@@ -677,6 +681,20 @@ bool Player::equipWeapon(string weaponNameToEquip)
 	}
 }
 
+bool Player::equipArmour(string armourNameToEquip)
+{
+	Equipment armourToEquip(armourNameToEquip, Vector2f(0, 0));
+	if (armourToEquip.getType() == Item::Armour)
+	{
+		m_EquippedArmour = armourToEquip;
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
 vector<Weapon>& Player::getEquippedWeapons()
 {
 	return m_EquippedWeapons;
@@ -687,7 +705,7 @@ Player::CombatType Player::getCombatType()
 	return m_CombatType;
 }
 
-Item Player::getEquippedArmour()
+Equipment Player::getEquippedArmour()
 {
 	return m_EquippedArmour;
 }

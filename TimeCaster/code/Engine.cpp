@@ -157,11 +157,15 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons())
 
 
 	
-
+	// Debug inventory initalization
 	storedItems[0] = Weapon("StartingWand", Vector2f(300, 650));
 	storedItems[1] = Weapon("UpgradedSword", Vector2f(450, 650));
 	storedItems[2] = Weapon("StartingSword", Vector2f(600, 650));
 	storedItems[3] = Weapon("UpgradedWand", Vector2f(750, 650));
+	storedItems[4] = Equipment("StartingArmour", Vector2f(900, 650));
+	storedItems[5] = Equipment("UpgradedArmour", Vector2f(1050, 650));
+
+
 	// Empty mana bar
 	emptyManaBar.setFillColor(Color::Black);
 	emptyManaBar.setPosition(10, 110);
@@ -699,11 +703,11 @@ void Engine::run()
 			if ((event.type == Event::MouseButtonPressed && event.key.code == Mouse::Middle && state == State::PLAYING) ||
 				(event.type == Event::KeyPressed && event.key.code == Keyboard::F && state == State::PLAYING))
 			{
-				//cout << " Weapon switched" << endl;
+
 
 				player.switchWeapon();
 			
-				//equippedWeaponIcon.setTextureRect(player.getEq());
+
 			}
 
 			if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left && state == State::OPTIONS_MENU)
@@ -756,9 +760,9 @@ void Engine::run()
 
 					equippedSwordIcon.setTextureRect(player.getEquippedWeapons().at(0).getTextureRect());
 					equippedWandIcon.setTextureRect(player.getEquippedWeapons().at(1).getTextureRect());
+					equippedArmourIcon.setTextureRect(player.getEquippedArmour().getTextureRect());
 
-			
-					//equippedWeaponIcon.setTextureRect(player.getEquippedWeapons());
+
 
 					// We will modify the next two lines later
 					arena.width = 1900;
@@ -783,7 +787,7 @@ void Engine::run()
 					// Reset the clock so there isn't a frame jump
 					clock.restart();
 
-					// equippedWeaponIcon.setTextureRect(player.getEquippedWeaponIcon());
+
 
 					player.loadConfigFile();
 					difficulty = Difficulty::Medium;
@@ -812,8 +816,10 @@ void Engine::run()
 						// Player loaded successfully
 						world.loadWorld();
 
+						// Update equipped item icons
 						equippedSwordIcon.setTextureRect(player.getEquippedWeapons().at(0).getTextureRect());
 						equippedWandIcon.setTextureRect(player.getEquippedWeapons().at(1).getTextureRect());
+						equippedArmourIcon.setTextureRect(player.getEquippedArmour().getTextureRect());
 
 						// We will modify the next two lines later
 						arena.width = 1900;
@@ -836,7 +842,7 @@ void Engine::run()
 						// Reset the clock so there isn't a frame jump
 						clock.restart();
 
-						//equippedWeaponIcon.setTextureRect(player.getEquippedWeaponIcon());
+
 
 						player.loadConfigFile();
 						difficulty = Difficulty::Medium;
@@ -853,6 +859,7 @@ void Engine::run()
 
 						equippedSwordIcon.setTextureRect(player.getEquippedWeapons().at(0).getTextureRect());
 						equippedWandIcon.setTextureRect(player.getEquippedWeapons().at(1).getTextureRect());
+						equippedArmourIcon.setTextureRect(player.getEquippedArmour().getTextureRect());
 
 
 
@@ -876,8 +883,6 @@ void Engine::run()
 
 						// Reset the clock so there isn't a frame jump
 						clock.restart();
-
-						//equippedWeaponIcon.setTextureRect(player.getEquippedWeaponIcon());
 
 						player.loadConfigFile();
 						difficulty = Difficulty::Medium;
@@ -1342,6 +1347,21 @@ void Engine::run()
 								equippedWandIcon.setTextureRect(clickedItem.getTextureRect());
 								//clickedItem.getIcon().setPosition(wandFrame.getPosition());
 								//cout << m_EquippedWeapons[1].getName();
+								// placed is not being made true on purpose, the player will still need to carry the items they equip
+								// we can change this later though
+							}
+						}
+					}
+
+					// Try to equip as armour if dropped on armour slot
+					if (clickedItem.getIcon().getGlobalBounds().intersects(headArmourFrame.getGlobalBounds()))
+					{
+						if (clickedItem.getType() == Item::Armour)
+						{
+							if (player.equipArmour(clickedItem.getName()));
+							{
+								equippedArmourIcon.setTextureRect(clickedItem.getTextureRect());
+								//equippedArmourIcon.setTextureRect(player.getEquippedArmour().getTextureRect());
 								// placed is not being made true on purpose, the player will still need to carry the items they equip
 								// we can change this later though
 							}
