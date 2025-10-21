@@ -653,13 +653,15 @@ void Player::switchWeapon()
 
 }
 
-bool Player::equipWeapon(Item weaponToEquip)
+bool Player::equipWeapon(string weaponNameToEquip)
 {
+	Weapon weaponToEquip(weaponNameToEquip, Vector2f(0, 0));
 	if (weaponToEquip.getType() == Item::MeleeWeapon)
 	{
 		m_EquippedSwordName = weaponToEquip.getName();
 		m_EquippedWeapons[0] = weaponToEquip;
 		m_CombatType = Melee;
+		
 		return true;
 	}
 	else if (weaponToEquip.getType() == Item::MagicWeapon)
@@ -675,7 +677,7 @@ bool Player::equipWeapon(Item weaponToEquip)
 	}
 }
 
-vector<Item>& Player::getEquippedWeapons()
+vector<Weapon>& Player::getEquippedWeapons()
 {
 	return m_EquippedWeapons;
 }
@@ -683,4 +685,9 @@ vector<Item>& Player::getEquippedWeapons()
 Player::CombatType Player::getCombatType()
 {
 	return m_CombatType;
+}
+
+Item Player::getEquippedArmour()
+{
+	return m_EquippedArmour;
 }

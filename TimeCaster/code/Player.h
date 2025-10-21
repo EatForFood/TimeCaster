@@ -4,6 +4,8 @@
 #include "NavBox.h"
 #include "CollisionDetection.h"
 #include "Item.h"
+#include "Equipment.h"
+#include "Weapon.h"
 
 using namespace sf;
 using namespace std;
@@ -102,8 +104,8 @@ public:
 	void setChunk(int chunk);
 	int getChunk();
 
-	vector<Item>& getEquippedWeapons();
-	vector<Item>& getEquippedWeapon();
+	vector<Weapon>& getEquippedWeapons();
+
 	FloatRect getRenderArea();
 
 	void incrementKillCount();
@@ -114,7 +116,11 @@ public:
 	//Item getEquippedWeapon();
 
 	void switchWeapon();
-	bool equipWeapon(Item weaponToEquip);
+	bool equipWeapon(string weaponNameToEquip);
+
+	bool equipArmour(string armourNameToEquip);
+
+	Item getEquippedArmour();
 
 
 	void setInCell();
@@ -131,6 +137,7 @@ private:
 	const string START_EQUIPPED_WEAPON = "StartingSword";
 	const string START_SWORD = "StartingSword";
 	const string START_WAND = "StartingWand";
+	const string START_ARMOUR = "StartingArmour";
 
 	
 
@@ -153,7 +160,7 @@ private:
 
 	string m_EquippedSwordName;
 	string m_EquippedWandName;
-	string m_SavedWandName;
+	string m_EquippedArmourName;
 
 	bool m_WindowedMode;
 
@@ -187,7 +194,9 @@ private:
 	vector<NavBox> navBoxes;
 //	vector<Item> equippedItems;
 	// always store the sword at index 0 and wand at index 1
-	vector<Item> m_EquippedWeapons;
+	vector<Weapon> m_EquippedWeapons;
+	Equipment m_EquippedArmour = Equipment("null", Vector2f(0, 0));
+	
 	int m_Chunk; // player's current chunk
 
 	FloatRect m_RenderArea;

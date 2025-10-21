@@ -417,14 +417,10 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons())
 	textureWandFrame = TextureHolder::GetTexture("graphics/UI/ringFrame.png");
 	textureItems = TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png");
 
-	// Player frame
-	playerFrame.setSize(sf::Vector2f(100.f, 200.f));
-	playerFrame.setTexture(&texturePlayerFrame);
-	playerFrame.setOrigin(playerFrame.getSize() / 2.f);
-	playerFrame.setPosition(viewCentre.x - 200, 400);
-
+	// Equipped item icons
+	
 	equippedSwordIcon.setTexture(&textureItems);
-	equippedSwordIcon.setTextureRect(IntRect(0,0,0,0));
+	equippedSwordIcon.setTextureRect(IntRect(0, 0, 0, 0));
 	equippedSwordIcon.setSize(Vector2f(75, 75));
 	equippedSwordIcon.setOrigin(equippedSwordIcon.getSize() / 2.f);
 	equippedSwordIcon.setPosition(viewCentre.x - 200, 550);
@@ -435,6 +431,23 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons())
 	equippedWandIcon.setOrigin(equippedWandIcon.getSize() / 2.f);
 	equippedWandIcon.setPosition(viewCentre.x - 100, 550);
 
+	equippedArmourIcon.setTexture(&textureItems);
+	equippedArmourIcon.setTextureRect(IntRect(0, 0, 0, 0));
+	equippedArmourIcon.setSize(Vector2f(75, 75));
+	equippedArmourIcon.setOrigin(equippedArmourIcon.getSize() / 2.f);
+	equippedArmourIcon.setPosition(viewCentre.x - 300, 550);
+
+
+	// Player frame
+	playerFrame.setSize(sf::Vector2f(100.f, 200.f));
+	playerFrame.setTexture(&texturePlayerFrame);
+	playerFrame.setOrigin(playerFrame.getSize() / 2.f);
+	playerFrame.setPosition(viewCentre.x - 200, 400);
+
+
+
+
+
 	
 
 	// Player sprite for frame
@@ -443,10 +456,10 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons())
 	playerInFrame.setOrigin(playerInFrame.getSize() / 2.f);
 	playerInFrame.setPosition(viewCentre.x - 200, 400);
 
-	headArmourFrame.setTexture(&textureHeadArmourFrame);
-	headArmourFrame.setSize(Vector2f(75, 75));
-	headArmourFrame.setOrigin(headArmourFrame.getSize() / 2.f);
-	headArmourFrame.setPosition(viewCentre.x - 300, 350);
+	neckFrame.setTexture(&textureNeckFrame);
+	neckFrame.setSize(Vector2f(75, 75));
+	neckFrame.setOrigin(neckFrame.getSize() / 2.f);
+	neckFrame.setPosition(viewCentre.x - 300, 350);
 
 	chestArmourFrame.setTexture(&textureChestArmourFrame);
 	chestArmourFrame.setSize(Vector2f(75, 75));
@@ -463,10 +476,10 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons())
 	bootsArmourFrame.setOrigin(bootsArmourFrame.getSize() / 2.f);
 	bootsArmourFrame.setPosition(viewCentre.x - 100, 450);
 
-	neckFrame.setTexture(&textureNeckFrame);
-	neckFrame.setSize(Vector2f(75, 75));
-	neckFrame.setOrigin(neckFrame.getSize() / 2.f);
-	neckFrame.setPosition(viewCentre.x - 300, 550);
+	headArmourFrame.setTexture(&textureHeadArmourFrame);
+	headArmourFrame.setSize(Vector2f(75, 75));
+	headArmourFrame.setOrigin(headArmourFrame.getSize() / 2.f);
+	headArmourFrame.setPosition(viewCentre.x - 300, 550);
 
 	weaponFrame.setTexture(&textureWeaponFrame);
 	weaponFrame.setSize(Vector2f(75, 75));
@@ -1248,6 +1261,7 @@ void Engine::run()
 						Mouse::isButtonPressed(Mouse::Left) && !draggingItem)
 					{
 						clickedItem = storedItems[i];          // copy to clickedItem
+					
 						itemLastIndex = i;                     // save original slot
 						itemLastX = clickedItem.getIcon().getPosition().x;
 						itemLastY = clickedItem.getIcon().getPosition().y;
@@ -1268,6 +1282,7 @@ void Engine::run()
 						Mouse::isButtonPressed(Mouse::Left) && !draggingItem)
 					{
 						clickedItem = allItems[i];           // copy to clickedItem
+						
 						itemLastIndex = -1;                   // world item
 						itemLastX = clickedItem.getIcon().getPosition().x;
 						itemLastY = clickedItem.getIcon().getPosition().y;
@@ -1307,12 +1322,9 @@ void Engine::run()
 					{
 						if (clickedItem.getType() == Item::MeleeWeapon)
 						{
-						if (player.equipWeapon(clickedItem));
+						if (player.equipWeapon(clickedItem.getName()));
 							{
 							equippedSwordIcon.setTextureRect(clickedItem.getTextureRect());
-							//clickedItem.getIcon().setPosition(weaponFrame.getPosition());
-
-							//cout << m_EquippedWeapons[0].getName();
 							// placed is not being made true on purpose, the player will still need to carry the items they equip
 							// we can change this later though
 							}
@@ -1325,7 +1337,7 @@ void Engine::run()
 					{
 						if (clickedItem.getType() == Item::MagicWeapon)
 						{
-							if (player.equipWeapon(clickedItem));
+							if (player.equipWeapon(clickedItem.getName()));
 							{
 								equippedWandIcon.setTextureRect(clickedItem.getTextureRect());
 								//clickedItem.getIcon().setPosition(wandFrame.getPosition());

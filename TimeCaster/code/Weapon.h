@@ -13,6 +13,7 @@ private:
 public:
 
 	Weapon(String type, sf::Vector2f position);
+	int getDamage();
 
 };
 

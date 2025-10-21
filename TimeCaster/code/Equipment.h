@@ -13,6 +13,7 @@ private:
 public:
 
 	Equipment(String type, sf::Vector2f position);
+	int getArmour();
 
 };
 
