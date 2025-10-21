@@ -189,10 +189,10 @@ void Player::update(float elapsedTime, Vector2i mousePosition, vector<NavBox> na
 
 	if (!m_IsMoving && m_Stamina < m_MaxStamina  )
 	{
-		m_Stamina += m_StaminaRecharge; //recharge stamina faster when not moving
+		m_Stamina += m_StaminaRecharge * elapsedTime; //recharge stamina faster when not moving
 	}
 	else if (m_Stamina < m_MaxStamina) {
-		m_Stamina += m_StaminaRecharge * 0.33; //recharge stamina slower when moving
+		m_Stamina += m_StaminaRecharge * elapsedTime * 0.33; //recharge stamina slower when moving
 	}	
 
 	if (m_UpPressed && !upDisabled)

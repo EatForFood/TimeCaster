@@ -124,7 +124,7 @@ private:
 	const float START_HEALTH = 100;
 	const float START_MANA = 100;
 	const float START_STAMINA = 100;
-	const float START_STAMINA_RECHARGE = 0.05;
+	const float START_STAMINA_RECHARGE = 5;
 	const int START_GOLD = 0;
 	const int START_KILLS = 0;
 	const int START_LEVEL = 1;
