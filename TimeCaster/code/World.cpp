@@ -6,7 +6,6 @@
 #include <fstream>
 #include <sstream>
 
-
 using namespace std;
 using namespace sf;
 
@@ -15,40 +14,39 @@ World::World()
 	
 }
 
-
-void World::newWorld() // create new world and save chunks to file
+void World::newWorld()
 {
-    int half = GRID_SIZE / 2; 
+    int half = GRID_SIZE / 2;
 
     ofstream out("gamedata/TCWorld.txt");
 
-    for (int y = -half; y <= half; y++)
+    // Possible chunk types (excluding "spawn")
+    vector<string> chunkTypes = {
+        "forest", "forest", "forest",
+        "goblinVillage",
+    };
+
+    // Set up random generator
+    mt19937 rng(static_cast<unsigned int>(time(nullptr)));
+    uniform_int_distribution<int> dist(0, static_cast<int>(chunkTypes.size()) - 1);
+
+    for (int y = -half; y <= half; ++y)
     {
-        for (int x = -half; x <= half; x++)
+        for (int x = -half; x <= half; ++x)
         {
-            if (x == 0 && y == 0) // center chunk is spawn
+            if (x == 0 && y == 0)
             {
+                // Center chunk is always spawn
                 string type = "spawn";
-                out << type << " "
-                    << x << " "
-                    << y << "\n";
-                chunks.emplace_back("spawn", Vector2f(x, y), false);
-            }
-            else if (x == -1 && y == 0)
-            {
-                string type = "goblinVillage";
-                out << type << " "
-                    << x << " "
-                    << y << "\n";
-                chunks.emplace_back("goblinVillage", Vector2f(x, y), false);
+                out << type << " " << x << " " << y << "\n";
+                chunks.emplace_back(type, Vector2f(x, y), false);
             }
             else
             {
-                string type = "forest";
-                out << type << " "
-                    << x << " "
-                    << y << "\n";
-                chunks.emplace_back("forest", Vector2f(x, y), false);
+                // Choose a random type for other chunks
+                string type = chunkTypes[dist(rng)];
+                out << type << " " << x << " " << y << "\n";
+                chunks.emplace_back(type, Vector2f(x, y), false);
             }
         }
     }
