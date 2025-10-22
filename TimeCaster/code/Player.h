@@ -120,6 +120,9 @@ public:
 
 	bool equipHeadArmour(string armourNameToEquip);
 	bool equipChestArmour(string armourNameToEquip);
+	bool equipTrouserArmour(string armourNameToEquip);
+	bool equipShoeArmour(string armourNameToEquip);
+	bool equipNeckArmour(string armourNameToEquip);
 
 	vector<Equipment>& getEquippedArmour();
 
@@ -135,11 +138,13 @@ private:
 	const int START_GOLD = 0;
 	const int START_KILLS = 0;
 	const int START_LEVEL = 1;
-	const string START_EQUIPPED_WEAPON = "StartingSword";
 	const string START_SWORD = "StartingSword";
 	const string START_WAND = "StartingWand";
 	const string START_HEAD_ARMOUR = "StartingHood";
 	const string START_CHEST_ARMOUR = "StartingArmour";
+	const string START_TROUSER_ARMOUR = "StartingTrousers";
+	const string START_SHOE_ARMOUR = "StartingShoes";
+	const string START_NECK_ARMOUR = "FamilyLocket";
 
 	
 
@@ -161,6 +166,9 @@ private:
 	string m_EquippedWandName;
 	string m_EquippedHeadArmourName;
 	string m_EquippedChestArmourName;
+	string m_EquippedTrouserArmourName;
+	string m_EquippedShoeArmourName;
+	string m_EquippedNeckArmourName;
 
 	bool m_WindowedMode;
 
@@ -195,7 +203,7 @@ private:
 //	vector<Item> equippedItems;
 	// always store the sword at index 0 and wand at index 1
 	vector<Weapon> m_EquippedWeapons;
-	// store helmet at index 0, torso at index 1, pants at index 2, shoes at index 3, ring at index 4
+	// store helmet at index 0, torso at index 1, pants at index 2, shoes at index 3, amulet/neck slot at index 4
 	vector<Equipment> m_EquippedArmour;
 	
 	int m_Chunk; // player's current chunk

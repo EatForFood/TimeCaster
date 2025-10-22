@@ -208,6 +208,9 @@ private:
 	RectangleShape equippedWandIcon;
 	RectangleShape equippedHeadArmourIcon;
 	RectangleShape equippedChestArmourIcon;
+	RectangleShape equippedTrousersArmourIcon;
+	RectangleShape equippedShoeArmourIcon;
+	RectangleShape equippedNeckArmourIcon;
 	RectangleShape playerInFrame;
 	RectangleShape headArmourFrame;
 	RectangleShape chestArmourFrame;

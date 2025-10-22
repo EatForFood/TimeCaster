@@ -454,12 +454,16 @@ void Player::createNewSave()
 
 	saveFile << std::fixed << std::setprecision(5) << START_SPEED << " " << START_HEALTH << " " << START_HEALTH << " " << START_STAMINA << " "
 		<< START_STAMINA << " " << START_STAMINA_RECHARGE << " " << START_MANA << " " << START_MANA << " " << START_GOLD << " " << START_KILLS
-		<< " " << START_LEVEL << " " << START_SWORD << " " << START_WAND << " " << START_HEAD_ARMOUR << " " << START_CHEST_ARMOUR << " " << 64 << " " << 64
+		<< " " << START_LEVEL << " " << START_SWORD << " " << START_WAND << " " << START_HEAD_ARMOUR << " " << START_CHEST_ARMOUR << " " 
+		<< START_TROUSER_ARMOUR << " " << START_SHOE_ARMOUR << " " << START_NECK_ARMOUR << " " << 64 << " " << 64
 		<< std::endl;
 	m_EquippedWeapons[0] = (Weapon(START_SWORD, Vector2f(0, 0)));
 	m_EquippedWeapons[1] = (Weapon(START_WAND, Vector2f(0, 0)));
 	m_EquippedArmour[0] = (Equipment(START_HEAD_ARMOUR, Vector2f(0, 0)));
 	m_EquippedArmour[1] = (Equipment(START_CHEST_ARMOUR, Vector2f(0, 0)));
+	m_EquippedArmour[2] = (Equipment(START_TROUSER_ARMOUR, Vector2f(0, 0)));
+	m_EquippedArmour[3] = (Equipment(START_SHOE_ARMOUR, Vector2f(0, 0)));
+	m_EquippedArmour[4] = (Equipment(START_NECK_ARMOUR, Vector2f(0, 0)));
 	saveFile.close();
 }
 void Player::createConfigFile(string difficultyString, bool windowedMode, bool displayFPS, float volume)
@@ -493,7 +497,9 @@ void Player::updateSaveFile()
 	saveFile << std::fixed << std::setprecision(5) << m_Speed << " " << m_Health << " " << m_MaxHealth << " " << m_Stamina << " "
     << m_MaxStamina << " " << m_StaminaRecharge << " " << m_Mana << " " << m_MaxMana << " " << m_Gold << " " << m_Kills << " " << m_Level << " "
     << m_EquippedWeapons[0].getName() << " " << m_EquippedWeapons[1].getName() << " " << m_EquippedArmour[0].getName() << " "
-	<<	m_EquippedArmour[1].getName() << " " << m_Position.x << " " << m_Position.y << std::endl;
+	<< m_EquippedArmour[1].getName() << " " << m_EquippedArmour[2].getName() << " " << m_EquippedArmour[3].getName() << " " 
+	<< m_EquippedArmour[4].getName() << m_Position.x << " " << m_Position.y 
+	<< std::endl;
 
 	saveFile.close();
 }
@@ -513,18 +519,27 @@ bool Player::loadSaveFile()
 		loadFile >> m_StaminaRecharge;
 		loadFile >> m_Mana;
 		loadFile >> m_MaxMana;
+
 		loadFile >> m_Gold;
 		loadFile >> m_Kills;
 		loadFile >> m_Level;
+		
 		loadFile >> m_EquippedSwordName;
 		loadFile >> m_EquippedWandName;
 		loadFile >> m_EquippedHeadArmourName;
 		loadFile >> m_EquippedChestArmourName;
+		loadFile >> m_EquippedTrouserArmourName;
+		loadFile >> m_EquippedShoeArmourName;
+		loadFile >> m_EquippedNeckArmourName;
+
 		loadFile >> m_Position.x;
 		loadFile >> m_Position.y;
 		// equip saved weapons and armour
 		equipHeadArmour(m_EquippedHeadArmourName);
 		equipChestArmour(m_EquippedChestArmourName);
+		equipTrouserArmour(m_EquippedTrouserArmourName);
+		equipShoeArmour(m_EquippedShoeArmourName);
+		equipNeckArmour(m_EquippedNeckArmourName);
 		equipWeapon(m_EquippedWandName);
 		equipWeapon(m_EquippedSwordName); // equip sword last so that melee is the default combat type
 		return true;
@@ -697,11 +712,11 @@ bool Player::equipHeadArmour(string armourNameToEquip)
 		m_EquippedArmour[0] = armourToEquip;
 		// set the appropriate sprites
 		
-		if (m_EquippedArmour[0].getName() == "LeatherCap") {
+		if (armourNameToEquip == "LeatherCap") {
 			m_SpriteHead = Sprite(TextureHolder::GetTexture("graphics/player/armour/leather/Head_leather_armor_hat.png"));
 			m_SpriteHead.setOrigin(32, 32);		m_SpriteHead.setScale(0.75, 0.75);
 		}
-		else if (m_EquippedArmour[0].getName() == "StartingHood") {
+		else if (armourNameToEquip == "StartingHood") {
 			m_SpriteHead = Sprite(TextureHolder::GetTexture("graphics/player/armour/robe/Head_robe_hood.png"));
 			m_SpriteHead.setOrigin(32, 32);		m_SpriteHead.setScale(0.75, 0.75);
 		}
@@ -724,16 +739,74 @@ bool Player::equipChestArmour(string armourNameToEquip)
 		m_EquippedArmour[1] = armourToEquip;
 		// set the appropriate sprites
 
-		if (m_EquippedArmour[1].getName() == "LeatherArmour") {
+		if (armourNameToEquip == "LeatherArmour") {
 			m_SpriteTorso = Sprite(TextureHolder::GetTexture("graphics/player/armour/leather/TORSO_leather_armor_torso.png"));
 			m_SpriteTorso.setOrigin(32, 32);		m_SpriteTorso.setScale(0.75, 0.75);
 		}
-		else if (m_EquippedArmour[1].getName() == "StartingArmour") {
+		else if (armourNameToEquip == "StartingArmour") {
 			m_SpriteTorso = Sprite(TextureHolder::GetTexture("graphics/player/armour/robe/TORSO_robe_shirt_brown.png"));	
 			m_SpriteTorso.setOrigin(32, 32);		m_SpriteTorso.setScale(0.75, 0.75);
 		}
 
 
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool Player::equipTrouserArmour(string armourNameToEquip)
+{
+	Equipment armourToEquip(armourNameToEquip, Vector2f(0, 0));
+	if (armourToEquip.getType() == Item::TrouserArmour)
+	{
+		// equip the armour
+		m_EquippedArmour[2] = armourToEquip;
+		// set the appropriate sprites (1 for now, more later)
+		if (armourNameToEquip == "StartingPants") {
+			m_SpritePants = Sprite(TextureHolder::GetTexture("graphics/player/armour/robe/Legs_robe_skirt.png"));
+			m_SpritePants.setOrigin(32, 32);		m_SpritePants.setScale(0.75, 0.75);
+		}
+
+
+
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool Player::equipShoeArmour(string armourNameToEquip)
+{
+	Equipment armourToEquip(armourNameToEquip, Vector2f(0, 0));
+	if (armourToEquip.getType() == Item::ShoeArmour)
+	{
+		// equip the armour
+		m_EquippedArmour[3] = armourToEquip;
+		// set the appropriate sprites (1 for now, more later)
+		if (armourNameToEquip == "StartingShoes") {
+			m_SpriteShoes = Sprite(TextureHolder::GetTexture("graphics/player/armour/robe/Feet_shoes_brown.png"));
+			m_SpriteShoes.setOrigin(32, 32);		m_SpriteShoes.setScale(0.75, 0.75);
+		}
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool Player::equipNeckArmour(string armourNameToEquip)
+{
+	Equipment armourToEquip(armourNameToEquip, Vector2f(0, 0));
+	if (armourToEquip.getType() == Item::NeckArmour)
+	{
+		// equip the armour
+		m_EquippedArmour[4] = armourToEquip;
 		return true;
 	}
 	else

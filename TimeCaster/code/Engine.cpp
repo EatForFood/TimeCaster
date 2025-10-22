@@ -168,6 +168,10 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	storedItems[5] = Equipment("StartingHood", Vector2f(0, 0));
 	storedItems[6] = Equipment("LeatherCap", Vector2f(0, 0));
 	storedItems[7] = Equipment("LeatherArmour", Vector2f(0, 0));
+	storedItems[8] = Equipment("StartingShoes", Vector2f(0, 0));
+	storedItems[9] = Equipment("StartingTrousers", Vector2f(0, 0));
+	storedItems[10] = Equipment("ShieldAmulet", Vector2f(0, 0));
+	storedItems[11] = Equipment("FamilyLocket", Vector2f(0, 0));
 
 
 
@@ -451,6 +455,25 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	equippedChestArmourIcon.setSize(Vector2f(75, 75));
 	equippedChestArmourIcon.setOrigin(equippedChestArmourIcon.getSize() / 2.f);
 	equippedChestArmourIcon.setPosition(viewCentre.x - 300, 550);
+
+	equippedTrousersArmourIcon.setTexture(&textureItems);
+	equippedTrousersArmourIcon.setTextureRect(IntRect(0, 0, 0, 0));
+	equippedTrousersArmourIcon.setSize(Vector2f(75, 75));
+	equippedTrousersArmourIcon.setOrigin(equippedTrousersArmourIcon.getSize() / 2.f);
+	equippedTrousersArmourIcon.setPosition(viewCentre.x - 300, 450);
+
+	equippedShoeArmourIcon.setTexture(&textureItems);
+	equippedShoeArmourIcon.setTextureRect(IntRect(0, 0, 0, 0));
+	equippedShoeArmourIcon.setSize(Vector2f(75, 75));
+	equippedShoeArmourIcon.setOrigin(equippedShoeArmourIcon.getSize() / 2.f);
+	equippedShoeArmourIcon.setPosition(viewCentre.x - 100, 450);
+
+	equippedNeckArmourIcon.setTexture(&textureItems);
+	equippedNeckArmourIcon.setTextureRect(IntRect(0, 0, 0, 0));
+	equippedNeckArmourIcon.setSize(Vector2f(75, 75));
+	equippedNeckArmourIcon.setOrigin(equippedNeckArmourIcon.getSize() / 2.f);
+	equippedNeckArmourIcon.setPosition(viewCentre.x - 300, 350);
+
 
 
 	// Player frame
@@ -775,6 +798,10 @@ void Engine::run()
 					equippedWandIcon.setTextureRect(player.getEquippedWeapons().at(1).getTextureRect());
 					equippedHeadArmourIcon.setTextureRect(player.getEquippedArmour().at(0).getTextureRect());
 					equippedChestArmourIcon.setTextureRect(player.getEquippedArmour().at(1).getTextureRect());
+					equippedTrousersArmourIcon.setTextureRect(player.getEquippedArmour().at(2).getTextureRect());
+					equippedShoeArmourIcon.setTextureRect(player.getEquippedArmour().at(3).getTextureRect());
+					equippedNeckArmourIcon.setTextureRect(player.getEquippedArmour().at(4).getTextureRect());
+					
 					
 
 
@@ -836,6 +863,10 @@ void Engine::run()
 						equippedWandIcon.setTextureRect(player.getEquippedWeapons().at(1).getTextureRect());
 						equippedHeadArmourIcon.setTextureRect(player.getEquippedArmour().at(0).getTextureRect());
 						equippedChestArmourIcon.setTextureRect(player.getEquippedArmour().at(1).getTextureRect());
+						equippedTrousersArmourIcon.setTextureRect(player.getEquippedArmour().at(2).getTextureRect());
+						equippedShoeArmourIcon.setTextureRect(player.getEquippedArmour().at(3).getTextureRect());
+						equippedNeckArmourIcon.setTextureRect(player.getEquippedArmour().at(4).getTextureRect());
+
 
 						// We will modify the next two lines later
 						arena.width = 1900;
@@ -877,6 +908,10 @@ void Engine::run()
 						equippedWandIcon.setTextureRect(player.getEquippedWeapons().at(1).getTextureRect());
 						equippedHeadArmourIcon.setTextureRect(player.getEquippedArmour().at(0).getTextureRect());
 						equippedChestArmourIcon.setTextureRect(player.getEquippedArmour().at(1).getTextureRect());
+						equippedTrousersArmourIcon.setTextureRect(player.getEquippedArmour().at(2).getTextureRect());
+						equippedShoeArmourIcon.setTextureRect(player.getEquippedArmour().at(3).getTextureRect());
+						equippedNeckArmourIcon.setTextureRect(player.getEquippedArmour().at(4).getTextureRect());
+
 
 
 
@@ -1340,55 +1375,37 @@ void Engine::run()
 					}
 
 					// Try to equip as sword if dropped on sword slot
-					if (clickedItem.getIcon().getGlobalBounds().intersects(weaponFrame.getGlobalBounds()))
-					{
-						if (clickedItem.getType() == Item::MeleeWeapon)
-						{
-						if (player.equipWeapon(clickedItem.getName()));
-							{
-							equippedSwordIcon.setTextureRect(clickedItem.getTextureRect());
+					if (clickedItem.getIcon().getGlobalBounds().intersects(weaponFrame.getGlobalBounds())
+						&& clickedItem.getType() == Item::MeleeWeapon)
+					{	if (player.equipWeapon(clickedItem.getName())) equippedSwordIcon.setTextureRect(clickedItem.getTextureRect());	}
+
 							// placed is not being made true on purpose, the player will still need to carry the items they equip
 							// we can change this later though
-							}
-						}
-						
-					}
 
 					// Try to equip as wand if dropped on wand slot
-					if (clickedItem.getIcon().getGlobalBounds().intersects(wandFrame.getGlobalBounds()))
-					{
-						if (clickedItem.getType() == Item::MagicWeapon)
-						{
-							if (player.equipWeapon(clickedItem.getName()));
-							{
-								equippedWandIcon.setTextureRect(clickedItem.getTextureRect());
-							}
-						}
-					}
+					if (clickedItem.getIcon().getGlobalBounds().intersects(wandFrame.getGlobalBounds()) 
+						&& clickedItem.getType() == Item::MagicWeapon)
+					{	if (player.equipWeapon(clickedItem.getName())) equippedWandIcon.setTextureRect(clickedItem.getTextureRect()); }
 
 					// Try to equip as head armour if dropped on head armour slot
-					if (clickedItem.getIcon().getGlobalBounds().intersects(headArmourFrame.getGlobalBounds()))
-					{
-						if (clickedItem.getType() == Item::HeadArmour)
-						{
-							if (player.equipHeadArmour(clickedItem.getName()));
-							{
-								equippedHeadArmourIcon.setTextureRect(clickedItem.getTextureRect());
-							}
-						}
-					}
+					if (clickedItem.getIcon().getGlobalBounds().intersects(headArmourFrame.getGlobalBounds()) 
+						&& clickedItem.getType() == Item::HeadArmour)
+					{ if (player.equipHeadArmour(clickedItem.getName())) equippedHeadArmourIcon.setTextureRect(clickedItem.getTextureRect()); }
 
 					// Try to equip as chest armour if dropped on chest armour slot
-					if (clickedItem.getIcon().getGlobalBounds().intersects(chestArmourFrame.getGlobalBounds()))
-					{
-						if (clickedItem.getType() == Item::ChestArmour)
-						{
-							if (player.equipChestArmour(clickedItem.getName()));
-							{
-								equippedChestArmourIcon.setTextureRect(clickedItem.getTextureRect());
-							}
-						}
-					}
+					if (clickedItem.getIcon().getGlobalBounds().intersects(chestArmourFrame.getGlobalBounds())
+						&& clickedItem.getType() == Item::ChestArmour)
+					{	if (player.equipChestArmour(clickedItem.getName())) equippedChestArmourIcon.setTextureRect(clickedItem.getTextureRect()); }
+
+					// Try to equip as trouser armour if dropped on trouser armour slot
+					if (clickedItem.getIcon().getGlobalBounds().intersects(trousersArmourFrame.getGlobalBounds()) 
+						&& clickedItem.getType() == Item::TrouserArmour)
+					{	if (player.equipTrouserArmour(clickedItem.getName())) equippedTrousersArmourIcon.setTextureRect(clickedItem.getTextureRect()); }
+
+					// Try to equip as shoe armour if dropped on shoe armour slot
+					if (clickedItem.getIcon().getGlobalBounds().intersects(bootsArmourFrame.getGlobalBounds()) 
+						&& clickedItem.getType() == Item::ShoeArmour)
+					{	if (player.equipShoeArmour(clickedItem.getName())) equippedShoeArmourIcon.setTextureRect(clickedItem.getTextureRect());}
 
 					// If no slot found, return to original position
 					if (!placed)
