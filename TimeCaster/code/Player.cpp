@@ -453,10 +453,13 @@ void Player::createNewSave()
 	std::ofstream saveFile("gamedata/TCSave.txt");
 
 	saveFile << std::fixed << std::setprecision(5) << START_SPEED << " " << START_HEALTH << " " << START_HEALTH << " " << START_STAMINA << " "
-		<< START_STAMINA << " " << START_STAMINA_RECHARGE << " " << START_MANA << " " << START_MANA << " " << START_GOLD << " " << START_KILLS << " " << START_LEVEL << " " << START_SWORD << " " << START_WAND << " " << START_HEAD_ARMOUR << " " << 64 << " " << 64 << std::endl;
+		<< START_STAMINA << " " << START_STAMINA_RECHARGE << " " << START_MANA << " " << START_MANA << " " << START_GOLD << " " << START_KILLS
+		<< " " << START_LEVEL << " " << START_SWORD << " " << START_WAND << " " << START_HEAD_ARMOUR << " " << START_CHEST_ARMOUR << " " << 64 << " " << 64
+		<< std::endl;
 	m_EquippedWeapons[0] = (Weapon(START_SWORD, Vector2f(0, 0)));
 	m_EquippedWeapons[1] = (Weapon(START_WAND, Vector2f(0, 0)));
 	m_EquippedArmour[0] = (Equipment(START_HEAD_ARMOUR, Vector2f(0, 0)));
+	m_EquippedArmour[1] = (Equipment(START_CHEST_ARMOUR, Vector2f(0, 0)));
 	saveFile.close();
 }
 void Player::createConfigFile(string difficultyString, bool windowedMode, bool displayFPS, float volume)
@@ -490,7 +493,7 @@ void Player::updateSaveFile()
 	saveFile << std::fixed << std::setprecision(5) << m_Speed << " " << m_Health << " " << m_MaxHealth << " " << m_Stamina << " "
     << m_MaxStamina << " " << m_StaminaRecharge << " " << m_Mana << " " << m_MaxMana << " " << m_Gold << " " << m_Kills << " " << m_Level << " "
     << m_EquippedWeapons[0].getName() << " " << m_EquippedWeapons[1].getName() << " " << m_EquippedArmour[0].getName() << " "
-	<< m_Position.x << " " << m_Position.y << std::endl;
+	<<	m_EquippedArmour[1].getName() << " " << m_Position.x << " " << m_Position.y << std::endl;
 
 	saveFile.close();
 }
@@ -515,11 +518,13 @@ bool Player::loadSaveFile()
 		loadFile >> m_Level;
 		loadFile >> m_EquippedSwordName;
 		loadFile >> m_EquippedWandName;
-		loadFile >> m_EquippedArmourName;
+		loadFile >> m_EquippedHeadArmourName;
+		loadFile >> m_EquippedChestArmourName;
 		loadFile >> m_Position.x;
 		loadFile >> m_Position.y;
 		// equip saved weapons and armour
-		equipHeadArmour(m_EquippedArmourName);
+		equipHeadArmour(m_EquippedHeadArmourName);
+		equipChestArmour(m_EquippedChestArmourName);
 		equipWeapon(m_EquippedWandName);
 		equipWeapon(m_EquippedSwordName); // equip sword last so that melee is the default combat type
 		return true;
@@ -720,11 +725,11 @@ bool Player::equipChestArmour(string armourNameToEquip)
 		// set the appropriate sprites
 
 		if (m_EquippedArmour[1].getName() == "LeatherArmour") {
-			m_SpriteTorso = Sprite(TextureHolder::GetTexture("graphics/player/armour/leather/Head_leather_armor_hat.png"));
+			m_SpriteTorso = Sprite(TextureHolder::GetTexture("graphics/player/armour/leather/TORSO_leather_armor_torso.png"));
 			m_SpriteTorso.setOrigin(32, 32);		m_SpriteTorso.setScale(0.75, 0.75);
 		}
 		else if (m_EquippedArmour[1].getName() == "StartingArmour") {
-			m_SpriteTorso = Sprite(TextureHolder::GetTexture("graphics/player/armour/robe/Head_robe_hood.png"));	
+			m_SpriteTorso = Sprite(TextureHolder::GetTexture("graphics/player/armour/robe/TORSO_robe_shirt_brown.png"));	
 			m_SpriteTorso.setOrigin(32, 32);		m_SpriteTorso.setScale(0.75, 0.75);
 		}
 
@@ -736,6 +741,8 @@ bool Player::equipChestArmour(string armourNameToEquip)
 		return false;
 	}
 }
+
+
 
 vector<Weapon>& Player::getEquippedWeapons()
 {

@@ -159,7 +159,8 @@ private:
 
 	string m_EquippedSwordName;
 	string m_EquippedWandName;
-	string m_EquippedArmourName;
+	string m_EquippedHeadArmourName;
+	string m_EquippedChestArmourName;
 
 	bool m_WindowedMode;
 

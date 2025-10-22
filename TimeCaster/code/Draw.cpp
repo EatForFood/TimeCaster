@@ -196,6 +196,7 @@ void Engine::draw()
 			window.draw(equippedSwordIcon);
 			window.draw(equippedWandIcon);
 			window.draw(equippedHeadArmourIcon);
+			window.draw(equippedChestArmourIcon);
 			window.draw(clickedItem.getIcon());
 		
 			window.setView(mainView);

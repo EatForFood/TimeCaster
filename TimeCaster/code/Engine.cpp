@@ -446,6 +446,12 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	equippedHeadArmourIcon.setOrigin(equippedHeadArmourIcon.getSize() / 2.f);
 	equippedHeadArmourIcon.setPosition(viewCentre.x - 100, 350);
 
+	equippedChestArmourIcon.setTexture(&textureItems);
+	equippedChestArmourIcon.setTextureRect(IntRect(0, 0, 0, 0));
+	equippedChestArmourIcon.setSize(Vector2f(75, 75));
+	equippedChestArmourIcon.setOrigin(equippedChestArmourIcon.getSize() / 2.f);
+	equippedChestArmourIcon.setPosition(viewCentre.x - 300, 550);
+
 
 	// Player frame
 	playerFrame.setSize(sf::Vector2f(100.f, 200.f));
@@ -768,6 +774,8 @@ void Engine::run()
 					equippedSwordIcon.setTextureRect(player.getEquippedWeapons().at(0).getTextureRect());
 					equippedWandIcon.setTextureRect(player.getEquippedWeapons().at(1).getTextureRect());
 					equippedHeadArmourIcon.setTextureRect(player.getEquippedArmour().at(0).getTextureRect());
+					equippedChestArmourIcon.setTextureRect(player.getEquippedArmour().at(1).getTextureRect());
+					
 
 
 
@@ -827,6 +835,7 @@ void Engine::run()
 						equippedSwordIcon.setTextureRect(player.getEquippedWeapons().at(0).getTextureRect());
 						equippedWandIcon.setTextureRect(player.getEquippedWeapons().at(1).getTextureRect());
 						equippedHeadArmourIcon.setTextureRect(player.getEquippedArmour().at(0).getTextureRect());
+						equippedChestArmourIcon.setTextureRect(player.getEquippedArmour().at(1).getTextureRect());
 
 						// We will modify the next two lines later
 						arena.width = 1900;
@@ -867,6 +876,7 @@ void Engine::run()
 						equippedSwordIcon.setTextureRect(player.getEquippedWeapons().at(0).getTextureRect());
 						equippedWandIcon.setTextureRect(player.getEquippedWeapons().at(1).getTextureRect());
 						equippedHeadArmourIcon.setTextureRect(player.getEquippedArmour().at(0).getTextureRect());
+						equippedChestArmourIcon.setTextureRect(player.getEquippedArmour().at(1).getTextureRect());
 
 
 
@@ -1352,15 +1362,11 @@ void Engine::run()
 							if (player.equipWeapon(clickedItem.getName()));
 							{
 								equippedWandIcon.setTextureRect(clickedItem.getTextureRect());
-								//clickedItem.getIcon().setPosition(wandFrame.getPosition());
-								//cout << m_EquippedWeapons[1].getName();
-								// placed is not being made true on purpose, the player will still need to carry the items they equip
-								// we can change this later though
 							}
 						}
 					}
 
-					// Try to equip as armour if dropped on armour slot
+					// Try to equip as head armour if dropped on head armour slot
 					if (clickedItem.getIcon().getGlobalBounds().intersects(headArmourFrame.getGlobalBounds()))
 					{
 						if (clickedItem.getType() == Item::HeadArmour)
@@ -1368,9 +1374,18 @@ void Engine::run()
 							if (player.equipHeadArmour(clickedItem.getName()));
 							{
 								equippedHeadArmourIcon.setTextureRect(clickedItem.getTextureRect());
-								//equippedArmourIcon.setTextureRect(player.getEquippedArmour().getTextureRect());
-								// placed is not being made true on purpose, the player will still need to carry the items they equip
-								// we can change this later though
+							}
+						}
+					}
+
+					// Try to equip as chest armour if dropped on chest armour slot
+					if (clickedItem.getIcon().getGlobalBounds().intersects(chestArmourFrame.getGlobalBounds()))
+					{
+						if (clickedItem.getType() == Item::ChestArmour)
+						{
+							if (player.equipChestArmour(clickedItem.getName()));
+							{
+								equippedChestArmourIcon.setTextureRect(clickedItem.getTextureRect());
 							}
 						}
 					}

@@ -207,6 +207,7 @@ private:
 	RectangleShape equippedSwordIcon;
 	RectangleShape equippedWandIcon;
 	RectangleShape equippedHeadArmourIcon;
+	RectangleShape equippedChestArmourIcon;
 	RectangleShape playerInFrame;
 	RectangleShape headArmourFrame;
 	RectangleShape chestArmourFrame;
@@ -225,8 +226,6 @@ private:
 	vector<Equipment>& m_EquippedArmour;
 	int currentItems = 0; // current item amount
 	Item clickedItem = Item("null",Vector2f(0,0));
-	Weapon clickedWeapon = Weapon("null", Vector2f(0, 0));
-	Equipment clickedEquipment = Equipment("null", Vector2f(0, 0));
 
 
 	RectangleShape* clickedShape = nullptr;
