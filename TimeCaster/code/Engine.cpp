@@ -22,7 +22,7 @@
 using namespace std;
 using namespace sf;
 
-Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons())
+Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArmour(player.getEquippedArmour())	
 {
 	player.loadConfigFile();
 
@@ -154,7 +154,9 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons())
 
 	//Item 0 is sword (melee combat), item 1 is wand (magic combat)
 	m_EquippedWeapons.resize(2, Weapon("null", Vector2f(0, 0)));
-
+	
+	// Item 0 is head, item 1 is torso, item 2 is pants, item 3 is shoes, item 4 is neck
+	m_EquippedArmour.resize(5, Equipment("null", Vector2f(0, 0)));
 
 	
 	// Debug inventory initalization
@@ -163,7 +165,10 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons())
 	storedItems[2] = Weapon("StartingSword", Vector2f(600, 650));
 	storedItems[3] = Weapon("UpgradedWand", Vector2f(750, 650));
 	storedItems[4] = Equipment("StartingArmour", Vector2f(900, 650));
-	storedItems[5] = Equipment("LeatherArmour", Vector2f(1050, 650));
+	storedItems[5] = Equipment("StartingHood", Vector2f(0, 0));
+	storedItems[6] = Equipment("LeatherCap", Vector2f(0, 0));
+	storedItems[7] = Equipment("LeatherArmour", Vector2f(0, 0));
+
 
 
 	// Empty mana bar
@@ -435,11 +440,11 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons())
 	equippedWandIcon.setOrigin(equippedWandIcon.getSize() / 2.f);
 	equippedWandIcon.setPosition(viewCentre.x - 100, 550);
 
-	equippedArmourIcon.setTexture(&textureItems);
-	equippedArmourIcon.setTextureRect(IntRect(0, 0, 0, 0));
-	equippedArmourIcon.setSize(Vector2f(75, 75));
-	equippedArmourIcon.setOrigin(equippedArmourIcon.getSize() / 2.f);
-	equippedArmourIcon.setPosition(viewCentre.x - 300, 550);
+	equippedHeadArmourIcon.setTexture(&textureItems);
+	equippedHeadArmourIcon.setTextureRect(IntRect(0, 0, 0, 0));
+	equippedHeadArmourIcon.setSize(Vector2f(75, 75));
+	equippedHeadArmourIcon.setOrigin(equippedHeadArmourIcon.getSize() / 2.f);
+	equippedHeadArmourIcon.setPosition(viewCentre.x - 100, 350);
 
 
 	// Player frame
@@ -466,10 +471,11 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons())
 	neckFrame.setOrigin(neckFrame.getSize() / 2.f);
 	neckFrame.setPosition(viewCentre.x - 300, 350);
 
-	chestArmourFrame.setTexture(&textureChestArmourFrame);
-	chestArmourFrame.setSize(Vector2f(75, 75));
-	chestArmourFrame.setOrigin(chestArmourFrame.getSize() / 2.f);
-	chestArmourFrame.setPosition(viewCentre.x - 100, 350);
+	headArmourFrame.setTexture(&textureHeadArmourFrame);
+	headArmourFrame.setSize(Vector2f(75, 75));
+	headArmourFrame.setOrigin(headArmourFrame.getSize() / 2.f);
+	headArmourFrame.setPosition(viewCentre.x - 100, 350);
+
 
 	trousersArmourFrame.setTexture(&textureTrousersArmourFrame);
 	trousersArmourFrame.setSize(Vector2f(75, 75));
@@ -481,10 +487,10 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons())
 	bootsArmourFrame.setOrigin(bootsArmourFrame.getSize() / 2.f);
 	bootsArmourFrame.setPosition(viewCentre.x - 100, 450);
 
-	headArmourFrame.setTexture(&textureHeadArmourFrame);
-	headArmourFrame.setSize(Vector2f(75, 75));
-	headArmourFrame.setOrigin(headArmourFrame.getSize() / 2.f);
-	headArmourFrame.setPosition(viewCentre.x - 300, 550);
+	chestArmourFrame.setTexture(&textureChestArmourFrame);
+	chestArmourFrame.setSize(Vector2f(75, 75));
+	chestArmourFrame.setOrigin(chestArmourFrame.getSize() / 2.f);
+	chestArmourFrame.setPosition(viewCentre.x - 300, 550);
 
 	weaponFrame.setTexture(&textureWeaponFrame);
 	weaponFrame.setSize(Vector2f(75, 75));
@@ -761,7 +767,7 @@ void Engine::run()
 
 					equippedSwordIcon.setTextureRect(player.getEquippedWeapons().at(0).getTextureRect());
 					equippedWandIcon.setTextureRect(player.getEquippedWeapons().at(1).getTextureRect());
-					equippedArmourIcon.setTextureRect(player.getEquippedArmour().getTextureRect());
+					equippedHeadArmourIcon.setTextureRect(player.getEquippedArmour().at(0).getTextureRect());
 
 
 
@@ -820,7 +826,7 @@ void Engine::run()
 						// Update equipped item icons
 						equippedSwordIcon.setTextureRect(player.getEquippedWeapons().at(0).getTextureRect());
 						equippedWandIcon.setTextureRect(player.getEquippedWeapons().at(1).getTextureRect());
-						equippedArmourIcon.setTextureRect(player.getEquippedArmour().getTextureRect());
+						equippedHeadArmourIcon.setTextureRect(player.getEquippedArmour().at(0).getTextureRect());
 
 						// We will modify the next two lines later
 						arena.width = 1900;
@@ -860,7 +866,7 @@ void Engine::run()
 
 						equippedSwordIcon.setTextureRect(player.getEquippedWeapons().at(0).getTextureRect());
 						equippedWandIcon.setTextureRect(player.getEquippedWeapons().at(1).getTextureRect());
-						equippedArmourIcon.setTextureRect(player.getEquippedArmour().getTextureRect());
+						equippedHeadArmourIcon.setTextureRect(player.getEquippedArmour().at(0).getTextureRect());
 
 
 
@@ -1357,11 +1363,11 @@ void Engine::run()
 					// Try to equip as armour if dropped on armour slot
 					if (clickedItem.getIcon().getGlobalBounds().intersects(headArmourFrame.getGlobalBounds()))
 					{
-						if (clickedItem.getType() == Item::Armour)
+						if (clickedItem.getType() == Item::HeadArmour)
 						{
-							if (player.equipArmour(clickedItem.getName()));
+							if (player.equipHeadArmour(clickedItem.getName()));
 							{
-								equippedArmourIcon.setTextureRect(clickedItem.getTextureRect());
+								equippedHeadArmourIcon.setTextureRect(clickedItem.getTextureRect());
 								//equippedArmourIcon.setTextureRect(player.getEquippedArmour().getTextureRect());
 								// placed is not being made true on purpose, the player will still need to carry the items they equip
 								// we can change this later though

@@ -118,9 +118,10 @@ public:
 	void switchWeapon();
 	bool equipWeapon(string weaponNameToEquip);
 
-	bool equipArmour(string armourNameToEquip);
+	bool equipHeadArmour(string armourNameToEquip);
+	bool equipChestArmour(string armourNameToEquip);
 
-	Equipment getEquippedArmour();
+	vector<Equipment>& getEquippedArmour();
 
 
 	void setInCell();
@@ -137,7 +138,8 @@ private:
 	const string START_EQUIPPED_WEAPON = "StartingSword";
 	const string START_SWORD = "StartingSword";
 	const string START_WAND = "StartingWand";
-	const string START_ARMOUR = "StartingArmour";
+	const string START_HEAD_ARMOUR = "StartingHood";
+	const string START_CHEST_ARMOUR = "StartingArmour";
 
 	
 
@@ -192,7 +194,8 @@ private:
 //	vector<Item> equippedItems;
 	// always store the sword at index 0 and wand at index 1
 	vector<Weapon> m_EquippedWeapons;
-	Equipment m_EquippedArmour = Equipment("null", Vector2f(0, 0));
+	// store helmet at index 0, torso at index 1, pants at index 2, shoes at index 3, ring at index 4
+	vector<Equipment> m_EquippedArmour;
 	
 	int m_Chunk; // player's current chunk
 

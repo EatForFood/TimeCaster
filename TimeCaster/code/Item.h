@@ -9,7 +9,11 @@ class Item
 {
 public:
 
-	enum ItemType { MeleeWeapon, MagicWeapon, Consumable, Armour, null };
+	enum ItemType 
+	{ MeleeWeapon, MagicWeapon, 
+		Consumable, 
+		HeadArmour, ChestArmour, TrouserArmour, ShoeArmour, NeckArmour, 
+		null };
 
 	Item(String type, Vector2f position);
 

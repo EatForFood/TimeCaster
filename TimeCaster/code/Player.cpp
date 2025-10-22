@@ -453,10 +453,10 @@ void Player::createNewSave()
 	std::ofstream saveFile("gamedata/TCSave.txt");
 
 	saveFile << std::fixed << std::setprecision(5) << START_SPEED << " " << START_HEALTH << " " << START_HEALTH << " " << START_STAMINA << " "
-		<< START_STAMINA << " " << START_STAMINA_RECHARGE << " " << START_MANA << " " << START_MANA << " " << START_GOLD << " " << START_KILLS << " " << START_LEVEL << " " << START_SWORD << " " << START_WAND << " " << START_ARMOUR << " " << 64 << " " << 64 << std::endl;
+		<< START_STAMINA << " " << START_STAMINA_RECHARGE << " " << START_MANA << " " << START_MANA << " " << START_GOLD << " " << START_KILLS << " " << START_LEVEL << " " << START_SWORD << " " << START_WAND << " " << START_HEAD_ARMOUR << " " << 64 << " " << 64 << std::endl;
 	m_EquippedWeapons[0] = (Weapon(START_SWORD, Vector2f(0, 0)));
 	m_EquippedWeapons[1] = (Weapon(START_WAND, Vector2f(0, 0)));
-	m_EquippedArmour = (Equipment(START_ARMOUR, Vector2f(0, 0)));
+	m_EquippedArmour[0] = (Equipment(START_HEAD_ARMOUR, Vector2f(0, 0)));
 	saveFile.close();
 }
 void Player::createConfigFile(string difficultyString, bool windowedMode, bool displayFPS, float volume)
@@ -489,7 +489,7 @@ void Player::updateSaveFile()
 
 	saveFile << std::fixed << std::setprecision(5) << m_Speed << " " << m_Health << " " << m_MaxHealth << " " << m_Stamina << " "
     << m_MaxStamina << " " << m_StaminaRecharge << " " << m_Mana << " " << m_MaxMana << " " << m_Gold << " " << m_Kills << " " << m_Level << " "
-    << m_EquippedWeapons[0].getName() << " " << m_EquippedWeapons[1].getName() << " " << m_EquippedArmour.getName() << " "
+    << m_EquippedWeapons[0].getName() << " " << m_EquippedWeapons[1].getName() << " " << m_EquippedArmour[0].getName() << " "
 	<< m_Position.x << " " << m_Position.y << std::endl;
 
 	saveFile.close();
@@ -519,7 +519,7 @@ bool Player::loadSaveFile()
 		loadFile >> m_Position.x;
 		loadFile >> m_Position.y;
 		// equip saved weapons and armour
-		equipArmour(m_EquippedArmourName);
+		equipHeadArmour(m_EquippedArmourName);
 		equipWeapon(m_EquippedWandName);
 		equipWeapon(m_EquippedSwordName); // equip sword last so that melee is the default combat type
 		return true;
@@ -683,36 +683,51 @@ bool Player::equipWeapon(string weaponNameToEquip)
 	}
 }
 
-bool Player::equipArmour(string armourNameToEquip)
+bool Player::equipHeadArmour(string armourNameToEquip)
 {
 	Equipment armourToEquip(armourNameToEquip, Vector2f(0, 0));
-	if (armourToEquip.getType() == Item::Armour)
+	if (armourToEquip.getType() == Item::HeadArmour)
 	{
 		// equip the armour
-		m_EquippedArmour = armourToEquip;
+		m_EquippedArmour[0] = armourToEquip;
 		// set the appropriate sprites
 		
-		if (m_EquippedArmour.getName() == "LeatherArmour") {
+		if (m_EquippedArmour[0].getName() == "LeatherCap") {
 			m_SpriteHead = Sprite(TextureHolder::GetTexture("graphics/player/armour/leather/Head_leather_armor_hat.png"));
 			m_SpriteHead.setOrigin(32, 32);		m_SpriteHead.setScale(0.75, 0.75);
-			m_SpriteTorso = Sprite(TextureHolder::GetTexture("graphics/player/armour/leather/Torso_leather_armor_torso.png"));
-			m_SpriteTorso.setOrigin(32, 32);	m_SpriteTorso.setScale(0.75, 0.75);
-			m_SpritePants = Sprite(TextureHolder::GetTexture("graphics/player/armour/plate/Legs_plate_armor_pants.png"));
-			m_SpritePants.setOrigin(32, 32);	m_SpritePants.setScale(0.75, 0.75);
-			m_SpriteShoes = Sprite(TextureHolder::GetTexture("graphics/player/armour/robe/Feet_shoes_brown.png"));
-			m_SpriteShoes.setOrigin(32, 32);	m_SpriteShoes.setScale(0.75, 0.75);
 		}
-		else if (m_EquippedArmour.getName() == "StartingArmour") {
+		else if (m_EquippedArmour[0].getName() == "StartingHood") {
 			m_SpriteHead = Sprite(TextureHolder::GetTexture("graphics/player/armour/robe/Head_robe_hood.png"));
 			m_SpriteHead.setOrigin(32, 32);		m_SpriteHead.setScale(0.75, 0.75);
-			m_SpriteTorso = Sprite(TextureHolder::GetTexture("graphics/player/armour/robe/Torso_robe_shirt_brown.png"));
-			m_SpriteTorso.setOrigin(32, 32);	m_SpriteTorso.setScale(0.75, 0.75);
-			m_SpritePants = Sprite(TextureHolder::GetTexture("graphics/player/armour/robe/Legs_robe_skirt.png"));
-			m_SpritePants.setOrigin(32, 32);		m_SpritePants.setScale(0.75, 0.75);
-			m_SpriteShoes = Sprite(TextureHolder::GetTexture("graphics/player/armour/robe/Feet_shoes_brown.png"));
-			m_SpriteShoes.setOrigin(32, 32);	m_SpriteShoes.setScale(0.75, 0.75);
 		}
 		
+
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool Player::equipChestArmour(string armourNameToEquip)
+{
+	Equipment armourToEquip(armourNameToEquip, Vector2f(0, 0));
+	if (armourToEquip.getType() == Item::ChestArmour)
+	{
+		// equip the armour
+		m_EquippedArmour[1] = armourToEquip;
+		// set the appropriate sprites
+
+		if (m_EquippedArmour[1].getName() == "LeatherArmour") {
+			m_SpriteTorso = Sprite(TextureHolder::GetTexture("graphics/player/armour/leather/Head_leather_armor_hat.png"));
+			m_SpriteTorso.setOrigin(32, 32);		m_SpriteTorso.setScale(0.75, 0.75);
+		}
+		else if (m_EquippedArmour[1].getName() == "StartingArmour") {
+			m_SpriteTorso = Sprite(TextureHolder::GetTexture("graphics/player/armour/robe/Head_robe_hood.png"));	
+			m_SpriteTorso.setOrigin(32, 32);		m_SpriteTorso.setScale(0.75, 0.75);
+		}
+
 
 		return true;
 	}
@@ -732,7 +747,7 @@ Player::CombatType Player::getCombatType()
 	return m_CombatType;
 }
 
-Equipment Player::getEquippedArmour()
+vector<Equipment>& Player::getEquippedArmour()
 {
 	return m_EquippedArmour;
 }
