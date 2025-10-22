@@ -9,6 +9,7 @@
 #include <fstream>
 #include <filesystem>
 #include <algorithm>
+#include "CollisionDetection.h"
 
 using namespace std;
 using namespace sf;
@@ -18,6 +19,7 @@ mt19937 gen(rd());
 
 Chunk::Chunk(String type, Vector2f chunk, bool load)
 {
+
 	m_Type = type;
 	m_LoadChunk = load;
 	m_Chunk = chunk;
@@ -1012,7 +1014,7 @@ bool Chunk::isTileBlocked(int tileX, int tileY)
 	for (auto& nav : navBoxes)
 	{
 		ConvexShape shape = nav.getShape();
-		if (shape.getGlobalBounds().contains(pos))
+		if (collision.pointInShape(pos, shape))
 			return true;
 	}
 	return false;

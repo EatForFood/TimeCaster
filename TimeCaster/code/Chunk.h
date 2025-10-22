@@ -3,6 +3,7 @@
 #include "Entity.h"
 #include "NavBox.h"
 #include "Cell.h"
+#include "CollisionDetection.h"
 
 using namespace sf;
 using namespace std;
@@ -10,6 +11,8 @@ using namespace std;
 class Chunk
 {
 protected:
+
+	CollisionDetection collision;
 
 	const int TILE_SIZE = 64;
 	const int CHUNK_SIZE = 50;
