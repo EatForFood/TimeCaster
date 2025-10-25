@@ -6,16 +6,9 @@ using namespace sf;
 
 class Equipment : public Item
 {
-private:
-	
-	int m_Armour;
-
 public:
 
 	Equipment(String type, sf::Vector2f position);
 	int getArmour();
-
+	string getName();
 };
-
-
-

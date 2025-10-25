@@ -19,7 +19,8 @@ public:
 
 	ItemType getType();
 
-
+	virtual int getDamage();
+	virtual int getArmour();
 
 	// Check the position of a pickup
 	FloatRect getPosition();
@@ -53,8 +54,6 @@ protected:
 	int SECONDS_TO_DESPAWN = 120;
 	String m_Name;
 
-
-
 	ItemType m_ItemType;
 
 	// The sprite that represents this pickup
@@ -76,8 +75,8 @@ protected:
 
 	Vector2f m_Position;
 
-	
-
+	int m_Damage = 0;
+	int m_Armour = 0;
 };
 
 

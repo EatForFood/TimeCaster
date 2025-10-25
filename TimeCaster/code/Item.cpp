@@ -160,3 +160,13 @@ Item::ItemType Item::getType()
 {
 	return m_ItemType;
 }
+
+int Item::getDamage()
+{
+	return m_Damage;
+}
+
+int Item::getArmour()
+{
+	return m_Armour;
+}

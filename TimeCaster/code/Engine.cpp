@@ -157,7 +157,6 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	
 	// Item 0 is head, item 1 is torso, item 2 is pants, item 3 is shoes, item 4 is neck
 	m_EquippedArmour.resize(5, Equipment("null", Vector2f(0, 0)));
-
 	
 	// Debug inventory initalization
 	storedItems[0] = Weapon("StartingWand", Vector2f(300, 650));
@@ -172,8 +171,6 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	storedItems[9] = Equipment("StartingTrousers", Vector2f(0, 0));
 	storedItems[10] = Equipment("ShieldAmulet", Vector2f(0, 0));
 	storedItems[11] = Equipment("FamilyLocket", Vector2f(0, 0));
-
-
 
 	// Empty mana bar
 	emptyManaBar.setFillColor(Color::Black);
@@ -273,8 +270,6 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	viewCentre = mainView.getCenter();
 	mainMenuButton.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 975);
 	mainMenuButton.setTexture(&textureMainMenuButton2);
-
-	
 
 	// Main menu button text
 	mainMenuButtonText.setString("Save & Exit");    // Set the displayed text
@@ -474,26 +469,17 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	equippedNeckArmourIcon.setOrigin(equippedNeckArmourIcon.getSize() / 2.f);
 	equippedNeckArmourIcon.setPosition(viewCentre.x - 300, 350);
 
-
-
 	// Player frame
 	playerFrame.setSize(sf::Vector2f(100.f, 200.f));
 	playerFrame.setTexture(&texturePlayerFrame);
 	playerFrame.setOrigin(playerFrame.getSize() / 2.f);
 	playerFrame.setPosition(viewCentre.x - 200, 400);
 
-
-
-
-
-	
-
 	// Player sprite for frame
 	playerInFrame.setSize(sf::Vector2f(60.f, 100.f));
 	playerInFrame.setTexture(&texturePlayerInFrame);
 	playerInFrame.setOrigin(playerInFrame.getSize() / 2.f);
 	playerInFrame.setPosition(viewCentre.x - 200, 400);
-	
 
 	neckFrame.setTexture(&textureNeckFrame);
 	neckFrame.setSize(Vector2f(75, 75));
@@ -504,7 +490,6 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	headArmourFrame.setSize(Vector2f(75, 75));
 	headArmourFrame.setOrigin(headArmourFrame.getSize() / 2.f);
 	headArmourFrame.setPosition(viewCentre.x - 100, 350);
-
 
 	trousersArmourFrame.setTexture(&textureTrousersArmourFrame);
 	trousersArmourFrame.setSize(Vector2f(75, 75));
@@ -531,6 +516,23 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	wandFrame.setOrigin(wandFrame.getSize() / 2.f);
 	wandFrame.setPosition(viewCentre.x - 100, 550);
 
+	itemTooltipBackground.setFillColor(Color::Black);
+	itemTooltipBackground.setPosition(0, 0);
+
+	itemTooltipName.setFont(font);
+	itemTooltipName.setCharacterSize(fontSize - 10);
+	itemTooltipName.setFillColor(Color::White);
+	itemTooltipName.setPosition(0, 0);
+	
+	statTooltipText.setFont(font);
+	statTooltipText.setCharacterSize(fontSize - 15);
+	statTooltipText.setFillColor(Color::White);
+	statTooltipText.setPosition(0, 0);
+
+	valueTooltipText.setFont(font);
+	valueTooltipText.setCharacterSize(fontSize - 15);
+	valueTooltipText.setFillColor(Color::White);
+	valueTooltipText.setPosition(0, 0);
 
 	//storedItem[0] = 0; //empty slot
 	
@@ -703,8 +705,8 @@ void Engine::run()
 		initializeInventory();
 
 		// Getting the mouse position and mapping those pixels to coordinates
-		Vector2i mousePos = Mouse::getPosition(window);
-		Vector2f worldPos = window.mapPixelToCoords(mousePos);
+		mousePos = Mouse::getPosition(window);
+		worldPos = window.mapPixelToCoords(mousePos);
 		/***********
 		Handle input
 		************/
@@ -801,10 +803,6 @@ void Engine::run()
 					equippedTrousersArmourIcon.setTextureRect(player.getEquippedArmour().at(2).getTextureRect());
 					equippedShoeArmourIcon.setTextureRect(player.getEquippedArmour().at(3).getTextureRect());
 					equippedNeckArmourIcon.setTextureRect(player.getEquippedArmour().at(4).getTextureRect());
-					
-					
-
-
 
 					// We will modify the next two lines later
 					arena.width = 1900;
@@ -828,8 +826,6 @@ void Engine::run()
 
 					// Reset the clock so there isn't a frame jump
 					clock.restart();
-
-
 
 					player.loadConfigFile();
 					difficulty = Difficulty::Medium;
@@ -867,15 +863,13 @@ void Engine::run()
 						equippedShoeArmourIcon.setTextureRect(player.getEquippedArmour().at(3).getTextureRect());
 						equippedNeckArmourIcon.setTextureRect(player.getEquippedArmour().at(4).getTextureRect());
 
-
 						// We will modify the next two lines later
 						arena.width = 1900;
 						arena.height = 800;
 						arena.left = 1664;
 						arena.top = 1664;
 
-						// Pass the vertex array by reference 
-						// to the createBackground function
+						// Pass the vertex array by reference to the createBackground function
 						int tileSize = 64;
 
 						// Spawn the player in the middle of the arena
@@ -888,8 +882,6 @@ void Engine::run()
 
 						// Reset the clock so there isn't a frame jump
 						clock.restart();
-
-
 
 						player.loadConfigFile();
 						difficulty = Difficulty::Medium;
@@ -911,9 +903,6 @@ void Engine::run()
 						equippedTrousersArmourIcon.setTextureRect(player.getEquippedArmour().at(2).getTextureRect());
 						equippedShoeArmourIcon.setTextureRect(player.getEquippedArmour().at(3).getTextureRect());
 						equippedNeckArmourIcon.setTextureRect(player.getEquippedArmour().at(4).getTextureRect());
-
-
-
 
 						// We will modify the next two lines later
 						arena.width = 1900;
@@ -1118,7 +1107,6 @@ void Engine::run()
 			player.stopDown();
 		}
 
-
 		/* below are debug functions, comment them out in full build / when needed
 		if you add any more, make sure they check if debug reset is false and set it to true or else it will run every loop while the key is pressed
 		Press tilde to activate debug commands */
@@ -1313,8 +1301,7 @@ void Engine::run()
 				// Check clicks on inventory items
 				for (int i = 0; i < storedItems.size(); i++)
 				{
-					if (!storedItems[i].isNull() &&
-						storedItems[i].getIcon().getGlobalBounds().contains(worldPos.x - 25, worldPos.y - 25) &&
+					if (!storedItems[i].isNull() && storedItems[i].getIcon().getGlobalBounds().contains(worldPos.x - 25, worldPos.y - 25) &&
 						Mouse::isButtonPressed(Mouse::Left) && !draggingItem)
 					{
 						clickedItem = storedItems[i];          // copy to clickedItem

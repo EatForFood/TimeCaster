@@ -1,14 +1,12 @@
 #include "Equipment.h"
 #include "TextureHolder.h"
+
 using namespace std;
 using namespace sf;
 
-Equipment::Equipment(String type, sf::Vector2f position)
-	: Item(type, position) // call base constructor
+Equipment::Equipment(String type, sf::Vector2f position) : Item(type, position) // call base constructor
 {
 	// Associate the texture with the sprite
-
-
 	if (m_Name == "StartingArmour")
 	{
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
@@ -24,7 +22,6 @@ Equipment::Equipment(String type, sf::Vector2f position)
 		m_ItemType = ChestArmour;
 
 		m_Sprite.setOrigin(25, 25);
-
 	}
 	else if (m_Name == "LeatherCap")
 	{
@@ -137,15 +134,19 @@ Equipment::Equipment(String type, sf::Vector2f position)
 	}
 	else
 	{
-			m_Value = 0;
-			m_Armour = 0;
-			m_Sprite.setOrigin(5, 5);
-			m_ItemType = null;
+		m_Value = 0;
+		m_Armour = 0;
+		m_Sprite.setOrigin(5, 5);
+		m_ItemType = null;
 	}
-
 }
 
 int Equipment::getArmour()
 {
 	return m_Armour;
+}
+
+string Equipment::getName()
+{
+	return m_Name;
 }

@@ -8,9 +8,6 @@ Weapon::Weapon(String type, Vector2f position)
 {
 	m_Name = type;
 
-
-
-
 	// Associate the texture with the sprite
 	if (m_Name == "staff")
 	{
@@ -51,7 +48,7 @@ Weapon::Weapon(String type, Vector2f position)
 		m_Icon.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
 		//	m_Sprite.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
 
-			// How much is item worth
+		// How much is item worth
 		m_Value = 5;
 
 		m_Icon.setScale(2.34, 2.34);
@@ -77,8 +74,6 @@ Weapon::Weapon(String type, Vector2f position)
 		m_Icon.setScale(2.34, 2.34);
 
 		m_ItemType = MeleeWeapon;
-
-
 	}
 	else if (m_Name == "UpgradedWand")
 	{
@@ -96,8 +91,6 @@ Weapon::Weapon(String type, Vector2f position)
 		m_Icon.setScale(2.34, 2.34);
 
 		m_ItemType = MagicWeapon;
-
-
 	}
 	else // empty item for inventory if none of the above match
 	{
@@ -105,10 +98,14 @@ Weapon::Weapon(String type, Vector2f position)
 		m_Sprite.setOrigin(5, 5);
 		m_ItemType = null;
 	}
-	
 }
 
 int Weapon::getDamage()
 {
 	return m_Damage;
+}
+
+string Weapon::getName()
+{
+	return m_Name;
 }

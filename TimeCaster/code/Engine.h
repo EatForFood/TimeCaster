@@ -219,6 +219,13 @@ private:
 	RectangleShape neckFrame;
 	RectangleShape weaponFrame;
 	RectangleShape wandFrame;
+
+	// Item tooltip elements
+	RectangleShape itemTooltipBackground;
+	Text itemTooltipName;
+	Text statTooltipText;
+	Text valueTooltipText;
+
 	//RectangleShape emptyFrames[16];
 	int draggedIndex = -1;
 	int maxItems = 16; // max amount of item slots
@@ -229,7 +236,6 @@ private:
 	vector<Equipment>& m_EquippedArmour;
 	int currentItems = 0; // current item amount
 	Item clickedItem = Item("null",Vector2f(0,0));
-
 
 	RectangleShape* clickedShape = nullptr;
 
@@ -291,6 +297,9 @@ private:
 	vector<Enemy> enemyArr;
 
 	vector<Chunk> chunks;
+
+	Vector2i mousePos;
+	Vector2f worldPos;
 
 public:
 	Engine();

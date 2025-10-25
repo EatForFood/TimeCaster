@@ -94,8 +94,6 @@ void Engine::draw()
 			drawables.emplace_back(player.getSprite().getGlobalBounds().top + player.getSprite().getGlobalBounds().height + 0.04, player.getShoes());
 		}
 		
-
-
 		// Sort by y position (smaller y values come first)
 		sort(drawables.begin(), drawables.end(), [](const DrawableItem& a, const DrawableItem& b)
 			{
@@ -128,6 +126,7 @@ void Engine::draw()
 				}
 			}
 		}
+
 		/*
 		for (auto& txt : chunks[0].getDebugText()) { // draw debug text showing tile location
 			window.draw(txt);
@@ -188,8 +187,7 @@ void Engine::draw()
 			window.draw(invManaBar);
 			window.draw(invManaBarText);
 
-			// draw icons last 
-
+			// draw icons last
 			for (auto& icons : storedItems) {
 				window.draw(icons.getIcon());
 			}
@@ -206,6 +204,51 @@ void Engine::draw()
 			window.draw(spriteCursor);
 			window.setView(hudView);
 
+			for (int i = 0; i < storedItems.size(); i++)
+			{
+				if (storedItems[i].getIcon().getGlobalBounds().contains(worldPos) && !Mouse::isButtonPressed(Mouse::Left) && !draggingItem)
+				{
+					Item::ItemType type = storedItems[i].getType();
+
+					window.setView(hudView);
+					itemTooltipBackground.setPosition(storedItems[i].getIcon().getPosition().x + 35, storedItems[i].getIcon().getPosition().y - 40);
+					window.draw(itemTooltipBackground);
+
+					valueTooltipText.setString("Value: " + to_string(storedItems[i].getValue()) + " Gold");
+					valueTooltipText.setPosition(itemTooltipBackground.getPosition().x + 10, itemTooltipBackground.getPosition().y + 50);
+					window.draw(valueTooltipText);
+
+					if (type == Item::ItemType::MeleeWeapon || type == Item::ItemType::MagicWeapon) {
+						
+						itemTooltipName.setString(storedItems[i].getName());
+						itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 20, 100));
+
+						statTooltipText.setString("Damage: " + to_string(storedItems[i].getDamage()));
+
+						itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 10, itemTooltipBackground.getPosition().y + 5);
+						statTooltipText.setPosition(itemTooltipBackground.getPosition().x + 10, itemTooltipBackground.getPosition().y + 32);
+
+						window.draw(itemTooltipName);
+						window.draw(statTooltipText);
+					}
+					else if (type == Item::ItemType::HeadArmour || type == Item::ItemType::ChestArmour || type == Item::ItemType::TrouserArmour || 
+						type == Item::ItemType::ShoeArmour || type == Item::ItemType::NeckArmour) {
+						itemTooltipName.setString(storedItems[i].getName());
+						itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 20, 100));
+
+						statTooltipText.setString("Armour: " + to_string(storedItems[i].getArmour()));
+
+						itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 10, itemTooltipBackground.getPosition().y + 5);
+						statTooltipText.setPosition(itemTooltipBackground.getPosition().x + 10, itemTooltipBackground.getPosition().y + 32);
+
+						window.draw(itemTooltipName);
+						window.draw(statTooltipText);
+					}
+					else if (type == Item::ItemType::Consumable) {
+						
+					}
+				}
+			}
 		}
 		else {
 			// Draw all the HUD elements
