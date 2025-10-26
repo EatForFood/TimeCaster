@@ -412,7 +412,6 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	/***********
 	Inventory UI
 	************/
-
 	textureHeadArmourFrame = TextureHolder::GetTexture("graphics/UI/headFrame.png");
 	textureChestArmourFrame = TextureHolder::GetTexture("graphics/UI/chestFrame.png");
 	textureTrousersArmourFrame = TextureHolder::GetTexture("graphics/UI/trousersFrame.png");
@@ -424,6 +423,7 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	textureNeckFrame = TextureHolder::GetTexture("graphics/UI/neckFrame.png");
 	textureWandFrame = TextureHolder::GetTexture("graphics/UI/ringFrame.png");
 	textureItems = TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png");
+	tooltipBackground = TextureHolder::GetTexture("graphics/UI/tooltipBackground.png");
 
 	// Equipped item icons
 	
@@ -479,7 +479,7 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	playerInFrame.setSize(sf::Vector2f(60.f, 100.f));
 	playerInFrame.setTexture(&texturePlayerInFrame);
 	playerInFrame.setOrigin(playerInFrame.getSize() / 2.f);
-	playerInFrame.setPosition(viewCentre.x - 200, 400);
+	playerInFrame.setPosition(viewCentre.x - 200, 410);
 
 	neckFrame.setTexture(&textureNeckFrame);
 	neckFrame.setSize(Vector2f(75, 75));
@@ -516,21 +516,21 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	wandFrame.setOrigin(wandFrame.getSize() / 2.f);
 	wandFrame.setPosition(viewCentre.x - 100, 550);
 
-	itemTooltipBackground.setFillColor(Color::Black);
+	itemTooltipBackground.setTexture(&tooltipBackground);
 	itemTooltipBackground.setPosition(0, 0);
 
 	itemTooltipName.setFont(font);
-	itemTooltipName.setCharacterSize(fontSize - 10);
+	itemTooltipName.setCharacterSize(fontSize - 15);
 	itemTooltipName.setFillColor(Color::White);
 	itemTooltipName.setPosition(0, 0);
 	
 	statTooltipText.setFont(font);
-	statTooltipText.setCharacterSize(fontSize - 15);
+	statTooltipText.setCharacterSize(fontSize - 20);
 	statTooltipText.setFillColor(Color::White);
 	statTooltipText.setPosition(0, 0);
 
 	valueTooltipText.setFont(font);
-	valueTooltipText.setCharacterSize(fontSize - 15);
+	valueTooltipText.setCharacterSize(fontSize - 20);
 	valueTooltipText.setFillColor(Color::White);
 	valueTooltipText.setPosition(0, 0);
 

@@ -215,18 +215,18 @@ void Engine::draw()
 					window.draw(itemTooltipBackground);
 
 					valueTooltipText.setString("Value: " + to_string(storedItems[i].getValue()) + " Gold");
-					valueTooltipText.setPosition(itemTooltipBackground.getPosition().x + 10, itemTooltipBackground.getPosition().y + 50);
+					valueTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 55);
 					window.draw(valueTooltipText);
 
 					if (type == Item::ItemType::MeleeWeapon || type == Item::ItemType::MagicWeapon) {
 						
 						itemTooltipName.setString(storedItems[i].getName());
-						itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 20, 100));
+						itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
 
 						statTooltipText.setString("Damage: " + to_string(storedItems[i].getDamage()));
 
-						itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 10, itemTooltipBackground.getPosition().y + 5);
-						statTooltipText.setPosition(itemTooltipBackground.getPosition().x + 10, itemTooltipBackground.getPosition().y + 32);
+						itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 15);
+						statTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 37);
 
 						window.draw(itemTooltipName);
 						window.draw(statTooltipText);
@@ -234,12 +234,12 @@ void Engine::draw()
 					else if (type == Item::ItemType::HeadArmour || type == Item::ItemType::ChestArmour || type == Item::ItemType::TrouserArmour || 
 						type == Item::ItemType::ShoeArmour || type == Item::ItemType::NeckArmour) {
 						itemTooltipName.setString(storedItems[i].getName());
-						itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 20, 100));
+						itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
 
 						statTooltipText.setString("Armour: " + to_string(storedItems[i].getArmour()));
 
-						itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 10, itemTooltipBackground.getPosition().y + 5);
-						statTooltipText.setPosition(itemTooltipBackground.getPosition().x + 10, itemTooltipBackground.getPosition().y + 32);
+						itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 15);
+						statTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 37);
 
 						window.draw(itemTooltipName);
 						window.draw(statTooltipText);

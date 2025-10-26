@@ -202,6 +202,7 @@ private:
 	Texture textureNeckFrame;
 	Texture textureWandFrame;
 	Texture textureItems;
+	Texture tooltipBackground;
 
 	RectangleShape playerFrame;
 	RectangleShape equippedSwordIcon;
