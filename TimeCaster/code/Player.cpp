@@ -687,7 +687,7 @@ bool Player::equipWeapon(string weaponNameToEquip)
 		m_EquippedSwordName = weaponToEquip.getName();
 		m_EquippedWeapons[0] = weaponToEquip;
 		m_CombatType = Melee;
-		
+		updateTextRect();
 		return true;
 	}
 	else if (weaponToEquip.getType() == Item::MagicWeapon)
@@ -695,6 +695,7 @@ bool Player::equipWeapon(string weaponNameToEquip)
 		m_EquippedWandName = weaponToEquip.getName();
 		m_EquippedWeapons[1] = weaponToEquip;
 		m_CombatType = Magic;
+		updateTextRect();
 		return true;
 	}
 	else
@@ -721,7 +722,7 @@ bool Player::equipHeadArmour(string armourNameToEquip)
 			m_SpriteHead.setOrigin(32, 32);		m_SpriteHead.setScale(0.75, 0.75);
 		}
 		
-
+		updateTextRect();
 		return true;
 	}
 	else
@@ -742,13 +743,14 @@ bool Player::equipChestArmour(string armourNameToEquip)
 		if (armourNameToEquip == "LeatherArmour") {
 			m_SpriteTorso = Sprite(TextureHolder::GetTexture("graphics/player/armour/leather/TORSO_leather_armor_torso.png"));
 			m_SpriteTorso.setOrigin(32, 32);		m_SpriteTorso.setScale(0.75, 0.75);
+
 		}
 		else if (armourNameToEquip == "StartingArmour") {
 			m_SpriteTorso = Sprite(TextureHolder::GetTexture("graphics/player/armour/robe/TORSO_robe_shirt_brown.png"));	
 			m_SpriteTorso.setOrigin(32, 32);		m_SpriteTorso.setScale(0.75, 0.75);
 		}
 
-
+		updateTextRect();
 		return true;
 	}
 	else
@@ -771,7 +773,7 @@ bool Player::equipTrouserArmour(string armourNameToEquip)
 		}
 
 
-
+		updateTextRect();
 		return true;
 	}
 	else
@@ -792,6 +794,7 @@ bool Player::equipShoeArmour(string armourNameToEquip)
 			m_SpriteShoes = Sprite(TextureHolder::GetTexture("graphics/player/armour/robe/Feet_shoes_brown.png"));
 			m_SpriteShoes.setOrigin(32, 32);		m_SpriteShoes.setScale(0.75, 0.75);
 		}
+		updateTextRect();
 		return true;
 	}
 	else
@@ -807,6 +810,7 @@ bool Player::equipNeckArmour(string armourNameToEquip)
 	{
 		// equip the armour
 		m_EquippedArmour[4] = armourToEquip;
+		updateTextRect();
 		return true;
 	}
 	else
@@ -832,3 +836,65 @@ vector<Equipment>& Player::getEquippedArmour()
 	return m_EquippedArmour;
 }
 
+Weapon* Player::getEquippedSword()
+{
+	return &m_EquippedWeapons[0];
+}
+
+Weapon* Player::getEquippedWand()
+{
+	return &m_EquippedWeapons[1];
+}
+
+Equipment* Player::getEquippedHeadArmour()
+{
+	return &m_EquippedArmour[0];
+}
+
+Equipment* Player::getEquippedChestArmour()
+{
+	return &m_EquippedArmour[1];
+}
+
+Equipment* Player::getEquippedTrouserArmour()
+{
+	return &m_EquippedArmour[2];
+}
+
+Equipment* Player::getEquippedShoeArmour()
+{
+	return &m_EquippedArmour[3];
+}
+
+Equipment* Player::getEquippedNeckArmour()
+{
+	return &m_EquippedArmour[4];
+}
+
+void Player::updateTextRect()
+{
+	if (direction == Vector2f(0, 1)) // up
+	{
+		setSpriteFromSheet(IntRect(0, 0, 576, 64), 64);
+	}
+
+	if (direction == Vector2f(0, -1)) // down
+	{
+		setSpriteFromSheet(IntRect(0, 128, 576, 64), 64);
+	}
+
+	if (direction == Vector2f(1, 0)) // right
+	{
+		setSpriteFromSheet(IntRect(0, 192, 576, 64), 64);
+	}
+
+	if (direction == Vector2f(-1, 0)) // left
+	{
+		setSpriteFromSheet(IntRect(0, 64, 576, 64), 64);
+	}
+
+	m_SpritePants.setPosition(m_Position);
+	m_SpriteHead.setPosition(m_Position);
+	m_SpriteTorso.setPosition(m_Position);
+	m_SpriteShoes.setPosition(m_Position);
+}

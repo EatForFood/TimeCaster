@@ -1256,6 +1256,8 @@ void Engine::run()
 					player.setChunk(i);
 				}
 			}
+			
+
 
 			if (!drawInventory && state == State::PLAYING) {
 				// Update the player
@@ -1271,6 +1273,8 @@ void Engine::run()
 					}
 				}
 			}
+
+
 
 			filter.setOrigin(player.getPosition());
 			filter.setPosition(player.getPosition().x, player.getPosition().y);

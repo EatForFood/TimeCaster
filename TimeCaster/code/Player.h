@@ -126,6 +126,16 @@ public:
 
 	vector<Equipment>& getEquippedArmour();
 
+	Weapon* getEquippedSword();
+	Weapon* getEquippedWand();
+	Equipment* getEquippedHeadArmour();
+	Equipment* getEquippedChestArmour();
+	Equipment* getEquippedTrouserArmour();
+	Equipment* getEquippedShoeArmour();
+	Equipment* getEquippedNeckArmour();
+		
+
+
 
 	void setInCell();
 	bool getInCell();
@@ -145,7 +155,7 @@ private:
 	const string START_TROUSER_ARMOUR = "StartingTrousers";
 	const string START_SHOE_ARMOUR = "StartingShoes";
 	const string START_NECK_ARMOUR = "FamilyLocket";
-
+	void updateTextRect();
 	
 
 	// Which directions is the player currently moving in
@@ -154,6 +164,8 @@ private:
 	bool m_LeftPressed;
 	bool m_RightPressed;
 
+
+	// Player stats
 	float m_Mana;
 	float m_MaxMana;
 	float m_Stamina;
