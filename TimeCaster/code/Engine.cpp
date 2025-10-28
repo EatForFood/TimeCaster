@@ -159,19 +159,19 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	m_EquippedArmour.resize(5, Equipment("null", Vector2f(0, 0)));
 	
 	// Debug inventory initalization
-	storedItems[0] = Weapon("Wooden Wand", Vector2f(300, 650));
+	storedItems[0] = Weapon("Wooden_Wand", Vector2f(300, 650));
 	storedItems[1] = Weapon("Scimitar", Vector2f(450, 650));
-	storedItems[2] = Weapon("Iron Sword", Vector2f(600, 650));
-	storedItems[3] = Weapon("Silver Wand", Vector2f(750, 650));
-	storedItems[4] = Equipment("Family Robe", Vector2f(900, 650));
-	storedItems[5] = Equipment("Family Hood", Vector2f(0, 0));
-	storedItems[6] = Equipment("Leather Cap", Vector2f(0, 0));
-	storedItems[7] = Equipment("Leather Chestplate", Vector2f(0, 0));
-	storedItems[8] = Equipment("Basic Shoes", Vector2f(0, 0));
-	storedItems[9] = Equipment("Robe Leggings", Vector2f(0, 0));
-	storedItems[10] = Equipment("Amulet of Shielding", Vector2f(0, 0));
-	storedItems[11] = Equipment("Family Locket", Vector2f(0, 0));
-	storedItems[12] = Item("Mana Potion", Vector2f(0, 0));
+	storedItems[2] = Weapon("Iron_Sword", Vector2f(600, 650));
+	storedItems[3] = Weapon("Silver_Wand", Vector2f(750, 650));
+	storedItems[4] = Equipment("Family_Robe", Vector2f(900, 650));
+	storedItems[5] = Equipment("Family_Hood", Vector2f(0, 0));
+	storedItems[6] = Equipment("Leather_Cap", Vector2f(0, 0));
+	storedItems[7] = Equipment("Leather_Chestplate", Vector2f(0, 0));
+	storedItems[8] = Equipment("Basic_Shoes", Vector2f(0, 0));
+	storedItems[9] = Equipment("Robe_Leggings", Vector2f(0, 0));
+	storedItems[10] = Equipment("Shield_Amulet", Vector2f(0, 0));
+	storedItems[11] = Equipment("Family_Locket", Vector2f(0, 0));
+	storedItems[12] = Item("Mana_Potion", Vector2f(0, 0));
 
 	// Empty mana bar
 	emptyManaBar.setFillColor(Color::Black);
@@ -835,6 +835,9 @@ void Engine::run()
 				// Player hit the load game button in the main menu
 				else if (loadGameButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU && event.mouseButton.button == Mouse::Left)
 				{
+
+
+
 					state = State::PLAYING;
 
 					// Play the start game sound
@@ -858,6 +861,8 @@ void Engine::run()
 						equippedTrousersArmourIcon.setTextureRect(player.getEquippedArmour().at(2).getTextureRect());
 						equippedShoeArmourIcon.setTextureRect(player.getEquippedArmour().at(3).getTextureRect());
 						equippedNeckArmourIcon.setTextureRect(player.getEquippedArmour().at(4).getTextureRect());
+
+
 
 						// We will modify the next two lines later
 						arena.width = 1900;
@@ -1107,14 +1112,14 @@ void Engine::run()
 		if (event.key.code == Keyboard::Tilde && state == State::PLAYING)
 		{
 			debugreset = false;
-			//	storedItems[2] = Weapon("Wooden Wand", Vector2f(600, 650));
+			//	storedItems[2] = Weapon("Wooden_Wand", Vector2f(600, 650));
 
 		}
 		if (event.key.code == Keyboard::Num1 && !debugreset && state == State::PLAYING)
 		{
 			// Increase health
 			player.upgradeHealth();
-			//	storedItems[2] = Weapon("Iron Sword", Vector2f(600, 650));
+			//	storedItems[2] = Weapon("Iron_Sword", Vector2f(600, 650));
 
 
 			debugreset = true;
@@ -1136,7 +1141,7 @@ void Engine::run()
 
 		if (event.key.code == Keyboard::Num4 && !debugreset && state == State::PLAYING)
 		{
-			if (addItemToInventory("Iron Sword"))
+			if (addItemToInventory("Iron_Sword"))
 			{
 				std::cout << "Item added to inventory" << std::endl;
 			}

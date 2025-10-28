@@ -50,7 +50,7 @@ Item::Item(String type, Vector2f position)
 		m_ItemType = Consumable;
 	}
 
-	if (m_Name == "Health Potion")
+	if (m_Name == "Health_Potion")
 	{
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
 		m_Sprite.setTextureRect(IntRect(66, 800, 32, 32));
@@ -65,7 +65,7 @@ Item::Item(String type, Vector2f position)
 		m_Sprite.setOrigin(25, 25);
 	}
 
-	if (m_Name == "Mana Potion")
+	if (m_Name == "Mana_Potion")
 	{
 
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
