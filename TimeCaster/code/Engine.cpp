@@ -520,17 +520,17 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	itemTooltipBackground.setPosition(0, 0);
 
 	itemTooltipName.setFont(font);
-	itemTooltipName.setCharacterSize(fontSize - 15);
+	itemTooltipName.setCharacterSize(fontSize - 12);
 	itemTooltipName.setFillColor(Color::White);
 	itemTooltipName.setPosition(0, 0);
 	
 	statTooltipText.setFont(font);
-	statTooltipText.setCharacterSize(fontSize - 20);
+	statTooltipText.setCharacterSize(fontSize - 15);
 	statTooltipText.setFillColor(Color::White);
 	statTooltipText.setPosition(0, 0);
 
 	valueTooltipText.setFont(font);
-	valueTooltipText.setCharacterSize(fontSize - 20);
+	valueTooltipText.setCharacterSize(fontSize - 15);
 	valueTooltipText.setFillColor(Color::White);
 	valueTooltipText.setPosition(0, 0);
 
@@ -538,8 +538,8 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	
 	// Display kill count inventory text
 	killsText.setString("Kills: " + std::to_string(player.getKillCount())); // Set the label text
-	killsText.setFont(font);                             // Assign the font
-	killsText.setCharacterSize(fontSize);               // Set the text size
+	killsText.setFont(font); // Assign the font
+	killsText.setCharacterSize(fontSize); // Set the text size
 	killsText.setFillColor(Color::Black);
 	textBounds = killsText.getLocalBounds();
 	killsText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 310);
@@ -674,7 +674,6 @@ bool Engine::addItemToInventory(String itemType)
 
 void Engine::populateChunkVector()
 {
-
 	for (int i = 0; i < world.getWorldSize(); i++) {
 		chunks.push_back(*world.getChunk(i));
 	}
@@ -741,11 +740,7 @@ void Engine::run()
 			if ((event.type == Event::MouseButtonPressed && event.key.code == Mouse::Middle && state == State::PLAYING) ||
 				(event.type == Event::KeyPressed && event.key.code == Keyboard::F && state == State::PLAYING))
 			{
-
-
 				player.switchWeapon();
-			
-
 			}
 
 			if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left && state == State::OPTIONS_MENU)
@@ -988,8 +983,6 @@ void Engine::run()
 						player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume());
 					}
 				}
-
-				// Player hit the windowed mode button
 
 				// Player hit the display fps button
 				if (windowedModeButton.getGlobalBounds().contains(worldPos) && state == State::OPTIONS_MENU && event.mouseButton.button == Mouse::Left)
@@ -1304,9 +1297,9 @@ void Engine::run()
 					if (!storedItems[i].isNull() && storedItems[i].getIcon().getGlobalBounds().contains(worldPos.x - 25, worldPos.y - 25) &&
 						Mouse::isButtonPressed(Mouse::Left) && !draggingItem)
 					{
-						clickedItem = storedItems[i];          // copy to clickedItem
+						clickedItem = storedItems[i]; // copy to clickedItem
 					
-						itemLastIndex = i;                     // save original slot
+						itemLastIndex = i; // save original slot
 						itemLastX = clickedItem.getIcon().getPosition().x;
 						itemLastY = clickedItem.getIcon().getPosition().y;
 
@@ -1325,9 +1318,9 @@ void Engine::run()
 					if (allItems[i].getIcon().getGlobalBounds().contains(worldPos.x - 25, worldPos.y - 25) &&
 						Mouse::isButtonPressed(Mouse::Left) && !draggingItem)
 					{
-						clickedItem = allItems[i];           // copy to clickedItem
+						clickedItem = allItems[i]; // copy to clickedItem
 						
-						itemLastIndex = -1;                   // world item
+						itemLastIndex = -1; // world item
 						itemLastX = clickedItem.getIcon().getPosition().x;
 						itemLastY = clickedItem.getIcon().getPosition().y;
 
