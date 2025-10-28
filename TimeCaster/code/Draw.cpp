@@ -240,14 +240,26 @@ void Engine::draw()
 					}
 					else if (type == Item::ItemType::Consumable) {
 						
+						itemTooltipName.setString(storedItems[i].getName());
+						itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
+
+						itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 15);
+				
+
+						window.draw(itemTooltipName);
+
 					}
 				}
+				
+
 			}
 			if (weaponFrame.getGlobalBounds().contains(worldPos) && !Mouse::isButtonPressed(Mouse::Left) && !draggingItem && 
 				!player.getEquippedSword()->isNull())
 			{
 				window.setView(hudView);
+
 				itemTooltipName.setString(player.getEquippedSword()->getName());
+
 				itemTooltipBackground.setPosition(equippedSwordIcon.getPosition().x + 35, equippedSwordIcon.getPosition().y - 40);
 				itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
 				
@@ -269,6 +281,7 @@ void Engine::draw()
 			{
 				window.setView(hudView);
 				itemTooltipName.setString(player.getEquippedWand()->getName());
+
 				itemTooltipBackground.setPosition(equippedWandIcon.getPosition().x + 35, equippedWandIcon.getPosition().y - 40);
 				itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
 				
@@ -289,7 +302,9 @@ void Engine::draw()
 				&& !player.getEquippedHeadArmour()->isNull())
 			{
 				window.setView(hudView);
+
 				itemTooltipName.setString(player.getEquippedHeadArmour()->getName());
+
 				itemTooltipBackground.setPosition(equippedHeadArmourIcon.getPosition().x + 35, equippedHeadArmourIcon.getPosition().y - 40);
 				itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
 				
@@ -313,7 +328,7 @@ void Engine::draw()
 				itemTooltipName.setString(player.getEquippedChestArmour()->getName());
 				itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
 				itemTooltipBackground.setPosition(equippedChestArmourIcon.getPosition().x + 35, equippedChestArmourIcon.getPosition().y - 40);
-				
+				window.draw(itemTooltipBackground);
 				valueTooltipText.setString("Value: " + to_string(player.getEquippedChestArmour()->getValue()) + " Gold");
 				valueTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 55);
 				
@@ -372,6 +387,8 @@ void Engine::draw()
 			if (neckFrame.getGlobalBounds().contains(worldPos) && !Mouse::isButtonPressed(Mouse::Left) && !draggingItem
 				&& !player.getEquippedNeckArmour()->isNull())
 			{
+				
+
 				window.setView(hudView);
 				itemTooltipName.setString(player.getEquippedNeckArmour()->getName());
 				itemTooltipBackground.setPosition(equippedNeckArmourIcon.getPosition().x + 35, equippedNeckArmourIcon.getPosition().y - 40);

@@ -53,6 +53,14 @@ protected:
 
 	vector<Cell> cells;
 
+	struct Structure
+	{
+		string type;
+		Vector2i position;
+	};
+
+	vector<Structure> structures;
+
 	bool blockedTiles[50][50];
 public:
 
@@ -82,6 +90,8 @@ public:
 	Vector2f getChunkCenter();
 
 	void clearChunk();
+
+	void placeStructure(String type, Vector2i position);
 
 	void placeHouse1(int x, int y);
 	void placeHouse2(int x, int y);

@@ -72,11 +72,13 @@ Chunk::Chunk(String type, Vector2f chunk, bool load)
 				}
 			}
 
+			/*
 			placeHouse4(13, 11);
 			placeHouse3(23, 10);
 			placeHouse2(13, 23);
 			placeHouse1(23, 26);
 			placeCastle(10, 35);
+			*/
 		}
 	}
 	else
@@ -114,7 +116,6 @@ Chunk::Chunk(String type, Vector2f chunk, bool load)
 						{
 							placeTile(x, y, 5, 2, false, true);
 						}
-
 					}
 					else
 					{
@@ -478,10 +479,16 @@ void Chunk::placeHouse1(int sx, int sy) { // sx 15, sy 18
 		placeTile(x, sy - 3, 1, 13, true, false);
 	}
 
+	Structure structure;
+	structure.position = Vector2i(sx, sy);
+	structure.type = "house1";
+	structures.push_back(structure);
+
 	sx += offset.x;
 	sy += offset.y;
 	NavBox navbox(sx + 1, sy - 3, 5, 4);
 	navBoxes.push_back(navbox);
+	
 }
 
 void Chunk::placeHouse2(int sx, int sy) { // sx 15, sy 18
@@ -511,6 +518,11 @@ void Chunk::placeHouse2(int sx, int sy) { // sx 15, sy 18
 	{
 		placeTile(sx, y, 2, 13, true, false);
 	}
+
+	Structure structure;
+	structure.position = Vector2i(sx, sy);
+	structure.type = "house2";
+	structures.push_back(structure);
 
 	sx += offset.x;
 	sy += offset.y;
@@ -549,10 +561,16 @@ void Chunk::placeHouse3(int sx, int sy) { // sx 15, sy 18
 		placeTile(x, sy - 1, 1, 13, true, false);
 	}
 
+	Structure structure;
+	structure.position = Vector2i(sx, sy);
+	structure.type = "house3";
+	structures.push_back(structure);
+
 	sx += offset.x;
 	sy += offset.y;
 	NavBox navbox(sx + 1, sy - 1, 3, 2);
 	navBoxes.push_back(navbox);
+
 }
 
 void Chunk::placeHouse4(int sx, int sy) { // sx 15, sy 18
@@ -613,6 +631,11 @@ void Chunk::placeHouse4(int sx, int sy) { // sx 15, sy 18
 		placeTile(x, sy - 3, 1, 13, true, false);  // 64/64 = 1, 832/64 = 13
 	}
 
+	Structure structure;
+	structure.position = Vector2i(sx, sy);
+	structure.type = "house4";
+	structures.push_back(structure);
+
 	sx += offset.x;
 	sy += offset.y;
 	NavBox navbox1(sx + 1, sy - 2, 2, 3);
@@ -628,7 +651,7 @@ void Chunk::placeCastle(int sx, int sy) { // sx 15, sy 18
 
 	// FIRST LEVEL
 
-// House west wall 
+// Castle west wall 
 	for (int y = sy - 30; y < sy; y++)
 	{
 		if (y != 15 && y != 16 && y != 17)
@@ -637,13 +660,13 @@ void Chunk::placeCastle(int sx, int sy) { // sx 15, sy 18
 		}
 	}
 
-	// House north wall
+	// Castle north wall
 	for (int x = sx + 1; x < sx + 25; x++)
 	{
 		placeTile(x, sy - 30, 0, 12, false, false);
 	}
 
-	// House east wall 
+	// Castle east wall 
 	for (int y = sy - 30; y < sy; y++)
 	{
 		if (y != 15 && y != 16 && y != 17)
@@ -652,7 +675,7 @@ void Chunk::placeCastle(int sx, int sy) { // sx 15, sy 18
 		}
 	}
 
-	// House south wall
+	// Castle south wall
 	for (int x = sx; x < sx + 25; x++)
 	{
 		placeTile(x, sy, 0, 12, false, false);
@@ -660,7 +683,7 @@ void Chunk::placeCastle(int sx, int sy) { // sx 15, sy 18
 
 	// SECOND LEVEL
 
-	// House west wall 
+	// Castle west wall 
 	for (int y = sy - 31; y < sy; y++)
 	{
 		if (y != 14 && y != 15 && y != 16)
@@ -669,13 +692,13 @@ void Chunk::placeCastle(int sx, int sy) { // sx 15, sy 18
 		}
 	}
 
-	// House north wall
+	// Castle north wall
 	for (int x = sx; x < sx + 24; x++)
 	{
 		placeTile(x, sy - 31, 0, 12, true, false);
 	}
 
-	// House east wall 
+	// Castle east wall 
 	for (int y = sy - 31; y < sy; y++)
 	{
 		if (y != 14 && y != 15 && y != 16)
@@ -684,7 +707,7 @@ void Chunk::placeCastle(int sx, int sy) { // sx 15, sy 18
 		}
 	}
 
-	// House south wall
+	// Castle south wall
 	for (int x = sx - 1; x < sx + 24; x++)
 	{
 		placeTile(x, sy - 1, 0, 12, true, false);
@@ -692,25 +715,25 @@ void Chunk::placeCastle(int sx, int sy) { // sx 15, sy 18
 
 	// THIRD LEVEL
 
-	// House west wall 
+	// Castle west wall 
 	for (int y = sy - 32; y < sy - 1; y++)
 	{
 		placeTile(sx - 2, y, 0, 12, true, false);
 	}
 
-	// House north wall
+	// Castle north wall
 	for (int x = sx - 1; x < sx + 23; x++)
 	{
 		placeTile(x, sy - 32, 0, 12, true, false);
 	}
 
-	// House east wall 
+	// Castle east wall 
 	for (int y = sy - 32; y < sy - 1; y++)
 	{
 		placeTile(sx + 22, y, 0, 12, true, false);
 	}
 
-	// House south wall
+	// Castle south wall
 	for (int x = sx - 2; x < sx + 23; x++)
 	{
 		placeTile(x, sy - 2, 0, 12, true, false);
@@ -718,7 +741,7 @@ void Chunk::placeCastle(int sx, int sy) { // sx 15, sy 18
 
 	// FOURTH LEVEL
 
-	// House west wall 
+	// Castle west wall 
 	for (int y = sy - 33; y < sy - 1; y++)
 	{
 		if (y % 2 == 0) {
@@ -726,7 +749,7 @@ void Chunk::placeCastle(int sx, int sy) { // sx 15, sy 18
 		}
 	}
 
-	// House north wall
+	// Castle north wall
 	for (int x = sx - 1; x < sx + 22; x++)
 	{
 		if (x % 2 == 1) {
@@ -734,7 +757,7 @@ void Chunk::placeCastle(int sx, int sy) { // sx 15, sy 18
 		}
 	}
 
-	// House east wall 
+	// Castle east wall 
 	for (int y = sy - 32; y < sy - 1; y++)
 	{
 		if (y % 2 == 0) {
@@ -742,7 +765,7 @@ void Chunk::placeCastle(int sx, int sy) { // sx 15, sy 18
 		}
 	}
 
-	// House south wall
+	// Castle south wall
 	for (int x = sx - 2; x < sx + 23; x++)
 	{
 		if (x % 2 == 1) {
@@ -750,9 +773,15 @@ void Chunk::placeCastle(int sx, int sy) { // sx 15, sy 18
 		}
 	}
 
+	Structure structure;
+	structure.position = Vector2i(sx, sy);
+	structure.type = "castle";
+	structures.push_back(structure);
+
 	sx += offset.x;
 	sy += offset.y;
 
+	// create navBoxes for castle walls
 	NavBox navboxW1(sx + 1, sy, 1, -17);
 	navBoxes.push_back(navboxW1);
 
@@ -935,17 +964,17 @@ void Chunk::createBurntForest() // create a forest from random tree entities
 void Chunk::saveChunk()
 {
 	// Create a filename based on the chunk's coordinates
-	std::string path = "gamedata/chunks/chunk_" +
-		std::to_string((int)m_Chunk.x) + "_" +
-		std::to_string((int)m_Chunk.y) + ".txt";
+	string path = "gamedata/chunks/chunk_" +
+		to_string((int)m_Chunk.x) + "_" +
+		to_string((int)m_Chunk.y) + ".txt";
 
-	std::ofstream outFile(path);
-
+	ofstream outFile(path);
 	if (!outFile.is_open()) {
-		std::cerr << "Failed to save chunk: " << path << std::endl;
+		cerr << "Failed to open file for saving: " << path << endl;
 		return;
 	}
 
+	// --- Save tiles ---
 	for (int y = 0; y < 50; y++) {
 		for (int x = 0; x < 50; x++) {
 			outFile << m_TileType[x][y].x << "," << m_TileType[x][y].y << "  "
@@ -954,25 +983,33 @@ void Chunk::saveChunk()
 		}
 	}
 
+	// --- Save structures ---
+	outFile << "STRUCTURES_BEGIN\n";
+	outFile << structures.size() << "\n";
+	for (const auto& structure : structures) {
+		outFile << structure.type << " " << structure.position.x << " " << structure.position.y << "\n";
+	}
+	outFile << "STRUCTURES_END\n";
+
 	outFile.close();
 }
 
-void Chunk::loadChunk() // load tile types and entities from file
+void Chunk::loadChunk()
 {
-	std::string path = "gamedata/chunks/chunk_" +
-		std::to_string((int)m_Chunk.x) + "_" +
-		std::to_string((int)m_Chunk.y) + ".txt";
+	string path = "gamedata/chunks/chunk_" +
+		to_string((int)m_Chunk.x) + "_" +
+		to_string((int)m_Chunk.y) + ".txt";
 
-	std::ifstream inFile(path);
-
+	ifstream inFile(path);
 	if (!inFile.is_open()) {
-		std::cerr << "Failed to load chunk: " << path << std::endl;
+		cerr << "Failed to open file for loading: " << path << endl;
 		return;
 	}
 
+	// --- Load tiles ---
 	for (int y = 0; y < 50; y++) {
 		for (int x = 0; x < 50; x++) {
-			std::string bgPair, fgPair, entityName;
+			string bgPair, fgPair, entityName;
 			inFile >> bgPair >> fgPair >> entityName;
 
 			int bgx, bgy, fgx, fgy;
@@ -992,6 +1029,26 @@ void Chunk::loadChunk() // load tile types and entities from file
 
 			placeTile(x, y, bgx, bgy, false, true);
 			placeTile(x, y, fgx, fgy, true, true);
+		}
+	}
+
+	// --- Load structures ---
+	string line;
+	structures.clear();
+
+	while (std::getline(inFile, line)) {
+		if (line == "STRUCTURES_BEGIN") {
+			size_t count;
+			inFile >> count;
+
+			for (size_t i = 0; i < count; ++i) {
+				Structure s;
+				inFile >> s.type >> s.position.x >> s.position.y;
+				structures.push_back(s);
+
+				// Optional: recreate or spawn structure in the world
+				placeStructure(s.type, s.position);
+			}
 		}
 	}
 
@@ -1044,4 +1101,34 @@ bool Chunk::blockEdges(int tileX, int tileY)
 		return true; // treat out-of-bounds as blocked
 
 	return blockedTiles[tileX][tileY];
+}
+
+void Chunk::placeStructure(String type, Vector2i position)
+{
+	
+
+	if (type == "house1")
+	{
+		placeHouse1(position.x, position.y);
+	}
+
+	if (type == "house2")
+	{
+		placeHouse2(position.x, position.y);
+	}
+
+	if (type == "house3")
+	{
+		placeHouse3(position.x, position.y);
+	}
+
+	if (type == "house4")
+	{
+		placeHouse4(position.x, position.y);
+	}
+
+	if (type == "castle")
+	{
+		placeCastle(position.x, position.y);
+	}
 }

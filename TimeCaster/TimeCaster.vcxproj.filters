@@ -18,6 +18,9 @@
     <ClInclude Include="code\Bullet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="code\Chunk.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="code\Decal.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -27,7 +30,28 @@
     <ClInclude Include="code\Pickup.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="code\Player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\TextureHolder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\Engine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\SoundManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\Character.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="code\Entity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\NavBox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\CollisionDetection.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="code\Equipment.h">
@@ -39,45 +63,24 @@
     <ClInclude Include="code\Weapon.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="code\Character.h">
+    <ClInclude Include="code\World.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="code\Enemy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="code\Pathfinder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="code\Player.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="code\CollisionDetection.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="code\Engine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="code\SoundManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="code\TextureHolder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="code\Cell.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="code\Chunk.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="code\NavBox.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="code\World.h">
+    <ClInclude Include="code\Pathfinder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="code\Bullet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\Chunk.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="code\Decal.cpp">
@@ -89,7 +92,28 @@
     <ClCompile Include="code\Pickup.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="code\Player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\TextureHolder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\Engine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\SoundManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\Character.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="code\Entity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\NavBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\CollisionDetection.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="code\Equipment.cpp">
@@ -104,40 +128,16 @@
     <ClCompile Include="code\World.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="code\Cell.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="code\Chunk.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="code\NavBox.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="code\TextureHolder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="code\CollisionDetection.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="code\Draw.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="code\Engine.cpp">
+    <ClCompile Include="code\Enemy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="code\Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="code\SoundManager.cpp">
+    <ClCompile Include="code\Cell.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="code\Player.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="code\Character.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="code\Enemy.cpp">
+    <ClCompile Include="code\Draw.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="code\Pathfinder.cpp">
