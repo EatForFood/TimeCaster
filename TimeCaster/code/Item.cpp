@@ -65,6 +65,22 @@ Item::Item(String type, Vector2f position)
 		m_Sprite.setOrigin(25, 25);
 	}
 
+	if (m_Name == "Mana Potion")
+	{
+
+		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
+		m_Sprite.setTextureRect(IntRect(480, 1472, 32, 32));
+		m_Icon.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
+		m_Icon.setTextureRect(IntRect(480, 1472, 32, 32));
+		FloatRect bounds = m_Icon.getLocalBounds();
+		m_Icon.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
+		m_Icon.setScale(2.3125, 2.3125);
+		m_Value = 15;
+
+		m_ItemType = Consumable;
+		m_Sprite.setOrigin(25, 25);
+	}
+
 
 	m_SecondsSinceSpawn = 0;
 	m_Spawned = true;
