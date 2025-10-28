@@ -939,6 +939,7 @@ void Engine::run()
 				// Player hit the options button
 				if (optionsButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU && event.mouseButton.button == Mouse::Left)
 				{
+					player.loadConfigFile();
 					sound.playButtonClickSound();
 					world.clearWorld();
 
