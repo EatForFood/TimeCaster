@@ -133,11 +133,22 @@ void Enemy::update(float elapsedTime, const Vector2f& playerPos, Chunk* chunk) {
 			cachedPath[1].y * TILE_SIZE + TILE_SIZE / 2
 		);
 
+		/*
+		// Prevent moving into navBoxes
+		for (auto& nav : navBoxes) {
+			if (m_CollisionBox.intersects(nav.getShape().getGlobalBounds())) {
+				if (collision.pointInShape(m_Position, nav.getShape())) {
+					revertPosition();
+				}
+			}
+		}
+		*/
+
 		Vector2f dir = nextPoint - m_Position;
 		float length = sqrt(dir.x * dir.x + dir.y * dir.y);
 
 		if (length > 0.01f) {
-			dir /= length; // Normalize
+			dir /= length; // Normalise
 			m_PositionLast = m_Position;
 			m_Position += dir * m_Speed * elapsedTime;
 			direction = dir;
@@ -154,15 +165,26 @@ void Enemy::update(float elapsedTime, const Vector2f& playerPos, Chunk* chunk) {
 	}
 
 	// Set sprite based on movement direction
-	if (!isEnemyMoving()) {
-		float angle = atan2(direction.y, direction.x) * 180.f / 3.14159265f;
-
-		if (angle >= -22.5f && angle < 22.5f)          setSpriteFromSheet(IntRect(0, 192, 576, 64), 65); // right
+	float angle = atan2(direction.y, direction.x) * 180.f / 3.14159265f;
+	if (isEnemyMoving()) { // animate sprite if enemy is moving
+		if (angle >= -22.5f && angle < 22.5f)          setSpriteFromSheet(IntRect(0, 64, 576, 64), 65); // right
 		else if (angle >= 22.5f && angle < 67.5f)      setSpriteFromSheet(IntRect(0, 0, 576, 64), 65);   // up-right
 		else if (angle >= 67.5f && angle < 112.5f)     setSpriteFromSheet(IntRect(0, 0, 576, 64), 65);   // up
 		else if (angle >= 112.5f && angle < 157.5f)    setSpriteFromSheet(IntRect(0, 0, 576, 64), 65);   // up-left
-		else if (angle >= 157.5f || angle < -157.5f)   setSpriteFromSheet(IntRect(0, 64, 576, 64), 65);  // left
-		else if (angle >= -157.5f && angle < -112.5f)  setSpriteFromSheet(IntRect(0, 64, 576, 64), 65);  // down-left
+		else if (angle >= 157.5f || angle < -157.5f)   setSpriteFromSheet(IntRect(0, 192, 576, 64), 65);  // left
+		else if (angle >= -157.5f && angle < -112.5f)  setSpriteFromSheet(IntRect(0, 128, 576, 64), 65);  // down-left
+		else if (angle >= -112.5f && angle < -67.5f)   setSpriteFromSheet(IntRect(0, 128, 576, 64), 65); // down
+		else if (angle >= -67.5f && angle < -22.5f)    setSpriteFromSheet(IntRect(0, 128, 576, 64), 65); // down-right
+		moveTextureRect();
+	}
+	
+	if (!isEnemyMoving()) {
+		if (angle >= -22.5f && angle < 22.5f)          setSpriteFromSheet(IntRect(0, 64, 576, 64), 65); // right
+		else if (angle >= 22.5f && angle < 67.5f)      setSpriteFromSheet(IntRect(0, 0, 576, 64), 65);   // up-right
+		else if (angle >= 67.5f && angle < 112.5f)     setSpriteFromSheet(IntRect(0, 0, 576, 64), 65);   // up
+		else if (angle >= 112.5f && angle < 157.5f)    setSpriteFromSheet(IntRect(0, 0, 576, 64), 65);   // up-left
+		else if (angle >= 157.5f || angle < -157.5f)   setSpriteFromSheet(IntRect(0, 192, 576, 64), 65);  // left
+		else if (angle >= -157.5f && angle < -112.5f)  setSpriteFromSheet(IntRect(0, 128, 576, 64), 65);  // down-left
 		else if (angle >= -112.5f && angle < -67.5f)   setSpriteFromSheet(IntRect(0, 128, 576, 64), 65); // down
 		else if (angle >= -67.5f && angle < -22.5f)    setSpriteFromSheet(IntRect(0, 128, 576, 64), 65); // down-right
 	}
@@ -172,10 +194,6 @@ void Enemy::update(float elapsedTime, const Vector2f& playerPos, Chunk* chunk) {
 	m_CollisionBox.top = m_Position.y - 100;
 	m_CollisionBox.width = 200;
 	m_CollisionBox.height = 200;
-
-	if (isEnemyMoving()) { // animate sprite if enemy is moving
-		moveTextureRect();
-	}
 
 	// Prevent moving into navBoxes
 	for (auto& nav : navBoxes) { 

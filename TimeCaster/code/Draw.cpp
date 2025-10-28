@@ -135,9 +135,7 @@ void Engine::draw()
 		for (auto& nav : world.getNavBoxes(0)) { // draw debug text showing tile location
 			window.draw(nav.getShape());
 		}
-		*/
 
-		/*
 		for (auto& nav : world.getNavBoxes(player.getChunk())) { // draw debug text showing tile location
 			window.draw(nav.getShape());
 			window.draw(world.getChunkArea(player.getChunk()).getShape());
@@ -150,9 +148,6 @@ void Engine::draw()
 		else {
 			spriteCursor.setTexture(textureCursorOpen);
 		}
-
-		//Draw the crosshair
-		//window.draw(spriteCursor);
 
 		// Switch to the HUD view
 		window.setView(hudView);
@@ -186,7 +181,7 @@ void Engine::draw()
 			window.draw(invManaBar);
 			window.draw(invManaBarText);
 
-			// draw icons last
+			// Drawing icons
 			for (auto& icons : storedItems) {
 				window.draw(icons.getIcon());
 			}

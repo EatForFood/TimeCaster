@@ -302,6 +302,9 @@ private:
 	Vector2i mousePos;
 	Vector2f worldPos;
 
+	// Skip intro animation boolean
+	bool skipAnimation;
+
 public:
 	Engine();
 
