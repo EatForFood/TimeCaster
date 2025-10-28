@@ -16,6 +16,15 @@ void Engine::draw()
 		// And draw everything related to it
 		window.setView(mainView);
 
+		if (world.getChunk(player.getChunk())->getChunkType() == "skeletonRuins")
+		{
+			filter.setFillColor(skeletonRuinsFilter);
+		}
+		else
+		{
+			filter.setFillColor(defaultFilter);
+		}
+
 		// Draw the background
 		if (!player.getInCell())
 		{
@@ -26,6 +35,10 @@ void Engine::draw()
 					if (currentChunk && currentChunk->getChunkType() == "goblinVillage")
 					{
 						window.draw(world.getBackground(i), &textureBackground2);
+					}
+					else if (currentChunk && currentChunk->getChunkType() == "skeletonRuins")
+					{
+						window.draw(world.getBackground(i), &textureBackground3);
 					}
 					else
 					{
@@ -118,6 +131,10 @@ void Engine::draw()
 					if (currentChunk && currentChunk->getChunkType() == "goblinVillage")
 					{
 						window.draw(world.getForground(i), &textureBackground2);
+					}
+					else if (currentChunk && currentChunk->getChunkType() == "skeletonRuins")
+					{
+						window.draw(world.getForground(i), &textureBackground3);
 					}
 					else
 					{

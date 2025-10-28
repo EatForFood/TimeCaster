@@ -41,6 +41,12 @@ void World::newWorld()
                 out << type << " " << x << " " << y << "\n";
                 chunks.emplace_back(type, Vector2f(x, y), false);
             }
+            else if (x == 0 && y == -1)
+            {
+                string type = "skeletonRuins";
+                out << type << " " << x << " " << y << "\n";
+                chunks.emplace_back(type, Vector2f(x, y), false);
+            }
             else
             {
                 // Choose a random type for other chunks

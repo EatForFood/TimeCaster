@@ -49,7 +49,7 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	}
 
 	filter.setSize(resolution);
-	filter.setFillColor(Color(199, 56, 20, 40));
+	filter.setFillColor(defaultFilter);
 
 	player.loadConfigFile();
 
@@ -66,6 +66,7 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	// Load the texture for our background vertex array
 	textureBackground = TextureHolder::GetTexture("graphics/landscape.png");
 	textureBackground2 = TextureHolder::GetTexture("graphics/landscape2.png");
+	textureBackground3 = TextureHolder::GetTexture("graphics/landscape3.png");
 
 	// Boolean for whether to display the fps
 //	bool displayFps = false;
@@ -682,7 +683,7 @@ void Engine::populateChunkVector()
 Chunk* Engine::getCurrentChunk(float x, float y) {
 	for (Chunk& chunk : chunks) {
 		FloatRect area = chunk.getChunkArea().getShape().getGlobalBounds();
-		if (area.contains(x, y)) {
+		if (collision.pointInShape(Vector2f(x,y), chunk.getChunkArea().getShape())) {
 			return &chunk;
 		}
 	}
