@@ -494,29 +494,13 @@ void Player::updateSaveFile()
 {	
 	std::ofstream saveFile("gamedata/TCSave.txt");
 
-	saveFile << std::fixed << std::setprecision(5) 
-		<< m_Speed << " " 
-		<< m_Health << " "
-		<< m_MaxHealth << " "
-		<< m_Stamina << " "
-		<< m_MaxStamina << " " 
-		<< m_StaminaRecharge << " " 
-		<< m_Mana << " " 
-		<< m_MaxMana << " " 
-		<< m_Gold << " " 
-		<< m_Kills << " " 
-		<< m_Level << " "
-		<< m_EquippedWeapons[0].getName() << " " 
-		<< m_EquippedWeapons[1].getName() << " " 
-		<< m_EquippedArmour[0].getName() << " "
-		<< m_EquippedArmour[1].getName() << " " 
-		<< m_EquippedArmour[2].getName() << " " 
-		<< m_EquippedArmour[3].getName() << " " 
-		<< m_EquippedArmour[4].getName()  << " "
-		<< m_Position.x << " " 
-		<< m_Position.y << " "
-		<< std::endl; 
-		
+	saveFile << std::fixed << std::setprecision(5) << m_Speed << " " << m_Health << " " << m_MaxHealth << " " << m_Stamina << " "
+    << m_MaxStamina << " " << m_StaminaRecharge << " " << m_Mana << " " << m_MaxMana << " " << m_Gold << " " << m_Kills << " " << m_Level << " "
+    << m_EquippedWeapons[0].getName() << " " << m_EquippedWeapons[1].getName() << " " << m_EquippedArmour[0].getName() << " "
+	<< m_EquippedArmour[1].getName() << " " << m_EquippedArmour[2].getName() << " " << m_EquippedArmour[3].getName() << " " 
+	<< m_EquippedArmour[4].getName() << m_Position.x << " " << m_Position.y 
+	<< std::endl;
+
 	saveFile.close();
 }
 
@@ -542,7 +526,6 @@ bool Player::loadSaveFile()
 		
 		loadFile >> m_EquippedSwordName;
 		loadFile >> m_EquippedWandName;
-
 		loadFile >> m_EquippedHeadArmourName;
 		loadFile >> m_EquippedChestArmourName;
 		loadFile >> m_EquippedTrouserArmourName;
