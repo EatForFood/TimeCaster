@@ -254,6 +254,9 @@ void Engine::draw()
 				!player.getEquippedSword()->isNull())
 			{
 				window.setView(hudView);
+
+				itemTooltipName.setString(player.getEquippedSwordr()->getName());
+
 				itemTooltipBackground.setPosition(equippedSwordIcon.getPosition().x + 35, equippedSwordIcon.getPosition().y - 40);
 				itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
 				
@@ -274,6 +277,8 @@ void Engine::draw()
 				&& !player.getEquippedWand()->isNull())
 			{
 				window.setView(hudView);
+				itemTooltipName.setString(player.getEquippedWand()->getName());
+
 				itemTooltipBackground.setPosition(equippedWandIcon.getPosition().x + 35, equippedWandIcon.getPosition().y - 40);
 				itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
 				
@@ -294,6 +299,9 @@ void Engine::draw()
 				&& !player.getEquippedHeadArmour()->isNull())
 			{
 				window.setView(hudView);
+
+				itemTooltipName.setString(player.getEquippedHeadArmour()->getName());
+
 				itemTooltipBackground.setPosition(equippedHeadArmourIcon.getPosition().x + 35, equippedHeadArmourIcon.getPosition().y - 40);
 				itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
 				
@@ -335,6 +343,7 @@ void Engine::draw()
 				&& !player.getEquippedTrouserArmour()->isNull())
 			{
 				window.setView(hudView);
+				itemTooltipName.setString(player.getEquippedTrouserArmour()->getName());
 				itemTooltipBackground.setPosition(equippedTrousersArmourIcon.getPosition().x + 35, equippedTrousersArmourIcon.getPosition().y - 40);
 				itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
 				
@@ -355,6 +364,7 @@ void Engine::draw()
 				&& !player.getEquippedShoeArmour()->isNull())
 			{
 				window.setView(hudView);
+				itemTooltipName.setString(player.getEquippedShoeArmour()->getName());
 				itemTooltipBackground.setPosition(equippedShoeArmourIcon.getPosition().x + 35, equippedShoeArmourIcon.getPosition().y - 40);
 				itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
 				
@@ -377,6 +387,7 @@ void Engine::draw()
 				
 
 				window.setView(hudView);
+				itemTooltipName.setString(player.getEquippedNeckArmour()->getName());
 				itemTooltipBackground.setPosition(equippedNeckArmourIcon.getPosition().x + 35, equippedNeckArmourIcon.getPosition().y - 40);
 				itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
 				
