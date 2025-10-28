@@ -145,21 +145,21 @@ private:
 	// Load game button
 	RectangleShape loadGameButton;
 
-	Text loadGameButtonText;     // Create the Text object first
+	Text loadGameButtonText; // Create the Text object first
 
 	RectangleShape optionsButton;
 
-	Text optionsButtonText;                 // Create the Text object
+	Text optionsButtonText; // Create the Text object
 
 	RectangleShape quitGameButton;
 
-	Text quitGameButtonText;                    // Create the Text object
+	Text quitGameButtonText; // Create the Text object
 
-	Text optionsHeadingText;                      // Create the Text object
+	Text optionsHeadingText; // Create the Text object
 
 	RectangleShape mainMenuButton;
 
-	Text mainMenuButtonText;                        // Create the Text object
+	Text mainMenuButtonText; // Create the Text object
 
 	Text volumeSliderText;
 
@@ -240,11 +240,11 @@ private:
 
 	RectangleShape* clickedShape = nullptr;
 
-	Text killsText;                                      // Create the Text objec
+	Text killsText; // Create the Text object
 	
 	RectangleShape invHealthBar;
 	RectangleShape backgroundInvHealthBar;
-	Text invHealthBarText;                   // Create the Text object
+	Text invHealthBarText; // Create the Text object
 
 	RectangleShape invStamBar;
 	RectangleShape backgroundInvStamBar;
