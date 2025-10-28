@@ -86,13 +86,15 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	FloatRect hudRect(0, 0, resolution.x, resolution.y);
 	hudView.reset(hudRect);
 
+	/*
 	Pickup healthPickup(1);
 	Pickup ammoPickup(2);
 	Pickup staminaPickup(3);
 	Pickup manaPickup(4);
+	*/
 
 	// Main font
-	font.loadFromFile("fonts/PixelifySans-Bold.ttf");
+	font.loadFromFile("fonts/Jersey10-Regular.ttf");
 
 	// Paused text
 	pausedText.setFont(font);
@@ -117,17 +119,9 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 		"\n6- More and better ammo pickups";
 	levelUpText.setString(levelUpStream.str());
 
-	// Gold text
-	goldCountText.setFont(font);
-	goldCountText.setCharacterSize(fontSize);
-	goldCountText.setString("Gold: " + player.getGold());
-	goldCountText.setFillColor(Color::Black);
-	textBounds = goldCountText.getLocalBounds();
-	goldCountText.setPosition(viewCentre.x - 45, 360);
-
 	// FPS text
 	fpsText.setFont(font);
-	fpsText.setCharacterSize(20);
+	fpsText.setCharacterSize(fontSize - 5);
 	fpsText.setFillColor(Color::Yellow);
 	fpsText.setPosition(1800, 5);
 
@@ -275,7 +269,7 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	// Main menu button text
 	mainMenuButtonText.setString("Save & Exit");    // Set the displayed text
 	mainMenuButtonText.setFont(font);               // Assign the font
-	mainMenuButtonText.setCharacterSize(fontSize - 5); // Slightly smaller than standard text
+	mainMenuButtonText.setCharacterSize(fontSize);
 	mainMenuButtonText.setFillColor(Color::White);
 	textBounds = mainMenuButtonText.getLocalBounds();
 	x = mainMenuButton.getPosition().x + (mainMenuButton.getSize().x / 2.f) - (textBounds.width / 2.f);
@@ -321,8 +315,8 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	displayFPSButton.setTexture(&textureMainMenuButton2);
 
 	// Display FPS button text
-	displayFPSButtonText.setString("Display FPS");    // Set the label text
-	displayFPSButtonText.setFont(font);               // Assign the font
+	displayFPSButtonText.setString("Display FPS"); // Set the label text
+	displayFPSButtonText.setFont(font); // Assign the font
 	displayFPSButtonText.setCharacterSize(fontSize - 5);
 	displayFPSButtonText.setFillColor(Color::Black);
 	textBounds = displayFPSButtonText.getLocalBounds();
@@ -343,8 +337,6 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	viewCentre = mainView.getCenter();
 	windowedModeButton.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 500);
 	windowedModeButton.setTexture(&textureMainMenuButton2);
-
-
 
 	// Windowed mode button text
 	windowedModeButtonText.setString("Windowed Mode");  // Set the display text
@@ -387,7 +379,7 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 
 	// Story into text
 	storyIntroText.setFont(font);
-	storyIntroText.setCharacterSize(fontSize);
+	storyIntroText.setCharacterSize(fontSize + 10);
 	storyIntroText.setFillColor(Color::White);
 	storyIntroText.setPosition(150, 150);
 
@@ -427,7 +419,6 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	tooltipBackground = TextureHolder::GetTexture("graphics/UI/tooltipBackground.png");
 
 	// Equipped item icons
-	
 	equippedSwordIcon.setTexture(&textureItems);
 	equippedSwordIcon.setTextureRect(IntRect(0, 0, 0, 0));
 	equippedSwordIcon.setSize(Vector2f(75, 75));
@@ -521,29 +512,35 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	itemTooltipBackground.setPosition(0, 0);
 
 	itemTooltipName.setFont(font);
-	itemTooltipName.setCharacterSize(fontSize - 12);
+	itemTooltipName.setCharacterSize(fontSize - 8);
 	itemTooltipName.setFillColor(Color::White);
 	itemTooltipName.setPosition(0, 0);
 	
 	statTooltipText.setFont(font);
-	statTooltipText.setCharacterSize(fontSize - 15);
+	statTooltipText.setCharacterSize(fontSize - 12);
 	statTooltipText.setFillColor(Color::White);
 	statTooltipText.setPosition(0, 0);
 
 	valueTooltipText.setFont(font);
-	valueTooltipText.setCharacterSize(fontSize - 15);
+	valueTooltipText.setCharacterSize(fontSize - 12);
 	valueTooltipText.setFillColor(Color::White);
 	valueTooltipText.setPosition(0, 0);
-
-	//storedItem[0] = 0; //empty slot
 	
 	// Display kill count inventory text
-	killsText.setString("Kills: " + std::to_string(player.getKillCount())); // Set the label text
+	killsText.setString("Kills: " + to_string(player.getKillCount())); // Set the label text
 	killsText.setFont(font); // Assign the font
 	killsText.setCharacterSize(fontSize); // Set the text size
 	killsText.setFillColor(Color::Black);
 	textBounds = killsText.getLocalBounds();
 	killsText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 310);
+
+	// Gold text
+	goldCountText.setFont(font);
+	goldCountText.setCharacterSize(fontSize);
+	goldCountText.setString("Gold: " + player.getGold());
+	goldCountText.setFillColor(Color::Black);
+	textBounds = goldCountText.getLocalBounds();
+	goldCountText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 360);
 
 	invHealthBar.setFillColor(Color::Red);
 	invHealthBar.setPosition(viewCentre.x - 310, 825);
@@ -564,7 +561,7 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	backgroundInvStamBar.setFillColor(Color::Black);
 	backgroundInvStamBar.setSize(Vector2f(200, 50));
 	backgroundInvStamBar.setPosition(viewCentre.x - 60, 825);
-	//storedItems[0].getIcon().setSize(Vector2f(75, 75));
+	
 	// Display invStamBar text
 	invStamBarText.setString("0 / 0");        // Set the initial text
 	invStamBarText.setFont(font);             // Assign the font
@@ -779,6 +776,8 @@ void Engine::run()
 				{
 					state = State::STORY_INTRO;
 
+					skipAnimation = false;
+
 					// Play the start game sound
 					if (!startSoundPlayed) {
 						sound.playStartGameSound();
@@ -839,6 +838,8 @@ void Engine::run()
 
 
 					state = State::PLAYING;
+
+					skipAnimation = false;
 
 					// Play the start game sound
 					if (!startSoundPlayed) {
@@ -1035,13 +1036,19 @@ void Engine::run()
 					sound.playButtonClickSound();
 				}
 
-				if (state == State::STORY_INTRO && event.key.code == Keyboard::Space || state == State::STORY_INTRO && event.key.code == Keyboard::Escape && drawInventory)
+				if (event.key.code == Keyboard::Space)
 				{
-					sound.stopStoryIntroSound();
-					state = State::PLAYING;
-					displayedText = "";
-					storyIntroText.setString(displayedText);
-					currentChar = 0;
+					if (state == State::STORY_INTRO && !skipAnimation) {
+						storyIntroText.setString(fullText);
+						skipAnimation = true;
+					}
+					else if (state == State::STORY_INTRO && skipAnimation) {
+						sound.stopStoryIntroSound();
+						state = State::PLAYING;
+						displayedText = "";
+						storyIntroText.setString(displayedText);
+						currentChar = 0;
+					}
 				}
 
 				if (state == State::PLAYING && event.key.code == Keyboard::Tab) {
@@ -1255,18 +1262,17 @@ void Engine::run()
 					player.setChunk(i);
 				}
 			}
-			
-			if (!drawInventory && state == State::PLAYING) {
+
+			if (state == State::PLAYING && !drawInventory) {
 				// Update the player
 				player.update(dtAsSeconds, Mouse::getPosition(), world.getNavBoxes(player.getChunk()));
 
-				// Update the vector of enemies if within render area
+				// Update the vector of enemies if within player's render area
 				for (Enemy& enemies : enemyArr)
 				{
 					if (player.getRenderArea().intersects(enemies.getSprite().getGlobalBounds()))
 					{
 						enemies.update(dtAsSeconds, player.getPosition(), getCurrentChunk(enemies.getPosition().x, enemies.getPosition().y));
-						cout << "Enemy x: " << enemies.getPosition().x << " Enemy y: " << enemies.getPosition().y << endl;
 					}
 				}
 			}
@@ -1442,7 +1448,7 @@ void Engine::run()
 				killsText.setString(ssKillCount.str());
 
 				stringstream ssHealthBar;
-				ssHealthBar << player.getHealth() << " / " << player.getMaxHealth();
+				ssHealthBar << int(player.getHealth()) << " / " << player.getMaxHealth();
 				invHealthBarText.setString(ssHealthBar.str());
 				textBounds = invHealthBarText.getLocalBounds();
 				x = backgroundInvHealthBar.getPosition().x + (backgroundInvHealthBar.getSize().x / 2.f) - (textBounds.width / 2.f);
@@ -1450,7 +1456,7 @@ void Engine::run()
 				invHealthBarText.setPosition(x - textBounds.left, y - textBounds.top);
 
 				stringstream ssStamBar;
-				ssStamBar << player.getStamina() << " / " << player.getMaxStamina();
+				ssStamBar << int(player.getStamina()) << " / " << player.getMaxStamina();
 				invStamBarText.setString(ssStamBar.str());
 				textBounds = invStamBarText.getLocalBounds();
 				x = backgroundInvStamBar.getPosition().x + (backgroundInvStamBar.getSize().x / 2.f) - (textBounds.width / 2.f);
@@ -1458,7 +1464,7 @@ void Engine::run()
 				invStamBarText.setPosition(x - textBounds.left, y - textBounds.top);
 
 				stringstream ssManaBar;
-				ssManaBar << player.getMana() << " / " << player.getMaxMana();
+				ssManaBar << int(player.getMana()) << " / " << player.getMaxMana();
 				invManaBarText.setString(ssManaBar.str());
 				textBounds = invManaBarText.getLocalBounds();
 				x = backgroundInvManaBar.getPosition().x + (backgroundInvManaBar.getSize().x / 2.f) - (textBounds.width / 2.f);
@@ -1513,7 +1519,7 @@ void Engine::run()
 			startSoundPlayed = FALSE;
 		}
 
-		if (state == State::STORY_INTRO) {
+		if (state == State::STORY_INTRO && !skipAnimation) {
 			if (currentChar < (int)fullText.size())
 			{
 				if (clock.getElapsedTime().asSeconds() >= delay)
