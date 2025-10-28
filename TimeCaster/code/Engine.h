@@ -232,7 +232,7 @@ private:
 	int maxItems = 16; // max amount of item slots
 	vector<Item> storedItems;
 	vector<RectangleShape> emptyFrames;
-	vector<Item> allItems;     // all possible ite
+	vector<Item> allItems;     // all possible item
 	vector<Weapon>& m_EquippedWeapons;
 	vector<Equipment>& m_EquippedArmour;
 	int currentItems = 0; // current item amount

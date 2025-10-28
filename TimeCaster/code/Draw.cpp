@@ -87,11 +87,11 @@ void Engine::draw()
 			}
 		}
 		
-			drawables.emplace_back(player.getSprite().getGlobalBounds().top + player.getSprite().getGlobalBounds().height, player.getSpriteFromSheet()); // place player armour into drawables
-			drawables.emplace_back(player.getSprite().getGlobalBounds().top + player.getSprite().getGlobalBounds().height + 0.01, player.getHead());
-			drawables.emplace_back(player.getSprite().getGlobalBounds().top + player.getSprite().getGlobalBounds().height + 0.02, player.getTorso());
-			drawables.emplace_back(player.getSprite().getGlobalBounds().top + player.getSprite().getGlobalBounds().height + 0.03, player.getPants());
-			drawables.emplace_back(player.getSprite().getGlobalBounds().top + player.getSprite().getGlobalBounds().height + 0.04, player.getShoes());
+		drawables.emplace_back(player.getSprite().getGlobalBounds().top + player.getSprite().getGlobalBounds().height, player.getSpriteFromSheet()); // place player armour into drawables
+		drawables.emplace_back(player.getSprite().getGlobalBounds().top + player.getSprite().getGlobalBounds().height + 0.01, player.getHead());
+		drawables.emplace_back(player.getSprite().getGlobalBounds().top + player.getSprite().getGlobalBounds().height + 0.02, player.getTorso());
+		drawables.emplace_back(player.getSprite().getGlobalBounds().top + player.getSprite().getGlobalBounds().height + 0.03, player.getPants());
+		drawables.emplace_back(player.getSprite().getGlobalBounds().top + player.getSprite().getGlobalBounds().height + 0.04, player.getShoes());
 		
 		
 		// Sort by y position (smaller y values come first)
@@ -162,7 +162,6 @@ void Engine::draw()
 			window.draw(filter);
 			window.draw(playerFrame);
 			window.draw(playerInFrame);
-
 			window.draw(headArmourFrame);
 			window.draw(chestArmourFrame);
 			window.draw(trousersArmourFrame);
@@ -255,15 +254,15 @@ void Engine::draw()
 				window.setView(hudView);
 				itemTooltipName.setString(player.getEquippedSword()->getName());
 				itemTooltipBackground.setPosition(equippedSwordIcon.getPosition().x + 35, equippedSwordIcon.getPosition().y - 40);
-				itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 20, 100));
+				itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
 				
 				valueTooltipText.setString("Value: " + to_string(player.getEquippedSword()->getValue()) + " Gold");
-				valueTooltipText.setPosition(itemTooltipBackground.getPosition().x + 10, itemTooltipBackground.getPosition().y + 50);
+				valueTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 55);
 				
-				itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 10, itemTooltipBackground.getPosition().y + 5);
+				itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 15);
 				
 				statTooltipText.setString("Damage: " + to_string(player.getEquippedSword()->getDamage()));
-				statTooltipText.setPosition(itemTooltipBackground.getPosition().x + 10, itemTooltipBackground.getPosition().y + 32);
+				statTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 37);
 
 				window.draw(itemTooltipBackground);
 				window.draw(valueTooltipText);
@@ -276,15 +275,15 @@ void Engine::draw()
 				window.setView(hudView);
 				itemTooltipName.setString(player.getEquippedWand()->getName());
 				itemTooltipBackground.setPosition(equippedWandIcon.getPosition().x + 35, equippedWandIcon.getPosition().y - 40);
-				itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 20, 100));
+				itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
 				
 				valueTooltipText.setString("Value: " + to_string(player.getEquippedWand()->getValue()) + " Gold");
-				valueTooltipText.setPosition(itemTooltipBackground.getPosition().x + 10, itemTooltipBackground.getPosition().y + 50);
+				valueTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 55);
 				
-				itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 10, itemTooltipBackground.getPosition().y + 5);
+				itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 15);
 				
 				statTooltipText.setString("Damage: " + to_string(player.getEquippedWand()->getDamage()));
-				statTooltipText.setPosition(itemTooltipBackground.getPosition().x + 10, itemTooltipBackground.getPosition().y + 32);
+				statTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 37);
 				
 				window.draw(itemTooltipBackground);
 				window.draw(valueTooltipText);
@@ -297,15 +296,15 @@ void Engine::draw()
 				window.setView(hudView);
 				itemTooltipName.setString(player.getEquippedHeadArmour()->getName());
 				itemTooltipBackground.setPosition(equippedHeadArmourIcon.getPosition().x + 35, equippedHeadArmourIcon.getPosition().y - 40);
-				itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 20, 100));
+				itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
 				
 				valueTooltipText.setString("Value: " + to_string(player.getEquippedHeadArmour()->getValue()) + " Gold");
-				valueTooltipText.setPosition(itemTooltipBackground.getPosition().x + 10, itemTooltipBackground.getPosition().y + 50);
+				valueTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 55);
 				
-				itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 10, itemTooltipBackground.getPosition().y + 5);
+				itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 15);
 				
 				statTooltipText.setString("Armour: " + to_string(player.getEquippedHeadArmour()->getArmour()));
-				statTooltipText.setPosition(itemTooltipBackground.getPosition().x + 10, itemTooltipBackground.getPosition().y + 32);
+				statTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 37);
 				
 				window.draw(itemTooltipBackground);
 				window.draw(valueTooltipText);
@@ -317,16 +316,16 @@ void Engine::draw()
 			{
 				window.setView(hudView);
 				itemTooltipName.setString(player.getEquippedChestArmour()->getName());
-				itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 20, 100));
+				itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
 				itemTooltipBackground.setPosition(equippedChestArmourIcon.getPosition().x + 35, equippedChestArmourIcon.getPosition().y - 40);
 				
 				valueTooltipText.setString("Value: " + to_string(player.getEquippedChestArmour()->getValue()) + " Gold");
-				valueTooltipText.setPosition(itemTooltipBackground.getPosition().x + 10, itemTooltipBackground.getPosition().y + 50);
+				valueTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 55);
 				
-				itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 10, itemTooltipBackground.getPosition().y + 5);
+				itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 15);
 				
 				statTooltipText.setString("Armour: " + to_string(player.getEquippedChestArmour()->getArmour()));
-				statTooltipText.setPosition(itemTooltipBackground.getPosition().x + 10, itemTooltipBackground.getPosition().y + 32);
+				statTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 37);
 
 				window.draw(itemTooltipBackground);
 				window.draw(valueTooltipText);
@@ -339,15 +338,15 @@ void Engine::draw()
 				window.setView(hudView);
 				itemTooltipName.setString(player.getEquippedTrouserArmour()->getName());
 				itemTooltipBackground.setPosition(equippedTrousersArmourIcon.getPosition().x + 35, equippedTrousersArmourIcon.getPosition().y - 40);
-				itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 20, 100));
+				itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
 				
 				valueTooltipText.setString("Value: " + to_string(player.getEquippedTrouserArmour()->getValue()) + " Gold");
-				valueTooltipText.setPosition(itemTooltipBackground.getPosition().x + 10, itemTooltipBackground.getPosition().y + 50);
+				valueTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 55);
 				
-				itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 10, itemTooltipBackground.getPosition().y + 5);
+				itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 15);
 				
 				statTooltipText.setString("Armour: " + to_string(player.getEquippedTrouserArmour()->getArmour()));
-				statTooltipText.setPosition(itemTooltipBackground.getPosition().x + 10, itemTooltipBackground.getPosition().y + 32);
+				statTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 37);
 
 				window.draw(itemTooltipBackground);
 				window.draw(valueTooltipText);
@@ -360,15 +359,15 @@ void Engine::draw()
 				window.setView(hudView);
 				itemTooltipName.setString(player.getEquippedShoeArmour()->getName());
 				itemTooltipBackground.setPosition(equippedShoeArmourIcon.getPosition().x + 35, equippedShoeArmourIcon.getPosition().y - 40);
-				itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 20, 100));
+				itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
 				
 				valueTooltipText.setString("Value: " + to_string(player.getEquippedShoeArmour()->getValue()) + " Gold");
-				valueTooltipText.setPosition(itemTooltipBackground.getPosition().x + 10, itemTooltipBackground.getPosition().y + 50);
+				valueTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 55);
 				
-				itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 10, itemTooltipBackground.getPosition().y + 5);
+				itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 15);
 				
 				statTooltipText.setString("Armour: " + to_string(player.getEquippedShoeArmour()->getArmour()));
-				statTooltipText.setPosition(itemTooltipBackground.getPosition().x + 10, itemTooltipBackground.getPosition().y + 32);
+				statTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 37);
 				
 				window.draw(itemTooltipBackground);
 				window.draw(valueTooltipText);
@@ -381,15 +380,15 @@ void Engine::draw()
 				window.setView(hudView);
 				itemTooltipName.setString(player.getEquippedNeckArmour()->getName());
 				itemTooltipBackground.setPosition(equippedNeckArmourIcon.getPosition().x + 35, equippedNeckArmourIcon.getPosition().y - 40);
-				itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 20, 100));
+				itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
 				
 				valueTooltipText.setString("Value: " + to_string(player.getEquippedNeckArmour()->getValue()) + " Gold");
-				valueTooltipText.setPosition(itemTooltipBackground.getPosition().x + 10, itemTooltipBackground.getPosition().y + 50);
+				valueTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 55);
 				
-				itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 10, itemTooltipBackground.getPosition().y + 5);
+				itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 15);
 				
 				statTooltipText.setString("Armour: " + to_string(player.getEquippedNeckArmour()->getArmour()));
-				statTooltipText.setPosition(itemTooltipBackground.getPosition().x + 10, itemTooltipBackground.getPosition().y + 32);
+				statTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 37);
 				
 				window.draw(itemTooltipBackground);
 				window.draw(valueTooltipText);
