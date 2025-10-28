@@ -148,13 +148,13 @@ private:
 	const int START_GOLD = 0;
 	const int START_KILLS = 0;
 	const int START_LEVEL = 1;
-	const string START_SWORD = "StartingSword";
-	const string START_WAND = "StartingWand";
-	const string START_HEAD_ARMOUR = "StartingHood";
-	const string START_CHEST_ARMOUR = "StartingArmour";
-	const string START_TROUSER_ARMOUR = "StartingTrousers";
-	const string START_SHOE_ARMOUR = "StartingShoes";
-	const string START_NECK_ARMOUR = "FamilyLocket";
+	const string START_SWORD = "Iron_Sword";
+	const string START_WAND = "Wooden_Wand";
+	const string START_HEAD_ARMOUR = "Family_Hood";
+	const string START_CHEST_ARMOUR = "Family_Robe";
+	const string START_TROUSER_ARMOUR = "Robe_Leggings";	
+	const string START_SHOE_ARMOUR = "Basic_Shoes";
+	const string START_NECK_ARMOUR = "Family_Locket";
 	void updateTextRect();
 	
 

@@ -19,7 +19,7 @@ Weapon::Weapon(String type, Vector2f position)
 
 		m_Sprite.setOrigin(25, 25);
 	}
-	else if (m_Name == "StartingSword")
+	else if (m_Name == "Iron_Sword")
 	{
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
 		m_Sprite.setTextureRect(IntRect(961, 896, 32, 32));
@@ -38,7 +38,7 @@ Weapon::Weapon(String type, Vector2f position)
 
 
 	}
-	else if (m_Name == "StartingWand")
+	else if (m_Name == "Wooden_Wand")
 	{
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
 		m_Sprite.setTextureRect(IntRect(194, 864, 32, 32));
@@ -58,7 +58,7 @@ Weapon::Weapon(String type, Vector2f position)
 
 		m_ItemType = MagicWeapon;
 	}
-	else if (m_Name == "UpgradedSword")
+	else if (m_Name == "Scimitar")
 	{
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
 		m_Sprite.setTextureRect(IntRect(1184, 898, 32, 32));
@@ -75,7 +75,7 @@ Weapon::Weapon(String type, Vector2f position)
 
 		m_ItemType = MeleeWeapon;
 	}
-	else if (m_Name == "UpgradedWand")
+	else if (m_Name == "Silver_Wand")
 	{
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
 		m_Sprite.setTextureRect(IntRect(130, 864, 32, 32));

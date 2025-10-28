@@ -730,11 +730,11 @@ bool Player::equipHeadArmour(string armourNameToEquip)
 		m_EquippedArmour[0] = armourToEquip;
 		// set the appropriate sprites
 		
-		if (armourNameToEquip == "LeatherCap") {
+		if (armourNameToEquip == "Leather_Cap") {
 			m_SpriteHead = Sprite(TextureHolder::GetTexture("graphics/player/armour/leather/Head_leather_armor_hat.png"));
 			m_SpriteHead.setOrigin(32, 32);		m_SpriteHead.setScale(0.75, 0.75);
 		}
-		else if (armourNameToEquip == "StartingHood") {
+		else if (armourNameToEquip == "Family_Hood") {
 			m_SpriteHead = Sprite(TextureHolder::GetTexture("graphics/player/armour/robe/Head_robe_hood.png"));
 			m_SpriteHead.setOrigin(32, 32);		m_SpriteHead.setScale(0.75, 0.75);
 		}
@@ -757,12 +757,12 @@ bool Player::equipChestArmour(string armourNameToEquip)
 		m_EquippedArmour[1] = armourToEquip;
 		// set the appropriate sprites
 
-		if (armourNameToEquip == "LeatherArmour") {
+		if (armourNameToEquip == "Leather_Chestplate") {
 			m_SpriteTorso = Sprite(TextureHolder::GetTexture("graphics/player/armour/leather/TORSO_leather_armor_torso.png"));
 			m_SpriteTorso.setOrigin(32, 32);		m_SpriteTorso.setScale(0.75, 0.75);
 
 		}
-		else if (armourNameToEquip == "StartingArmour") {
+		else if (armourNameToEquip == "Family_Robe") {
 			m_SpriteTorso = Sprite(TextureHolder::GetTexture("graphics/player/armour/robe/TORSO_robe_shirt_brown.png"));	
 			m_SpriteTorso.setOrigin(32, 32);		m_SpriteTorso.setScale(0.75, 0.75);
 		}
@@ -807,7 +807,7 @@ bool Player::equipShoeArmour(string armourNameToEquip)
 		// equip the armour
 		m_EquippedArmour[3] = armourToEquip;
 		// set the appropriate sprites (1 for now, more later)
-		if (armourNameToEquip == "StartingShoes") {
+		if (armourNameToEquip == "Basic_Shoes") {
 			m_SpriteShoes = Sprite(TextureHolder::GetTexture("graphics/player/armour/robe/Feet_shoes_brown.png"));
 			m_SpriteShoes.setOrigin(32, 32);		m_SpriteShoes.setScale(0.75, 0.75);
 		}

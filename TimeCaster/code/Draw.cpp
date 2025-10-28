@@ -152,9 +152,7 @@ void Engine::draw()
 		for (auto& nav : world.getNavBoxes(0)) { // draw debug text showing tile location
 			window.draw(nav.getShape());
 		}
-		*/
 
-		/*
 		for (auto& nav : world.getNavBoxes(player.getChunk())) { // draw debug text showing tile location
 			window.draw(nav.getShape());
 			window.draw(world.getChunkArea(player.getChunk()).getShape());
@@ -167,9 +165,6 @@ void Engine::draw()
 		else {
 			spriteCursor.setTexture(textureCursorOpen);
 		}
-
-		//Draw the crosshair
-		//window.draw(spriteCursor);
 
 		// Switch to the HUD view
 		window.setView(hudView);
@@ -203,7 +198,7 @@ void Engine::draw()
 			window.draw(invManaBar);
 			window.draw(invManaBarText);
 
-			// draw icons last
+			// Drawing icons
 			for (auto& icons : storedItems) {
 				window.draw(icons.getIcon());
 			}
@@ -262,6 +257,14 @@ void Engine::draw()
 					}
 					else if (type == Item::ItemType::Consumable) {
 						
+						itemTooltipName.setString(storedItems[i].getName());
+						itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
+
+						itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 15);
+				
+
+						window.draw(itemTooltipName);
+
 					}
 				}
 				
@@ -271,6 +274,9 @@ void Engine::draw()
 				!player.getEquippedSword()->isNull())
 			{
 				window.setView(hudView);
+
+				itemTooltipName.setString(player.getEquippedSword()->getName());
+
 				itemTooltipBackground.setPosition(equippedSwordIcon.getPosition().x + 35, equippedSwordIcon.getPosition().y - 40);
 				itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
 				
@@ -291,6 +297,8 @@ void Engine::draw()
 				&& !player.getEquippedWand()->isNull())
 			{
 				window.setView(hudView);
+				itemTooltipName.setString(player.getEquippedWand()->getName());
+
 				itemTooltipBackground.setPosition(equippedWandIcon.getPosition().x + 35, equippedWandIcon.getPosition().y - 40);
 				itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
 				
@@ -311,6 +319,9 @@ void Engine::draw()
 				&& !player.getEquippedHeadArmour()->isNull())
 			{
 				window.setView(hudView);
+
+				itemTooltipName.setString(player.getEquippedHeadArmour()->getName());
+
 				itemTooltipBackground.setPosition(equippedHeadArmourIcon.getPosition().x + 35, equippedHeadArmourIcon.getPosition().y - 40);
 				itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
 				
@@ -352,6 +363,7 @@ void Engine::draw()
 				&& !player.getEquippedTrouserArmour()->isNull())
 			{
 				window.setView(hudView);
+				itemTooltipName.setString(player.getEquippedTrouserArmour()->getName());
 				itemTooltipBackground.setPosition(equippedTrousersArmourIcon.getPosition().x + 35, equippedTrousersArmourIcon.getPosition().y - 40);
 				itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
 				
@@ -372,6 +384,7 @@ void Engine::draw()
 				&& !player.getEquippedShoeArmour()->isNull())
 			{
 				window.setView(hudView);
+				itemTooltipName.setString(player.getEquippedShoeArmour()->getName());
 				itemTooltipBackground.setPosition(equippedShoeArmourIcon.getPosition().x + 35, equippedShoeArmourIcon.getPosition().y - 40);
 				itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
 				
@@ -394,6 +407,7 @@ void Engine::draw()
 				
 
 				window.setView(hudView);
+				itemTooltipName.setString(player.getEquippedNeckArmour()->getName());
 				itemTooltipBackground.setPosition(equippedNeckArmourIcon.getPosition().x + 35, equippedNeckArmourIcon.getPosition().y - 40);
 				itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
 				
