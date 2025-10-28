@@ -255,7 +255,7 @@ void Engine::draw()
 			{
 				window.setView(hudView);
 
-				itemTooltipName.setString(player.getEquippedSwordr()->getName());
+				itemTooltipName.setString(player.getEquippedSword()->getName());
 
 				itemTooltipBackground.setPosition(equippedSwordIcon.getPosition().x + 35, equippedSwordIcon.getPosition().y - 40);
 				itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
