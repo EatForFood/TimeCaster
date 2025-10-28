@@ -62,6 +62,9 @@ private:
 	// Colour filter 
 	RectangleShape filter;
 
+	Color defaultFilter = Color(199, 56, 20, 40);
+	Color skeletonRuinsFilter = Color(199, 56, 30, 60);
+
 	// The boundaries of the arena
 	IntRect arena;
 
@@ -70,6 +73,7 @@ private:
 
 	Texture textureBackground;
 	Texture textureBackground2;
+	Texture textureBackground3;
 
 	World world; // world object to manage chunks
 
