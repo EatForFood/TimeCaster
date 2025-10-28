@@ -245,6 +245,14 @@ void Engine::draw()
 					}
 					else if (type == Item::ItemType::Consumable) {
 						
+						itemTooltipName.setString(storedItems[i].getName());
+						itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
+
+						itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 15);
+				
+
+						window.draw(itemTooltipName);
+
 					}
 				}
 				

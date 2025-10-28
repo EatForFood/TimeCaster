@@ -171,6 +171,7 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	storedItems[9] = Equipment("Robe Leggings", Vector2f(0, 0));
 	storedItems[10] = Equipment("Amulet of Shielding", Vector2f(0, 0));
 	storedItems[11] = Equipment("Family Locket", Vector2f(0, 0));
+	storedItems[12] = Item("Health Potion", Vector2f(0, 0));
 
 	// Empty mana bar
 	emptyManaBar.setFillColor(Color::Black);
