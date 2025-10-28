@@ -1257,8 +1257,6 @@ void Engine::run()
 				}
 			}
 			
-
-
 			if (!drawInventory && state == State::PLAYING) {
 				// Update the player
 				player.update(dtAsSeconds, Mouse::getPosition(), world.getNavBoxes(player.getChunk()));
@@ -1273,8 +1271,6 @@ void Engine::run()
 					}
 				}
 			}
-
-
 
 			filter.setOrigin(player.getPosition());
 			filter.setPosition(player.getPosition().x, player.getPosition().y);
