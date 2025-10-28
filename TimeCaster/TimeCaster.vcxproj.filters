@@ -75,9 +75,6 @@
     <ClInclude Include="code\Pathfinder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="code\Structure.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="code\Bullet.cpp">
@@ -144,9 +141,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="code\Pathfinder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="code\Structure.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

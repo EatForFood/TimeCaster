@@ -812,7 +812,7 @@ void Engine::run()
 					// Spawn the player in the middle of the arena
 					player.spawn(arena, resolution, tileSize, player.getPlayerLevel());
 
-					for (int i = 0; i < 1; ++i)
+					for (int i = 0; i < 0; ++i)
 					{
 						Enemy e;
 						e.spawn(arena, resolution, tileSize, "Goblin", player.getPlayerLevel());

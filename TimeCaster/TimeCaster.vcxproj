@@ -35,7 +35,6 @@
     <ClInclude Include="code\Pickup.h" />
     <ClInclude Include="code\Player.h" />
     <ClInclude Include="code\SoundManager.h" />
-    <ClInclude Include="code\Structure.h" />
     <ClInclude Include="code\TextureHolder.h" />
     <ClInclude Include="code\Engine.h" />
     <ClInclude Include="code\Weapon.h" />
@@ -60,7 +59,6 @@
     <ClCompile Include="code\Pickup.cpp" />
     <ClCompile Include="code\Player.cpp" />
     <ClCompile Include="code\SoundManager.cpp" />
-    <ClCompile Include="code\Structure.cpp" />
     <ClCompile Include="code\TextureHolder.cpp" />
     <ClCompile Include="code\Engine.cpp" />
     <ClCompile Include="code\Weapon.cpp" />
