@@ -83,6 +83,8 @@ public:
 
 	void clearChunk();
 
+	void placeStructure(String type, Vector2f position);
+
 	void placeHouse1(int x, int y);
 	void placeHouse2(int x, int y);
 	void placeHouse3(int x, int y);

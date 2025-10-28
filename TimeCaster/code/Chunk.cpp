@@ -628,7 +628,7 @@ void Chunk::placeCastle(int sx, int sy) { // sx 15, sy 18
 
 	// FIRST LEVEL
 
-// House west wall 
+// Castle west wall 
 	for (int y = sy - 30; y < sy; y++)
 	{
 		if (y != 15 && y != 16 && y != 17)
@@ -637,13 +637,13 @@ void Chunk::placeCastle(int sx, int sy) { // sx 15, sy 18
 		}
 	}
 
-	// House north wall
+	// Castle north wall
 	for (int x = sx + 1; x < sx + 25; x++)
 	{
 		placeTile(x, sy - 30, 0, 12, false, false);
 	}
 
-	// House east wall 
+	// Castle east wall 
 	for (int y = sy - 30; y < sy; y++)
 	{
 		if (y != 15 && y != 16 && y != 17)
@@ -652,7 +652,7 @@ void Chunk::placeCastle(int sx, int sy) { // sx 15, sy 18
 		}
 	}
 
-	// House south wall
+	// Castle south wall
 	for (int x = sx; x < sx + 25; x++)
 	{
 		placeTile(x, sy, 0, 12, false, false);
@@ -660,7 +660,7 @@ void Chunk::placeCastle(int sx, int sy) { // sx 15, sy 18
 
 	// SECOND LEVEL
 
-	// House west wall 
+	// Castle west wall 
 	for (int y = sy - 31; y < sy; y++)
 	{
 		if (y != 14 && y != 15 && y != 16)
@@ -669,13 +669,13 @@ void Chunk::placeCastle(int sx, int sy) { // sx 15, sy 18
 		}
 	}
 
-	// House north wall
+	// Castle north wall
 	for (int x = sx; x < sx + 24; x++)
 	{
 		placeTile(x, sy - 31, 0, 12, true, false);
 	}
 
-	// House east wall 
+	// Castle east wall 
 	for (int y = sy - 31; y < sy; y++)
 	{
 		if (y != 14 && y != 15 && y != 16)
@@ -684,7 +684,7 @@ void Chunk::placeCastle(int sx, int sy) { // sx 15, sy 18
 		}
 	}
 
-	// House south wall
+	// Castle south wall
 	for (int x = sx - 1; x < sx + 24; x++)
 	{
 		placeTile(x, sy - 1, 0, 12, true, false);
@@ -692,25 +692,25 @@ void Chunk::placeCastle(int sx, int sy) { // sx 15, sy 18
 
 	// THIRD LEVEL
 
-	// House west wall 
+	// Castle west wall 
 	for (int y = sy - 32; y < sy - 1; y++)
 	{
 		placeTile(sx - 2, y, 0, 12, true, false);
 	}
 
-	// House north wall
+	// Castle north wall
 	for (int x = sx - 1; x < sx + 23; x++)
 	{
 		placeTile(x, sy - 32, 0, 12, true, false);
 	}
 
-	// House east wall 
+	// Castle east wall 
 	for (int y = sy - 32; y < sy - 1; y++)
 	{
 		placeTile(sx + 22, y, 0, 12, true, false);
 	}
 
-	// House south wall
+	// Castle south wall
 	for (int x = sx - 2; x < sx + 23; x++)
 	{
 		placeTile(x, sy - 2, 0, 12, true, false);
@@ -718,7 +718,7 @@ void Chunk::placeCastle(int sx, int sy) { // sx 15, sy 18
 
 	// FOURTH LEVEL
 
-	// House west wall 
+	// Castle west wall 
 	for (int y = sy - 33; y < sy - 1; y++)
 	{
 		if (y % 2 == 0) {
@@ -726,7 +726,7 @@ void Chunk::placeCastle(int sx, int sy) { // sx 15, sy 18
 		}
 	}
 
-	// House north wall
+	// Castle north wall
 	for (int x = sx - 1; x < sx + 22; x++)
 	{
 		if (x % 2 == 1) {
@@ -734,7 +734,7 @@ void Chunk::placeCastle(int sx, int sy) { // sx 15, sy 18
 		}
 	}
 
-	// House east wall 
+	// Castle east wall 
 	for (int y = sy - 32; y < sy - 1; y++)
 	{
 		if (y % 2 == 0) {
@@ -742,7 +742,7 @@ void Chunk::placeCastle(int sx, int sy) { // sx 15, sy 18
 		}
 	}
 
-	// House south wall
+	// Castle south wall
 	for (int x = sx - 2; x < sx + 23; x++)
 	{
 		if (x % 2 == 1) {
@@ -753,6 +753,7 @@ void Chunk::placeCastle(int sx, int sy) { // sx 15, sy 18
 	sx += offset.x;
 	sy += offset.y;
 
+	// create navBoxes for castle walls
 	NavBox navboxW1(sx + 1, sy, 1, -17);
 	navBoxes.push_back(navboxW1);
 
@@ -935,16 +936,11 @@ void Chunk::createBurntForest() // create a forest from random tree entities
 void Chunk::saveChunk()
 {
 	// Create a filename based on the chunk's coordinates
-	std::string path = "gamedata/chunks/chunk_" +
-		std::to_string((int)m_Chunk.x) + "_" +
-		std::to_string((int)m_Chunk.y) + ".txt";
+	string path = "gamedata/chunks/chunk_" +
+		to_string((int)m_Chunk.x) + "_" +
+		to_string((int)m_Chunk.y) + ".txt";
 
-	std::ofstream outFile(path);
-
-	if (!outFile.is_open()) {
-		std::cerr << "Failed to save chunk: " << path << std::endl;
-		return;
-	}
+	ofstream outFile(path);
 
 	for (int y = 0; y < 50; y++) {
 		for (int x = 0; x < 50; x++) {
@@ -959,20 +955,15 @@ void Chunk::saveChunk()
 
 void Chunk::loadChunk() // load tile types and entities from file
 {
-	std::string path = "gamedata/chunks/chunk_" +
-		std::to_string((int)m_Chunk.x) + "_" +
-		std::to_string((int)m_Chunk.y) + ".txt";
+	string path = "gamedata/chunks/chunk_" +
+		to_string((int)m_Chunk.x) + "_" +
+		to_string((int)m_Chunk.y) + ".txt";
 
-	std::ifstream inFile(path);
-
-	if (!inFile.is_open()) {
-		std::cerr << "Failed to load chunk: " << path << std::endl;
-		return;
-	}
+	ifstream inFile(path);
 
 	for (int y = 0; y < 50; y++) {
 		for (int x = 0; x < 50; x++) {
-			std::string bgPair, fgPair, entityName;
+			string bgPair, fgPair, entityName;
 			inFile >> bgPair >> fgPair >> entityName;
 
 			int bgx, bgy, fgx, fgy;
@@ -1044,4 +1035,32 @@ bool Chunk::blockEdges(int tileX, int tileY)
 		return true; // treat out-of-bounds as blocked
 
 	return blockedTiles[tileX][tileY];
+}
+
+void Chunk::placeStructure(String type, Vector2f position)
+{
+	if (type == "house1")
+	{
+		placeHouse1(position.x, position.y);
+	}
+
+	if (type == "house2")
+	{
+		placeHouse1(position.x, position.y);
+	}
+
+	if (type == "house3")
+	{
+		placeHouse1(position.x, position.y);
+	}
+
+	if (type == "house4")
+	{
+		placeHouse1(position.x, position.y);
+	}
+
+	if (type == "castle")
+	{
+		placeHouse1(position.x, position.y);
+	}
 }

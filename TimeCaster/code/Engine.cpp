@@ -17,7 +17,7 @@
 #include "Weapon.h"
 #include "Equipment.h"
 #include "Enemy.h"
-#include <string>;
+#include <string>
 
 using namespace std;
 using namespace sf;
