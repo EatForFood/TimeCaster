@@ -149,11 +149,16 @@ void Engine::draw()
 			spriteCursor.setTexture(textureCursorOpen);
 		}
 
+		/*
+		if (player.getPosition().x + 4 < something && player.getPosition().x - 4 > something && player.getPosition().y + 4 < something && player.getPosition().y - 4 > something) {
+			window.draw(eKey);
+		}
+		*/
+
 		// Switch to the HUD view
 		window.setView(hudView);
 
 		if (drawInventory) {
-
 			window.draw(filter);
 			window.draw(playerFrame);
 			window.draw(playerInFrame);
@@ -212,22 +217,34 @@ void Engine::draw()
 					valueTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 55);
 					window.draw(valueTooltipText);
 
-					if (type == Item::ItemType::MeleeWeapon || type == Item::ItemType::MagicWeapon) {
-						
-						itemTooltipName.setString(storedItems[i].getName());
-						itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
+					itemTooltipName.setString(storedItems[i].getName());
+					window.draw(itemTooltipName);
 
+					if (type == Item::ItemType::MeleeWeapon || type == Item::ItemType::MagicWeapon) 
+					{
 						statTooltipText.setString("Damage: " + to_string(storedItems[i].getDamage()));
 
-						itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 15);
+						if (itemTooltipName.getLocalBounds().width > statTooltipText.getLocalBounds().width && itemTooltipName.getLocalBounds().width > valueTooltipText.getGlobalBounds().width)
+						{
+							itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
+						}
+						else if (statTooltipText.getLocalBounds().width > itemTooltipName.getLocalBounds().width && statTooltipText.getLocalBounds().width > valueTooltipText.getGlobalBounds().width)
+						{
+							itemTooltipBackground.setSize(Vector2f(statTooltipText.getLocalBounds().width + 55, 100));
+						}
+						else if (valueTooltipText.getGlobalBounds().width > itemTooltipName.getLocalBounds().width && valueTooltipText.getGlobalBounds().width > statTooltipText.getLocalBounds().width)
+						{
+							itemTooltipBackground.setSize(Vector2f(valueTooltipText.getGlobalBounds().width + 55, 100));
+						}
+
+						itemTooltipName.setOrigin(itemTooltipName.getGlobalBounds().width / 2, itemTooltipName.getGlobalBounds().height / 2);
+						itemTooltipName.setPosition((itemTooltipBackground.getPosition().x + itemTooltipBackground.getGlobalBounds().width) / 2, itemTooltipBackground.getPosition().y + 15);
 						statTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 37);
 
-						window.draw(itemTooltipName);
 						window.draw(statTooltipText);
 					}
 					else if (type == Item::ItemType::HeadArmour || type == Item::ItemType::ChestArmour || type == Item::ItemType::TrouserArmour || 
 						type == Item::ItemType::ShoeArmour || type == Item::ItemType::NeckArmour) {
-						itemTooltipName.setString(storedItems[i].getName());
 						itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
 
 						statTooltipText.setString("Armour: " + to_string(storedItems[i].getArmour()));
@@ -235,26 +252,16 @@ void Engine::draw()
 						itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 15);
 						statTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 37);
 
-						window.draw(itemTooltipName);
 						window.draw(statTooltipText);
 					}
 					else if (type == Item::ItemType::Consumable) {
-						
-						itemTooltipName.setString(storedItems[i].getName());
 						itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
 
 						itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 15);
-				
-
-						window.draw(itemTooltipName);
-
 					}
 				}
-				
-
 			}
-			if (weaponFrame.getGlobalBounds().contains(worldPos) && !Mouse::isButtonPressed(Mouse::Left) && !draggingItem && 
-				!player.getEquippedSword()->isNull())
+			if (weaponFrame.getGlobalBounds().contains(worldPos) && !Mouse::isButtonPressed(Mouse::Left) && !draggingItem && !player.getEquippedSword()->isNull())
 			{
 				window.setView(hudView);
 
@@ -276,8 +283,7 @@ void Engine::draw()
 				window.draw(itemTooltipName);
 				window.draw(statTooltipText);
 			}
-			if (wandFrame.getGlobalBounds().contains(worldPos) && !Mouse::isButtonPressed(Mouse::Left) && !draggingItem
-				&& !player.getEquippedWand()->isNull())
+			if (wandFrame.getGlobalBounds().contains(worldPos) && !Mouse::isButtonPressed(Mouse::Left) && !draggingItem && !player.getEquippedWand()->isNull())
 			{
 				window.setView(hudView);
 				itemTooltipName.setString(player.getEquippedWand()->getName());
@@ -384,11 +390,8 @@ void Engine::draw()
 				window.draw(itemTooltipName);
 				window.draw(statTooltipText);
 			}
-			if (neckFrame.getGlobalBounds().contains(worldPos) && !Mouse::isButtonPressed(Mouse::Left) && !draggingItem
-				&& !player.getEquippedNeckArmour()->isNull())
+			if (neckFrame.getGlobalBounds().contains(worldPos) && !Mouse::isButtonPressed(Mouse::Left) && !draggingItem && !player.getEquippedNeckArmour()->isNull())
 			{
-				
-
 				window.setView(hudView);
 				itemTooltipName.setString(player.getEquippedNeckArmour()->getName());
 				itemTooltipBackground.setPosition(equippedNeckArmourIcon.getPosition().x + 35, equippedNeckArmourIcon.getPosition().y - 40);

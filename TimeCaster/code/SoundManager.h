@@ -29,9 +29,6 @@ private:
 
 	SoundBuffer soundtrack4Buffer;
 	Sound soundtrack4;
-
-	SoundBuffer soundtrack5Buffer;
-	Sound soundtrack5;
 	
 	/***********
 	Other sounds

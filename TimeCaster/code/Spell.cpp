@@ -1,16 +1,15 @@
-#include "Bullet.h"
+#include "Spell.h"
 #include "Decal.h"
 
 // The constructor
-Bullet::Bullet()
+Spell::Spell()
 {
-	m_BulletShape.setSize(sf::Vector2f(2, 2));
+	m_SpellShape.setSize(sf::Vector2f(2, 2));
 }
 
-void Bullet::shoot(float startX, float startY,
-	float targetX, float targetY)
+void Spell::shoot(float startX, float startY, float targetX, float targetY)
 {
-	// Keep track of the bullet
+	// Keep track of the spell
 	m_InFlight = true;
 	m_Position.x = startX;
 	m_Position.y = startY;
@@ -25,21 +24,21 @@ void Bullet::shoot(float startX, float startY,
 	}
 
 	// Calculate the ratio between x and t
-	float ratioXY = m_BulletSpeed / (1 + gradient);
+	float ratioXY = m_SpellSpeed / (1 + gradient);
 
 	// Set the "speed" horizontally and vertically
-	m_BulletDistanceY = ratioXY;
-	m_BulletDistanceX = ratioXY * gradient;
+	m_SpellDistanceY = ratioXY;
+	m_SpellDistanceX = ratioXY * gradient;
 	
 	// Point the bullet in the right direction
 	if (targetX < startX)
 	{
-		m_BulletDistanceX *= -1;
+		m_SpellDistanceX *= -1;
 	}
 
 	if (targetY < startY)
 	{
-		m_BulletDistanceY *= -1;
+		m_SpellDistanceY *= -1;
 	}
 
 	// Finally, assign the results to the
@@ -54,42 +53,42 @@ void Bullet::shoot(float startX, float startY,
 	m_MinY = startY - range;
 	m_MaxY = startY + range;
 	
-	// Position the bullet ready to be drawn
-	m_BulletShape.setPosition(m_Position);
+	// Position the spell ready to be drawn
+	m_SpellShape.setPosition(m_Position);
 
 }
 
-void Bullet::stop()
+void Spell::stop()
 {
 	m_InFlight = false;
 }
 
-bool Bullet::isInFlight()
+bool Spell::isInFlight()
 {
 	return m_InFlight;
 }
 
-FloatRect Bullet::getPosition()
+FloatRect Spell::getPosition()
 {
-	return m_BulletShape.getGlobalBounds();
+	return m_SpellShape.getGlobalBounds();
 }
 
-RectangleShape Bullet::getShape()
+RectangleShape Spell::getShape()
 {
-	return m_BulletShape;
+	return m_SpellShape;
 }
 
 
-void Bullet::update(float elapsedTime)
+void Spell::update(float elapsedTime)
 {
-	// Update the bullet position variables
-	m_Position.x += m_BulletDistanceX * elapsedTime;
-	m_Position.y += m_BulletDistanceY * elapsedTime;
+	// Update the spell position variables
+	m_Position.x += m_SpellDistanceX * elapsedTime;
+	m_Position.y += m_SpellDistanceY * elapsedTime;
 
-	// Move the bullet
-	m_BulletShape.setPosition(m_Position);
+	// Move the spell
+	m_SpellShape.setPosition(m_Position);
 
-	// Has the bullet gone out of range?
+	// Has the spell gone out of range?
 	if (m_Position.x < m_MinX || m_Position.x > m_MaxX ||
 		m_Position.y < m_MinY || m_Position.y > m_MaxY)
 	{
@@ -98,12 +97,12 @@ void Bullet::update(float elapsedTime)
 
 }
 
-float Bullet::bGetX()
+float Spell::bGetX()
 {
 	return m_Position.x;
 }
 
-float Bullet::bGetY()
+float Spell::bGetY()
 {
 	return m_Position.y;
 }

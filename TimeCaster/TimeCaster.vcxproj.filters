@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="code\Bullet.h">
+    <ClInclude Include="code\Spell.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="code\Chunk.h">
@@ -77,7 +77,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="code\Bullet.cpp">
+    <ClCompile Include="code\Spell.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="code\Chunk.cpp">

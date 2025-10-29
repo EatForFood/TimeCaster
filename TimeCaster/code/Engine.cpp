@@ -417,6 +417,7 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	textureWandFrame = TextureHolder::GetTexture("graphics/UI/ringFrame.png");
 	textureItems = TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png");
 	tooltipBackground = TextureHolder::GetTexture("graphics/UI/tooltipBackground.png");
+	eKeyTexture = TextureHolder::GetTexture("graphics/UI/eKey.png");
 
 	// Equipped item icons
 	equippedSwordIcon.setTexture(&textureItems);
@@ -563,8 +564,8 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	backgroundInvStamBar.setPosition(viewCentre.x - 60, 825);
 	
 	// Display invStamBar text
-	invStamBarText.setString("0 / 0");        // Set the initial text
-	invStamBarText.setFont(font);             // Assign the font
+	invStamBarText.setString("0 / 0"); // Set the initial text
+	invStamBarText.setFont(font); // Assign the font
 	invStamBarText.setCharacterSize(fontSize - 5); // Slightly smaller text size
 	invStamBarText.setFillColor(Color::White);
 
@@ -576,8 +577,8 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	backgroundInvManaBar.setPosition(viewCentre.x + 190, 825);
 
 	// Display invManaBar text
-	invManaBarText.setString("0 / 0");        // Set the initial text
-	invManaBarText.setFont(font);             // Assign the font
+	invManaBarText.setString("0 / 0"); // Set the initial text
+	invManaBarText.setFont(font); // Assign the font
 	invManaBarText.setCharacterSize(fontSize - 5); // Slightly smaller text size
 	invManaBarText.setFillColor(Color::White);
 
@@ -586,6 +587,9 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 
 	// Populate soundtrack
 	sound.populateSoundtrack();
+
+	eKey.setTexture(&eKeyTexture);
+	eKey.setSize(Vector2f(50, 50));
 }
 
 void Engine::initializeInventory()
@@ -610,7 +614,6 @@ void Engine::initializeInventory()
 	}
 	startX = viewCentre.x - 300;
 	startY = 650;
-
 
 	// Position icons for items that actually exist
 	for (int i = 0; i < storedItems.size(); i++) {

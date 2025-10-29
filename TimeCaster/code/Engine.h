@@ -203,6 +203,7 @@ private:
 	Texture textureWandFrame;
 	Texture textureItems;
 	Texture tooltipBackground;
+	Texture eKeyTexture;
 
 	RectangleShape playerFrame;
 	RectangleShape equippedSwordIcon;
@@ -253,6 +254,8 @@ private:
 	RectangleShape invManaBar;
 	RectangleShape backgroundInvManaBar;
 	Text invManaBarText;
+
+	RectangleShape eKey;
 
 	// When did we last update the HUD?
 	int framesSinceLastHUDUpdate = 0;
