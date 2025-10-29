@@ -21,6 +21,8 @@ Equipment::Equipment(String type, sf::Vector2f position) : Item(type, position) 
 		m_Armour = 2;
 		m_ItemType = ChestArmour;
 
+		
+
 		m_Sprite.setOrigin(25, 25);
 	}
 	else if (m_Name == "Leather_Cap")
@@ -130,6 +132,7 @@ Equipment::Equipment(String type, sf::Vector2f position) : Item(type, position) 
 		// also neck armour is probably gonna be the most valuable slot, it could be an interesting choice to make whether to unequip it or not
 		m_Armour = 0;
 		m_ItemType = NeckArmour;
+		
 		m_Sprite.setOrigin(25, 25);
 	}
 	else
