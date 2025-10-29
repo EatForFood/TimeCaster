@@ -136,7 +136,9 @@ public:
 
 	bool equipArmour(string armourNameToEquip);
 
-	void heal();
+	void healHealth(int healthToHeal);
+	void healMana(int manaToRestore);
+	void healStamina(int staminaToRestore);
 
 private:
 

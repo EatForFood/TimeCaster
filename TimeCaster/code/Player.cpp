@@ -935,10 +935,23 @@ void Player::AttackAnimation(string attackType)
 	updateTextRect();
 }
 
-void Player::heal() {
-	m_Health += 50;
+void Player::healHealth(int healthToRestore) {
+	m_Health += healthToRestore;
 	if (m_Health > m_MaxHealth) {
 		m_Health = m_MaxHealth;
 	}
 }
 
+void Player::healMana(int manaToRestore) {
+	m_Mana += manaToRestore;
+	if (m_Mana > m_MaxMana) {
+		m_Mana = m_MaxMana;
+	}
+}
+
+void Player::healStamina(int staminaToRestore) {
+	m_Stamina += staminaToRestore;
+	if (m_Stamina > m_MaxStamina) {
+		m_Stamina = m_MaxStamina;
+	}
+}

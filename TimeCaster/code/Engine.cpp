@@ -1421,6 +1421,28 @@ void Engine::run()
 						&& clickedItem.getType() == Item::ShoeArmour)
 					{	if (player.equipArmour(clickedItem.getName())) equippedShoeArmourIcon.setTextureRect(clickedItem.getTextureRect());}
 
+					if (clickedItem.getIcon().getGlobalBounds().intersects(playerInFrame.getGlobalBounds())
+						&& clickedItem.getType() == Item::Consumable)
+					{
+						cout << "Item used!";
+						if (clickedItem.getName() == "Health_Potion")
+						{
+							player.healHealth(50); // heal 50 health
+						}
+						else if (clickedItem.getName() == "Mana_Potion")
+						{
+							player.healMana(50); // restore 50 mana
+						}
+						else if (clickedItem.getName() == "Stamina_Potion")
+						{
+							player.healStamina(50); // restore 50 stamina
+						}
+						clickedItem = Item("null", Vector2f(0, 0));
+						placed = true;
+
+						tutorialStage = 2;
+					}
+
 					// If no slot found, return to original position
 					if (!placed)
 					{
@@ -1434,15 +1456,7 @@ void Engine::run()
 					draggingItem = false;
 				}
 
-				for (int i = 0; i < storedItems.size(); i++)
-				{
-					if (storedItems[i].getName() == "Health_Potion" && !storedItems[i].isNull() && storedItems[i].getIcon().getGlobalBounds().intersects(playerInFrame.getGlobalBounds()) && Mouse::isButtonPressed(Mouse::Left))
-					{
-						player.heal();
-						storedItems[i] = Item("null", Vector2f(0, 0));
-						tutorialStage = 2;
-					}
-				}
+			
 			}
 
 			if (currentDecal > 248)
