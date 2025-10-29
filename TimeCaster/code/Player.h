@@ -136,6 +136,8 @@ public:
 
 	bool equipArmour(string armourNameToEquip);
 
+	void heal();
+
 private:
 
 	const float START_SPEED = 100;
