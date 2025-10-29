@@ -156,8 +156,6 @@ void Player::update(float elapsedTime, Vector2i mousePosition, vector<NavBox> na
 
 	if (m_IsAttacking)
 	{
-		m_AttackTimer += m_TimeElapsed;
-		moveTextureRect();
 		moveTextureRect();
 
 		if (getAniCounter() == 0)
@@ -175,6 +173,10 @@ void Player::update(float elapsedTime, Vector2i mousePosition, vector<NavBox> na
 			equipArmour(m_EquippedArmour[3].getName());
 
 			// reset armour sprites if needed
+		}
+		else
+		{
+			moveTextureRect();
 		}
 	}
 
