@@ -60,7 +60,7 @@ Item::Item(String type, Vector2f position)
 		m_Icon.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
 		m_Icon.setScale(2.3125, 2.3125);
 		m_Value = 10;
-	
+		m_RestoreValue = 50;
 		m_ItemType = Consumable;
 		m_Sprite.setOrigin(25, 25);
 	}
@@ -75,7 +75,7 @@ Item::Item(String type, Vector2f position)
 		m_Icon.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
 		m_Icon.setScale(2.3125, 2.3125);
 		m_Value = 15;
-
+		m_RestoreValue = 50;
 		m_ItemType = Consumable;
 		m_Sprite.setOrigin(25, 25);
 	}
@@ -90,8 +90,8 @@ Item::Item(String type, Vector2f position)
 		m_Icon.setScale(2.3125, 2.3125);
 		m_Value = 15;
 		m_Armour = 0;
-		m_Sentimental = true;
-		m_ItemType = NeckArmour;
+		m_RestoreValue = 50;
+		m_ItemType = Consumable;
 
 		m_Sprite.setOrigin(25, 25);
 	}
@@ -215,4 +215,9 @@ int Item::getDamage()
 int Item::getArmour()
 {
 	return m_Armour;
+}
+
+int Item::getRestoreValue()
+{
+	return m_RestoreValue;
 }
