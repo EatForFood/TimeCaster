@@ -16,6 +16,9 @@
 
 class Engine
 {
+protected: 
+	string cleanItemName(string itemName);
+
 private:
 	// The games difficulty will always be in one of these states
 	enum class Difficulty { Easy, Medium, Hard };
@@ -62,6 +65,9 @@ private:
 	// Colour filter 
 	RectangleShape filter;
 
+	Color defaultFilter = Color(199, 56, 20, 40);
+	Color skeletonRuinsFilter = Color(199, 56, 30, 60);
+
 	// The boundaries of the arena
 	IntRect arena;
 
@@ -70,6 +76,7 @@ private:
 
 	Texture textureBackground;
 	Texture textureBackground2;
+	Texture textureBackground3;
 
 	World world; // world object to manage chunks
 
@@ -328,4 +335,6 @@ public:
 	Chunk* getCurrentChunk(float x, float y);
 
 	void populateChunkVector();
+	
+
 };

@@ -16,6 +16,15 @@ void Engine::draw()
 		// And draw everything related to it
 		window.setView(mainView);
 
+		if (world.getChunk(player.getChunk())->getChunkType() == "skeletonRuins")
+		{
+			filter.setFillColor(skeletonRuinsFilter);
+		}
+		else
+		{
+			filter.setFillColor(defaultFilter);
+		}
+
 		// Draw the background
 		if (!player.getInCell())
 		{
@@ -26,6 +35,10 @@ void Engine::draw()
 					if (currentChunk && currentChunk->getChunkType() == "goblinVillage")
 					{
 						window.draw(world.getBackground(i), &textureBackground2);
+					}
+					else if (currentChunk && currentChunk->getChunkType() == "skeletonRuins")
+					{
+						window.draw(world.getBackground(i), &textureBackground3);
 					}
 					else
 					{
@@ -119,6 +132,10 @@ void Engine::draw()
 					{
 						window.draw(world.getForground(i), &textureBackground2);
 					}
+					else if (currentChunk && currentChunk->getChunkType() == "skeletonRuins")
+					{
+						window.draw(world.getForground(i), &textureBackground3);
+					}
 					else
 					{
 						window.draw(world.getForground(i), &textureBackground);
@@ -149,16 +166,11 @@ void Engine::draw()
 			spriteCursor.setTexture(textureCursorOpen);
 		}
 
-		/*
-		if (player.getPosition().x + 4 < something && player.getPosition().x - 4 > something && player.getPosition().y + 4 < something && player.getPosition().y - 4 > something) {
-			window.draw(eKey);
-		}
-		*/
-
 		// Switch to the HUD view
 		window.setView(hudView);
 
 		if (drawInventory) {
+
 			window.draw(filter);
 			window.draw(playerFrame);
 			window.draw(playerInFrame);
@@ -209,6 +221,14 @@ void Engine::draw()
 				{
 					Item::ItemType type = storedItems[i].getType();
 
+					string itemName = storedItems[i].getName();
+
+					// Remove all underscores from the name for display purposes
+				
+
+					
+					
+
 					window.setView(hudView);
 					itemTooltipBackground.setPosition(storedItems[i].getIcon().getPosition().x + 35, storedItems[i].getIcon().getPosition().y - 40);
 					window.draw(itemTooltipBackground);
@@ -217,34 +237,22 @@ void Engine::draw()
 					valueTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 55);
 					window.draw(valueTooltipText);
 
-					itemTooltipName.setString(storedItems[i].getName());
-					window.draw(itemTooltipName);
+					if (type == Item::ItemType::MeleeWeapon || type == Item::ItemType::MagicWeapon) {
+						
+						itemTooltipName.setString(cleanItemName(itemName));
+						itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
 
-					if (type == Item::ItemType::MeleeWeapon || type == Item::ItemType::MagicWeapon) 
-					{
 						statTooltipText.setString("Damage: " + to_string(storedItems[i].getDamage()));
 
-						if (itemTooltipName.getLocalBounds().width > statTooltipText.getLocalBounds().width && itemTooltipName.getLocalBounds().width > valueTooltipText.getGlobalBounds().width)
-						{
-							itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
-						}
-						else if (statTooltipText.getLocalBounds().width > itemTooltipName.getLocalBounds().width && statTooltipText.getLocalBounds().width > valueTooltipText.getGlobalBounds().width)
-						{
-							itemTooltipBackground.setSize(Vector2f(statTooltipText.getLocalBounds().width + 55, 100));
-						}
-						else if (valueTooltipText.getGlobalBounds().width > itemTooltipName.getLocalBounds().width && valueTooltipText.getGlobalBounds().width > statTooltipText.getLocalBounds().width)
-						{
-							itemTooltipBackground.setSize(Vector2f(valueTooltipText.getGlobalBounds().width + 55, 100));
-						}
-
-						itemTooltipName.setOrigin(itemTooltipName.getGlobalBounds().width / 2, itemTooltipName.getGlobalBounds().height / 2);
-						itemTooltipName.setPosition((itemTooltipBackground.getPosition().x + itemTooltipBackground.getGlobalBounds().width) / 2, itemTooltipBackground.getPosition().y + 15);
+						itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 15);
 						statTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 37);
 
+						window.draw(itemTooltipName);
 						window.draw(statTooltipText);
 					}
 					else if (type == Item::ItemType::HeadArmour || type == Item::ItemType::ChestArmour || type == Item::ItemType::TrouserArmour || 
 						type == Item::ItemType::ShoeArmour || type == Item::ItemType::NeckArmour) {
+						itemTooltipName.setString(cleanItemName(itemName));
 						itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
 
 						statTooltipText.setString("Armour: " + to_string(storedItems[i].getArmour()));
@@ -252,20 +260,32 @@ void Engine::draw()
 						itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 15);
 						statTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 37);
 
+						window.draw(itemTooltipName);
 						window.draw(statTooltipText);
 					}
 					else if (type == Item::ItemType::Consumable) {
+						
+						itemTooltipName.setString(cleanItemName(itemName));
 						itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
 
 						itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 15);
+				
+
+						window.draw(itemTooltipName);
+
 					}
 				}
+				
+
 			}
-			if (weaponFrame.getGlobalBounds().contains(worldPos) && !Mouse::isButtonPressed(Mouse::Left) && !draggingItem && !player.getEquippedSword()->isNull())
+			if (weaponFrame.getGlobalBounds().contains(worldPos) && !Mouse::isButtonPressed(Mouse::Left) && !draggingItem && 
+				!player.getEquippedSword()->isNull())
 			{
 				window.setView(hudView);
 
-				itemTooltipName.setString(player.getEquippedSword()->getName());
+				string itemName = player.getEquippedSword()->getName();
+
+				itemTooltipName.setString(cleanItemName(itemName));
 
 				itemTooltipBackground.setPosition(equippedSwordIcon.getPosition().x + 35, equippedSwordIcon.getPosition().y - 40);
 				itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
@@ -283,10 +303,13 @@ void Engine::draw()
 				window.draw(itemTooltipName);
 				window.draw(statTooltipText);
 			}
-			if (wandFrame.getGlobalBounds().contains(worldPos) && !Mouse::isButtonPressed(Mouse::Left) && !draggingItem && !player.getEquippedWand()->isNull())
+			if (wandFrame.getGlobalBounds().contains(worldPos) && !Mouse::isButtonPressed(Mouse::Left) && !draggingItem
+				&& !player.getEquippedWand()->isNull())
 			{
 				window.setView(hudView);
-				itemTooltipName.setString(player.getEquippedWand()->getName());
+				string itemName = player.getEquippedWand()->getName();
+
+				itemTooltipName.setString(cleanItemName(itemName));
 
 				itemTooltipBackground.setPosition(equippedWandIcon.getPosition().x + 35, equippedWandIcon.getPosition().y - 40);
 				itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
@@ -309,7 +332,9 @@ void Engine::draw()
 			{
 				window.setView(hudView);
 
-				itemTooltipName.setString(player.getEquippedHeadArmour()->getName());
+				string itemName = player.getEquippedHeadArmour()->getName();
+
+				itemTooltipName.setString(cleanItemName(itemName));
 
 				itemTooltipBackground.setPosition(equippedHeadArmourIcon.getPosition().x + 35, equippedHeadArmourIcon.getPosition().y - 40);
 				itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
@@ -331,7 +356,9 @@ void Engine::draw()
 				&& !player.getEquippedChestArmour()->isNull())
 			{
 				window.setView(hudView);
-				itemTooltipName.setString(player.getEquippedChestArmour()->getName());
+				string itemName = player.getEquippedChestArmour()->getName();
+
+				itemTooltipName.setString(cleanItemName(itemName));
 				itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
 				itemTooltipBackground.setPosition(equippedChestArmourIcon.getPosition().x + 35, equippedChestArmourIcon.getPosition().y - 40);
 				window.draw(itemTooltipBackground);
@@ -352,7 +379,9 @@ void Engine::draw()
 				&& !player.getEquippedTrouserArmour()->isNull())
 			{
 				window.setView(hudView);
-				itemTooltipName.setString(player.getEquippedTrouserArmour()->getName());
+				string itemName = player.getEquippedTrouserArmour()->getName();
+
+				itemTooltipName.setString(cleanItemName(itemName));
 				itemTooltipBackground.setPosition(equippedTrousersArmourIcon.getPosition().x + 35, equippedTrousersArmourIcon.getPosition().y - 40);
 				itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
 				
@@ -373,7 +402,9 @@ void Engine::draw()
 				&& !player.getEquippedShoeArmour()->isNull())
 			{
 				window.setView(hudView);
-				itemTooltipName.setString(player.getEquippedShoeArmour()->getName());
+				string itemName = player.getEquippedShoeArmour()->getName();
+
+				itemTooltipName.setString(cleanItemName(itemName));
 				itemTooltipBackground.setPosition(equippedShoeArmourIcon.getPosition().x + 35, equippedShoeArmourIcon.getPosition().y - 40);
 				itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
 				
@@ -390,10 +421,15 @@ void Engine::draw()
 				window.draw(itemTooltipName);
 				window.draw(statTooltipText);
 			}
-			if (neckFrame.getGlobalBounds().contains(worldPos) && !Mouse::isButtonPressed(Mouse::Left) && !draggingItem && !player.getEquippedNeckArmour()->isNull())
+			if (neckFrame.getGlobalBounds().contains(worldPos) && !Mouse::isButtonPressed(Mouse::Left) && !draggingItem
+				&& !player.getEquippedNeckArmour()->isNull())
 			{
+				
+
 				window.setView(hudView);
-				itemTooltipName.setString(player.getEquippedNeckArmour()->getName());
+				string itemName = player.getEquippedNeckArmour()->getName();
+
+				itemTooltipName.setString(cleanItemName(itemName));
 				itemTooltipBackground.setPosition(equippedNeckArmourIcon.getPosition().x + 35, equippedNeckArmourIcon.getPosition().y - 40);
 				itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
 				
@@ -477,4 +513,16 @@ void Engine::draw()
 	}
 
 	window.display();
+}
+
+string Engine::cleanItemName(string itemName)
+{
+	for (int i = 0; i < itemName.length(); i++)
+	{
+		if (itemName[i] == '_')
+		{
+			itemName.replace(i, 1, " ");
+		}
+	}
+	return itemName;
 }

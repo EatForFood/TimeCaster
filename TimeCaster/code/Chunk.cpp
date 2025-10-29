@@ -71,14 +71,6 @@ Chunk::Chunk(String type, Vector2f chunk, bool load)
 					}
 				}
 			}
-
-			/*
-			placeHouse4(13, 11);
-			placeHouse3(23, 10);
-			placeHouse2(13, 23);
-			placeHouse1(23, 26);
-			placeCastle(10, 35);
-			*/
 		}
 	}
 	else
@@ -353,6 +345,96 @@ Chunk::Chunk(String type, Vector2f chunk, bool load)
 
 				}
 			}
+
+			createBurntForest();
+		}
+
+		if (m_Type == "skeletonRuins") {
+
+			for (int x = 0; x < 50; x++)
+			{
+				for (int y = 0; y < 50; y++)
+				{
+					if (x > 9 && x < 35 && y > 4 && y < 35) // create mud inside castle
+					{
+						int chance = rand() % 5;
+
+						if (chance <= 2)
+						{
+							placeTile(x, y, 7, 0, false, true);
+						}
+						else
+						{
+							placeTile(x, y, 8, 0, false, true);
+						}
+					}
+					else if (x > 7 && x < 38 && y > 2 && y < 37) // create grass that trees cant spawn on 
+					{
+
+						int chance = rand() % 5;
+
+						if (chance <= 2)
+						{
+							placeTile(x, y, 4, 2, false, true);
+						}
+						else
+						{
+							placeTile(x, y, 5, 2, false, true);
+						}
+					}
+					else
+					{
+						int chance = rand() % 2500; // use random grass tiles to give ground some texture
+
+						if (chance <= 1200)
+						{
+							placeTile(x, y, 0, 0, false, true);
+						}
+						else if (chance <= 2400)
+						{
+							placeTile(x, y, 1, 0, false, true);
+						}
+						else if (chance <= 2500)
+						{
+							placeTile(x, y, 6, 0, false, true);
+						}
+					}
+				}
+			}
+
+			for (int x = 13; x < 29; x += 6) // randomly spawn houses inside ruins
+			{
+				for (int y = 11; y < 32; y += 6)
+				{
+					int chance = rand() % 8;
+
+					if (chance == 0)
+					{
+						placeHouse2(x, y);
+					}
+					else if (chance == 1)
+					{
+						placeHouse3(x, y);
+					}
+					else if (chance == 2)
+					{
+						placeHouse4(x, y);
+					}
+				}
+			}
+
+			// Forground empty
+			for (int x = 0; x < 50; x++)
+			{
+				for (int y = 0; y < 50; y++)
+				{
+
+					placeTile(x, y, 6, 2, true, true);
+
+				}
+			}
+
+			placeCastle(10, 35);
 
 			createBurntForest();
 		}
@@ -933,29 +1015,32 @@ void Chunk::createBurntForest() // create a forest from random tree entities
 	{
 		for (int j = 0; j < CHUNK_SIZE - 2; j++)
 		{
-			int chance = rand() % 2500;
+			if (m_TileType[i][j] == Vector2i(0, 0) || m_TileType[i][j] == Vector2i(1, 0)) // if ground is grass place trees + stuff
+			{
+				int chance = rand() % 2500;
 
-			if (chance <= 200) // 10% chance to spawn tree
-			{
-				int type = 6 + (gen() % 2);
-				string entity = "tree" + to_string(type);
-				CreateEntity(entity, i, j);
-			}
-			else if (chance <= 400) // 10% chance to spawn bush
-			{
-				int type = 6;
-				string entity = "bush" + to_string(type);
-				CreateEntity(entity, i, j);
-			}
-			else if (chance <= 410) // 10% chance to spawn log
-			{
-				int type = 1 + (gen() % 2);
-				string entity = "log" + to_string(type);
-				CreateEntity(entity, i, j);
-			}
-			else if (chance == 500) // 10% chance to spawn big tree
-			{
-				CreateEntity("tree8", i, j);
+				if (chance <= 200) // 10% chance to spawn tree
+				{
+					int type = 6 + (gen() % 2);
+					string entity = "tree" + to_string(type);
+					CreateEntity(entity, i, j);
+				}
+				else if (chance <= 400) // 10% chance to spawn bush
+				{
+					int type = 6;
+					string entity = "bush" + to_string(type);
+					CreateEntity(entity, i, j);
+				}
+				else if (chance <= 410) // 10% chance to spawn log
+				{
+					int type = 1 + (gen() % 2);
+					string entity = "log" + to_string(type);
+					CreateEntity(entity, i, j);
+				}
+				else if (chance == 500) // 10% chance to spawn big tree
+				{
+					CreateEntity("tree8", i, j);
+				}
 			}
 		}
 	}
@@ -1071,7 +1156,7 @@ bool Chunk::isTileBlocked(int tileX, int tileY)
 	for (auto& nav : navBoxes)
 	{
 		ConvexShape shape = nav.getShape();
-		if (collision.pointInShape(pos, shape))
+		if (collision.pointInShape(pos, shape) || m_TileType[tileX][tileY] == Vector2i(0, 13))
 			return true;
 	}
 	return false;
@@ -1089,7 +1174,7 @@ void Chunk::markNavBoxAsBlocked(const NavBox& nav)
 			float iy = (x + y) * (TILE_SIZE / 4) + TILE_SIZE / 2;
 			Vector2f pos(ix, iy);
 
-			if (bounds.contains(pos))
+			if (collision.pointInShape(pos, nav.getShape()))
 				blockedTiles[x][y] = true;
 		}
 	}

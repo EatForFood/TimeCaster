@@ -7,7 +7,7 @@ using namespace sf;
 Equipment::Equipment(String type, sf::Vector2f position) : Item(type, position) // call base constructor
 {
 	// Associate the texture with the sprite
-	if (m_Name == "Family Robe")
+	if (m_Name == "Family_Robe")
 	{
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
 		m_Sprite.setTextureRect(IntRect(96, 674, 32, 32));
@@ -21,9 +21,11 @@ Equipment::Equipment(String type, sf::Vector2f position) : Item(type, position) 
 		m_Armour = 2;
 		m_ItemType = ChestArmour;
 
+		
+
 		m_Sprite.setOrigin(25, 25);
 	}
-	else if (m_Name == "Leather Cap")
+	else if (m_Name == "Leather_Cap")
 	{
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
 		m_Sprite.setTextureRect(IntRect(1058, 1408, 32, 32));
@@ -39,7 +41,7 @@ Equipment::Equipment(String type, sf::Vector2f position) : Item(type, position) 
 
 		m_Sprite.setOrigin(25, 25);
 	}
-	else if (m_Name == "Family Hood")
+	else if (m_Name == "Family_Hood")
 	{
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
 		m_Sprite.setTextureRect(IntRect(1090, 1408, 32, 32));
@@ -56,7 +58,7 @@ Equipment::Equipment(String type, sf::Vector2f position) : Item(type, position) 
 		m_Sprite.setOrigin(25, 25);
 
 	}
-	else if (m_Name == "Leather Chestplate")
+	else if (m_Name == "Leather_Chestplate")
 	{
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
 		m_Sprite.setTextureRect(IntRect(290, 672, 32, 32));
@@ -72,7 +74,7 @@ Equipment::Equipment(String type, sf::Vector2f position) : Item(type, position) 
 
 		m_Sprite.setOrigin(25, 25);
 	}
-	else if (m_Name == "Basic Shoes")
+	else if (m_Name == "Basic_Shoes")
 	{
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
 		m_Sprite.setTextureRect(IntRect(1920, 640, 32, 32));
@@ -88,7 +90,7 @@ Equipment::Equipment(String type, sf::Vector2f position) : Item(type, position) 
 
 		m_Sprite.setOrigin(25, 25);
 	}
-	else if (m_Name == "Robe Leggings")
+	else if (m_Name == "Robe_Leggings")
 	{
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
 		m_Sprite.setTextureRect(IntRect(1608, 1326, 16, 16)); // not the best trouser icon, probably change later, there aren't many on the sheet
@@ -102,7 +104,7 @@ Equipment::Equipment(String type, sf::Vector2f position) : Item(type, position) 
 		m_ItemType = TrouserArmour;
 		m_Sprite.setOrigin(25, 25);
 	}
-	else if (m_Name == "Amulet of Shielding")
+	else if (m_Name == "Amulet_of_Shielding")
 	{
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
 		m_Sprite.setTextureRect(IntRect(256, 640, 32, 32));
@@ -116,7 +118,7 @@ Equipment::Equipment(String type, sf::Vector2f position) : Item(type, position) 
 		m_ItemType = NeckArmour;
 		m_Sprite.setOrigin(25, 25);
 	}
-	else if (m_Name == "Family Locket")
+	else if (m_Name == "Family_Locket")
 	{
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
 		m_Sprite.setTextureRect(IntRect(672, 640, 32, 32));
@@ -130,6 +132,7 @@ Equipment::Equipment(String type, sf::Vector2f position) : Item(type, position) 
 		// also neck armour is probably gonna be the most valuable slot, it could be an interesting choice to make whether to unequip it or not
 		m_Armour = 0;
 		m_ItemType = NeckArmour;
+		
 		m_Sprite.setOrigin(25, 25);
 	}
 	else
