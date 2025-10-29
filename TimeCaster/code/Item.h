@@ -44,6 +44,7 @@ public:
 
 	string getName();
 
+	int getRestoreValue();
 	// Get the goodness from the pickup
 	int gotIt();
 
@@ -51,6 +52,7 @@ protected:
 
 	int m_Value;
 	float m_Weight; 
+	int m_RestoreValue;
 	int SECONDS_TO_DESPAWN = 120;
 	String m_Name;
 

@@ -241,6 +241,7 @@ private:
 	Texture textureItems;
 	Texture tooltipBackground;
 	Texture eKeyTexture;
+	Texture inventoryBackgroundTexture;
 
 	RectangleShape playerFrame;
 	RectangleShape equippedSwordIcon;
@@ -258,6 +259,8 @@ private:
 	RectangleShape neckFrame;
 	RectangleShape weaponFrame;
 	RectangleShape wandFrame;
+	RectangleShape inventoryBackground;
+	RectangleShape colouredInventoryBackground;
 
 	// Item tooltip elements
 	RectangleShape itemTooltipBackground;
@@ -350,5 +353,4 @@ private:
 	Spell spells[100];
 
 	int tutorialStage = 0;
-
 };
