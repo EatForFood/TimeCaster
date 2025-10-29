@@ -36,17 +36,7 @@ Weapon::Weapon(String type, Vector2f position)
 
 		m_ItemType = MeleeWeapon;
 
-		// Remove all underscores from the name for display purposes
-		/*
 
-		for (int i = m_Name.; i < m_Name.getSize(); i++)
-		{
-			if (m_Name[i] == '_')
-			{
-				m_Name.erase(i, 1);
-			}
-		}
-		*/
 
 	}
 	else if (m_Name == "Wooden_Wand")

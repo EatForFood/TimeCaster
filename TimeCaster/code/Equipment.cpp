@@ -104,7 +104,7 @@ Equipment::Equipment(String type, sf::Vector2f position) : Item(type, position) 
 		m_ItemType = TrouserArmour;
 		m_Sprite.setOrigin(25, 25);
 	}
-	else if (m_Name == "Shield_Amulet")
+	else if (m_Name == "Amulet_of_Shielding")
 	{
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
 		m_Sprite.setTextureRect(IntRect(256, 640, 32, 32));

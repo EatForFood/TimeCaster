@@ -164,7 +164,7 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	storedItems[7] = Equipment("Leather_Chestplate", Vector2f(0, 0));
 	storedItems[8] = Equipment("Basic_Shoes", Vector2f(0, 0));
 	storedItems[9] = Equipment("Robe_Leggings", Vector2f(0, 0));
-	storedItems[10] = Equipment("Shield_Amulet", Vector2f(0, 0));
+	storedItems[10] = Equipment("Amulet_of_Shielding", Vector2f(0, 0));
 	storedItems[11] = Equipment("Family_Locket", Vector2f(0, 0));
 	storedItems[12] = Item("Golden_Wand", Vector2f(0, 0));
 

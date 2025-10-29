@@ -221,6 +221,14 @@ void Engine::draw()
 				{
 					Item::ItemType type = storedItems[i].getType();
 
+					string itemName = storedItems[i].getName();
+
+					// Remove all underscores from the name for display purposes
+				
+
+					
+					
+
 					window.setView(hudView);
 					itemTooltipBackground.setPosition(storedItems[i].getIcon().getPosition().x + 35, storedItems[i].getIcon().getPosition().y - 40);
 					window.draw(itemTooltipBackground);
@@ -231,7 +239,7 @@ void Engine::draw()
 
 					if (type == Item::ItemType::MeleeWeapon || type == Item::ItemType::MagicWeapon) {
 						
-						itemTooltipName.setString(storedItems[i].getName());
+						itemTooltipName.setString(cleanItemName(itemName));
 						itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
 
 						statTooltipText.setString("Damage: " + to_string(storedItems[i].getDamage()));
@@ -244,7 +252,7 @@ void Engine::draw()
 					}
 					else if (type == Item::ItemType::HeadArmour || type == Item::ItemType::ChestArmour || type == Item::ItemType::TrouserArmour || 
 						type == Item::ItemType::ShoeArmour || type == Item::ItemType::NeckArmour) {
-						itemTooltipName.setString(storedItems[i].getName());
+						itemTooltipName.setString(cleanItemName(itemName));
 						itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
 
 						statTooltipText.setString("Armour: " + to_string(storedItems[i].getArmour()));
@@ -257,7 +265,7 @@ void Engine::draw()
 					}
 					else if (type == Item::ItemType::Consumable) {
 						
-						itemTooltipName.setString(storedItems[i].getName());
+						itemTooltipName.setString(cleanItemName(itemName));
 						itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
 
 						itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 15);
@@ -275,7 +283,9 @@ void Engine::draw()
 			{
 				window.setView(hudView);
 
-				itemTooltipName.setString(player.getEquippedSword()->getName());
+				string itemName = player.getEquippedSword()->getName();
+
+				itemTooltipName.setString(cleanItemName(itemName));
 
 				itemTooltipBackground.setPosition(equippedSwordIcon.getPosition().x + 35, equippedSwordIcon.getPosition().y - 40);
 				itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
@@ -297,7 +307,9 @@ void Engine::draw()
 				&& !player.getEquippedWand()->isNull())
 			{
 				window.setView(hudView);
-				itemTooltipName.setString(player.getEquippedWand()->getName());
+				string itemName = player.getEquippedWand()->getName();
+
+				itemTooltipName.setString(cleanItemName(itemName));
 
 				itemTooltipBackground.setPosition(equippedWandIcon.getPosition().x + 35, equippedWandIcon.getPosition().y - 40);
 				itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
@@ -320,7 +332,9 @@ void Engine::draw()
 			{
 				window.setView(hudView);
 
-				itemTooltipName.setString(player.getEquippedHeadArmour()->getName());
+				string itemName = player.getEquippedHeadArmour()->getName();
+
+				itemTooltipName.setString(cleanItemName(itemName));
 
 				itemTooltipBackground.setPosition(equippedHeadArmourIcon.getPosition().x + 35, equippedHeadArmourIcon.getPosition().y - 40);
 				itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
@@ -342,7 +356,9 @@ void Engine::draw()
 				&& !player.getEquippedChestArmour()->isNull())
 			{
 				window.setView(hudView);
-				itemTooltipName.setString(player.getEquippedChestArmour()->getName());
+				string itemName = player.getEquippedChestArmour()->getName();
+
+				itemTooltipName.setString(cleanItemName(itemName));
 				itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
 				itemTooltipBackground.setPosition(equippedChestArmourIcon.getPosition().x + 35, equippedChestArmourIcon.getPosition().y - 40);
 				window.draw(itemTooltipBackground);
@@ -363,7 +379,9 @@ void Engine::draw()
 				&& !player.getEquippedTrouserArmour()->isNull())
 			{
 				window.setView(hudView);
-				itemTooltipName.setString(player.getEquippedTrouserArmour()->getName());
+				string itemName = player.getEquippedTrouserArmour()->getName();
+
+				itemTooltipName.setString(cleanItemName(itemName));
 				itemTooltipBackground.setPosition(equippedTrousersArmourIcon.getPosition().x + 35, equippedTrousersArmourIcon.getPosition().y - 40);
 				itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
 				
@@ -384,7 +402,9 @@ void Engine::draw()
 				&& !player.getEquippedShoeArmour()->isNull())
 			{
 				window.setView(hudView);
-				itemTooltipName.setString(player.getEquippedShoeArmour()->getName());
+				string itemName = player.getEquippedShoeArmour()->getName();
+
+				itemTooltipName.setString(cleanItemName(itemName));
 				itemTooltipBackground.setPosition(equippedShoeArmourIcon.getPosition().x + 35, equippedShoeArmourIcon.getPosition().y - 40);
 				itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
 				
@@ -407,7 +427,9 @@ void Engine::draw()
 				
 
 				window.setView(hudView);
-				itemTooltipName.setString(player.getEquippedNeckArmour()->getName());
+				string itemName = player.getEquippedNeckArmour()->getName();
+
+				itemTooltipName.setString(cleanItemName(itemName));
 				itemTooltipBackground.setPosition(equippedNeckArmourIcon.getPosition().x + 35, equippedNeckArmourIcon.getPosition().y - 40);
 				itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
 				
@@ -491,4 +513,16 @@ void Engine::draw()
 	}
 
 	window.display();
+}
+
+string Engine::cleanItemName(string itemName)
+{
+	for (int i = 0; i < itemName.length(); i++)
+	{
+		if (itemName[i] == '_')
+		{
+			itemName.replace(i, 1, " ");
+		}
+	}
+	return itemName;
 }

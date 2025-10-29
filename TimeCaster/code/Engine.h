@@ -16,6 +16,9 @@
 
 class Engine
 {
+protected: 
+	string cleanItemName(string itemName);
+
 private:
 	// The games difficulty will always be in one of these states
 	enum class Difficulty { Easy, Medium, Hard };
@@ -329,4 +332,6 @@ public:
 	Chunk* getCurrentChunk(float x, float y);
 
 	void populateChunkVector();
+	
+
 };
