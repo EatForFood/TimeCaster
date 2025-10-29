@@ -168,7 +168,7 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	storedItems[9] = Equipment("Robe_Leggings", Vector2f(0, 0));
 	storedItems[10] = Weapon("Reaper's_Scythe", Vector2f(0, 0));
 	storedItems[11] = Equipment("Family_Locket", Vector2f(0, 0));
-	storedItems[12] = Weapon("Golden_Wand", Vector2f(0, 0));
+	storedItems[12] = Weapon("Armoured_Boots", Vector2f(0, 0));
 
 	// Empty mana bar
 	emptyManaBar.setFillColor(Color::Black);
