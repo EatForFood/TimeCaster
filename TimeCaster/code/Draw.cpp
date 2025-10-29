@@ -166,6 +166,12 @@ void Engine::draw()
 			spriteCursor.setTexture(textureCursorOpen);
 		}
 
+		/*
+		if (player.getPosition().x + 4 < something && player.getPosition().x - 4 > something && player.getPosition().y + 4 < something && player.getPosition().y - 4 > something) {
+			window.draw(eKey);
+		}
+		*/
+
 		// Switch to the HUD view
 		window.setView(hudView);
 
@@ -225,10 +231,6 @@ void Engine::draw()
 
 					// Remove all underscores from the name for display purposes
 				
-
-					
-					
-
 					window.setView(hudView);
 					itemTooltipBackground.setPosition(storedItems[i].getIcon().getPosition().x + 35, storedItems[i].getIcon().getPosition().y - 40);
 					window.draw(itemTooltipBackground);
@@ -275,8 +277,6 @@ void Engine::draw()
 
 					}
 				}
-				
-
 			}
 			if (weaponFrame.getGlobalBounds().contains(worldPos) && !Mouse::isButtonPressed(Mouse::Left) && !draggingItem && 
 				!player.getEquippedSword()->isNull())
@@ -424,8 +424,6 @@ void Engine::draw()
 			if (neckFrame.getGlobalBounds().contains(worldPos) && !Mouse::isButtonPressed(Mouse::Left) && !draggingItem
 				&& !player.getEquippedNeckArmour()->isNull())
 			{
-				
-
 				window.setView(hudView);
 				string itemName = player.getEquippedNeckArmour()->getName();
 
