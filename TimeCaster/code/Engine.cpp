@@ -39,7 +39,7 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	resolution.y = 1080;
 
 	//RenderWindow window(VideoMode(resolution.x, resolution.y), "TimeCaster", Style::Fullscreen);
-
+	
 	if (windowedMode == true)
 	{
 		window.create(VideoMode(resolution.x, resolution.y), "TimeCaster", Style::Default);
@@ -422,96 +422,97 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	textureItems = TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png");
 	tooltipBackground = TextureHolder::GetTexture("graphics/UI/tooltipBackground.png");
 	eKeyTexture = TextureHolder::GetTexture("graphics/UI/eKey.png");
+	inventoryBackgroundTexture = TextureHolder::GetTexture("graphics/UI/inventoryBackground.png");
 
 	// Equipped item icons
 	equippedSwordIcon.setTexture(&textureItems);
 	equippedSwordIcon.setTextureRect(IntRect(0, 0, 0, 0));
 	equippedSwordIcon.setSize(Vector2f(75, 75));
 	equippedSwordIcon.setOrigin(equippedSwordIcon.getSize() / 2.f);
-	equippedSwordIcon.setPosition(viewCentre.x - 200, 550);
+	equippedSwordIcon.setPosition(viewCentre.x - 250, 500);
 
 	equippedWandIcon.setTexture(&textureItems);
 	equippedWandIcon.setTextureRect(IntRect(0, 0, 0, 0));
 	equippedWandIcon.setSize(Vector2f(75, 75));
 	equippedWandIcon.setOrigin(equippedWandIcon.getSize() / 2.f);
-	equippedWandIcon.setPosition(viewCentre.x - 100, 550);
+	equippedWandIcon.setPosition(viewCentre.x - 150, 500);
 
 	equippedHeadArmourIcon.setTexture(&textureItems);
 	equippedHeadArmourIcon.setTextureRect(IntRect(0, 0, 0, 0));
 	equippedHeadArmourIcon.setSize(Vector2f(75, 75));
 	equippedHeadArmourIcon.setOrigin(equippedHeadArmourIcon.getSize() / 2.f);
-	equippedHeadArmourIcon.setPosition(viewCentre.x - 100, 350);
+	equippedHeadArmourIcon.setPosition(viewCentre.x - 150, 300);
 
 	equippedChestArmourIcon.setTexture(&textureItems);
 	equippedChestArmourIcon.setTextureRect(IntRect(0, 0, 0, 0));
 	equippedChestArmourIcon.setSize(Vector2f(75, 75));
 	equippedChestArmourIcon.setOrigin(equippedChestArmourIcon.getSize() / 2.f);
-	equippedChestArmourIcon.setPosition(viewCentre.x - 300, 550);
+	equippedChestArmourIcon.setPosition(viewCentre.x - 350, 500);
 
 	equippedTrousersArmourIcon.setTexture(&textureItems);
 	equippedTrousersArmourIcon.setTextureRect(IntRect(0, 0, 0, 0));
 	equippedTrousersArmourIcon.setSize(Vector2f(75, 75));
 	equippedTrousersArmourIcon.setOrigin(equippedTrousersArmourIcon.getSize() / 2.f);
-	equippedTrousersArmourIcon.setPosition(viewCentre.x - 300, 450);
+	equippedTrousersArmourIcon.setPosition(viewCentre.x - 350, 400);
 
 	equippedShoeArmourIcon.setTexture(&textureItems);
 	equippedShoeArmourIcon.setTextureRect(IntRect(0, 0, 0, 0));
 	equippedShoeArmourIcon.setSize(Vector2f(75, 75));
 	equippedShoeArmourIcon.setOrigin(equippedShoeArmourIcon.getSize() / 2.f);
-	equippedShoeArmourIcon.setPosition(viewCentre.x - 100, 450);
+	equippedShoeArmourIcon.setPosition(viewCentre.x - 150, 400);
 
 	equippedNeckArmourIcon.setTexture(&textureItems);
 	equippedNeckArmourIcon.setTextureRect(IntRect(0, 0, 0, 0));
 	equippedNeckArmourIcon.setSize(Vector2f(75, 75));
 	equippedNeckArmourIcon.setOrigin(equippedNeckArmourIcon.getSize() / 2.f);
-	equippedNeckArmourIcon.setPosition(viewCentre.x - 300, 350);
+	equippedNeckArmourIcon.setPosition(viewCentre.x - 350, 300);
 
 	// Player frame
 	playerFrame.setSize(sf::Vector2f(100.f, 200.f));
 	playerFrame.setTexture(&texturePlayerFrame);
 	playerFrame.setOrigin(playerFrame.getSize() / 2.f);
-	playerFrame.setPosition(viewCentre.x - 200, 400);
+	playerFrame.setPosition(viewCentre.x - 250, 350);
 
 	// Player sprite for frame
 	playerInFrame.setSize(sf::Vector2f(60.f, 100.f));
 	playerInFrame.setTexture(&texturePlayerInFrame);
 	playerInFrame.setOrigin(playerInFrame.getSize() / 2.f);
-	playerInFrame.setPosition(viewCentre.x - 200, 410);
+	playerInFrame.setPosition(viewCentre.x - 250, 360);
 
 	neckFrame.setTexture(&textureNeckFrame);
 	neckFrame.setSize(Vector2f(75, 75));
 	neckFrame.setOrigin(neckFrame.getSize() / 2.f);
-	neckFrame.setPosition(viewCentre.x - 300, 350);
+	neckFrame.setPosition(viewCentre.x - 350, 300);
 
 	headArmourFrame.setTexture(&textureHeadArmourFrame);
 	headArmourFrame.setSize(Vector2f(75, 75));
 	headArmourFrame.setOrigin(headArmourFrame.getSize() / 2.f);
-	headArmourFrame.setPosition(viewCentre.x - 100, 350);
+	headArmourFrame.setPosition(viewCentre.x - 150, 300);
 
 	trousersArmourFrame.setTexture(&textureTrousersArmourFrame);
 	trousersArmourFrame.setSize(Vector2f(75, 75));
 	trousersArmourFrame.setOrigin(trousersArmourFrame.getSize() / 2.f);
-	trousersArmourFrame.setPosition(viewCentre.x - 300, 450);
+	trousersArmourFrame.setPosition(viewCentre.x - 350, 400);
 
 	bootsArmourFrame.setTexture(&textureBootsArmourFrame);
 	bootsArmourFrame.setSize(Vector2f(75, 75));
 	bootsArmourFrame.setOrigin(bootsArmourFrame.getSize() / 2.f);
-	bootsArmourFrame.setPosition(viewCentre.x - 100, 450);
+	bootsArmourFrame.setPosition(viewCentre.x - 150, 400);
 
 	chestArmourFrame.setTexture(&textureChestArmourFrame);
 	chestArmourFrame.setSize(Vector2f(75, 75));
 	chestArmourFrame.setOrigin(chestArmourFrame.getSize() / 2.f);
-	chestArmourFrame.setPosition(viewCentre.x - 300, 550);
+	chestArmourFrame.setPosition(viewCentre.x - 350, 500);
 
 	weaponFrame.setTexture(&textureWeaponFrame);
 	weaponFrame.setSize(Vector2f(75, 75));
 	weaponFrame.setOrigin(weaponFrame.getSize() / 2.f);
-	weaponFrame.setPosition(viewCentre.x - 200, 550);
+	weaponFrame.setPosition(viewCentre.x - 250, 500);
 
 	wandFrame.setTexture(&textureWandFrame);
 	wandFrame.setSize(Vector2f(75, 75));
 	wandFrame.setOrigin(wandFrame.getSize() / 2.f);
-	wandFrame.setPosition(viewCentre.x - 100, 550);
+	wandFrame.setPosition(viewCentre.x - 150, 500);
 
 	itemTooltipBackground.setTexture(&tooltipBackground);
 	itemTooltipBackground.setPosition(0, 0);
@@ -537,7 +538,7 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	killsText.setCharacterSize(fontSize); // Set the text size
 	killsText.setFillColor(Color::Black);
 	textBounds = killsText.getLocalBounds();
-	killsText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 310);
+	killsText.setPosition((viewCentre.x - (textBounds.width / 2.f) - textBounds.left) - 50, 260);
 
 	// Gold text
 	goldCountText.setFont(font);
@@ -545,27 +546,27 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	goldCountText.setString("Gold: " + player.getGold());
 	goldCountText.setFillColor(Color::Black);
 	textBounds = goldCountText.getLocalBounds();
-	goldCountText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 360);
+	goldCountText.setPosition((viewCentre.x - (textBounds.width / 2.f) - textBounds.left) - 50, 310);
 
 	invHealthBar.setFillColor(Color::Red);
-	invHealthBar.setPosition(viewCentre.x - 310, 825);
+	invHealthBar.setPosition(viewCentre.x - 360, 775);
 
 	backgroundInvHealthBar.setFillColor(Color::Black);
 	backgroundInvHealthBar.setSize(Vector2f(200, 50));
-	backgroundInvHealthBar.setPosition(viewCentre.x - 310, 825);
+	backgroundInvHealthBar.setPosition(viewCentre.x - 360, 775);
 
 	// Display invHealthBar text
-	invHealthBarText.setString("0 / 0");     // Set the initial text
-	invHealthBarText.setFont(font);          // Assign the font
+	invHealthBarText.setString("0 / 0"); // Set the initial text
+	invHealthBarText.setFont(font); // Assign the font
 	invHealthBarText.setCharacterSize(fontSize - 5); // Slightly smaller text size
 	invHealthBarText.setFillColor(Color::White);
 
 	invStamBar.setFillColor(Color::Green);
-	invStamBar.setPosition(viewCentre.x - 60, 825);
+	invStamBar.setPosition(viewCentre.x - 110, 775);
 
 	backgroundInvStamBar.setFillColor(Color::Black);
 	backgroundInvStamBar.setSize(Vector2f(200, 50));
-	backgroundInvStamBar.setPosition(viewCentre.x - 60, 825);
+	backgroundInvStamBar.setPosition(viewCentre.x - 110, 775);
 	
 	// Display invStamBar text
 	invStamBarText.setString("0 / 0"); // Set the initial text
@@ -574,11 +575,11 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	invStamBarText.setFillColor(Color::White);
 
 	invManaBar.setFillColor(Color::Magenta);
-	invManaBar.setPosition(viewCentre.x + 190, 825);
+	invManaBar.setPosition(viewCentre.x + 140, 775);
 
 	backgroundInvManaBar.setFillColor(Color::Black);
 	backgroundInvManaBar.setSize(Vector2f(200, 50));
-	backgroundInvManaBar.setPosition(viewCentre.x + 190, 825);
+	backgroundInvManaBar.setPosition(viewCentre.x + 140, 775);
 
 	// Display invManaBar text
 	invManaBarText.setString("0 / 0"); // Set the initial text
@@ -601,12 +602,22 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	tutorialText.setString("You sustained some damage while fleeing from the dragon. Press Tab to open your inventory and heal");
 	textBounds = tutorialText.getLocalBounds();
 	tutorialText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 900);
+
+	inventoryBackground.setTexture(&inventoryBackgroundTexture);
+	inventoryBackground.setSize(Vector2f(1000, 800));
+	textBounds = inventoryBackground.getLocalBounds();
+	inventoryBackground.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y - (textBounds.height / 2.f) - textBounds.top);
+
+	colouredInventoryBackground.setFillColor(Color(0, 0, 128));
+	colouredInventoryBackground.setSize(Vector2f(894, 620));
+	textBounds = colouredInventoryBackground.getLocalBounds();
+	colouredInventoryBackground.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y - (textBounds.height / 2.f) - textBounds.top);
 }
 
 void Engine::initializeInventory()
 {
-	int startX = viewCentre.x - 300;
-	int startY = 650;
+	int startX = viewCentre.x - 350;
+	int startY = 600;
 
 	// create empty item r
 	emptyFrames.resize(16);
@@ -617,14 +628,14 @@ void Engine::initializeInventory()
 
 		if (i != 0 && i % 8 == 0) {
 			startY += 100;
-			startX = viewCentre.x - 300;
+			startX = viewCentre.x - 350;
 		}
 
 		emptyFrames[i].setPosition(startX, startY);
 		startX += 100;
 	}
-	startX = viewCentre.x - 300;
-	startY = 650;
+	startX = viewCentre.x - 350;
+	startY = 600;
 
 	// Position icons for items that actually exist
 	for (int i = 0; i < storedItems.size(); i++) {
@@ -645,7 +656,6 @@ string Engine::difficultyToString(Difficulty difficulty)
 	return "Unknown";
 }
 
-
 Engine::Difficulty Engine::stringToDifficulty(string str)
 {
 	if (str == "Easy") {return Difficulty::Easy; }
@@ -653,7 +663,6 @@ Engine::Difficulty Engine::stringToDifficulty(string str)
 	else if (str == "Hard") { return Difficulty::Hard; }
 	else return Difficulty::Medium;
 }
-
 
 void Engine::moveDraggedIcon(Sprite& draggedIcon, Vector2f mousePos)
 {
@@ -1072,7 +1081,7 @@ void Engine::run()
 
 					if (tutorialStage == 0) {
 						tutorialStage = 1;
-						tutorialText.setString("Welcome to your inventory! Here you can manage your items and equipment. Drag the health potion onto the player to heal.");
+						tutorialText.setString("Welcome to your inventory! Here you can manage your items and equipment. Drag the health potion onto the player and release to heal.");
 						textBounds = tutorialText.getLocalBounds();
 						tutorialText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 900);
 					}
@@ -1083,7 +1092,6 @@ void Engine::run()
 		// Handle controls while playing
 		if (state == State::PLAYING && !drawInventory)
 		{
-
 			if (Mouse::isButtonPressed(Mouse::Left))
 			{
 				player.AttackAnimation("slash");
@@ -1126,7 +1134,6 @@ void Engine::run()
 			{
 				player.stopRight();
 			}
-
 
 		} // End WASD while playing
 		else if (drawInventory)

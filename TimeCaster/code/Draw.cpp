@@ -172,13 +172,11 @@ void Engine::draw()
 		// Switch to the HUD view
 		window.setView(hudView);
 
-		if (tutorialStage < 2) {
-			window.draw(tutorialText);
-		}
-
 		if (drawInventory) 
 		{
 			window.draw(filter);
+			window.draw(inventoryBackground);
+			window.draw(colouredInventoryBackground);
 			window.draw(playerFrame);
 			window.draw(playerInFrame);
 			window.draw(headArmourFrame);
@@ -462,6 +460,10 @@ void Engine::draw()
 			window.draw(spriteCursor);
 			window.setView(hudView);
 		}
+	}
+
+	if (tutorialStage < 2) {
+		window.draw(tutorialText);
 	}
 
 	if (state == State::MAIN_MENU)
