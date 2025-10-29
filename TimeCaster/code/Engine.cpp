@@ -26,8 +26,8 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 {
 	player.loadConfigFile();
 
-	difficulty = Difficulty::Medium;
-	//difficulty = stringToDifficulty(player.getdifficultyString());
+//	difficulty = Difficulty::Medium;
+	difficulty = stringToDifficulty(player.getdifficultyString());
 	windowedMode = player.getWindowedMode();
 	displayFps = player.getDisplayFps();
 	Listener::setGlobalVolume(player.getVolume());
@@ -52,6 +52,8 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	filter.setFillColor(defaultFilter);
 
 	player.loadConfigFile();
+
+	difficulty = stringToDifficulty(player.getdifficultyString());
 
 	FloatRect viewRect(0, 0, resolution.x, resolution.y);
 	mainView.reset(viewRect);
@@ -155,7 +157,7 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	
 	// Debug inventory initalization
 	storedItems[0] = Weapon("Wooden_Wand", Vector2f(300, 650));
-	storedItems[1] = Weapon("Scimitar", Vector2f(450, 650));
+	storedItems[1] = Weapon("Pirate's_Scimitar", Vector2f(450, 650));
 	storedItems[2] = Weapon("Iron_Sword", Vector2f(600, 650));
 	storedItems[3] = Weapon("Silver_Wand", Vector2f(750, 650));
 	storedItems[4] = Equipment("Family_Robe", Vector2f(900, 650));
@@ -164,9 +166,9 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	storedItems[7] = Equipment("Leather_Chestplate", Vector2f(0, 0));
 	storedItems[8] = Equipment("Basic_Shoes", Vector2f(0, 0));
 	storedItems[9] = Equipment("Robe_Leggings", Vector2f(0, 0));
-	storedItems[10] = Equipment("Amulet_of_Shielding", Vector2f(0, 0));
+	storedItems[10] = Weapon("Reaper's_Scythe", Vector2f(0, 0));
 	storedItems[11] = Equipment("Family_Locket", Vector2f(0, 0));
-	storedItems[12] = Item("Golden_Wand", Vector2f(0, 0));
+	storedItems[12] = Weapon("Armoured_Boots", Vector2f(0, 0));
 
 	// Empty mana bar
 	emptyManaBar.setFillColor(Color::Black);
@@ -642,15 +644,15 @@ string Engine::difficultyToString(Difficulty difficulty)
 	return "Unknown";
 }
 
-/*
-Difficulty Engine::stringToDifficulty(std::string str)
+
+Engine::Difficulty Engine::stringToDifficulty(string str)
 {
 	if (str == "Easy") {return Difficulty::Easy; }
 	else if (str == "Medium") {return Difficulty::Medium; }
 	else if (str == "Hard") { return Difficulty::Hard; }
 	else return Difficulty::Medium;
 }
-*/
+
 
 void Engine::moveDraggedIcon(Sprite& draggedIcon, Vector2f mousePos)
 {
@@ -834,7 +836,7 @@ void Engine::run()
 					clock.restart();
 
 					player.loadConfigFile();
-					difficulty = Difficulty::Medium;
+					difficulty = stringToDifficulty(player.getdifficultyString());
 					windowedMode = player.getWindowedMode();
 					displayFps = player.getDisplayFps();
 					Listener::setGlobalVolume(player.getVolume());
@@ -897,7 +899,7 @@ void Engine::run()
 						clock.restart();
 
 						player.loadConfigFile();
-						difficulty = Difficulty::Medium;
+						difficulty = stringToDifficulty(player.getdifficultyString());
 						windowedMode = player.getWindowedMode();
 						displayFps = player.getDisplayFps();
 						Listener::setGlobalVolume(player.getVolume());
@@ -939,7 +941,7 @@ void Engine::run()
 						clock.restart();
 
 						player.loadConfigFile();
-						difficulty = Difficulty::Medium;
+						difficulty = stringToDifficulty(player.getdifficultyString());
 						windowedMode = player.getWindowedMode();
 						displayFps = player.getDisplayFps();
 						Listener::setGlobalVolume(player.getVolume());
@@ -951,6 +953,7 @@ void Engine::run()
 				if (optionsButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU && event.mouseButton.button == Mouse::Left)
 				{
 					player.loadConfigFile();
+					difficulty = stringToDifficulty(player.getdifficultyString());
 					sound.playButtonClickSound();
 					world.clearWorld();
 

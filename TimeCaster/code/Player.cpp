@@ -464,6 +464,7 @@ void Player::createNewSave()
 	m_EquippedArmour[2] = (Equipment(START_TROUSER_ARMOUR, Vector2f(0, 0)));
 	m_EquippedArmour[3] = (Equipment(START_SHOE_ARMOUR, Vector2f(0, 0)));
 	m_EquippedArmour[4] = (Equipment(START_NECK_ARMOUR, Vector2f(0, 0)));
+
 	saveFile.close();
 }
 
