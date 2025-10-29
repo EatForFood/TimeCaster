@@ -118,12 +118,6 @@ public:
 	void switchWeapon();
 	bool equipWeapon(string weaponNameToEquip);
 
-	bool equipHeadArmour(string armourNameToEquip);
-	bool equipChestArmour(string armourNameToEquip);
-	bool equipTrouserArmour(string armourNameToEquip);
-	bool equipShoeArmour(string armourNameToEquip);
-	bool equipNeckArmour(string armourNameToEquip);
-
 	vector<Equipment>& getEquippedArmour();
 
 	Weapon* getEquippedSword();
@@ -134,10 +128,13 @@ public:
 	Equipment* getEquippedShoeArmour();
 	Equipment* getEquippedNeckArmour();
 		
+
 	void setInCell();
 	bool getInCell();
 
-	void heal();
+	void AttackAnimation(string attackType);
+
+	bool equipArmour(string armourNameToEquip);
 
 private:
 
@@ -224,5 +221,7 @@ private:
 
 	bool inCell = false;
 
-
+	bool m_IsAttacking = false;
+	float m_AttackTimer = 0.0f;
+	float m_AttackDuration = 0.8f;
 };

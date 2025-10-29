@@ -149,3 +149,13 @@ Sprite Character::getShoes()
 {
 	return m_SpriteShoes;
 }
+
+void Character::resetAniCounter()
+{
+	m_Ani_Counter = 0;
+}
+
+int Character::getAniCounter()
+{
+	return m_Ani_Counter;
+}

@@ -143,6 +143,8 @@ public:
 	float getHealth();
 	float getMaxHealth();
 
+	void resetAniCounter();
+	int getAniCounter();
 
 };
 
