@@ -15,7 +15,7 @@ Player::Player()
 {
 	m_Speed = START_SPEED;
 	m_Health = START_HEALTH;
-	m_MaxHealth = START_HEALTH;
+	m_MaxHealth = START_HEALTH * 2;
 	m_Mana = START_MANA;
 	m_MaxMana = START_MANA;
 	m_Stamina = START_STAMINA;
@@ -450,13 +450,13 @@ int Player::getPlayerLevel()
 
 void Player::createNewSave()
 {
-	std::ofstream saveFile("gamedata/TCSave.txt");
+	ofstream saveFile("gamedata/TCSave.txt");
 
-	saveFile << std::fixed << std::setprecision(5) << START_SPEED << " " << START_HEALTH << " " << START_HEALTH << " " << START_STAMINA << " "
+	saveFile << fixed << setprecision(5) << START_SPEED << " " << START_HEALTH << " " << m_MaxHealth << " " << START_STAMINA << " "
 		<< START_STAMINA << " " << START_STAMINA_RECHARGE << " " << START_MANA << " " << START_MANA << " " << START_GOLD << " " << START_KILLS
 		<< " " << START_LEVEL << " " << START_SWORD << " " << START_WAND << " " << START_HEAD_ARMOUR << " " << START_CHEST_ARMOUR << " " 
 		<< START_TROUSER_ARMOUR << " " << START_SHOE_ARMOUR << " " << START_NECK_ARMOUR << " " << 64 << " " << 64
-		<< std::endl;
+		<< endl;
 	m_EquippedWeapons[0] = (Weapon(START_SWORD, Vector2f(0, 0)));
 	m_EquippedWeapons[1] = (Weapon(START_WAND, Vector2f(0, 0)));
 	m_EquippedArmour[0] = (Equipment(START_HEAD_ARMOUR, Vector2f(0, 0)));
@@ -466,6 +466,7 @@ void Player::createNewSave()
 	m_EquippedArmour[4] = (Equipment(START_NECK_ARMOUR, Vector2f(0, 0)));
 	saveFile.close();
 }
+
 void Player::createConfigFile(string difficultyString, bool windowedMode, bool displayFPS, float volume)
 {
 	std::ofstream configFile("gamedata/TCConfig.txt");
@@ -492,9 +493,9 @@ bool Player::loadConfigFile()
 //remember to pass in all player stats to be saved
 void Player::updateSaveFile()
 {	
-	std::ofstream saveFile("gamedata/TCSave.txt");
+	ofstream saveFile("gamedata/TCSave.txt");
 
-	saveFile << std::fixed << std::setprecision(5) 
+	saveFile << fixed << setprecision(5) 
 		<< m_Speed << " " 
 		<< m_Health << " "
 		<< m_MaxHealth << " "

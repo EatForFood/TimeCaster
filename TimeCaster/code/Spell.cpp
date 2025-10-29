@@ -55,7 +55,6 @@ void Spell::shoot(float startX, float startY, float targetX, float targetY)
 	
 	// Position the spell ready to be drawn
 	m_SpellShape.setPosition(m_Position);
-
 }
 
 void Spell::stop()
@@ -78,7 +77,6 @@ RectangleShape Spell::getShape()
 	return m_SpellShape;
 }
 
-
 void Spell::update(float elapsedTime)
 {
 	// Update the spell position variables
@@ -94,7 +92,6 @@ void Spell::update(float elapsedTime)
 	{
 		m_InFlight = false;
 	}
-
 }
 
 float Spell::bGetX()

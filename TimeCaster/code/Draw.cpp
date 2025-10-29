@@ -64,15 +64,13 @@ void Engine::draw()
 			window.draw(decal[i].getSprite());
 		}
 
-		/*
 		for (int i = 0; i < 100; i++)
 		{
-			if (bullets[i].isInFlight())
+			if (spells[i].isInFlight())
 			{
-				window.draw(bullets[i].getShape());
+				window.draw(spells[i].getShape());
 			}
 		}
-		*/
 
 		for (auto& item : items) {
 			window.draw(item.getSprite());
@@ -105,7 +103,6 @@ void Engine::draw()
 		drawables.emplace_back(player.getSprite().getGlobalBounds().top + player.getSprite().getGlobalBounds().height + 0.02, player.getTorso());
 		drawables.emplace_back(player.getSprite().getGlobalBounds().top + player.getSprite().getGlobalBounds().height + 0.03, player.getPants());
 		drawables.emplace_back(player.getSprite().getGlobalBounds().top + player.getSprite().getGlobalBounds().height + 0.04, player.getShoes());
-		
 		
 		// Sort by y position (smaller y values come first)
 		sort(drawables.begin(), drawables.end(), [](const DrawableItem& a, const DrawableItem& b)
@@ -175,8 +172,12 @@ void Engine::draw()
 		// Switch to the HUD view
 		window.setView(hudView);
 
-		if (drawInventory) {
+		if (tutorialStage < 2) {
+			window.draw(tutorialText);
+		}
 
+		if (drawInventory) 
+		{
 			window.draw(filter);
 			window.draw(playerFrame);
 			window.draw(playerInFrame);

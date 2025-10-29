@@ -235,6 +235,8 @@ private:
 	Text statTooltipText;
 	Text valueTooltipText;
 
+	Text tutorialText;
+
 	//RectangleShape emptyFrames[16];
 	int draggedIndex = -1;
 	int maxItems = 16; // max amount of item slots
@@ -315,6 +317,10 @@ private:
 	// Skip intro animation boolean
 	bool skipAnimation;
 
+	Spell spells[100];
+
+	int tutorialStage = 0;
+
 public:
 	Engine();
 
@@ -335,6 +341,4 @@ public:
 	Chunk* getCurrentChunk(float x, float y);
 
 	void populateChunkVector();
-	
-
 };

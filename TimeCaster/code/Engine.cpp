@@ -591,6 +591,13 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 
 	eKey.setTexture(&eKeyTexture);
 	eKey.setSize(Vector2f(50, 50));
+
+	tutorialText.setFont(font);
+	tutorialText.setCharacterSize(fontSize);
+	tutorialText.setFillColor(Color::White);
+	tutorialText.setString("You sustained some damage while fleeing from the dragon. Press Tab to open your inventory and heal");
+	textBounds = tutorialText.getLocalBounds();
+	tutorialText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 900);
 }
 
 void Engine::initializeInventory()
@@ -1056,12 +1063,19 @@ void Engine::run()
 					}
 				}
 
-				if (state == State::PLAYING && event.key.code == Keyboard::Tab) {
+				if (state == State::PLAYING && event.key.code == Keyboard::Tab && tutorialStage != 1) {
 					if (drawInventory) {
 						drawInventory = false;
 					}
 					else {
 						drawInventory = true;
+					}
+
+					if (tutorialStage == 0) {
+						tutorialStage = 1;
+						tutorialText.setString("Welcome to your inventory! Here you can manage your items and equipment. Drag the health potion onto the player to heal.");
+						textBounds = tutorialText.getLocalBounds();
+						tutorialText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 900);
 					}
 				}
 			}
@@ -1291,16 +1305,14 @@ void Engine::run()
 			// Make the view centre around the player				
 			mainView.setCenter(player.getCenter().x, player.getCenter().y - 10);
 
-			/*
-			// Update any bullets that are in-flight
+			// Update any spells that are in-flight
 			for (int i = 0; i < 100; i++)
 			{
-				if (bullets[i].isInFlight())
+				if (spells[i].isInFlight())
 				{
-					bullets[i].update(dtAsSeconds);
+					spells[i].update(dtAsSeconds);
 				}
 			}
-			*/
 
 			// Drag items the player clicks on
 			if (drawInventory)
@@ -1453,7 +1465,7 @@ void Engine::run()
 				killsText.setString(ssKillCount.str());
 
 				stringstream ssHealthBar;
-				ssHealthBar << int(player.getHealth()) << " / " << player.getMaxHealth();
+				ssHealthBar << int(player.getHealth()) << " / " << int(player.getMaxHealth());
 				invHealthBarText.setString(ssHealthBar.str());
 				textBounds = invHealthBarText.getLocalBounds();
 				x = backgroundInvHealthBar.getPosition().x + (backgroundInvHealthBar.getSize().x / 2.f) - (textBounds.width / 2.f);
@@ -1461,7 +1473,7 @@ void Engine::run()
 				invHealthBarText.setPosition(x - textBounds.left, y - textBounds.top);
 
 				stringstream ssStamBar;
-				ssStamBar << int(player.getStamina()) << " / " << player.getMaxStamina();
+				ssStamBar << int(player.getStamina()) << " / " << int(player.getMaxStamina());
 				invStamBarText.setString(ssStamBar.str());
 				textBounds = invStamBarText.getLocalBounds();
 				x = backgroundInvStamBar.getPosition().x + (backgroundInvStamBar.getSize().x / 2.f) - (textBounds.width / 2.f);
@@ -1469,7 +1481,7 @@ void Engine::run()
 				invStamBarText.setPosition(x - textBounds.left, y - textBounds.top);
 
 				stringstream ssManaBar;
-				ssManaBar << int(player.getMana()) << " / " << player.getMaxMana();
+				ssManaBar << int(player.getMana()) << " / " << int(player.getMaxMana());
 				invManaBarText.setString(ssManaBar.str());
 				textBounds = invManaBarText.getLocalBounds();
 				x = backgroundInvManaBar.getPosition().x + (backgroundInvManaBar.getSize().x / 2.f) - (textBounds.width / 2.f);
