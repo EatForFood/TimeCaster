@@ -169,6 +169,7 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	storedItems[10] = Weapon("Reaper's_Scythe", Vector2f(0, 0));
 	storedItems[11] = Equipment("Family_Locket", Vector2f(0, 0));
 	storedItems[12] = Weapon("Armoured_Boots", Vector2f(0, 0));
+	storedItems[13] = Item("Health_Potion", Vector2f(0, 0));
 
 	// Empty mana bar
 	emptyManaBar.setFillColor(Color::Black);
@@ -847,9 +848,6 @@ void Engine::run()
 				// Player hit the load game button in the main menu
 				else if (loadGameButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU && event.mouseButton.button == Mouse::Left)
 				{
-
-
-
 					state = State::PLAYING;
 
 					skipAnimation = false;
@@ -875,8 +873,6 @@ void Engine::run()
 						equippedTrousersArmourIcon.setTextureRect(player.getEquippedArmour().at(2).getTextureRect());
 						equippedShoeArmourIcon.setTextureRect(player.getEquippedArmour().at(3).getTextureRect());
 						equippedNeckArmourIcon.setTextureRect(player.getEquippedArmour().at(4).getTextureRect());
-
-
 
 						// We will modify the next two lines later
 						arena.width = 1900;
@@ -1430,6 +1426,16 @@ void Engine::run()
 					}
 
 					draggingItem = false;
+				}
+
+				for (int i = 0; i < storedItems.size(); i++)
+				{
+					if (storedItems[i].getName() == "Health_Potion" && !storedItems[i].isNull() && storedItems[i].getIcon().getGlobalBounds().intersects(playerInFrame.getGlobalBounds()) && Mouse::isButtonPressed(Mouse::Left))
+					{
+						player.heal();
+						storedItems[i] = Item("null", Vector2f(0, 0));
+						tutorialStage = 2;
+					}
 				}
 			}
 

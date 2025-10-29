@@ -917,3 +917,10 @@ void Player::updateTextRect()
 	m_SpriteTorso.setPosition(m_Position);
 	m_SpriteShoes.setPosition(m_Position);
 }
+
+void Player::heal() {
+	m_Health += 50;
+	if (m_Health > m_MaxHealth) {
+		m_Health = m_MaxHealth;
+	}
+}

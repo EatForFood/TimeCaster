@@ -137,6 +137,8 @@ public:
 	void setInCell();
 	bool getInCell();
 
+	void heal();
+
 private:
 
 	const float START_SPEED = 100;

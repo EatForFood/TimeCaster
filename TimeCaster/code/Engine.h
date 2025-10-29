@@ -347,4 +347,8 @@ private:
 	// Skip intro animation boolean
 	bool skipAnimation;
 
+	Spell spells[100];
+
+	int tutorialStage = 0;
+
 };
