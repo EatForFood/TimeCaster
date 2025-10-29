@@ -1428,21 +1428,28 @@ void Engine::run()
 						&& clickedItem.getType() == Item::ShoeArmour)
 					{	if (player.equipArmour(clickedItem.getName())) equippedShoeArmourIcon.setTextureRect(clickedItem.getTextureRect());}
 
+					// Try to equip as neck armour if dropped on neck armour slot
+					if (clickedItem.getIcon().getGlobalBounds().intersects(neckFrame.getGlobalBounds()) 
+						&& clickedItem.getType() == Item::NeckArmour)
+					{
+						if (player.equipArmour(clickedItem.getName())) equippedNeckArmourIcon.setTextureRect(clickedItem.getTextureRect());
+					}
+
 					if (clickedItem.getIcon().getGlobalBounds().intersects(playerInFrame.getGlobalBounds())
 						&& clickedItem.getType() == Item::Consumable)
 					{
 						cout << "Item used!";
 						if (clickedItem.getName() == "Health_Potion")
 						{
-							player.healHealth(50); // heal 50 health
+							player.healHealth(clickedItem.getRestoreValue()); // heal health
 						}
 						else if (clickedItem.getName() == "Mana_Potion")
 						{
-							player.healMana(50); // restore 50 mana
+							player.healMana(clickedItem.getRestoreValue()); // restore mana
 						}
 						else if (clickedItem.getName() == "Stamina_Potion")
 						{
-							player.healStamina(50); // restore 50 stamina
+							player.healStamina(clickedItem.getRestoreValue()); // restore stamina
 						}
 						clickedItem = Item("null", Vector2f(0, 0));
 						placed = true;
