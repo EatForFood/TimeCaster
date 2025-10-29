@@ -16,15 +16,45 @@
 
 class Engine
 {
+
+public:
+	Engine();
+
+	void run();
+
+	void initializeInventory();
+
+	enum Difficulty { Easy, Medium, Hard };
+
+	Difficulty stringToDifficulty(std::string str);
+
+	string difficultyToString(Difficulty difficulty);
+
+
+
+	void moveDraggedIcon(Sprite& draggedIcon, Vector2f mousePos);
+
+	bool addItemToInventory(String itemType);
+
+	void draw();
+
+	Chunk* getCurrentChunk(float x, float y);
+
+	void populateChunkVector();
+
+
+
 protected: 
 	string cleanItemName(string itemName);
 
+
+
 private:
 	// The games difficulty will always be in one of these states
-	enum class Difficulty { Easy, Medium, Hard };
+
 
 	// The game will always be in one of these states
-	enum class State { MAIN_MENU, OPTIONS_MENU, STORY_INTRO, PLAYING, PAUSED, GAME_OVER };
+	enum State { MAIN_MENU, OPTIONS_MENU, STORY_INTRO, PLAYING, PAUSED, GAME_OVER };
 
 	CollisionDetection collision;
 
@@ -314,27 +344,5 @@ private:
 
 	// Skip intro animation boolean
 	bool skipAnimation;
-
-public:
-	Engine();
-
-	void run();
-
-	void initializeInventory();
-
-	//Difficulty stringToDifficulty(std::string str);
-
-	string difficultyToString(Difficulty difficulty);
-
-	void moveDraggedIcon(Sprite& draggedIcon, Vector2f mousePos);
-
-	bool addItemToInventory(String itemType);
-
-	void draw();
-
-	Chunk* getCurrentChunk(float x, float y);
-
-	void populateChunkVector();
-	
 
 };

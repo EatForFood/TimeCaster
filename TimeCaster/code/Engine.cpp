@@ -26,8 +26,8 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 {
 	player.loadConfigFile();
 
-	difficulty = Difficulty::Medium;
-	//difficulty = stringToDifficulty(player.getdifficultyString());
+//	difficulty = Difficulty::Medium;
+	difficulty = stringToDifficulty(player.getdifficultyString());
 	windowedMode = player.getWindowedMode();
 	displayFps = player.getDisplayFps();
 	Listener::setGlobalVolume(player.getVolume());
@@ -52,6 +52,8 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	filter.setFillColor(defaultFilter);
 
 	player.loadConfigFile();
+
+	difficulty = stringToDifficulty(player.getdifficultyString());
 
 	FloatRect viewRect(0, 0, resolution.x, resolution.y);
 	mainView.reset(viewRect);
@@ -635,15 +637,15 @@ string Engine::difficultyToString(Difficulty difficulty)
 	return "Unknown";
 }
 
-/*
-Difficulty Engine::stringToDifficulty(std::string str)
+
+Engine::Difficulty Engine::stringToDifficulty(string str)
 {
 	if (str == "Easy") {return Difficulty::Easy; }
 	else if (str == "Medium") {return Difficulty::Medium; }
 	else if (str == "Hard") { return Difficulty::Hard; }
 	else return Difficulty::Medium;
 }
-*/
+
 
 void Engine::moveDraggedIcon(Sprite& draggedIcon, Vector2f mousePos)
 {
@@ -827,7 +829,7 @@ void Engine::run()
 					clock.restart();
 
 					player.loadConfigFile();
-					difficulty = Difficulty::Medium;
+					difficulty = stringToDifficulty(player.getdifficultyString());
 					windowedMode = player.getWindowedMode();
 					displayFps = player.getDisplayFps();
 					Listener::setGlobalVolume(player.getVolume());
@@ -890,7 +892,7 @@ void Engine::run()
 						clock.restart();
 
 						player.loadConfigFile();
-						difficulty = Difficulty::Medium;
+						difficulty = stringToDifficulty(player.getdifficultyString());
 						windowedMode = player.getWindowedMode();
 						displayFps = player.getDisplayFps();
 						Listener::setGlobalVolume(player.getVolume());
@@ -932,7 +934,7 @@ void Engine::run()
 						clock.restart();
 
 						player.loadConfigFile();
-						difficulty = Difficulty::Medium;
+						difficulty = stringToDifficulty(player.getdifficultyString());
 						windowedMode = player.getWindowedMode();
 						displayFps = player.getDisplayFps();
 						Listener::setGlobalVolume(player.getVolume());
@@ -944,6 +946,7 @@ void Engine::run()
 				if (optionsButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU && event.mouseButton.button == Mouse::Left)
 				{
 					player.loadConfigFile();
+					difficulty = stringToDifficulty(player.getdifficultyString());
 					sound.playButtonClickSound();
 					world.clearWorld();
 
