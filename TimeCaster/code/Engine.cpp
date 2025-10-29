@@ -6,7 +6,7 @@
 #include "Engine.h"
 #include "Player.h"
 #include "TextureHolder.h"
-#include "Bullet.h"
+//#include "Bullet.h"
 #include "Pickup.h"
 #include "Decal.h"
 #include "Windows.h"
@@ -155,7 +155,7 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	
 	// Debug inventory initalization
 	storedItems[0] = Weapon("Wooden_Wand", Vector2f(300, 650));
-	storedItems[1] = Weapon("Scimitar", Vector2f(450, 650));
+	storedItems[1] = Weapon("Pirate's_Scimitar", Vector2f(450, 650));
 	storedItems[2] = Weapon("Iron_Sword", Vector2f(600, 650));
 	storedItems[3] = Weapon("Silver_Wand", Vector2f(750, 650));
 	storedItems[4] = Equipment("Family_Robe", Vector2f(900, 650));
@@ -164,9 +164,9 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	storedItems[7] = Equipment("Leather_Chestplate", Vector2f(0, 0));
 	storedItems[8] = Equipment("Basic_Shoes", Vector2f(0, 0));
 	storedItems[9] = Equipment("Robe_Leggings", Vector2f(0, 0));
-	storedItems[10] = Equipment("Amulet_of_Shielding", Vector2f(0, 0));
+	storedItems[10] = Weapon("Reaper's_Scythe", Vector2f(0, 0));
 	storedItems[11] = Equipment("Family_Locket", Vector2f(0, 0));
-	storedItems[12] = Item("Golden_Wand", Vector2f(0, 0));
+	storedItems[12] = Weapon("Golden_Wand", Vector2f(0, 0));
 
 	// Empty mana bar
 	emptyManaBar.setFillColor(Color::Black);

@@ -3,7 +3,7 @@
 #include <SFML/Audio.hpp>
 #include "Player.h"
 #include "TextureHolder.h"
-#include "Bullet.h"
+//#include "Bullet.h"
 #include "Pickup.h"
 #include "Decal.h"
 #include "Windows.h"

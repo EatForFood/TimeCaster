@@ -63,6 +63,7 @@ protected:
 
 	// Handle spawning and disappearing
 	bool m_Spawned;
+	bool m_Sentimental = false;
 	float m_SecondsSinceSpawn;
 	float m_SecondsSinceDeSpawn;
 	float m_SecondsToLive;
