@@ -90,6 +90,8 @@ void Character::setSpriteFromSheet(sf::IntRect textureBox, int tileSize) // set 
 	m_SpriteTorso.setTextureRect(sf::IntRect{ sheetCoordinate, spriteSize });
 	m_SpritePants.setTextureRect(sf::IntRect{ sheetCoordinate, spriteSize });
 	m_SpriteShoes.setTextureRect(sf::IntRect{ sheetCoordinate, spriteSize });
+
+	m_SpriteWeapon.setTextureRect(sf::IntRect{ sheetCoordinate, spriteSize });
 }
 
 void Character::moveTextureRect() // animate sprite by moving texRect location
@@ -109,6 +111,11 @@ void Character::moveTextureRect() // animate sprite by moving texRect location
 		m_SpriteTorso.setTextureRect(sf::IntRect(sheetCoordinate + sf::Vector2i(spriteSize.x * m_Ani_Counter, 0), spriteSize));
 		m_SpritePants.setTextureRect(sf::IntRect(sheetCoordinate + sf::Vector2i(spriteSize.x * m_Ani_Counter, 0), spriteSize));
 		m_SpriteShoes.setTextureRect(sf::IntRect(sheetCoordinate + sf::Vector2i(spriteSize.x * m_Ani_Counter, 0), spriteSize));
+
+		if (m_IsAttacking)
+		{
+			m_SpriteWeapon.setTextureRect(sf::IntRect(sheetCoordinate + sf::Vector2i(spriteSize.x * m_Ani_Counter, 0), spriteSize));
+		}
 	}
 	else {
 		m_Sprite.setTextureRect(sf::IntRect(sheetCoordinate + sf::Vector2i(0, spriteSize.y * m_Ani_Counter), spriteSize));
@@ -117,6 +124,11 @@ void Character::moveTextureRect() // animate sprite by moving texRect location
 		m_SpriteTorso.setTextureRect(sf::IntRect(sheetCoordinate + sf::Vector2i(0, spriteSize.y * m_Ani_Counter), spriteSize));
 		m_SpritePants.setTextureRect(sf::IntRect(sheetCoordinate + sf::Vector2i(0, spriteSize.y * m_Ani_Counter), spriteSize));
 		m_SpriteShoes.setTextureRect(sf::IntRect(sheetCoordinate + sf::Vector2i(0, spriteSize.y * m_Ani_Counter), spriteSize));
+
+		if (m_IsAttacking)
+		{
+			m_SpriteWeapon.setTextureRect(sf::IntRect(sheetCoordinate + sf::Vector2i(0, spriteSize.y * m_Ani_Counter), spriteSize));
+		}
 	}
 
 	//increment animation counter to point to the next frame
@@ -150,9 +162,14 @@ Sprite Character::getShoes()
 	return m_SpriteShoes;
 }
 
+Sprite Character::getWeapon()
+{
+	return m_SpriteWeapon;
+}
+
 void Character::resetAniCounter()
 {
-	m_Ani_Counter = 0;
+	m_Ani_Counter = 1;
 }
 
 int Character::getAniCounter()

@@ -1322,6 +1322,8 @@ void Engine::run()
 			// Drag items the player clicks on
 			if (drawInventory)
 			{
+				player.setSpritePosition(Vector2f(player.getPosition().x,player.getPosition().y));
+
 				bool draggingFromInventory = false;
 				//int draggedIndex = -1;
 

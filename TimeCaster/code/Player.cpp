@@ -47,6 +47,9 @@ Player::Player()
 	m_SpriteShoes.setOrigin(32, 32);
 	m_SpriteShoes.setScale(0.75, 0.75);
 
+	m_SpriteWeapon = Sprite(TextureHolder::GetTexture("graphics/player/weapon/slash/Iron_Sword.png"));
+	m_SpriteWeapon.setOrigin(32, 32);
+	m_SpriteWeapon.setScale(0.75, 0.75);
 
 	m_Clothes.push_back(m_SpriteHead);
 	m_Clothes.push_back(m_SpriteTorso);
@@ -158,7 +161,7 @@ void Player::update(float elapsedTime, Vector2i mousePosition, vector<NavBox> na
 	{
 		moveTextureRect();
 
-		if (getAniCounter() == 0)
+		if (getAniCounter() == 0 || getAniCounter() == 10)
 		{
 			m_IsAttacking = false;
 			resetAniCounter();
@@ -171,6 +174,7 @@ void Player::update(float elapsedTime, Vector2i mousePosition, vector<NavBox> na
 			equipArmour(m_EquippedArmour[1].getName());
 			equipArmour(m_EquippedArmour[2].getName());
 			equipArmour(m_EquippedArmour[3].getName());
+			equipWeapon(m_EquippedWeapons[0].getName());
 
 			// reset armour sprites if needed
 		}
@@ -313,6 +317,8 @@ void Player::update(float elapsedTime, Vector2i mousePosition, vector<NavBox> na
 	m_CollisionBox.width = 200;
 	m_CollisionBox.height = 200;
 
+	m_SpriteWeapon.setPosition(m_Position);
+
 	m_RenderArea = FloatRect(m_Position.x - m_Resolution.x / 2, m_Position.y - m_Resolution.y / 2, m_Resolution.x, m_Resolution.y);
 	
 
@@ -334,6 +340,7 @@ void Player::update(float elapsedTime, Vector2i mousePosition, vector<NavBox> na
 		{
 			// facing down
 			direction == Vector2f(0, -1);
+
 		}
 		else if (angle >= 135 && angle < 225)
 		{
@@ -364,6 +371,7 @@ void Player::update(float elapsedTime, Vector2i mousePosition, vector<NavBox> na
 	downDisabled = false;
 	leftDisabled = false;
 	rightDisabled = false;
+
 }
 
 void Player::upgradeSpeed()
@@ -584,7 +592,7 @@ bool Player::loadSaveFile()
 		equipArmour(m_EquippedTrouserArmourName);
 		equipArmour(m_EquippedShoeArmourName);
 		equipArmour(m_EquippedNeckArmourName);
-		equipWeapon(m_EquippedWandName);
+		//equipWeapon(m_EquippedWandName);
 		equipWeapon(m_EquippedSwordName); // equip sword last so that melee is the default combat type
 		return true;
 	}
@@ -730,6 +738,8 @@ bool Player::equipWeapon(string weaponNameToEquip)
 	{
 		m_EquippedSwordName = weaponToEquip.getName();
 		m_EquippedWeapons[0] = weaponToEquip;
+		m_SpriteWeapon = Sprite(TextureHolder::GetTexture("graphics/player/weapon/slash/"+ weaponToEquip.getName() + ".png"));;
+		m_SpriteWeapon.setOrigin(32, 32);		m_SpriteWeapon.setScale(0.75, 0.75);
 		m_CombatType = Melee;
 		updateTextRect();
 		return true;
@@ -905,10 +915,16 @@ void Player::updateTextRect()
 	m_SpriteHead.setPosition(m_Position);
 	m_SpriteTorso.setPosition(m_Position);
 	m_SpriteShoes.setPosition(m_Position);
+	m_SpriteWeapon.setPosition(m_Position);
 }
 
 void Player::AttackAnimation(string attackType)
 {
+	if (!m_IsAttacking)
+	{
+		resetAniCounter();
+	}
+
 	m_IsAttacking = true;
 	m_AttackTimer = 0.0f; // reset attack timer
 
@@ -956,4 +972,19 @@ void Player::healStamina(int staminaToRestore) {
 	if (m_Stamina > m_MaxStamina) {
 		m_Stamina = m_MaxStamina;
 	}
+}
+
+bool Player::isAttacking()
+{
+	return m_IsAttacking;
+}
+
+void Player::setSpritePosition(Vector2f pos)
+{
+	m_SpritePants.setPosition(pos);
+	m_SpriteHead.setPosition(pos);
+	m_SpriteTorso.setPosition(pos);
+	m_SpriteShoes.setPosition(pos);
+	m_SpriteWeapon.setPosition(pos);
+	m_Sprite.setPosition(pos);
 }

@@ -23,6 +23,8 @@ protected:
 	Sprite m_SpriteShoes;
 	Sprite m_SpriteSheetShoes; // sprite sheet for shoes
 
+	Sprite m_SpriteWeapon;
+
 	vector<Sprite> m_Clothes;
 
 	// How long does a jump last
@@ -102,6 +104,8 @@ protected:
 	// How big is each tile of the arena
 	int m_TileSize;
 
+	bool m_IsAttacking = false;
+
 public:
 
 	//void virtual update(float elapsedTime);
@@ -112,6 +116,7 @@ public:
 	Sprite getHead();
 	Sprite getTorso();
 	Sprite getShoes();
+	Sprite getWeapon();
 
 	//move the rectangle to the next cell in the animation
 	void moveTextureRect();

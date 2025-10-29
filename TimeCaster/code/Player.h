@@ -134,11 +134,18 @@ public:
 
 	void AttackAnimation(string attackType);
 
+	bool isAttacking();
+
 	bool equipArmour(string armourNameToEquip);
 
 	void healHealth(int healthToHeal);
 	void healMana(int manaToRestore);
 	void healStamina(int staminaToRestore);
+
+	Vector2f worldPosition;
+	Vector2f inventoryPosition = Vector2f(500,500);
+
+	void setSpritePosition(Vector2f pos);
 
 private:
 
@@ -225,7 +232,6 @@ private:
 
 	bool inCell = false;
 
-	bool m_IsAttacking = false;
 	float m_AttackTimer = 0.0f;
 	float m_AttackDuration = 0.8f;
 };

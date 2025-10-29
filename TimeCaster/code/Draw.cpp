@@ -103,6 +103,11 @@ void Engine::draw()
 		drawables.emplace_back(player.getSprite().getGlobalBounds().top + player.getSprite().getGlobalBounds().height + 0.02, player.getTorso());
 		drawables.emplace_back(player.getSprite().getGlobalBounds().top + player.getSprite().getGlobalBounds().height + 0.03, player.getPants());
 		drawables.emplace_back(player.getSprite().getGlobalBounds().top + player.getSprite().getGlobalBounds().height + 0.04, player.getShoes());
+
+		if (player.isAttacking())
+		{
+			drawables.emplace_back(player.getSprite().getGlobalBounds().top + player.getSprite().getGlobalBounds().height + 0.05, player.getWeapon());
+		}
 		
 		// Sort by y position (smaller y values come first)
 		sort(drawables.begin(), drawables.end(), [](const DrawableItem& a, const DrawableItem& b)
@@ -180,7 +185,7 @@ void Engine::draw()
 		{
 			window.draw(filter);
 			window.draw(playerFrame);
-			window.draw(playerInFrame);
+			//window.draw(playerInFrame);
 			window.draw(headArmourFrame);
 			window.draw(chestArmourFrame);
 			window.draw(trousersArmourFrame);

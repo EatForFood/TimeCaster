@@ -9,6 +9,7 @@
 using namespace std;
 using namespace sf;
 
+
 World::World()
 {
 	
@@ -26,7 +27,7 @@ void World::newWorld()
         "goblinVillage",
     };
 
-    // Set up random generator
+    // Set up random generator (mercene twister)
     mt19937 rng(static_cast<unsigned int>(time(nullptr)));
     uniform_int_distribution<int> dist(0, static_cast<int>(chunkTypes.size()) - 1);
 
