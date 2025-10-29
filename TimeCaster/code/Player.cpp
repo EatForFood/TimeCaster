@@ -25,27 +25,25 @@ Player::Player()
 	m_Kills = START_KILLS;
 	m_Level = START_LEVEL;
 
-	// Associate a texture with the sprite
-	m_Sprite = Sprite(TextureHolder::GetTexture("graphics/player/playerWalk.png"));
-
-	// Set the origin of the sprite to the centre, 
+	// Associate a texture with the body sprite
+	m_Sprite = Sprite(TextureHolder::GetTexture("graphics/player/playerWalk.png")); 
 	m_Sprite.setOrigin(32, 32);
 	m_Sprite.setScale(0.75,0.75);
 
 	// manually set armour sprites
-	m_SpriteHead = Sprite(TextureHolder::GetTexture("graphics/player/armour/robe/Head_robe_hood.png"));
+	m_SpriteHead = Sprite(TextureHolder::GetTexture("graphics/player/armour/Family_Hood.png"));
 	m_SpriteHead.setOrigin(32, 32);
 	m_SpriteHead.setScale(0.75, 0.75);
 
-	m_SpriteTorso = Sprite(TextureHolder::GetTexture("graphics/player/armour/robe/Torso_robe_shirt_brown.png"));
+	m_SpriteTorso = Sprite(TextureHolder::GetTexture("graphics/player/armour/Family_Robe.png"));
 	m_SpriteTorso.setOrigin(32, 32);
 	m_SpriteTorso.setScale(0.75, 0.75);
 
-	m_SpritePants = Sprite(TextureHolder::GetTexture("graphics/player/armour/robe/Legs_robe_skirt.png"));
+	m_SpritePants = Sprite(TextureHolder::GetTexture("graphics/player/armour/Robe_Leggings.png"));
 	m_SpritePants.setOrigin(32, 32);
 	m_SpritePants.setScale(0.75, 0.75);
 
-	m_SpriteShoes = Sprite(TextureHolder::GetTexture("graphics/player/armour/robe/Feet_shoes_brown.png"));
+	m_SpriteShoes = Sprite(TextureHolder::GetTexture("graphics/player/armour/Basic_Shoes.png"));
 	m_SpriteShoes.setOrigin(32, 32);
 	m_SpriteShoes.setScale(0.75, 0.75);
 
@@ -156,6 +154,30 @@ void Player::update(float elapsedTime, Vector2i mousePosition, vector<NavBox> na
 
 	m_TimeElapsed = elapsedTime; 
 
+	if (m_IsAttacking)
+	{
+		m_AttackTimer += m_TimeElapsed;
+		moveTextureRect();
+		moveTextureRect();
+
+		if (getAniCounter() == 0)
+		{
+			m_IsAttacking = false;
+			resetAniCounter();
+			// revert to idle animation
+			m_Sprite = Sprite(TextureHolder::GetTexture("graphics/player/playerWalk.png"));
+			m_Sprite.setOrigin(32, 32);
+			m_Sprite.setScale(0.75, 0.75);
+
+			equipArmour(m_EquippedArmour[0].getName());
+			equipArmour(m_EquippedArmour[1].getName());
+			equipArmour(m_EquippedArmour[2].getName());
+			equipArmour(m_EquippedArmour[3].getName());
+
+			// reset armour sprites if needed
+		}
+	}
+
 	if (!m_UpPressed && !m_DownPressed && !m_LeftPressed && !m_RightPressed)
 	{
 		m_IsMoving = false;
@@ -166,24 +188,27 @@ void Player::update(float elapsedTime, Vector2i mousePosition, vector<NavBox> na
 
 	if (!m_UpPressed || !m_DownPressed || !m_LeftPressed || !m_RightPressed) // if player is not moving set sprite to standing frame in last direction faced
 	{
-		if (direction == Vector2f(0, 1)) // up
+		if (!m_IsAttacking)
 		{
-			setSpriteFromSheet(IntRect(0, 0, 576, 64), 64);
-		}
+			if (direction == Vector2f(0, 1)) // up
+			{
+				setSpriteFromSheet(IntRect(0, 0, 576, 64), 64);
+			}
 
-		if (direction == Vector2f(0, -1)) // down
-		{
-			setSpriteFromSheet(IntRect(0, 128, 576, 64), 64);
-		}
+			if (direction == Vector2f(0, -1)) // down
+			{
+				setSpriteFromSheet(IntRect(0, 128, 576, 64), 64);
+			}
 
-		if (direction == Vector2f(1, 0)) // right
-		{
-			setSpriteFromSheet(IntRect(0, 192, 576, 64), 64);
-		}
+			if (direction == Vector2f(1, 0)) // right
+			{
+				setSpriteFromSheet(IntRect(0, 192, 576, 64), 64);
+			}
 
-		if (direction == Vector2f(-1, 0)) // left
-		{
-			setSpriteFromSheet(IntRect(0, 64, 576, 64), 64);
+			if (direction == Vector2f(-1, 0)) // left
+			{
+				setSpriteFromSheet(IntRect(0, 64, 576, 64), 64);
+			}
 		}
 	}
 
@@ -199,7 +224,6 @@ void Player::update(float elapsedTime, Vector2i mousePosition, vector<NavBox> na
 	{
 		m_PositionLast = m_Position;
 		m_Position.y -= m_Speed * elapsedTime;
-		setSpriteFromSheet(IntRect(0, 0, 576, 64), 64); // set sprite depending on direction
 		direction = Vector2f(0, 1);
 	}
 
@@ -216,7 +240,6 @@ void Player::update(float elapsedTime, Vector2i mousePosition, vector<NavBox> na
 	{
 		m_PositionLast = m_Position;
 		m_Position.y += m_Speed * elapsedTime;
-		setSpriteFromSheet(IntRect(0, 128, 576, 64), 64);
 		direction = Vector2f(0, -1);
 	}
 
@@ -233,7 +256,6 @@ void Player::update(float elapsedTime, Vector2i mousePosition, vector<NavBox> na
 	{
 		m_PositionLast = m_Position;
 		m_Position.x += m_Speed * elapsedTime;
-		setSpriteFromSheet(IntRect(0, 192, 576, 64), 64);
 		direction = Vector2f(1, 0);
 	}
 
@@ -250,7 +272,6 @@ void Player::update(float elapsedTime, Vector2i mousePosition, vector<NavBox> na
 	{
 		m_PositionLast = m_Position;
 		m_Position.x -= m_Speed * elapsedTime;
-		setSpriteFromSheet(IntRect(0, 64, 576, 64), 64);
 		direction = Vector2f(-1, 0);
 	}
 
@@ -310,29 +331,31 @@ void Player::update(float elapsedTime, Vector2i mousePosition, vector<NavBox> na
 		if (angle >= 45 && angle < 135)
 		{
 			// facing down
-			setSpriteFromSheet({ 0, 128, 576, 64 }, 64);
+			direction == Vector2f(0, -1);
 		}
 		else if (angle >= 135 && angle < 225)
 		{
 			// facing left
-			setSpriteFromSheet({ 0, 64, 576, 64 }, 64);
+			direction == Vector2f(-1, 0);
 		}
 		else if (angle >= 225 && angle < 315)
 		{
 			// facing up
-			setSpriteFromSheet({ 0, 0, 576, 64 }, 64);
-			
+			direction == Vector2f(0, 1);
 		}
 		else
 		{
 			// facing right
-			setSpriteFromSheet({ 0, 192, 576, 64 }, 64);
+			direction == Vector2f(1, 0);
 		}
 	}
 
 	if (m_UpPressed || m_DownPressed || m_LeftPressed || m_RightPressed) // animate sprite if player is moving
 	{
-		moveTextureRect();
+		if (!m_IsAttacking)
+		{
+			moveTextureRect();
+		}
 	}
 
 	upDisabled = false;
@@ -552,11 +575,11 @@ bool Player::loadSaveFile()
 		loadFile >> m_Position.x;
 		loadFile >> m_Position.y;
 		// equip saved weapons and armour
-		equipHeadArmour(m_EquippedHeadArmourName);
-		equipChestArmour(m_EquippedChestArmourName);
-		equipTrouserArmour(m_EquippedTrouserArmourName);
-		equipShoeArmour(m_EquippedShoeArmourName);
-		equipNeckArmour(m_EquippedNeckArmourName);
+		equipArmour(m_EquippedHeadArmourName);
+		equipArmour(m_EquippedChestArmourName);
+		equipArmour(m_EquippedTrouserArmourName);
+		equipArmour(m_EquippedShoeArmourName);
+		equipArmour(m_EquippedNeckArmourName);
 		equipWeapon(m_EquippedWandName);
 		equipWeapon(m_EquippedSwordName); // equip sword last so that melee is the default combat type
 		return true;
@@ -721,96 +744,53 @@ bool Player::equipWeapon(string weaponNameToEquip)
 	}
 }
 
-bool Player::equipHeadArmour(string armourNameToEquip)
+bool Player::equipArmour(string armourNameToEquip)
 {
 	Equipment armourToEquip(armourNameToEquip, Vector2f(0, 0));
 	if (armourToEquip.getType() == Item::HeadArmour)
 	{
 		// equip the armour
 		m_EquippedArmour[0] = armourToEquip;
-		// set the appropriate sprites
-		
-		if (armourNameToEquip == "Leather_Cap") {
-			m_SpriteHead = Sprite(TextureHolder::GetTexture("graphics/player/armour/leather/Head_leather_armor_hat.png"));
-			m_SpriteHead.setOrigin(32, 32);		m_SpriteHead.setScale(0.75, 0.75);
-		}
-		else if (armourNameToEquip == "Family_Hood") {
-			m_SpriteHead = Sprite(TextureHolder::GetTexture("graphics/player/armour/robe/Head_robe_hood.png"));
-			m_SpriteHead.setOrigin(32, 32);		m_SpriteHead.setScale(0.75, 0.75);
-		}
-		
+
+		m_SpriteHead = Sprite(TextureHolder::GetTexture("graphics/player/armour/" + armourNameToEquip + ".png"));
+		m_SpriteHead.setOrigin(32, 32);		m_SpriteHead.setScale(0.75, 0.75);
+
 		updateTextRect();
 		return true;
 	}
-	else
-	{
-		return false;
-	}
-}
-
-bool Player::equipChestArmour(string armourNameToEquip)
-{
-	Equipment armourToEquip(armourNameToEquip, Vector2f(0, 0));
-	if (armourToEquip.getType() == Item::ChestArmour)
+	else if (armourToEquip.getType() == Item::ChestArmour)
 	{
 		// equip the armour
 		m_EquippedArmour[1] = armourToEquip;
 		// set the appropriate sprites
 
-		if (armourNameToEquip == "Leather_Chestplate") {
-			m_SpriteTorso = Sprite(TextureHolder::GetTexture("graphics/player/armour/leather/TORSO_leather_armor_torso.png"));
-			m_SpriteTorso.setOrigin(32, 32);		m_SpriteTorso.setScale(0.75, 0.75);
-
-		}
-		else if (armourNameToEquip == "Family_Robe") {
-			m_SpriteTorso = Sprite(TextureHolder::GetTexture("graphics/player/armour/robe/TORSO_robe_shirt_brown.png"));	
-			m_SpriteTorso.setOrigin(32, 32);		m_SpriteTorso.setScale(0.75, 0.75);
-		}
+		m_SpriteTorso = Sprite(TextureHolder::GetTexture("graphics/player/armour/" + armourNameToEquip + ".png"));
+		m_SpriteTorso.setOrigin(32, 32);		m_SpriteTorso.setScale(0.75, 0.75);
 
 		updateTextRect();
 		return true;
 	}
-	else
-	{
-		return false;
-	}
-}
-
-bool Player::equipTrouserArmour(string armourNameToEquip)
-{
-	Equipment armourToEquip(armourNameToEquip, Vector2f(0, 0));
-	if (armourToEquip.getType() == Item::TrouserArmour)
+	else if (armourToEquip.getType() == Item::TrouserArmour)
 	{
 		// equip the armour
 		m_EquippedArmour[2] = armourToEquip;
 		// set the appropriate sprites (1 for now, more later)
-		if (armourNameToEquip == "StartingPants") {
-			m_SpritePants = Sprite(TextureHolder::GetTexture("graphics/player/armour/robe/Legs_robe_skirt.png"));
-			m_SpritePants.setOrigin(32, 32);		m_SpritePants.setScale(0.75, 0.75);
-		}
 
+		m_SpritePants = Sprite(TextureHolder::GetTexture("graphics/player/armour/" + armourNameToEquip + ".png"));
+		m_SpritePants.setOrigin(32, 32);		m_SpritePants.setScale(0.75, 0.75);
 
 		updateTextRect();
 		return true;
 	}
-	else
-	{
-		return false;
-	}
-}
-
-bool Player::equipShoeArmour(string armourNameToEquip)
-{
-	Equipment armourToEquip(armourNameToEquip, Vector2f(0, 0));
-	if (armourToEquip.getType() == Item::ShoeArmour)
+	else if (armourToEquip.getType() == Item::ShoeArmour)
 	{
 		// equip the armour
 		m_EquippedArmour[3] = armourToEquip;
 		// set the appropriate sprites (1 for now, more later)
-		if (armourNameToEquip == "Basic_Shoes") {
-			m_SpriteShoes = Sprite(TextureHolder::GetTexture("graphics/player/armour/robe/Feet_shoes_brown.png"));
-			m_SpriteShoes.setOrigin(32, 32);		m_SpriteShoes.setScale(0.75, 0.75);
-		}
+
+		m_SpriteShoes = Sprite(TextureHolder::GetTexture("graphics/player/armour/" + armourNameToEquip + ".png"));
+		m_SpriteShoes.setOrigin(32, 32);		m_SpriteShoes.setScale(0.75, 0.75);
+
 		updateTextRect();
 		return true;
 	}
@@ -819,24 +799,6 @@ bool Player::equipShoeArmour(string armourNameToEquip)
 		return false;
 	}
 }
-
-bool Player::equipNeckArmour(string armourNameToEquip)
-{
-	Equipment armourToEquip(armourNameToEquip, Vector2f(0, 0));
-	if (armourToEquip.getType() == Item::NeckArmour)
-	{
-		// equip the armour
-		m_EquippedArmour[4] = armourToEquip;
-		updateTextRect();
-		return true;
-	}
-	else
-	{
-		return false;
-	}
-}
-
-
 
 vector<Weapon>& Player::getEquippedWeapons()
 {
@@ -890,24 +852,49 @@ Equipment* Player::getEquippedNeckArmour()
 
 void Player::updateTextRect()
 {
-	if (direction == Vector2f(0, 1)) // up
+	if (!m_IsAttacking)
 	{
-		setSpriteFromSheet(IntRect(0, 0, 576, 64), 64);
-	}
+		if (direction == Vector2f(0, 1)) // up
+		{
+			setSpriteFromSheet(IntRect(0, 0, 576, 64), 64);
+		}
 
-	if (direction == Vector2f(0, -1)) // down
-	{
-		setSpriteFromSheet(IntRect(0, 128, 576, 64), 64);
-	}
+		if (direction == Vector2f(0, -1)) // down
+		{
+			setSpriteFromSheet(IntRect(0, 128, 576, 64), 64);
+		}
 
-	if (direction == Vector2f(1, 0)) // right
-	{
-		setSpriteFromSheet(IntRect(0, 192, 576, 64), 64);
-	}
+		if (direction == Vector2f(1, 0)) // right
+		{
+			setSpriteFromSheet(IntRect(0, 192, 576, 64), 64);
+		}
 
-	if (direction == Vector2f(-1, 0)) // left
+		if (direction == Vector2f(-1, 0)) // left
+		{
+			setSpriteFromSheet(IntRect(0, 64, 576, 64), 64);
+		}
+	}
+	else
 	{
-		setSpriteFromSheet(IntRect(0, 64, 576, 64), 64);
+		if (direction == Vector2f(0, 1)) // up
+		{
+			setSpriteFromSheet(IntRect(0, 0, 384, 64), 64);
+		}
+
+		if (direction == Vector2f(0, -1)) // down
+		{
+			setSpriteFromSheet(IntRect(0, 128, 384, 64), 64);
+		}
+
+		if (direction == Vector2f(1, 0)) // right
+		{
+			setSpriteFromSheet(IntRect(0, 192, 384, 64), 64);
+		}
+
+		if (direction == Vector2f(-1, 0)) // left
+		{
+			setSpriteFromSheet(IntRect(0, 64, 384, 64), 64);
+		}
 	}
 
 	m_SpritePants.setPosition(m_Position);
@@ -915,3 +902,34 @@ void Player::updateTextRect()
 	m_SpriteTorso.setPosition(m_Position);
 	m_SpriteShoes.setPosition(m_Position);
 }
+
+void Player::AttackAnimation(string attackType)
+{
+	m_IsAttacking = true;
+	m_AttackTimer = 0.0f; // reset attack timer
+
+	// Associate a texture with the body sprite
+	m_Sprite = Sprite(TextureHolder::GetTexture("graphics/player/" + attackType + "/playerAttack.png"));
+	m_Sprite.setOrigin(32, 32);
+	m_Sprite.setScale(0.75, 0.75);
+
+	// manually set armour sprites
+	m_SpriteHead = Sprite(TextureHolder::GetTexture("graphics/player/armour/" + attackType + "/" + m_EquippedArmour[0].getName() + ".png"));
+	m_SpriteHead.setOrigin(32, 32);
+	m_SpriteHead.setScale(0.75, 0.75);
+
+	m_SpriteTorso = Sprite(TextureHolder::GetTexture("graphics/player/armour/" + attackType + "/" + m_EquippedArmour[1].getName() + ".png"));
+	m_SpriteTorso.setOrigin(32, 32);
+	m_SpriteTorso.setScale(0.75, 0.75);
+
+	m_SpritePants = Sprite(TextureHolder::GetTexture("graphics/player/armour/" + attackType + "/" + m_EquippedArmour[2].getName() + ".png"));
+	m_SpritePants.setOrigin(32, 32);
+	m_SpritePants.setScale(0.75, 0.75);
+
+	m_SpriteShoes = Sprite(TextureHolder::GetTexture("graphics/player/armour/" + attackType + "/" + m_EquippedArmour[3].getName() + ".png"));
+	m_SpriteShoes.setOrigin(32, 32);
+	m_SpriteShoes.setScale(0.75, 0.75);
+
+	updateTextRect();
+}
+

@@ -1067,6 +1067,12 @@ void Engine::run()
 		// Handle controls while playing
 		if (state == State::PLAYING && !drawInventory)
 		{
+
+			if (Mouse::isButtonPressed(Mouse::Left))
+			{
+				player.AttackAnimation("slash");
+			}
+
 			// Handle the pressing and releasing of the WASD keys
 			if (Keyboard::isKeyPressed(Keyboard::W))
 			{
@@ -1384,22 +1390,22 @@ void Engine::run()
 					// Try to equip as head armour if dropped on head armour slot
 					if (clickedItem.getIcon().getGlobalBounds().intersects(headArmourFrame.getGlobalBounds()) 
 						&& clickedItem.getType() == Item::HeadArmour)
-					{ if (player.equipHeadArmour(clickedItem.getName())) equippedHeadArmourIcon.setTextureRect(clickedItem.getTextureRect()); }
+					{ if (player.equipArmour(clickedItem.getName())) equippedHeadArmourIcon.setTextureRect(clickedItem.getTextureRect()); }
 
 					// Try to equip as chest armour if dropped on chest armour slot
 					if (clickedItem.getIcon().getGlobalBounds().intersects(chestArmourFrame.getGlobalBounds())
 						&& clickedItem.getType() == Item::ChestArmour)
-					{	if (player.equipChestArmour(clickedItem.getName())) equippedChestArmourIcon.setTextureRect(clickedItem.getTextureRect()); }
+					{	if (player.equipArmour(clickedItem.getName())) equippedChestArmourIcon.setTextureRect(clickedItem.getTextureRect()); }
 
 					// Try to equip as trouser armour if dropped on trouser armour slot
 					if (clickedItem.getIcon().getGlobalBounds().intersects(trousersArmourFrame.getGlobalBounds()) 
 						&& clickedItem.getType() == Item::TrouserArmour)
-					{	if (player.equipTrouserArmour(clickedItem.getName())) equippedTrousersArmourIcon.setTextureRect(clickedItem.getTextureRect()); }
+					{	if (player.equipArmour(clickedItem.getName())) equippedTrousersArmourIcon.setTextureRect(clickedItem.getTextureRect()); }
 
 					// Try to equip as shoe armour if dropped on shoe armour slot
 					if (clickedItem.getIcon().getGlobalBounds().intersects(bootsArmourFrame.getGlobalBounds()) 
 						&& clickedItem.getType() == Item::ShoeArmour)
-					{	if (player.equipShoeArmour(clickedItem.getName())) equippedShoeArmourIcon.setTextureRect(clickedItem.getTextureRect());}
+					{	if (player.equipArmour(clickedItem.getName())) equippedShoeArmourIcon.setTextureRect(clickedItem.getTextureRect());}
 
 					// If no slot found, return to original position
 					if (!placed)
