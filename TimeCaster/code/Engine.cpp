@@ -1421,6 +1421,13 @@ void Engine::run()
 						&& clickedItem.getType() == Item::ShoeArmour)
 					{	if (player.equipArmour(clickedItem.getName())) equippedShoeArmourIcon.setTextureRect(clickedItem.getTextureRect());}
 
+					// Try to equip as neck armour if dropped on neck armour slot
+					if (clickedItem.getIcon().getGlobalBounds().intersects(neckFrame.getGlobalBounds()) 
+						&& clickedItem.getType() == Item::NeckArmour)
+					{
+						if (player.equipArmour(clickedItem.getName())) equippedNeckArmourIcon.setTextureRect(clickedItem.getTextureRect());
+					}
+
 					if (clickedItem.getIcon().getGlobalBounds().intersects(playerInFrame.getGlobalBounds())
 						&& clickedItem.getType() == Item::Consumable)
 					{
