@@ -133,17 +133,6 @@ void Enemy::update(float elapsedTime, const Vector2f& playerPos, Chunk* chunk) {
 			cachedPath[1].y * TILE_SIZE + TILE_SIZE / 2
 		);
 
-		/*
-		// Prevent moving into navBoxes
-		for (auto& nav : navBoxes) {
-			if (m_CollisionBox.intersects(nav.getShape().getGlobalBounds())) {
-				if (collision.pointInShape(m_Position, nav.getShape())) {
-					revertPosition();
-				}
-			}
-		}
-		*/
-
 		Vector2f dir = nextPoint - m_Position;
 		float length = sqrt(dir.x * dir.x + dir.y * dir.y);
 
@@ -166,6 +155,7 @@ void Enemy::update(float elapsedTime, const Vector2f& playerPos, Chunk* chunk) {
 
 	// Set sprite based on movement direction
 	float angle = atan2(direction.y, direction.x) * 180.f / 3.14159265f;
+	
 	if (isEnemyMoving()) { // animate sprite if enemy is moving
 		if (angle >= -22.5f && angle < 22.5f)          setSpriteFromSheet(IntRect(0, 64, 576, 64), 65); // right
 		else if (angle >= 22.5f && angle < 67.5f)      setSpriteFromSheet(IntRect(0, 0, 576, 64), 65);   // up-right

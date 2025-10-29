@@ -6,7 +6,7 @@
 #include "Engine.h"
 #include "Player.h"
 #include "TextureHolder.h"
-#include "Bullet.h"
+#include "Spell.h"
 #include "Pickup.h"
 #include "Decal.h"
 #include "Windows.h"
@@ -26,8 +26,8 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 {
 	player.loadConfigFile();
 
-	difficulty = Difficulty::Medium;
-	//difficulty = stringToDifficulty(player.getdifficultyString());
+//	difficulty = Difficulty::Medium;
+	difficulty = stringToDifficulty(player.getdifficultyString());
 	windowedMode = player.getWindowedMode();
 	displayFps = player.getDisplayFps();
 	Listener::setGlobalVolume(player.getVolume());
@@ -52,6 +52,8 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	filter.setFillColor(defaultFilter);
 
 	player.loadConfigFile();
+
+	difficulty = stringToDifficulty(player.getdifficultyString());
 
 	FloatRect viewRect(0, 0, resolution.x, resolution.y);
 	mainView.reset(viewRect);
@@ -155,7 +157,7 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	
 	// Debug inventory initalization
 	storedItems[0] = Weapon("Wooden_Wand", Vector2f(300, 650));
-	storedItems[1] = Weapon("Scimitar", Vector2f(450, 650));
+	storedItems[1] = Weapon("Pirate's_Scimitar", Vector2f(450, 650));
 	storedItems[2] = Weapon("Iron_Sword", Vector2f(600, 650));
 	storedItems[3] = Weapon("Silver_Wand", Vector2f(750, 650));
 	storedItems[4] = Equipment("Family_Robe", Vector2f(900, 650));
@@ -164,9 +166,9 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	storedItems[7] = Equipment("Leather_Chestplate", Vector2f(0, 0));
 	storedItems[8] = Equipment("Basic_Shoes", Vector2f(0, 0));
 	storedItems[9] = Equipment("Robe_Leggings", Vector2f(0, 0));
-	storedItems[10] = Equipment("Shield_Amulet", Vector2f(0, 0));
+	storedItems[10] = Weapon("Reaper's_Scythe", Vector2f(0, 0));
 	storedItems[11] = Equipment("Family_Locket", Vector2f(0, 0));
-	storedItems[12] = Item("Golden_Wand", Vector2f(0, 0));
+	storedItems[12] = Weapon("Armoured_Boots", Vector2f(0, 0));
 
 	// Empty mana bar
 	emptyManaBar.setFillColor(Color::Black);
@@ -418,6 +420,7 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	textureWandFrame = TextureHolder::GetTexture("graphics/UI/ringFrame.png");
 	textureItems = TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png");
 	tooltipBackground = TextureHolder::GetTexture("graphics/UI/tooltipBackground.png");
+	eKeyTexture = TextureHolder::GetTexture("graphics/UI/eKey.png");
 
 	// Equipped item icons
 	equippedSwordIcon.setTexture(&textureItems);
@@ -564,8 +567,8 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	backgroundInvStamBar.setPosition(viewCentre.x - 60, 825);
 	
 	// Display invStamBar text
-	invStamBarText.setString("0 / 0");        // Set the initial text
-	invStamBarText.setFont(font);             // Assign the font
+	invStamBarText.setString("0 / 0"); // Set the initial text
+	invStamBarText.setFont(font); // Assign the font
 	invStamBarText.setCharacterSize(fontSize - 5); // Slightly smaller text size
 	invStamBarText.setFillColor(Color::White);
 
@@ -577,8 +580,8 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	backgroundInvManaBar.setPosition(viewCentre.x + 190, 825);
 
 	// Display invManaBar text
-	invManaBarText.setString("0 / 0");        // Set the initial text
-	invManaBarText.setFont(font);             // Assign the font
+	invManaBarText.setString("0 / 0"); // Set the initial text
+	invManaBarText.setFont(font); // Assign the font
 	invManaBarText.setCharacterSize(fontSize - 5); // Slightly smaller text size
 	invManaBarText.setFillColor(Color::White);
 
@@ -587,6 +590,16 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 
 	// Populate soundtrack
 	sound.populateSoundtrack();
+
+	eKey.setTexture(&eKeyTexture);
+	eKey.setSize(Vector2f(50, 50));
+
+	tutorialText.setFont(font);
+	tutorialText.setCharacterSize(fontSize);
+	tutorialText.setFillColor(Color::White);
+	tutorialText.setString("You sustained some damage while fleeing from the dragon. Press Tab to open your inventory and heal");
+	textBounds = tutorialText.getLocalBounds();
+	tutorialText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 900);
 }
 
 void Engine::initializeInventory()
@@ -612,7 +625,6 @@ void Engine::initializeInventory()
 	startX = viewCentre.x - 300;
 	startY = 650;
 
-
 	// Position icons for items that actually exist
 	for (int i = 0; i < storedItems.size(); i++) {
 		if (!storedItems[i].isNull()) {
@@ -632,15 +644,15 @@ string Engine::difficultyToString(Difficulty difficulty)
 	return "Unknown";
 }
 
-/*
-Difficulty Engine::stringToDifficulty(std::string str)
+
+Engine::Difficulty Engine::stringToDifficulty(string str)
 {
 	if (str == "Easy") {return Difficulty::Easy; }
 	else if (str == "Medium") {return Difficulty::Medium; }
 	else if (str == "Hard") { return Difficulty::Hard; }
 	else return Difficulty::Medium;
 }
-*/
+
 
 void Engine::moveDraggedIcon(Sprite& draggedIcon, Vector2f mousePos)
 {
@@ -824,7 +836,7 @@ void Engine::run()
 					clock.restart();
 
 					player.loadConfigFile();
-					difficulty = Difficulty::Medium;
+					difficulty = stringToDifficulty(player.getdifficultyString());
 					windowedMode = player.getWindowedMode();
 					displayFps = player.getDisplayFps();
 					Listener::setGlobalVolume(player.getVolume());
@@ -887,7 +899,7 @@ void Engine::run()
 						clock.restart();
 
 						player.loadConfigFile();
-						difficulty = Difficulty::Medium;
+						difficulty = stringToDifficulty(player.getdifficultyString());
 						windowedMode = player.getWindowedMode();
 						displayFps = player.getDisplayFps();
 						Listener::setGlobalVolume(player.getVolume());
@@ -929,7 +941,7 @@ void Engine::run()
 						clock.restart();
 
 						player.loadConfigFile();
-						difficulty = Difficulty::Medium;
+						difficulty = stringToDifficulty(player.getdifficultyString());
 						windowedMode = player.getWindowedMode();
 						displayFps = player.getDisplayFps();
 						Listener::setGlobalVolume(player.getVolume());
@@ -941,6 +953,7 @@ void Engine::run()
 				if (optionsButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU && event.mouseButton.button == Mouse::Left)
 				{
 					player.loadConfigFile();
+					difficulty = stringToDifficulty(player.getdifficultyString());
 					sound.playButtonClickSound();
 					world.clearWorld();
 
@@ -1053,12 +1066,19 @@ void Engine::run()
 					}
 				}
 
-				if (state == State::PLAYING && event.key.code == Keyboard::Tab) {
+				if (state == State::PLAYING && event.key.code == Keyboard::Tab && tutorialStage != 1) {
 					if (drawInventory) {
 						drawInventory = false;
 					}
 					else {
 						drawInventory = true;
+					}
+
+					if (tutorialStage == 0) {
+						tutorialStage = 1;
+						tutorialText.setString("Welcome to your inventory! Here you can manage your items and equipment. Drag the health potion onto the player to heal.");
+						textBounds = tutorialText.getLocalBounds();
+						tutorialText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 900);
 					}
 				}
 			}
@@ -1294,16 +1314,14 @@ void Engine::run()
 			// Make the view centre around the player				
 			mainView.setCenter(player.getCenter().x, player.getCenter().y - 10);
 
-			/*
-			// Update any bullets that are in-flight
+			// Update any spells that are in-flight
 			for (int i = 0; i < 100; i++)
 			{
-				if (bullets[i].isInFlight())
+				if (spells[i].isInFlight())
 				{
-					bullets[i].update(dtAsSeconds);
+					spells[i].update(dtAsSeconds);
 				}
 			}
-			*/
 
 			// Drag items the player clicks on
 			if (drawInventory)
@@ -1456,7 +1474,7 @@ void Engine::run()
 				killsText.setString(ssKillCount.str());
 
 				stringstream ssHealthBar;
-				ssHealthBar << int(player.getHealth()) << " / " << player.getMaxHealth();
+				ssHealthBar << int(player.getHealth()) << " / " << int(player.getMaxHealth());
 				invHealthBarText.setString(ssHealthBar.str());
 				textBounds = invHealthBarText.getLocalBounds();
 				x = backgroundInvHealthBar.getPosition().x + (backgroundInvHealthBar.getSize().x / 2.f) - (textBounds.width / 2.f);
@@ -1464,7 +1482,7 @@ void Engine::run()
 				invHealthBarText.setPosition(x - textBounds.left, y - textBounds.top);
 
 				stringstream ssStamBar;
-				ssStamBar << int(player.getStamina()) << " / " << player.getMaxStamina();
+				ssStamBar << int(player.getStamina()) << " / " << int(player.getMaxStamina());
 				invStamBarText.setString(ssStamBar.str());
 				textBounds = invStamBarText.getLocalBounds();
 				x = backgroundInvStamBar.getPosition().x + (backgroundInvStamBar.getSize().x / 2.f) - (textBounds.width / 2.f);
@@ -1472,7 +1490,7 @@ void Engine::run()
 				invStamBarText.setPosition(x - textBounds.left, y - textBounds.top);
 
 				stringstream ssManaBar;
-				ssManaBar << int(player.getMana()) << " / " << player.getMaxMana();
+				ssManaBar << int(player.getMana()) << " / " << int(player.getMaxMana());
 				invManaBarText.setString(ssManaBar.str());
 				textBounds = invManaBarText.getLocalBounds();
 				x = backgroundInvManaBar.getPosition().x + (backgroundInvManaBar.getSize().x / 2.f) - (textBounds.width / 2.f);

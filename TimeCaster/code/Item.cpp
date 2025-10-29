@@ -64,7 +64,6 @@ Item::Item(String type, Vector2f position)
 		m_ItemType = Consumable;
 		m_Sprite.setOrigin(25, 25);
 	}
-
 	if (m_Name == "Mana_Potion")
 	{
 
@@ -80,6 +79,7 @@ Item::Item(String type, Vector2f position)
 		m_ItemType = Consumable;
 		m_Sprite.setOrigin(25, 25);
 	}
+	if (m_Name == "")
 
 
 	m_SecondsSinceSpawn = 0;

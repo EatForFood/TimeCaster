@@ -29,9 +29,6 @@ SoundManager::SoundManager() {
 	soundtrack4Buffer.loadFromFile("sound/soundtrack4.ogg");
 	soundtrack4.setBuffer(soundtrack4Buffer);
 
-	soundtrack5Buffer.loadFromFile("sound/soundtrack5.ogg");
-	soundtrack5.setBuffer(soundtrack5Buffer);
-
 	/***********
 	Other sounds/music
 	************/
@@ -65,7 +62,6 @@ void SoundManager::populateSoundtrack()
 	soundtrack.push_back(soundtrack2);
 	soundtrack.push_back(soundtrack3);
 	soundtrack.push_back(soundtrack4);
-	soundtrack.push_back(soundtrack5);
 } // End of populateSoundtrack function
 
 // Function for checking whether soundtrack is currently playing or not

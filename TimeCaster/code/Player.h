@@ -137,8 +137,9 @@ public:
 	bool equipArmour(string armourNameToEquip);
 
 private:
+
 	const float START_SPEED = 100;
-	const float START_HEALTH = 100;
+	const float START_HEALTH = 50;
 	const float START_MANA = 100;
 	const float START_STAMINA = 100;
 	const float START_STAMINA_RECHARGE = 5;
@@ -154,13 +155,11 @@ private:
 	const string START_NECK_ARMOUR = "Family_Locket";
 	void updateTextRect();
 	
-
 	// Which directions is the player currently moving in
 	bool m_UpPressed;
 	bool m_DownPressed;
 	bool m_LeftPressed;
 	bool m_RightPressed;
-
 
 	// Player stats
 	float m_Mana;

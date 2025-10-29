@@ -3,7 +3,7 @@
 #include <SFML/Audio.hpp>
 #include "Player.h"
 #include "TextureHolder.h"
-#include "Bullet.h"
+#include "Spell.h"
 #include "Pickup.h"
 #include "Decal.h"
 #include "Windows.h"
@@ -16,12 +16,45 @@
 
 class Engine
 {
+
+public:
+	Engine();
+
+	void run();
+
+	void initializeInventory();
+
+	enum Difficulty { Easy, Medium, Hard };
+
+	Difficulty stringToDifficulty(std::string str);
+
+	string difficultyToString(Difficulty difficulty);
+
+
+
+	void moveDraggedIcon(Sprite& draggedIcon, Vector2f mousePos);
+
+	bool addItemToInventory(String itemType);
+
+	void draw();
+
+	Chunk* getCurrentChunk(float x, float y);
+
+	void populateChunkVector();
+
+
+
+protected: 
+	string cleanItemName(string itemName);
+
+
+
 private:
 	// The games difficulty will always be in one of these states
-	enum class Difficulty { Easy, Medium, Hard };
+
 
 	// The game will always be in one of these states
-	enum class State { MAIN_MENU, OPTIONS_MENU, STORY_INTRO, PLAYING, PAUSED, GAME_OVER };
+	enum State { MAIN_MENU, OPTIONS_MENU, STORY_INTRO, PLAYING, PAUSED, GAME_OVER };
 
 	CollisionDetection collision;
 
@@ -207,6 +240,7 @@ private:
 	Texture textureWandFrame;
 	Texture textureItems;
 	Texture tooltipBackground;
+	Texture eKeyTexture;
 
 	RectangleShape playerFrame;
 	RectangleShape equippedSwordIcon;
@@ -230,6 +264,8 @@ private:
 	Text itemTooltipName;
 	Text statTooltipText;
 	Text valueTooltipText;
+
+	Text tutorialText;
 
 	//RectangleShape emptyFrames[16];
 	int draggedIndex = -1;
@@ -257,6 +293,8 @@ private:
 	RectangleShape invManaBar;
 	RectangleShape backgroundInvManaBar;
 	Text invManaBarText;
+
+	RectangleShape eKey;
 
 	// When did we last update the HUD?
 	int framesSinceLastHUDUpdate = 0;
@@ -309,24 +347,4 @@ private:
 	// Skip intro animation boolean
 	bool skipAnimation;
 
-public:
-	Engine();
-
-	void run();
-
-	void initializeInventory();
-
-	//Difficulty stringToDifficulty(std::string str);
-
-	string difficultyToString(Difficulty difficulty);
-
-	void moveDraggedIcon(Sprite& draggedIcon, Vector2f mousePos);
-
-	bool addItemToInventory(String itemType);
-
-	void draw();
-
-	Chunk* getCurrentChunk(float x, float y);
-
-	void populateChunkVector();
 };
