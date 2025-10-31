@@ -181,7 +181,6 @@ void Engine::draw()
 		{
 			window.draw(filter);
 			window.draw(inventoryBackground);
-			window.draw(colouredInventoryBackground);
 			window.draw(playerFrame);
 			//window.draw(playerInFrame);
 			window.draw(headArmourFrame);

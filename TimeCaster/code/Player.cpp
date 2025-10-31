@@ -719,7 +719,6 @@ int Player::getKillCount() {
 
 void Player::switchWeapon()
 {
-
 	if (m_CombatType == Melee)
 	{
 		m_CombatType = Magic;
@@ -728,7 +727,6 @@ void Player::switchWeapon()
 	{
 		m_CombatType = Melee;
 	}
-
 }
 
 bool Player::equipWeapon(string weaponNameToEquip)
