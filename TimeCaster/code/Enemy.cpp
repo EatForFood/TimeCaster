@@ -42,6 +42,12 @@ void Enemy::spawn(IntRect arena, Vector2f resolution, int tileSize, String type,
 	else if (type == "Goblin") {
 		m_Sprite = Sprite(TextureHolder::GetTexture("graphics/enemies/goblin.png"));
 	}
+	else if (type == "Skeleton") {
+		m_Sprite = Sprite(TextureHolder::GetTexture("graphics/enemies/skeleton.png"));
+		m_Speed = 50;
+		m_Health = 50;
+		m_AttackDmg = 20;
+	}
 
 	// Set the origin of the sprite to the centre, 
 	m_Sprite.setOrigin(32, 32);
@@ -113,88 +119,67 @@ bool Enemy::isEnemyMoving() {
 }
 
 void Enemy::update(float elapsedTime, const Vector2f& playerPos, Chunk* chunk) {
+
 	m_TimeElapsed = elapsedTime;
 
-	Vector2i enemyTile(int(m_Position.x / TILE_SIZE), int(m_Position.y / TILE_SIZE));
-	Vector2i playerTile(int(playerPos.x / TILE_SIZE), int(playerPos.y / TILE_SIZE));
+	// Compute direction vector from enemy to player
+	Vector2f toPlayer = playerPos - m_Position;
 
-	int distanceMoved = max(abs(playerTile.x - lastPlayerTile.x), abs(playerTile.y - lastPlayerTile.y));
+	// Compute the length (distance)
+	float length = sqrt(toPlayer.x * toPlayer.x + toPlayer.y * toPlayer.y);
 
-	// Recalculate path only if player moved > 1 tiles or path empty
-	if (cachedPath.empty() || distanceMoved > 1) {
-		cachedPath = Pathfinder::findPath(chunk, enemyTile, playerTile, 20);
-		lastPlayerTile = playerTile;
+	// Avoid division by zero
+	if (length != 0)
+	{
+		// Normalize the vector
+		Vector2f playerDirection = toPlayer / length;
+
+		// Move enemy toward player
+		m_PositionLast = m_Position;
+		m_Position += playerDirection * m_Speed * elapsedTime;
 	}
 
-	// --- Follow path ---
-	if (cachedPath.size() > 1) {
-		Vector2f nextPoint(
-			cachedPath[1].x * TILE_SIZE + TILE_SIZE / 2,
-			cachedPath[1].y * TILE_SIZE + TILE_SIZE / 2
-		);
-
-		Vector2f dir = nextPoint - m_Position;
-		float length = sqrt(dir.x * dir.x + dir.y * dir.y);
-
-		if (length > 0.01f) {
-			dir /= length; // Normalise
-			m_PositionLast = m_Position;
-			m_Position += dir * m_Speed * elapsedTime;
-			direction = dir;
-			m_IsMoving = true;
-		}
-
-		// If close enough to next tile, pop it from path
-		if (length < 8.f && cachedPath.size() > 1) {
-			cachedPath.erase(cachedPath.begin());
-		}
-	}
-	else {
-		m_IsMoving = false;
-	}
-
-	// Set sprite based on movement direction
-	float angle = atan2(direction.y, direction.x) * 180.f / 3.14159265f;
-	
-	if (isEnemyMoving()) { // animate sprite if enemy is moving
-		if (angle >= -22.5f && angle < 22.5f)          setSpriteFromSheet(IntRect(0, 64, 576, 64), 65); // right
-		else if (angle >= 22.5f && angle < 67.5f)      setSpriteFromSheet(IntRect(0, 0, 576, 64), 65);   // up-right
-		else if (angle >= 67.5f && angle < 112.5f)     setSpriteFromSheet(IntRect(0, 0, 576, 64), 65);   // up
-		else if (angle >= 112.5f && angle < 157.5f)    setSpriteFromSheet(IntRect(0, 0, 576, 64), 65);   // up-left
-		else if (angle >= 157.5f || angle < -157.5f)   setSpriteFromSheet(IntRect(0, 192, 576, 64), 65);  // left
-		else if (angle >= -157.5f && angle < -112.5f)  setSpriteFromSheet(IntRect(0, 128, 576, 64), 65);  // down-left
-		else if (angle >= -112.5f && angle < -67.5f)   setSpriteFromSheet(IntRect(0, 128, 576, 64), 65); // down
-		else if (angle >= -67.5f && angle < -22.5f)    setSpriteFromSheet(IntRect(0, 128, 576, 64), 65); // down-right
-		moveTextureRect();
-	}
-	
-	if (!isEnemyMoving()) {
-		if (angle >= -22.5f && angle < 22.5f)          setSpriteFromSheet(IntRect(0, 64, 576, 64), 65); // right
-		else if (angle >= 22.5f && angle < 67.5f)      setSpriteFromSheet(IntRect(0, 0, 576, 64), 65);   // up-right
-		else if (angle >= 67.5f && angle < 112.5f)     setSpriteFromSheet(IntRect(0, 0, 576, 64), 65);   // up
-		else if (angle >= 112.5f && angle < 157.5f)    setSpriteFromSheet(IntRect(0, 0, 576, 64), 65);   // up-left
-		else if (angle >= 157.5f || angle < -157.5f)   setSpriteFromSheet(IntRect(0, 192, 576, 64), 65);  // left
-		else if (angle >= -157.5f && angle < -112.5f)  setSpriteFromSheet(IntRect(0, 128, 576, 64), 65);  // down-left
-		else if (angle >= -112.5f && angle < -67.5f)   setSpriteFromSheet(IntRect(0, 128, 576, 64), 65); // down
-		else if (angle >= -67.5f && angle < -22.5f)    setSpriteFromSheet(IntRect(0, 128, 576, 64), 65); // down-right
-	}
-
+	// If your sprite uses m_Position for rendering:
 	m_Sprite.setPosition(m_Position);
-	m_CollisionBox.left = m_Position.x - 100;
-	m_CollisionBox.top = m_Position.y - 100;
-	m_CollisionBox.width = 200;
-	m_CollisionBox.height = 200;
 
-	// Prevent moving into navBoxes
-	for (auto& nav : navBoxes) { 
-		if (m_CollisionBox.intersects(nav.getShape().getGlobalBounds())) {
-			if (collision.pointInShape(m_Position, nav.getShape())) {
-				revertPosition();
-			}
-		}
+	// Calculate the angle between mouse and center of screen
+	float angle = atan2(playerPos.y - m_Position.y, playerPos.x - m_Position.x) * 180 / 3.141;
+
+	if (angle < 0) angle += 360;
+
+	if (angle >= 45 && angle < 135)
+	{
+		// facing down
+		direction = Vector2f(0, -1);
+
 	}
-}
+	else if (angle >= 135 && angle < 225)
+	{
+		// facing left
+		direction = Vector2f(-1, 0);
+	}
+	else if (angle >= 225 && angle < 315)
+	{
+		// facing up
+		direction = Vector2f(0, 1);
+	}
+	else
+	{
+		// facing right
+		direction = Vector2f(1, 0);
+	}
 
+	updateTextRect();
+	moveTextureRect();
+
+	if (m_Health < 0)
+	{
+		m_IsDead = true;
+		m_Sprite.setRotation(90);
+		m_Sprite.setOrigin(32, 56);
+	}
+	
+}
 
 float Enemy::getCurrentHP() {
 	return m_Health;
@@ -228,4 +213,27 @@ FloatRect Enemy::getRenderArea()
 float Enemy::getDamage()
 {
 	return m_Damage;
+}
+
+void Enemy::updateTextRect()
+{
+	if (direction == Vector2f(0, 1)) // up
+	{
+		setSpriteFromSheet(IntRect(0, 0, 576, 64), 64);
+	}
+
+	if (direction == Vector2f(0, -1)) // down
+	{
+		setSpriteFromSheet(IntRect(0, 128, 576, 64), 64);
+	}
+
+	if (direction == Vector2f(1, 0)) // right
+	{
+		setSpriteFromSheet(IntRect(0, 192, 576, 64), 64);
+	}
+
+	if (direction == Vector2f(-1, 0)) // left
+	{
+		setSpriteFromSheet(IntRect(0, 64, 576, 64), 64);
+	}
 }

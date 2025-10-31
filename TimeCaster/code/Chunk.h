@@ -102,9 +102,4 @@ public:
 	void createForest();
 	void createBurntForest();
 
-	bool isTileBlocked(int tileX, int tileY);
-
-	void markNavBoxAsBlocked(const NavBox& nav);
-
-	bool blockEdges(int tileX, int tileY);
 };

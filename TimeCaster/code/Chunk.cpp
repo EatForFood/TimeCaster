@@ -722,11 +722,9 @@ void Chunk::placeHouse4(int sx, int sy) { // sx 15, sy 18
 	sy += offset.y;
 	NavBox navbox1(sx + 1, sy - 2, 2, 3);
 	navBoxes.push_back(navbox1);
-	markNavBoxAsBlocked(navbox1);
 
 	NavBox navbox2(sx + 3, sy - 3, 3, 2);
 	navBoxes.push_back(navbox2);
-	markNavBoxAsBlocked(navbox2);
 }
 
 void Chunk::placeCastle(int sx, int sy) { // sx 15, sy 18
@@ -902,14 +900,12 @@ void Chunk::CreateEntity(String type, int x, int y) {
 		NavBox nav(x, y, 1, 1);
 		nav.NavTree();
 		navBoxes.push_back(nav);
-		markNavBoxAsBlocked(nav);
 	}
 	else if (type == "tree5" || type == "tree8")
 	{
 		NavBox nav(x, y, 1, 1);
 		nav.NavTreeLarge();
 		navBoxes.push_back(nav);
-		markNavBoxAsBlocked(nav);
 	}
 	else
 	{
@@ -1145,53 +1141,8 @@ String Chunk::getChunkType()
 	return m_Type;
 }
 
-bool Chunk::isTileBlocked(int tileX, int tileY)
-{
-	// Convert tile coordinate to world coordinate
-	float ix = (tileX - tileY) * (TILE_SIZE / 2);
-	float iy = (tileX + tileY) * (TILE_SIZE / 4);
-	Vector2f pos(ix, iy);
-
-	// Check collision with any NavBox obstacle
-	for (auto& nav : navBoxes)
-	{
-		ConvexShape shape = nav.getShape();
-		if (collision.pointInShape(pos, shape) || m_TileType[tileX][tileY] == Vector2i(0, 13))
-			return true;
-	}
-	return false;
-}
-
-void Chunk::markNavBoxAsBlocked(const NavBox& nav)
-{
-	FloatRect bounds = nav.getShape().getGlobalBounds();
-
-	for (int x = 0; x < 50; ++x)
-	{
-		for (int y = 0; y < 50; ++y)
-		{
-			float ix = (x - y) * (TILE_SIZE / 2) + TILE_SIZE / 2;
-			float iy = (x + y) * (TILE_SIZE / 4) + TILE_SIZE / 2;
-			Vector2f pos(ix, iy);
-
-			if (collision.pointInShape(pos, nav.getShape()))
-				blockedTiles[x][y] = true;
-		}
-	}
-}
-
-bool Chunk::blockEdges(int tileX, int tileY)
-{
-	if (tileX < 0 || tileY < 0 || tileX >= 50 || tileY >= 50)
-		return true; // treat out-of-bounds as blocked
-
-	return blockedTiles[tileX][tileY];
-}
-
 void Chunk::placeStructure(String type, Vector2i position)
 {
-	
-
 	if (type == "house1")
 	{
 		placeHouse1(position.x, position.y);

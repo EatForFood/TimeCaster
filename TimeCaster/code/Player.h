@@ -229,9 +229,7 @@ private:
 
 	FloatRect m_RenderArea;
 
-
 	bool inCell = false;
 
-	float m_AttackTimer = 0.0f;
-	float m_AttackDuration = 0.8f;
+
 };

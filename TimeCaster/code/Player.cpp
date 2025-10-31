@@ -59,10 +59,11 @@ Player::Player()
 
 void Player::spawn(IntRect arena, Vector2f resolution, int tileSize, int level)
 {
-	m_Hitbox.left = m_Position.x - 20;
-	m_Hitbox.width = 40;
-	m_Hitbox.top = m_Position.y - 20;
-	m_Hitbox.height = 40;
+	// assign player's hitbox
+	m_Hitbox.left = m_Position.x - 12;
+	m_Hitbox.width = 24;
+	m_Hitbox.top = m_Position.y - 12;
+	m_Hitbox.height = 24;
 
 	m_Level = level;
 
@@ -159,6 +160,11 @@ void Player::update(float elapsedTime, Vector2i mousePosition, vector<NavBox> na
 
 	if (m_IsAttacking)
 	{
+		if (m_CombatType == Melee)
+		{
+			m_AttackDmg = m_EquippedWeapons[0].getDamage();
+		}
+
 		moveTextureRect();
 
 		if (getAniCounter() == 0 || getAniCounter() == 10)
@@ -306,56 +312,56 @@ void Player::update(float elapsedTime, Vector2i mousePosition, vector<NavBox> na
 
 	dodge();
 
+	// update player sprite and equipment
 	m_SpritePants.setPosition(m_Position);
 	m_SpriteHead.setPosition(m_Position);
 	m_SpriteTorso.setPosition(m_Position);
 	m_SpriteShoes.setPosition(m_Position);
-
 	m_Sprite.setPosition(m_Position);
+	m_SpriteWeapon.setPosition(m_Position);
+
+	// update collision detection zone
 	m_CollisionBox.left = m_Position.x - 100;
 	m_CollisionBox.top = m_Position.y - 100;
 	m_CollisionBox.width = 200;
 	m_CollisionBox.height = 200;
 
-	m_SpriteWeapon.setPosition(m_Position);
+	// update player hitbox
+	m_Hitbox.left = m_Position.x - 12;
+	m_Hitbox.width = 24;
+	m_Hitbox.top = m_Position.y - 12;
+	m_Hitbox.height = 24;
 
+	// update render area
 	m_RenderArea = FloatRect(m_Position.x - m_Resolution.x / 2, m_Position.y - m_Resolution.y / 2, m_Resolution.x, m_Resolution.y);
-	
-
-	/*cout << m_Resolution.x << " 2 " << m_Resolution.y << endl;
-
-	m_Resolution.x = VideoMode::getDesktopMode().width;
-	m_Resolution.y = VideoMode::getDesktopMode().height;
-
-	cout << m_Resolution.x << " 3 " << m_Resolution.y << endl;*/
 
 	// Calculate the angle between mouse and center of screen
 	float angle = (atan2(mousePosition.y - m_Resolution.y / 2, mousePosition.x - m_Resolution.x / 2) * 180) / 3.141;
 
 	if (angle < 0) angle += 360;
 
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Right)) // make player face mouse when holding righ click
+	if (Mouse::isButtonPressed(Mouse::Right)) // make player face mouse when holding right click
 	{
 		if (angle >= 45 && angle < 135)
 		{
 			// facing down
-			direction == Vector2f(0, -1);
+			direction = Vector2f(0, -1);
 
 		}
 		else if (angle >= 135 && angle < 225)
 		{
 			// facing left
-			direction == Vector2f(-1, 0);
+			direction = Vector2f(-1, 0);
 		}
 		else if (angle >= 225 && angle < 315)
 		{
 			// facing up
-			direction == Vector2f(0, 1);
+			direction = Vector2f(0, 1);
 		}
 		else
 		{
 			// facing right
-			direction == Vector2f(1, 0);
+			direction = Vector2f(1, 0);
 		}
 	}
 
@@ -926,7 +932,6 @@ void Player::AttackAnimation(string attackType)
 	}
 
 	m_IsAttacking = true;
-	m_AttackTimer = 0.0f; // reset attack timer
 
 	// Associate a texture with the body sprite
 	m_Sprite = Sprite(TextureHolder::GetTexture("graphics/player/" + attackType + "/playerAttack.png"));

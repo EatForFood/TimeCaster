@@ -12,6 +12,11 @@ void Character::setPosition(Vector2f newPosition)
 	m_Sprite.setPosition(m_Position);
 }
 
+FloatRect Character::getHitBox()
+{
+	return m_Hitbox;
+}
+
 FloatRect Character::getGlobalBounds()
 {
 	return m_Sprite.getGlobalBounds();
@@ -175,4 +180,34 @@ void Character::resetAniCounter()
 int Character::getAniCounter()
 {
 	return m_Ani_Counter;
+}
+
+bool Character::isAttacking()
+{
+	return m_IsAttacking;
+}
+
+void Character::setHealth(float health)
+{
+	m_Health = m_Health + health;
+}
+
+float Character::getAttackDamage()
+{
+	return m_AttackDmg;
+}
+
+bool Character::isDead()
+{
+	return m_IsDead;
+}
+
+bool Character::wasHit()
+{
+	return m_WasHit;
+}
+
+void Character::setWasHit(bool hit)
+{
+	m_WasHit = hit;
 }

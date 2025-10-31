@@ -835,10 +835,10 @@ void Engine::run()
 					// Spawn the player in the middle of the arena
 					player.spawn(arena, resolution, tileSize, player.getPlayerLevel());
 
-					for (int i = 0; i < 0; ++i)
+					for (int i = 0; i < 1; ++i)
 					{
 						Enemy e;
-						e.spawn(arena, resolution, tileSize, "Goblin", player.getPlayerLevel());
+						e.spawn(arena, resolution, tileSize, "Skeleton", player.getPlayerLevel());
 						enemyArr.push_back(e);
 					}
 
@@ -897,7 +897,7 @@ void Engine::run()
 
 						for (Enemy& enemies : enemyArr)
 						{
-							enemies.spawn(arena, resolution, tileSize, "Goblin", player.getPlayerLevel());
+							enemies.spawn(arena, resolution, tileSize, "Skeleton", player.getPlayerLevel());
 						}
 
 						// Reset the clock so there isn't a frame jump
@@ -1263,9 +1263,10 @@ void Engine::run()
 			}
 		}
 
-		/***************
-		UPDATE THE FRAME
-		****************/
+		/*********************************************************************
+		                           UPDATE THE FRAME
+		**********************************************************************/
+
 		if (state == State::PLAYING)
 		{
 			// Update the delta time
@@ -1303,7 +1304,23 @@ void Engine::run()
 				{
 					if (player.getRenderArea().intersects(enemies.getSprite().getGlobalBounds()))
 					{
-						enemies.update(dtAsSeconds, player.getPosition(), getCurrentChunk(enemies.getPosition().x, enemies.getPosition().y));
+						if (!enemies.isDead())
+						{
+							enemies.update(dtAsSeconds, player.getPosition(), getCurrentChunk(enemies.getPosition().x, enemies.getPosition().y));
+
+							if (player.getColBox().intersects(enemies.getSprite().getGlobalBounds()))
+							{
+								if (player.getWeapon().getGlobalBounds().intersects(enemies.getSprite().getGlobalBounds()) && player.isAttacking() && !enemies.wasHit())
+								{
+									enemies.setHealth(-player.getAttackDamage());
+									enemies.setWasHit(true);
+								}
+								else if (!player.isAttacking())
+								{
+									enemies.setWasHit(false);
+								}
+							}
+						}
 					}
 				}
 			}

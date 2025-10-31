@@ -68,4 +68,6 @@ public:
 	FloatRect getRenderArea();
 
 	float getDamage();
+
+	void updateTextRect();
 };

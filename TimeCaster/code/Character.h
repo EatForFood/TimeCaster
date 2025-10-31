@@ -89,8 +89,8 @@ protected:
 	//50 ms for each frame
 
 	float m_AnimationTimer = 0;
-
-	IntRect m_Hitbox;
+	
+	FloatRect m_Hitbox;
 
 	// Where the bullet should spawn from
 	Vector2f m_Bullet_Spawn;
@@ -105,6 +105,9 @@ protected:
 	int m_TileSize;
 
 	bool m_IsAttacking = false;
+	float m_AttackDmg;
+	bool m_IsDead = false;
+	bool m_WasHit = false;
 
 public:
 
@@ -151,5 +154,16 @@ public:
 	void resetAniCounter();
 	int getAniCounter();
 
+	FloatRect getHitBox();
+
+	bool isAttacking();
+
+	void setHealth(float health);
+
+	float getAttackDamage();
+
+	bool isDead();
+	bool wasHit();
+	void setWasHit(bool hit);
 };
 
