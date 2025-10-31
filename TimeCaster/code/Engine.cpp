@@ -1153,37 +1153,25 @@ void Engine::run()
 		/* below are debug functions, comment them out in full build / when needed
 		if you add any more, make sure they check if debug reset is false and set it to true or else it will run every loop while the key is pressed
 		Press tilde to activate debug commands */
-		if (event.key.code == Keyboard::Tilde && state == State::PLAYING)
-		{
-			debugreset = false;
-			//	storedItems[2] = Weapon("Wooden_Wand", Vector2f(600, 650));
-
-		}
-		if (event.key.code == Keyboard::Num1 && !debugreset && state == State::PLAYING)
+		if (event.key.code == Keyboard::Num1 && state == State::PLAYING)
 		{
 			// Increase health
 			player.upgradeHealth();
-			//	storedItems[2] = Weapon("Iron_Sword", Vector2f(600, 650));
-
-
-			debugreset = true;
 		}
 
-		if (event.key.code == Keyboard::Num2 && !debugreset && state == State::PLAYING)
+		if (event.key.code == Keyboard::Num2 && state == State::PLAYING)
 		{
 			// Increase stamina
 			player.upgradeStamina();
-			debugreset = true;
 		}
 
-		if (event.key.code == Keyboard::Num3 && !debugreset && state == State::PLAYING)
+		if (event.key.code == Keyboard::Num3 && state == State::PLAYING)
 		{
 			// Increase health
 			player.upgradeMana();
-			debugreset = true;
 		}
 
-		if (event.key.code == Keyboard::Num4 && !debugreset && state == State::PLAYING)
+		if (event.key.code == Keyboard::Num4 && state == State::PLAYING)
 		{
 			if (addItemToInventory("Iron_Sword"))
 			{
@@ -1193,47 +1181,40 @@ void Engine::run()
 			{
 				std::cout << "No space in inventory" << std::endl;
 			}
-			debugreset = true;
 		}
 
-		if (event.key.code == Keyboard::Num5 && !debugreset && state == State::PLAYING)
+		if (event.key.code == Keyboard::Num5 && state == State::PLAYING)
 		{
-
 			//Selling item example, the storedItems index will need to be set somehow but the rest can be copy and pasted 
 			// I can make a function for it if needed	
-			if (storedItems[0].isNull())	cout << "null item attempted to be sold" << endl;
+			if (storedItems[0].isNull()) cout << "null item attempted to be sold" << endl;
 
 			player.setGold(player.getGold() + storedItems[0].getValue());
 			cout << "Sold " << " for " << storedItems[0].getValue() << " gold." << endl;
 			cout << "You now have " << player.getGold() << " gold." << endl;
 			storedItems[0] = Item("null", Vector2f(0, 0));
-			debugreset = true;
 		}
 
-		if (event.key.code == Keyboard::Num8 && !debugreset && state == State::PLAYING)
+		if (event.key.code == Keyboard::Num8 && state == State::PLAYING)
 		{
 			player.hit(gameTimeTotal, 10, 200);
-			debugreset = true;
 		}
 
-		if (event.key.code == Keyboard::Num9 && !debugreset && state == State::PLAYING)
+		if (event.key.code == Keyboard::Num9 && state == State::PLAYING)
 		{
 			player.hit(gameTimeTotal, 30, 1000);
-			debugreset = true;
 		}
 
-		if (event.key.code == Keyboard::G && !debugreset && state == State::PLAYING)
+		if (event.key.code == Keyboard::G && state == State::PLAYING)
 		{
 			for (int i = 0; i < (rand() % 10); i++) {
-				items.emplace_back("gold", Vector2f(0, 0));
+				items.emplace_back("Gold", Vector2f(player.getPosition().x, player.getPosition().y));
 			}
-			debugreset = true;
 		}
 
-		if (event.key.code == Keyboard::C && !debugreset && state == State::PLAYING)
+		if (event.key.code == Keyboard::C && state == State::PLAYING)
 		{
 			player.setInCell();
-			debugreset = true;
 		}
 
 		// Handle the display fps button changing colour based on boolean
@@ -1272,7 +1253,6 @@ void Engine::run()
 		/*********************************************************************
 		                           UPDATE THE FRAME
 		**********************************************************************/
-
 		if (state == State::PLAYING)
 		{
 			// Update the delta time

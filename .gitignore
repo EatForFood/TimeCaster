@@ -361,15 +361,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
-/TimeCaster/gamedata/TCSave.txt
-/TimeCaster/gamedata/TCConfig.txt
-/TimeCaster/gamedata/chunks/chunk_-1_-1.txt
-/TimeCaster/gamedata/chunks/chunk_-1_0.txt
-/TimeCaster/gamedata/chunks/chunk_-1_1.txt
-/TimeCaster/gamedata/chunks/chunk_0_-1.txt
-/TimeCaster/gamedata/chunks/chunk_0_0.txt
-/TimeCaster/gamedata/chunks/chunk_0_1.txt
-/TimeCaster/gamedata/chunks/chunk_1_-1.txt
-/TimeCaster/gamedata/chunks/chunk_1_0.txt
-/TimeCaster/gamedata/chunks/chunk_1_1.txt
-/TimeCaster/gamedata
+
+/TimeCaster/gamedata/
