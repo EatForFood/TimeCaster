@@ -242,13 +242,25 @@ void Engine::draw()
 					valueTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 55);
 					window.draw(valueTooltipText);
 
+					itemTooltipName.setString(cleanItemName(itemName));
+
 					if (type == Item::ItemType::MeleeWeapon || type == Item::ItemType::MagicWeapon) {
 						
-						itemTooltipName.setString(cleanItemName(itemName));
-						itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
-
 						statTooltipText.setString("Damage: " + to_string(storedItems[i].getDamage()));
 
+						if (itemTooltipName.getLocalBounds().width > statTooltipText.getLocalBounds().width && itemTooltipName.getLocalBounds().width > valueTooltipText.getLocalBounds().width)
+						{
+							itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
+						}
+						else if (statTooltipText.getLocalBounds().width > itemTooltipName.getLocalBounds().width && statTooltipText.getLocalBounds().width > valueTooltipText.getLocalBounds().width)
+						{
+							itemTooltipBackground.setSize(Vector2f(statTooltipText.getLocalBounds().width + 55, 100));
+						}
+						else
+						{
+							itemTooltipBackground.setSize(Vector2f(valueTooltipText.getLocalBounds().width + 55, 100));
+						}
+						
 						itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 15);
 						statTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 37);
 
@@ -257,10 +269,21 @@ void Engine::draw()
 					}
 					else if (type == Item::ItemType::HeadArmour || type == Item::ItemType::ChestArmour || type == Item::ItemType::TrouserArmour || 
 						type == Item::ItemType::ShoeArmour || type == Item::ItemType::NeckArmour) {
-						itemTooltipName.setString(cleanItemName(itemName));
-						itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
 
 						statTooltipText.setString("Armour: " + to_string(storedItems[i].getArmour()));
+
+						if (itemTooltipName.getLocalBounds().width > statTooltipText.getLocalBounds().width && itemTooltipName.getLocalBounds().width > valueTooltipText.getLocalBounds().width)
+						{
+							itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
+						}
+						else if (statTooltipText.getLocalBounds().width > itemTooltipName.getLocalBounds().width && statTooltipText.getLocalBounds().width > valueTooltipText.getLocalBounds().width)
+						{
+							itemTooltipBackground.setSize(Vector2f(statTooltipText.getLocalBounds().width + 55, 100));
+						}
+						else
+						{
+							itemTooltipBackground.setSize(Vector2f(valueTooltipText.getLocalBounds().width + 55, 100));
+						}
 
 						itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 15);
 						statTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 37);
@@ -270,12 +293,21 @@ void Engine::draw()
 					}
 					else if (type == Item::ItemType::Consumable) {
 						
-						itemTooltipName.setString(cleanItemName(itemName));
-						itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
+						if (itemTooltipName.getLocalBounds().width > statTooltipText.getLocalBounds().width && itemTooltipName.getLocalBounds().width > valueTooltipText.getLocalBounds().width)
+						{
+							itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
+						}
+						else if (statTooltipText.getLocalBounds().width > itemTooltipName.getLocalBounds().width && statTooltipText.getLocalBounds().width > valueTooltipText.getLocalBounds().width)
+						{
+							itemTooltipBackground.setSize(Vector2f(statTooltipText.getLocalBounds().width + 55, 100));
+						}
+						else
+						{
+							itemTooltipBackground.setSize(Vector2f(valueTooltipText.getLocalBounds().width + 55, 100));
+						}
 
 						itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 15);
 				
-
 						window.draw(itemTooltipName);
 
 					}

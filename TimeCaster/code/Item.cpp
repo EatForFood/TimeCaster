@@ -30,10 +30,9 @@ Item::Item(String type, Vector2f position)
 		//m_NullItem = true;
 
 		m_ItemType = null;
-
 	}
 
-	if (m_Name == "gold")
+	if (m_Name == "Gold")
 	{
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/goldCoin.png"));
 		m_Icon.setTexture(TextureHolder::GetTexture("graphics/items/goldCoinIcon.png"));

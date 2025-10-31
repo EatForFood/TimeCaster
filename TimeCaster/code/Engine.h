@@ -30,8 +30,6 @@ public:
 
 	string difficultyToString(Difficulty difficulty);
 
-
-
 	void moveDraggedIcon(Sprite& draggedIcon, Vector2f mousePos);
 
 	bool addItemToInventory(String itemType);
@@ -47,11 +45,8 @@ public:
 protected: 
 	string cleanItemName(string itemName);
 
-
-
 private:
 	// The games difficulty will always be in one of these states
-
 
 	// The game will always be in one of these states
 	enum State { MAIN_MENU, OPTIONS_MENU, STORY_INTRO, PLAYING, PAUSED, GAME_OVER };
@@ -112,6 +107,7 @@ private:
 
 	// When was the fire button last pressed?
 	Time lastPressed;
+
 	// FPS float number
 	float fps = 0.f;
 
@@ -319,11 +315,6 @@ private:
 	vector<DrawableItem> drawables;
 
 	vector<Item> items;
-
-
-	bool debugreset = true; //it's a bit of a hack but it works to stop multiple upgrades from one key press
-	//press numpad0 to reset if you want to test again
-	//remove this in full build
 
 	// Boolean for whether the start game sound has played
 	bool startSoundPlayed = false;
