@@ -343,8 +343,8 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	windowedModeButton.setTexture(&textureMainMenuButton2);
 
 	// Windowed mode button text
-	windowedModeButtonText.setString("Windowed Mode");  // Set the display text
-	windowedModeButtonText.setFont(font);               // Assign the font
+	windowedModeButtonText.setString("Windowed Mode"); // Set the display text
+	windowedModeButtonText.setFont(font); // Assign the font
 	windowedModeButtonText.setCharacterSize(fontSize - 5);
 	windowedModeButtonText.setFillColor(Color::Black);
 	textBounds = windowedModeButtonText.getLocalBounds();
@@ -373,7 +373,7 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 
 	// Display difficulty button text
 	difficultyButtonText.setString("Difficulty: " + difficultyToString(difficulty)); // Set the label text
-	difficultyButtonText.setFont(font);                              // Assign the font
+	difficultyButtonText.setFont(font); // Assign the font
 	difficultyButtonText.setCharacterSize(fontSize - 5);
 	difficultyButtonText.setFillColor(Color::Black);
 	textBounds = difficultyButtonText.getLocalBounds();
@@ -607,11 +607,6 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	inventoryBackground.setSize(Vector2f(1000, 800));
 	textBounds = inventoryBackground.getLocalBounds();
 	inventoryBackground.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y - (textBounds.height / 2.f) - textBounds.top);
-
-	colouredInventoryBackground.setFillColor(Color(0, 0, 128));
-	colouredInventoryBackground.setSize(Vector2f(894, 620));
-	textBounds = colouredInventoryBackground.getLocalBounds();
-	colouredInventoryBackground.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y - (textBounds.height / 2.f) - textBounds.top);
 }
 
 void Engine::initializeInventory()
@@ -841,6 +836,7 @@ void Engine::run()
 						e.spawn(arena, resolution, tileSize, "Skeleton", player.getPlayerLevel());
 						enemyArr.push_back(e);
 					}
+					*/
 
 					// Reset the clock so there isn't a frame jump
 					clock.restart();
@@ -895,10 +891,12 @@ void Engine::run()
 						// Spawn the player in the middle of the arena
 						player.spawn(arena, resolution, tileSize, player.getPlayerLevel());
 
-						for (Enemy& enemies : enemyArr)
+						/*
+						for (int i = 0; i < 1; ++i)
 						{
 							enemies.spawn(arena, resolution, tileSize, "Skeleton", player.getPlayerLevel());
 						}
+						*/
 
 						// Reset the clock so there isn't a frame jump
 						clock.restart();
@@ -937,10 +935,14 @@ void Engine::run()
 						// Spawn the player in the middle of the arena
 						player.spawn(arena, resolution, tileSize, player.getPlayerLevel());
 
-						for (Enemy& enemies : enemyArr)
+						/*
+						for (int i = 0; i < 1; ++i)
 						{
-							enemies.spawn(arena, resolution, tileSize, "Goblin", player.getPlayerLevel());
+							Enemy e;
+							e.spawn(arena, resolution, tileSize, "Goblin", player.getPlayerLevel());
+							enemyArr.push_back(e);
 						}
+						*/
 
 						// Reset the clock so there isn't a frame jump
 						clock.restart();
@@ -993,6 +995,7 @@ void Engine::run()
 					sound.playButtonClickSound();
 					world.clearWorld();
 					player.updateSaveFile();
+					enemyArr.clear();
 					state = State::MAIN_MENU;
 				}
 
@@ -1002,12 +1005,10 @@ void Engine::run()
 					if (displayFps) {
 						sound.playButtonClickSound();
 						displayFps = false;
-						player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume());
 					}
 					else {
 						sound.playButtonClickSound();
 						displayFps = true;
-						player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume());
 					}
 				}
 
@@ -1017,13 +1018,11 @@ void Engine::run()
 					if (windowedMode) {
 						sound.playButtonClickSound();
 						windowedMode = false;
-						player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume());
 						window.create(VideoMode(resolution.x, resolution.y), "TimeCaster", Style::Fullscreen);
 					}
 					else {
 						sound.playButtonClickSound();
 						windowedMode = true;
-						player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume());
 						window.create(VideoMode(resolution.x, resolution.y), "TimeCaster", Style::Default);
 					}
 				}
@@ -1034,17 +1033,14 @@ void Engine::run()
 					switch (difficulty) {
 					case Difficulty::Easy:
 						difficulty = Difficulty::Medium;
-						player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume());
 						break;
 
 					case Difficulty::Medium:
 						difficulty = Difficulty::Hard;
-						player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume());
 						break;
 
 					case Difficulty::Hard:
 						difficulty = Difficulty::Easy;
-						player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume());
 						break;
 					}
 

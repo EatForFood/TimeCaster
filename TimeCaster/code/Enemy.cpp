@@ -10,8 +10,6 @@ using namespace sf;
 
 Enemy::Enemy() {
 	m_Speed = START_SPEED;
-	m_Health = START_HEALTH;
-	m_MaxHealth = START_HEALTH;
 }
 
 void Enemy::spawn(IntRect arena, Vector2f resolution, int tileSize, String type, int level) {
@@ -21,6 +19,8 @@ void Enemy::spawn(IntRect arena, Vector2f resolution, int tileSize, String type,
 	m_Hitbox.height = 40;
 	m_Level = level;
 	m_Type = type;
+	m_MaxHealth = START_HEALTH * (1 + (m_Level - 1) * 0.1f); // Increase health by 10% per level
+	m_MaxHealth = START_HEALTH * (1 + (m_Level - 1) * 0.1f); // Increase max health by 10% per level
 
 	// Copy the details of the arena to the enemy's m_Arena
 	m_Arena.left = arena.left;
@@ -47,6 +47,9 @@ void Enemy::spawn(IntRect arena, Vector2f resolution, int tileSize, String type,
 		m_Speed = 50;
 		m_Health = 50;
 		m_AttackDmg = 20;
+	}
+	else if (type == "Dragon") {
+		m_Sprite = Sprite(TextureHolder::GetTexture("graphics/enemies/dragon.png"));
 	}
 
 	// Set the origin of the sprite to the centre, 
@@ -99,14 +102,16 @@ void Enemy::stopDown()
 	m_MoveDown = false;
 }
 
-void Enemy::stopMoving() {
+void Enemy::stopMoving() 
+{
 	m_MoveLeft = false;
 	m_MoveRight = false;
 	m_MoveUp = false;
 	m_MoveDown = false;
 }
 
-void Enemy::revertPosition() {
+void Enemy::revertPosition() 
+{
 	setPosition(m_PositionLast);
 }
 
