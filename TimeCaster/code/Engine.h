@@ -350,6 +350,9 @@ private:
 	bool skipAnimation;
 
 	Spell spells[100];
+	int currentSpell = 0;
 
 	int tutorialStage = 0;
+
+	enum CombatType { Melee, Magic };
 };

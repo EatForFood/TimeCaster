@@ -109,6 +109,8 @@ protected:
 	bool m_IsDead = false;
 	bool m_WasHit = false;
 
+	bool m_CastingSpell = false;
+
 public:
 
 	//void virtual update(float elapsedTime);
@@ -165,5 +167,8 @@ public:
 	bool isDead();
 	bool wasHit();
 	void setWasHit(bool hit);
+
+	bool isCastingSpell();
+	void castingSpell(bool casting);
 };
 

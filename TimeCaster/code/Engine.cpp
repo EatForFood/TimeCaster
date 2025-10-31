@@ -836,7 +836,7 @@ void Engine::run()
 						e.spawn(arena, resolution, tileSize, "Skeleton", player.getPlayerLevel());
 						enemyArr.push_back(e);
 					}
-					*/
+					
 
 					// Reset the clock so there isn't a frame jump
 					clock.restart();
@@ -1090,7 +1090,17 @@ void Engine::run()
 		{
 			if (Mouse::isButtonPressed(Mouse::Left))
 			{
-				player.AttackAnimation("slash");
+				player.Attack();
+				if (player.getCombatType() == Magic && !player.isCastingSpell())
+				{
+					spells[currentSpell].shoot(player.getCenter().x, player.getCenter().y + 10, mouseWorldPosition.x, mouseWorldPosition.y);
+					currentSpell++;
+					if (currentSpell > 99)
+					{
+						currentSpell = 0;
+					}
+					player.castingSpell(true);
+				}
 			}
 
 			// Handle the pressing and releasing of the WASD keys
