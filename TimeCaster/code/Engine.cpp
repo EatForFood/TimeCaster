@@ -1569,19 +1569,19 @@ void Engine::run()
 			}
 			
 			// size up the health bar
-			emptyHealthBar.setSize(Vector2f(player.getMaxHealth() * 2.7, 35));
-			healthBar.setSize(Vector2f(player.getHealth() * 2.7, 35));
-			healthBarContainer.setSize(Vector2f(player.getMaxHealth() * 3, 35));
+			emptyHealthBar.setSize(Vector2f(200, 35));
+			healthBar.setSize(Vector2f(200 * (player.getHealth() / player.getMaxHealth()), 35));
+			healthBarContainer.setSize(Vector2f(230, 35));
 
 			// Set size of the mana bar
-			emptyManaBar.setSize(Vector2f(player.getMaxMana() * 2.7, 35));
-			manaBar.setSize(Vector2f(player.getMana() * 2.7, 35));
-			manaBarContainer.setSize(Vector2f(player.getMaxMana() * 3, 35));
+			emptyManaBar.setSize(Vector2f(200, 35));
+			manaBar.setSize(Vector2f(200 * (player.getMana() / player.getMaxMana()), 35));
+			manaBarContainer.setSize(Vector2f(230, 35));
 
 			// Set size of the Stamina bar
-			emptyStaminaBar.setSize(Vector2f(player.getMaxStamina() * 2.7, 35));
-			staminaBar.setSize(Vector2f(player.getStamina() * 2.7, 35));
-			staminaBarContainer.setSize(Vector2f(player.getMaxStamina() * 3, 35));
+			emptyStaminaBar.setSize(Vector2f(200, 35));
+			staminaBar.setSize(Vector2f(200 * (player.getStamina() / player.getMaxStamina()), 35));
+			staminaBarContainer.setSize(Vector2f(230, 35));
 
 			// Increment the amount of time since the last HUD update
 			timeSinceLastUpdate += dt;
