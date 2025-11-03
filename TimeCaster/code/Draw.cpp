@@ -492,12 +492,12 @@ void Engine::draw()
 		else {
 			// Draw all the HUD elements
 			window.draw(filter);
-			window.draw(emptyHealthBar);
 			window.draw(healthBar);
-			window.draw(emptyManaBar);
+			window.draw(emptyHealthBar);
 			window.draw(manaBar);
-			window.draw(emptyStaminaBar);
+			window.draw(emptyManaBar);
 			window.draw(staminaBar);
+			window.draw(emptyStaminaBar);
 			if (displayFps) {
 				window.draw(fpsText);
 			}

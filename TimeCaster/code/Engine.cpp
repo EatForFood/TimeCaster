@@ -128,24 +128,30 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	fpsText.setFillColor(Color::Yellow);
 	fpsText.setPosition(1800, 5);
 
+	barContainer = TextureHolder::GetTexture("graphics/UI/barContainer.png");
+
 	// Health bar
 	healthBar.setFillColor(Color::Red);
-	healthBar.setPosition(10,10);
+	healthBar.setPosition(25,10);
 
-	emptyHealthBar.setFillColor(Color::Black);
+	emptyHealthBar.setTexture(&barContainer);
 	emptyHealthBar.setPosition(10, 10);
 
 	// Stamina bar
 	staminaBar.setFillColor(Color::Green);
-	staminaBar.setPosition(10, 60);
+	staminaBar.setPosition(25, 60);
 
 	// Empty Stamina bar
-	emptyStaminaBar.setFillColor(Color::Black);
+	emptyStaminaBar.setTexture(&barContainer);
 	emptyStaminaBar.setPosition(10, 60);
 
 	// Mana bar
 	manaBar.setFillColor(Color::Magenta);
-	manaBar.setPosition(10, 110);
+	manaBar.setPosition(25, 110);
+
+	// Empty mana bar
+	emptyManaBar.setTexture(&barContainer);
+	emptyManaBar.setPosition(10, 110);
 
 	storedItems.resize(16, Item("null", Vector2f(300, 650)));
 
@@ -170,10 +176,6 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	storedItems[11] = Equipment("Family_Locket", Vector2f(0, 0));
 	storedItems[12] = Weapon("Armoured_Boots", Vector2f(0, 0));
 	storedItems[13] = Item("Health_Potion", Vector2f(0, 0));
-
-	// Empty mana bar
-	emptyManaBar.setFillColor(Color::Black);
-	emptyManaBar.setPosition(10, 110);
 
 	/***********
 	Main Menu UI
@@ -643,8 +645,17 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	spellIndicator.setOrigin(spellIndicator.getSize() / 2.f);
 	spellIndicator.setPosition(spellBox1.getPosition().x + 37.5, spellBox1.getPosition().y - 25);
 
-	swordIcon.setPosition(swordBox.getPosition());
-	wandIcon.setPosition(wandBox.getPosition());
+	swordIcon.setTexture(&textureItems);
+	swordIcon.setSize(Vector2f(75, 75));
+	swordIcon.setOrigin(swordIcon.getSize() / 2.f);
+	swordIcon.setPosition(swordBox.getPosition() + swordBox.getSize() / 2.f);
+	swordIcon.setTextureRect(player.getEquippedWeapons().at(0).getTextureRect());
+
+	wandIcon.setTexture(&textureItems);
+	wandIcon.setSize(Vector2f(75, 75));
+	wandIcon.setOrigin(wandIcon.getSize() / 2.f);
+	wandIcon.setPosition(wandBox.getPosition() + wandBox.getSize() / 2.f);
+	wandIcon.setTextureRect(player.getEquippedWeapons().at(1).getTextureRect());
 }
 
 void Engine::initializeInventory()
@@ -1188,69 +1199,72 @@ void Engine::run()
 			player.stopDown();
 		}
 
-		/* below are debug functions, comment them out in full build / when needed */
-		if (event.key.code == Keyboard::Num1 && state == State::PLAYING)
+		if (event.type == Event::KeyPressed)
 		{
-			// Increase health
-			player.upgradeHealth();
-		}
-
-		if (event.key.code == Keyboard::Num2 && state == State::PLAYING)
-		{
-			// Increase stamina
-			player.upgradeStamina();
-		}
-
-		if (event.key.code == Keyboard::Num3 && state == State::PLAYING)
-		{
-			// Increase health
-			player.upgradeMana();
-		}
-
-		if (event.key.code == Keyboard::Num4 && state == State::PLAYING)
-		{
-			if (addItemToInventory("Iron_Sword"))
+			/* below are debug functions, comment them out in full build / when needed */
+			if (event.key.code == Keyboard::Num1 && state == State::PLAYING)
 			{
-				std::cout << "Item added to inventory" << std::endl;
+				// Increase health
+				player.upgradeHealth();
 			}
-			else
+
+			if (event.key.code == Keyboard::Num2 && state == State::PLAYING)
 			{
-				std::cout << "No space in inventory" << std::endl;
+				// Increase stamina
+				player.upgradeStamina();
 			}
-		}
 
-		if (event.key.code == Keyboard::Num5 && state == State::PLAYING)
-		{
-			//Selling item example, the storedItems index will need to be set somehow but the rest can be copy and pasted 
-			// I can make a function for it if needed	
-			if (storedItems[0].isNull()) cout << "null item attempted to be sold" << endl;
-
-			player.setGold(player.getGold() + storedItems[0].getValue());
-			cout << "Sold " << " for " << storedItems[0].getValue() << " gold." << endl;
-			cout << "You now have " << player.getGold() << " gold." << endl;
-			storedItems[0] = Item("null", Vector2f(0, 0));
-		}
-
-		if (event.key.code == Keyboard::Num8 && state == State::PLAYING)
-		{
-			player.hit(gameTimeTotal, 10, 200);
-		}
-
-		if (event.key.code == Keyboard::Num9 && state == State::PLAYING)
-		{
-			player.hit(gameTimeTotal, 30, 1000);
-		}
-
-		if (event.key.code == Keyboard::G && state == State::PLAYING)
-		{
-			for (int i = 0; i < (rand() % 10); i++) {
-				items.emplace_back("Gold", Vector2f(player.getPosition().x, player.getPosition().y));
+			if (event.key.code == Keyboard::Num3 && state == State::PLAYING)
+			{
+				// Increase health
+				player.upgradeMana();
 			}
-		}
 
-		if (event.key.code == Keyboard::C && state == State::PLAYING)
-		{
-			player.setInCell();
+			if (event.key.code == Keyboard::Num4 && state == State::PLAYING)
+			{
+				if (addItemToInventory("Iron_Sword"))
+				{
+					std::cout << "Item added to inventory" << std::endl;
+				}
+				else
+				{
+					std::cout << "No space in inventory" << std::endl;
+				}
+			}
+
+			if (event.key.code == Keyboard::Num5 && state == State::PLAYING)
+			{
+				//Selling item example, the storedItems index will need to be set somehow but the rest can be copy and pasted 
+				// I can make a function for it if needed	
+				if (storedItems[0].isNull()) cout << "null item attempted to be sold" << endl;
+
+				player.setGold(player.getGold() + storedItems[0].getValue());
+				cout << "Sold " << " for " << storedItems[0].getValue() << " gold." << endl;
+				cout << "You now have " << player.getGold() << " gold." << endl;
+				storedItems[0] = Item("null", Vector2f(0, 0));
+			}
+
+			if (event.key.code == Keyboard::Num8 && state == State::PLAYING)
+			{
+				player.hit(gameTimeTotal, 10, 200);
+			}
+
+			if (event.key.code == Keyboard::Num9 && state == State::PLAYING)
+			{
+				player.hit(gameTimeTotal, 30, 1000);
+			}
+
+			if (event.key.code == Keyboard::G && state == State::PLAYING)
+			{
+				for (int i = 0; i < (rand() % 10); i++) {
+					items.emplace_back("Gold", Vector2f(player.getPosition().x, player.getPosition().y));
+				}
+			}
+
+			if (event.key.code == Keyboard::C && state == State::PLAYING)
+			{
+				player.setInCell();
+			}
 		}
 
 		// Handle the display fps button changing colour based on boolean
@@ -1284,6 +1298,18 @@ void Engine::run()
 			{
 				difficultyButton.setFillColor(Color::Red);
 			}
+		}
+
+		if (player.getHealth() < 0) {
+			player.setHealthValue(0);
+		}
+
+		if (player.getStamina() < 0) {
+			player.setStaminaValue(0);
+		}
+
+		if (player.getMana() < 0) {
+			player.setManaValue(0);
 		}
 
 		/*********************************************************************
@@ -1365,8 +1391,11 @@ void Engine::run()
 				}
 			}
 
-			swordIcon = player.getEquippedWeapons().at(0).getIcon();
-			wandIcon = player.getEquippedWeapons().at(1).getIcon();
+			swordIcon.setTextureRect(player.getEquippedWeapons().at(0).getTextureRect());
+			swordIcon.setOrigin(swordIcon.getSize() / 2.f);
+
+			wandIcon.setTextureRect(player.getEquippedWeapons().at(1).getTextureRect());
+			wandIcon.setOrigin(wandIcon.getSize() / 2.f);
 
 			if (player.getCombatType() == Player::CombatType::Melee)
 			{
@@ -1523,25 +1552,23 @@ void Engine::run()
 
 					draggingItem = false;
 				}
-
-			
 			}
 
 			if (currentDecal > 248)
 			{
 				currentDecal = 0;
 			}
-
+			
 			// size up the health bar
-			healthBar.setSize(Vector2f(player.getHealth() * 3, 35));
+			healthBar.setSize(Vector2f(player.getHealth() * 2.7, 35));
 			emptyHealthBar.setSize(Vector2f(player.getMaxHealth() * 3, 35));
 
 			// Set size of the mana bar
-			manaBar.setSize(Vector2f(player.getMana() * 3, 35));
+			manaBar.setSize(Vector2f(player.getMana() * 2.7, 35));
 			emptyManaBar.setSize(Vector2f(player.getMaxMana() * 3, 35));
 
 			// Set size of the Stamina bar
-			staminaBar.setSize(Vector2f(player.getStamina() * 3, 35));
+			staminaBar.setSize(Vector2f(player.getStamina() * 2.7, 35));
 			emptyStaminaBar.setSize(Vector2f(player.getMaxStamina() * 3, 35));
 
 			// Increment the amount of time since the last HUD update

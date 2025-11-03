@@ -238,6 +238,7 @@ private:
 	Texture tooltipBackground;
 	Texture eKeyTexture;
 	Texture inventoryBackgroundTexture;
+	Texture barContainer;
 
 	RectangleShape playerFrame;
 	RectangleShape equippedSwordIcon;
@@ -357,8 +358,8 @@ private:
 
 	Texture indicator;
 
-	Sprite swordIcon;
-	Sprite wandIcon;
+	RectangleShape swordIcon;
+	RectangleShape wandIcon;
 	Sprite spell1Icon;
 	Sprite spell2Icon;
 	Sprite spell3Icon;

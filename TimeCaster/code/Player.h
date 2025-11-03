@@ -146,6 +146,10 @@ public:
 
 	void setSpritePosition(Vector2f pos);
 
+	void setStaminaValue(int stam);
+	void setManaValue(int mana);
+	void setHealthValue(int health);
+
 private:
 
 	const float START_SPEED = 100;
@@ -218,7 +222,7 @@ private:
 
 	CollisionDetection collision;
 	vector<NavBox> navBoxes;
-//	vector<Item> equippedItems;
+	// vector<Item> equippedItems;
 	// always store the sword at index 0 and wand at index 1
 	vector<Weapon> m_EquippedWeapons;
 	// store helmet at index 0, torso at index 1, pants at index 2, shoes at index 3, amulet/neck slot at index 4

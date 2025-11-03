@@ -1024,3 +1024,15 @@ void Player::setSpritePosition(Vector2f pos)
 	m_SpriteWeapon.setPosition(pos);
 	m_Sprite.setPosition(pos);
 }
+
+void Player::setStaminaValue(int stam) {
+	m_Stamina = stam;
+}
+
+void Player::setManaValue(int mana) {
+	m_Mana = mana;
+}
+
+void Player::setHealthValue(int health) {
+	m_Health = health;
+}
