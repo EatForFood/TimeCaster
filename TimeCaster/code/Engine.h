@@ -363,4 +363,6 @@ private:
 	Sprite spell2Icon;
 	Sprite spell3Icon;
 	Sprite spell4Icon;
+
+	enum CombatType { Melee, Magic };
 };
