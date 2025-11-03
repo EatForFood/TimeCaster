@@ -211,7 +211,7 @@ private:
 
 	RectangleShape difficultyButton;
 
-	Text difficultyButtonText;                                       // Create the Text object
+	Text difficultyButtonText; // Create the Text object
 
 	Text storyIntroText;
 	string fullText;
@@ -222,7 +222,7 @@ private:
 	float delay = 0.05f; // seconds between characters
 	int currentChar = 0;
 
-	Text skipIntroText;                             // Create the Text object
+	Text skipIntroText; // Create the Text object
 
 	Texture textureHeadArmourFrame;
 	Texture textureChestArmourFrame;
@@ -343,4 +343,23 @@ private:
 	Spell spells[100];
 
 	int tutorialStage = 0;
+
+	// Boxes and textures for player spell/melee options
+	RectangleShape spellBox1; // Heal
+	RectangleShape spellBox2; // Fireball
+	RectangleShape spellBox3; // Phase Shift
+	RectangleShape spellBox4; // Freeze/slow time
+	RectangleShape wandBox;
+	RectangleShape swordBox;
+	RectangleShape weaponIndicator;
+	RectangleShape spellIndicator;
+
+	Texture indicator;
+
+	Sprite swordIcon;
+	Sprite wandIcon;
+	Sprite spell1Icon;
+	Sprite spell2Icon;
+	Sprite spell3Icon;
+	Sprite spell4Icon;
 };

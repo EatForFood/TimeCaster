@@ -423,6 +423,7 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	tooltipBackground = TextureHolder::GetTexture("graphics/UI/tooltipBackground.png");
 	eKeyTexture = TextureHolder::GetTexture("graphics/UI/eKey.png");
 	inventoryBackgroundTexture = TextureHolder::GetTexture("graphics/UI/inventoryBackground.png");
+	indicator = TextureHolder::GetTexture("graphics/UI/indicator.png");
 
 	// Equipped item icons
 	equippedSwordIcon.setTexture(&textureItems);
@@ -607,6 +608,43 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	inventoryBackground.setSize(Vector2f(1000, 800));
 	textBounds = inventoryBackground.getLocalBounds();
 	inventoryBackground.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y - (textBounds.height / 2.f) - textBounds.top);
+
+	swordBox.setTexture(&textureEmptyFrame);
+	swordBox.setSize(Vector2f(75, 75));
+	swordBox.setPosition(viewCentre.x - 288, 1000);
+
+	wandBox.setTexture(&textureEmptyFrame);
+	wandBox.setSize(Vector2f(75, 75));
+	wandBox.setPosition(viewCentre.x - 188, 1000);
+	
+	spellBox1.setTexture(&textureEmptyFrame);
+	spellBox1.setSize(Vector2f(75, 75));
+	spellBox1.setPosition(viewCentre.x - 88, 1000);
+
+	spellBox2.setTexture(&textureEmptyFrame);
+	spellBox2.setSize(Vector2f(75, 75));
+	spellBox2.setPosition(viewCentre.x + 13, 1000);
+
+	spellBox3.setTexture(&textureEmptyFrame);
+	spellBox3.setSize(Vector2f(75, 75));
+	spellBox3.setPosition(viewCentre.x + 113, 1000);
+
+	spellBox4.setTexture(&textureEmptyFrame);
+	spellBox4.setSize(Vector2f(75, 75));
+	spellBox4.setPosition(viewCentre.x + 213, 1000);
+
+	weaponIndicator.setTexture(&indicator);
+	weaponIndicator.setSize(Vector2f(48, 36));
+	weaponIndicator.setOrigin(weaponIndicator.getSize() / 2.f);
+	weaponIndicator.setPosition(swordBox.getPosition().x + 37.5, swordBox.getPosition().y - 25);
+
+	spellIndicator.setTexture(&indicator);
+	spellIndicator.setSize(Vector2f(48, 36));
+	spellIndicator.setOrigin(spellIndicator.getSize() / 2.f);
+	spellIndicator.setPosition(spellBox1.getPosition().x + 37.5, spellBox1.getPosition().y - 25);
+
+	swordIcon.setPosition(swordBox.getPosition());
+	wandIcon.setPosition(wandBox.getPosition());
 }
 
 void Engine::initializeInventory()
@@ -1139,9 +1177,7 @@ void Engine::run()
 			player.stopDown();
 		}
 
-		/* below are debug functions, comment them out in full build / when needed
-		if you add any more, make sure they check if debug reset is false and set it to true or else it will run every loop while the key is pressed
-		Press tilde to activate debug commands */
+		/* below are debug functions, comment them out in full build / when needed */
 		if (event.key.code == Keyboard::Num1 && state == State::PLAYING)
 		{
 			// Increase health
@@ -1317,6 +1353,19 @@ void Engine::run()
 					spells[i].update(dtAsSeconds);
 				}
 			}
+
+			swordIcon = player.getEquippedWeapons().at(0).getIcon();
+			wandIcon = player.getEquippedWeapons().at(1).getIcon();
+
+			if (player.getCombatType() == Player::CombatType::Melee)
+			{
+				weaponIndicator.setPosition(swordBox.getPosition().x + 37.5, swordBox.getPosition().y - 25);
+			}
+			else
+			{
+				weaponIndicator.setPosition(wandBox.getPosition().x + 37.5, wandBox.getPosition().y - 25);
+			}
+			
 
 			// Drag items the player clicks on
 			if (drawInventory)

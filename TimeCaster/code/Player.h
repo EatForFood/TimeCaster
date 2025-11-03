@@ -128,7 +128,6 @@ public:
 	Equipment* getEquippedShoeArmour();
 	Equipment* getEquippedNeckArmour();
 		
-
 	void setInCell();
 	bool getInCell();
 

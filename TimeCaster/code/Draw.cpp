@@ -482,6 +482,7 @@ void Engine::draw()
 		}
 		else {
 			// Draw all the HUD elements
+			window.draw(filter);
 			window.draw(emptyHealthBar);
 			window.draw(healthBar);
 			window.draw(emptyManaBar);
@@ -491,7 +492,16 @@ void Engine::draw()
 			if (displayFps) {
 				window.draw(fpsText);
 			}
-			window.draw(filter);
+			window.draw(swordBox);
+			window.draw(swordIcon);
+			window.draw(wandBox);
+			window.draw(wandIcon);
+			window.draw(spellBox1);
+			window.draw(spellBox2);
+			window.draw(spellBox3);
+			window.draw(spellBox4);
+			window.draw(weaponIndicator);
+			window.draw(spellIndicator);
 			window.setView(mainView);
 			window.draw(spriteCursor);
 			window.setView(hudView);
