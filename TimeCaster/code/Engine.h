@@ -150,19 +150,17 @@ private:
 
 	Text fpsText;
 
-	RectangleShape healthBar;
-	// Empty health bar
-	RectangleShape emptyHealthBar;
+	RectangleShape healthBar; // Health bar (in world)
+	RectangleShape healthBarContainer; // Health bar container (in world)
+	RectangleShape emptyHealthBar; // Empty health bar (in world)
 
-	// Stamina bar
-	RectangleShape staminaBar;
-	// Empty Stamina bar
-	RectangleShape emptyStaminaBar;
+	RectangleShape staminaBar; // Stamina bar (in world)
+	RectangleShape staminaBarContainer; // Stamina bar container (in world)
+	RectangleShape emptyStaminaBar; // Empty Stamina bar (in world)
 
-	// Mana bar
-	RectangleShape manaBar;
-	// Empty mana bar
-	RectangleShape emptyManaBar;
+	RectangleShape manaBar; // Mana bar (in world)
+	RectangleShape manaBarContainer; // Mana bar container (in world)
+	RectangleShape emptyManaBar; // Empty mana bar (in world)
 
 	Texture textureMainMenuButton1;
 	Texture textureMainMenuButton2;

@@ -134,24 +134,33 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	healthBar.setFillColor(Color::Red);
 	healthBar.setPosition(25,10);
 
-	emptyHealthBar.setTexture(&barContainer);
-	emptyHealthBar.setPosition(10, 10);
+	emptyHealthBar.setFillColor(Color::Black);
+	emptyHealthBar.setPosition(25, 10);
+
+	healthBarContainer.setTexture(&barContainer);
+	healthBarContainer.setPosition(10, 10);
 
 	// Stamina bar
 	staminaBar.setFillColor(Color::Green);
 	staminaBar.setPosition(25, 60);
 
+	emptyStaminaBar.setFillColor(Color::Black);
+	emptyStaminaBar.setPosition(25, 60);
+
 	// Empty Stamina bar
-	emptyStaminaBar.setTexture(&barContainer);
-	emptyStaminaBar.setPosition(10, 60);
+	staminaBarContainer.setTexture(&barContainer);
+	staminaBarContainer.setPosition(10, 60);
 
 	// Mana bar
 	manaBar.setFillColor(Color::Magenta);
 	manaBar.setPosition(25, 110);
 
+	emptyManaBar.setFillColor(Color::Black);
+	emptyManaBar.setPosition(25, 110);
+
 	// Empty mana bar
-	emptyManaBar.setTexture(&barContainer);
-	emptyManaBar.setPosition(10, 110);
+	manaBarContainer.setTexture(&barContainer);
+	manaBarContainer.setPosition(10, 110);
 
 	storedItems.resize(16, Item("null", Vector2f(300, 650)));
 
@@ -1224,11 +1233,11 @@ void Engine::run()
 			{
 				if (addItemToInventory("Iron_Sword"))
 				{
-					std::cout << "Item added to inventory" << std::endl;
+					cout << "Item added to inventory" << endl;
 				}
 				else
 				{
-					std::cout << "No space in inventory" << std::endl;
+					cout << "No space in inventory" << endl;
 				}
 			}
 
@@ -1560,16 +1569,19 @@ void Engine::run()
 			}
 			
 			// size up the health bar
+			emptyHealthBar.setSize(Vector2f(player.getMaxHealth() * 2.7, 35));
 			healthBar.setSize(Vector2f(player.getHealth() * 2.7, 35));
-			emptyHealthBar.setSize(Vector2f(player.getMaxHealth() * 3, 35));
+			healthBarContainer.setSize(Vector2f(player.getMaxHealth() * 3, 35));
 
 			// Set size of the mana bar
+			emptyManaBar.setSize(Vector2f(player.getMaxMana() * 2.7, 35));
 			manaBar.setSize(Vector2f(player.getMana() * 2.7, 35));
-			emptyManaBar.setSize(Vector2f(player.getMaxMana() * 3, 35));
+			manaBarContainer.setSize(Vector2f(player.getMaxMana() * 3, 35));
 
 			// Set size of the Stamina bar
+			emptyStaminaBar.setSize(Vector2f(player.getMaxStamina() * 2.7, 35));
 			staminaBar.setSize(Vector2f(player.getStamina() * 2.7, 35));
-			emptyStaminaBar.setSize(Vector2f(player.getMaxStamina() * 3, 35));
+			staminaBarContainer.setSize(Vector2f(player.getMaxStamina() * 3, 35));
 
 			// Increment the amount of time since the last HUD update
 			timeSinceLastUpdate += dt;
