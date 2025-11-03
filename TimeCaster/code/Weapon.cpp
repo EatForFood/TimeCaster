@@ -36,7 +36,7 @@ Weapon::Weapon(String type, Vector2f position)
 
 
 		m_ItemType = MeleeWeapon;
-
+		m_AnimationType = "slash";
 
 
 	}
@@ -59,6 +59,7 @@ Weapon::Weapon(String type, Vector2f position)
 		m_Damage = 5;
 
 		m_ItemType = MagicWeapon;
+		m_AnimationType = "thrust";
 	}
 	else if (m_Name == "Pirate's_Scimitar")
 	{
@@ -76,6 +77,7 @@ Weapon::Weapon(String type, Vector2f position)
 		m_Icon.setScale(2.34, 2.34);
 
 		m_ItemType = MeleeWeapon;
+		m_AnimationType = "slash";
 	}
 	else if (m_Name == "Silver_Wand")
 	{
@@ -93,6 +95,7 @@ Weapon::Weapon(String type, Vector2f position)
 		m_Icon.setScale(2.34, 2.34);
 
 		m_ItemType = MagicWeapon;
+		m_AnimationType = "thrust";
 	}
 	else if (m_Name == "Golden_Wand")
 	{
@@ -143,4 +146,9 @@ int Weapon::getDamage()
 string Weapon::getName()
 {
 	return m_Name;
+}
+
+string Weapon::getAnimType()
+{
+	return m_AnimationType;
 }

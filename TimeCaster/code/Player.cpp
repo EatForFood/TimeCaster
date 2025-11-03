@@ -164,12 +164,17 @@ void Player::update(float elapsedTime, Vector2i mousePosition, vector<NavBox> na
 		{
 			m_AttackDmg = m_EquippedWeapons[0].getDamage();
 		}
+		else if (m_CombatType == Magic) // if using spells dont let staff do dmg
+		{
+			m_AttackDmg = 0;
+		}
 
 		moveTextureRect();
 
-		if (getAniCounter() == 0 || getAniCounter() == 10)
+		if (getAniCounter() == 0 || getAniCounter() == 10) // stop attacking when animation ends
 		{
 			m_IsAttacking = false;
+			m_CastingSpell = false;
 			resetAniCounter();
 			// revert to idle animation
 			m_Sprite = Sprite(TextureHolder::GetTexture("graphics/player/playerWalk.png"));
@@ -180,7 +185,15 @@ void Player::update(float elapsedTime, Vector2i mousePosition, vector<NavBox> na
 			equipArmour(m_EquippedArmour[1].getName());
 			equipArmour(m_EquippedArmour[2].getName());
 			equipArmour(m_EquippedArmour[3].getName());
-			equipWeapon(m_EquippedWeapons[0].getName());
+
+			if (m_CombatType == Melee)
+			{
+				equipWeapon(m_EquippedWeapons[0].getName());
+			}
+			else if (m_CombatType == Magic)
+			{
+				equipWeapon(m_EquippedWeapons[1].getName());
+			}
 
 			// reset armour sprites if needed
 		}
@@ -742,7 +755,7 @@ bool Player::equipWeapon(string weaponNameToEquip)
 	{
 		m_EquippedSwordName = weaponToEquip.getName();
 		m_EquippedWeapons[0] = weaponToEquip;
-		m_SpriteWeapon = Sprite(TextureHolder::GetTexture("graphics/player/weapon/slash/"+ weaponToEquip.getName() + ".png"));;
+		m_SpriteWeapon = Sprite(TextureHolder::GetTexture("graphics/player/weapon/" + weaponToEquip.getAnimType() + "/" + weaponToEquip.getName() + ".png"));;
 		m_SpriteWeapon.setOrigin(32, 32);		m_SpriteWeapon.setScale(0.75, 0.75);
 		m_CombatType = Melee;
 		updateTextRect();
@@ -752,6 +765,8 @@ bool Player::equipWeapon(string weaponNameToEquip)
 	{
 		m_EquippedWandName = weaponToEquip.getName();
 		m_EquippedWeapons[1] = weaponToEquip;
+		m_SpriteWeapon = Sprite(TextureHolder::GetTexture("graphics/player/weapon/" + weaponToEquip.getAnimType() + "/" + weaponToEquip.getName() + ".png"));;
+		m_SpriteWeapon.setOrigin(32, 32);		m_SpriteWeapon.setScale(0.75, 0.75);
 		m_CombatType = Magic;
 		updateTextRect();
 		return true;
@@ -922,16 +937,34 @@ void Player::updateTextRect()
 	m_SpriteWeapon.setPosition(m_Position);
 }
 
-void Player::AttackAnimation(string attackType)
+void Player::Attack()
 {
+	string attackType;
+	string equippedWeapon;
+
 	if (!m_IsAttacking)
 	{
 		resetAniCounter();
 	}
 
+	if (m_CombatType == Melee)
+	{
+		attackType = m_EquippedWeapons[0].getAnimType();
+		equippedWeapon = m_EquippedWeapons[0].getName();
+	}
+	else if (m_CombatType == Magic)
+	{
+		attackType = m_EquippedWeapons[1].getAnimType();
+		equippedWeapon = m_EquippedWeapons[1].getName();
+	}
+
 	m_IsAttacking = true;
 
 	// Associate a texture with the body sprite
+	m_SpriteWeapon = Sprite(TextureHolder::GetTexture("graphics/player/weapon/" + attackType + "/" + equippedWeapon + ".png"));
+	m_SpriteWeapon.setOrigin(32, 32);
+	m_SpriteWeapon.setScale(0.75, 0.75);
+
 	m_Sprite = Sprite(TextureHolder::GetTexture("graphics/player/" + attackType + "/playerAttack.png"));
 	m_Sprite.setOrigin(32, 32);
 	m_Sprite.setScale(0.75, 0.75);

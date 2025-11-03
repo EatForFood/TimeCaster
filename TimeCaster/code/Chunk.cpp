@@ -505,7 +505,7 @@ void Chunk::placeTile(int x, int y, int texX, int texY, bool forGround, bool sav
 	{
 		Text label;
 		label.setFont(debugFont);
-		label.setString(std::to_string(x) + "," + std::to_string(y));
+		label.setString(to_string(x) + "," + to_string(y));
 		label.setCharacterSize(8);       // small size so it fits
 		label.setFillColor(sf::Color::White);
 
@@ -1117,7 +1117,7 @@ void Chunk::loadChunk()
 	string line;
 	structures.clear();
 
-	while (std::getline(inFile, line)) {
+	while (getline(inFile, line)) {
 		if (line == "STRUCTURES_BEGIN") {
 			size_t count;
 			inFile >> count;

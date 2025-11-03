@@ -211,3 +211,13 @@ void Character::setWasHit(bool hit)
 {
 	m_WasHit = hit;
 }
+
+bool Character::isCastingSpell()
+{
+	return m_CastingSpell;
+}
+
+void Character::castingSpell(bool casting)
+{
+	m_CastingSpell = casting;
+}

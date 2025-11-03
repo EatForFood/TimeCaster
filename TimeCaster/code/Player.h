@@ -131,7 +131,7 @@ public:
 	void setInCell();
 	bool getInCell();
 
-	void AttackAnimation(string attackType);
+	void Attack();
 
 	bool isAttacking();
 

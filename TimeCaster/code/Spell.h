@@ -17,7 +17,7 @@ private:
 	bool m_InFlight = false;
 
 	// How fast does a spell travel?
-	float m_SpellSpeed = 1000;
+	float m_SpellSpeed = 300;
 
 	// What fraction of 1 pixel does the spell travel, 
 	// Horizontally and vertically each frame?
@@ -34,6 +34,18 @@ private:
 	float m_MinX;
 	float m_MaxY;
 	float m_MinY;
+
+	// spell animation stuff
+	Sprite m_Sprite;
+	Texture m_Texture;
+	Vector2i sheetCoordinate; 
+	Vector2i spriteSize;
+	int m_Animation_It_Limit; //Max animation iterations
+	bool m_Horizontal{ true };
+	int m_Ani_Counter{};
+	int m_Counter{};
+	float m_TimeElapsed;
+	float m_AnimationTimer = 0;
 
 // Public function prototypes go here
 public:
@@ -62,5 +74,8 @@ public:
 	float bGetX();
 	float bGetY();
 
+	void setSpriteFromSheet(IntRect textureBox, int tileSize);
+	void moveTextureRect();
 
+	Sprite getSprite();
 };

@@ -108,6 +108,14 @@ void Engine::draw()
 		{
 			drawables.emplace_back(player.getSprite().getGlobalBounds().top + player.getSprite().getGlobalBounds().height + 0.05, player.getWeapon());
 		}
+
+		for (auto& spell : spells)
+		{
+			if (spell.isInFlight())
+			{
+				drawables.emplace_back(spell.getSprite().getGlobalBounds().top + spell.getSprite().getGlobalBounds().height, spell.getSprite());
+			}
+		}
 		
 		// Sort by y position (smaller y values come first)
 		sort(drawables.begin(), drawables.end(), [](const DrawableItem& a, const DrawableItem& b)
@@ -122,6 +130,7 @@ void Engine::draw()
 		}
 
 		drawables.clear();
+
 
 		if (!player.getInCell())
 		{
