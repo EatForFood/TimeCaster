@@ -41,6 +41,10 @@ SoundManager::SoundManager() {
 	hitBuffer.loadFromFile("sound/hit.wav");
 	hit.setBuffer(hitBuffer);
 
+	// Loads fireball sound 
+	fireballBuffer.loadFromFile("sound/fireball.wav");
+	fireball.setBuffer(fireballBuffer);
+
 	// Loads click sound from file into buffer
 	clickBuffer.loadFromFile("sound/buttonClick.wav");
 	buttonClick.setBuffer(clickBuffer);
@@ -52,6 +56,7 @@ SoundManager::SoundManager() {
 	// Loads boss intro sound from file into buffer
 	bossIntroBuffer.loadFromFile("sound/bossIntro.wav");
 	bossIntro.setBuffer(bossIntroBuffer);
+
 
 } // End of SoundManager constructor
 
@@ -102,6 +107,11 @@ void SoundManager::playStartGameSound() {
 // Function to play the hit sound
 void SoundManager::playHitSound() {
 	hit.play();
+}
+
+// Function to play the Fireball sound
+void SoundManager::playFireballSound() {
+	fireball.play();
 }
 
 // Function to play the button click sound

@@ -8,6 +8,14 @@ Spell::Spell()
 	m_Sprite = Sprite(TextureHolder::GetTexture("graphics/spells/fireball.png"));
 	m_Sprite.setOrigin(32, 32);
 	m_Sprite.setScale(0.75, 0.75);
+	// Set spell damage to 15 for now
+	m_SpellDamage = 15;
+
+	// Set piercing properties to false for now
+	m_PierceEnemy = false;
+	m_PierceObject = false;
+
+	
 }
 
 void Spell::shoot(float startX, float startY, float targetX, float targetY)
@@ -179,4 +187,20 @@ void Spell::moveTextureRect() // animate sprite by moving texRect location
 Sprite Spell::getSprite()
 {
 	return m_Sprite;
+}
+
+// This returns false if spell does 0 damage (non-damaging spell)
+float Spell::getSpellDamage()
+{
+	return m_SpellDamage;
+}
+
+bool Spell::piercesEnemy()
+{
+	return m_PierceEnemy;
+}
+
+bool Spell::piercesObject()
+{
+	return m_PierceObject;
 }
