@@ -1377,6 +1377,8 @@ void Engine::run()
 								{
 									enemies.setHealth(-player.getAttackDamage());
 									enemies.setWasHit(true);
+									// Play enemy hit sound
+									sound.playHitSound();
 								}
 								else if (!player.isAttacking())
 								{
@@ -1403,6 +1405,8 @@ void Engine::run()
 				if (spells[i].isInFlight())
 				{
 					spells[i].update(dtAsSeconds);
+
+				
 				}
 			}
 
