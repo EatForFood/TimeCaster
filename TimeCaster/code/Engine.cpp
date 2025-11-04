@@ -1221,6 +1221,10 @@ void Engine::run()
 				if (player.getCombatType() == Magic && !player.isCastingSpell())
 				{
 					spells[currentSpell].shoot(player.getCenter().x, player.getCenter().y + 10, mouseWorldPosition.x, mouseWorldPosition.y);
+				
+					// Play fireball sound (Change sound based on spell later)
+					sound.playFireballSound();
+					
 					currentSpell++;
 					if (currentSpell > 99)
 					{
@@ -1378,7 +1382,7 @@ void Engine::run()
 								{
 									enemies.setWasHit(false);
 								}
-							}
+							}						
 						}
 					}
 				}

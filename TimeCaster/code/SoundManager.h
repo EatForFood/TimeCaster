@@ -42,6 +42,10 @@ private:
 	SoundBuffer hitBuffer;
 	Sound hit;
 
+	// Prepare the fireball sound
+	SoundBuffer fireballBuffer;
+	Sound fireball;
+
 	// Prepare the button click sound
 	SoundBuffer clickBuffer;
 	Sound buttonClick;
@@ -53,6 +57,7 @@ private:
 	// Prepare the story intro sound
 	SoundBuffer storyIntroBuffer;
 	Sound storyIntro;
+
 
 public:
 	// SoundManager constructor
@@ -75,6 +80,9 @@ public:
 
 	// Function to play the hit sound
 	void playHitSound();
+
+	// Function to play the Fireball sound
+	void playFireballSound();
 
 	// Function to play the button click sound
 	void playButtonClickSound();
