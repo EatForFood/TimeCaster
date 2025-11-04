@@ -1349,6 +1349,10 @@ void Engine::run()
 				if (collision.pointInShape(player.getPosition(), world.getChunkArea(i).getShape())) // find players current chunk
 				{
 					player.setChunk(i);
+					for (Enemy& enemies : enemyArr)
+					{
+						enemies.setChunk(i);
+					}
 				}
 			}
 
@@ -1363,7 +1367,7 @@ void Engine::run()
 					{
 						if (!enemies.isDead())
 						{
-							enemies.update(dtAsSeconds, player.getPosition(), getCurrentChunk(enemies.getPosition().x, enemies.getPosition().y));
+							enemies.update(dtAsSeconds, player.getPosition(), getCurrentChunk(enemies.getPosition().x, enemies.getPosition().y), world.getNavBoxes(enemies.getChunk()));
 
 							if (player.getColBox().intersects(enemies.getSprite().getGlobalBounds()))
 							{

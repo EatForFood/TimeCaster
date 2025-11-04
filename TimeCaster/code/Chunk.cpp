@@ -45,9 +45,7 @@ Chunk::Chunk(String type, Vector2f chunk, bool load)
 	rVABG.resize(100 * 100 * VERTS_IN_QUAD);
 	rVAFG.resize(200 * 200 * VERTS_IN_QUAD);
 
-	for (int x = 0; x < 50; ++x)
-		for (int y = 0; y < 50; ++y)
-			blockedTiles[x][y] = false;
+	createNodes();
 
 	if (m_LoadChunk)
 	{
@@ -441,6 +439,7 @@ Chunk::Chunk(String type, Vector2f chunk, bool load)
 
 		saveChunk();
 	}
+
 }
 
 
@@ -731,12 +730,13 @@ void Chunk::placeCastle(int sx, int sy) { // sx 15, sy 18
 
 	// FIRST LEVEL
 
-// Castle west wall 
+   // Castle west wall 
 	for (int y = sy - 30; y < sy; y++)
 	{
 		if (y != 15 && y != 16 && y != 17)
 		{
 			placeTile(sx, y, 0, 12, false, false);
+			m_Walkable[sx][y] = false; // mark as unwalkable
 		}
 	}
 
@@ -744,6 +744,7 @@ void Chunk::placeCastle(int sx, int sy) { // sx 15, sy 18
 	for (int x = sx + 1; x < sx + 25; x++)
 	{
 		placeTile(x, sy - 30, 0, 12, false, false);
+		m_Walkable[x][sy - 30] = false;
 	}
 
 	// Castle east wall 
@@ -752,6 +753,7 @@ void Chunk::placeCastle(int sx, int sy) { // sx 15, sy 18
 		if (y != 15 && y != 16 && y != 17)
 		{
 			placeTile(sx + 24, y, 0, 12, false, false);
+			m_Walkable[sx + 24][y] = false;
 		}
 	}
 
@@ -759,6 +761,7 @@ void Chunk::placeCastle(int sx, int sy) { // sx 15, sy 18
 	for (int x = sx; x < sx + 25; x++)
 	{
 		placeTile(x, sy, 0, 12, false, false);
+		m_Walkable[x][sy] = false;
 	}
 
 	// SECOND LEVEL
@@ -1167,4 +1170,19 @@ void Chunk::placeStructure(String type, Vector2i position)
 	{
 		placeCastle(position.x, position.y);
 	}
+}
+
+void Chunk::createNodes()
+{
+	for (int x = 0; x < 50; x++) {
+		for (int y = 0; y < 50; y++) 
+		{
+			m_Walkable[x][y] = true;
+		}
+	}
+}
+
+bool Chunk::getNode(int x, int y)
+{
+	return m_Walkable[x][y];
 }

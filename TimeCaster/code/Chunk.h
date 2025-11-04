@@ -40,7 +40,9 @@ protected:
 	Vector2i m_TileType[50][50];
 	String m_TileEntity[50][50];
 	Vector2i m_TileTypeFGround[50][50];
-	
+
+	bool m_Walkable[50][50];
+
 
 	bool debug;
 	Font debugFont;
@@ -101,5 +103,8 @@ public:
 
 	void createForest();
 	void createBurntForest();
+
+	void createNodes();
+	bool getNode(int x, int y);
 
 };

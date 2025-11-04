@@ -2,8 +2,12 @@
 #include "Enemy.h"
 #include "TextureHolder.h"
 #include "CollisionDetection.h"
-#include "Pathfinder.h"
 #include "Chunk.h"
+#include <vector>
+#include <queue>
+#include <cmath>
+#include <unordered_map>
+#include <algorithm>
 
 using namespace std;
 using namespace sf;
@@ -123,69 +127,6 @@ bool Enemy::isEnemyMoving() {
 	return false;
 }
 
-void Enemy::update(float elapsedTime, const Vector2f& playerPos, Chunk* chunk) {
-
-	m_TimeElapsed = elapsedTime;
-
-	// Compute direction vector from enemy to player
-	Vector2f toPlayer = playerPos - m_Position;
-
-	// Compute the length (distance)
-	float length = sqrt(toPlayer.x * toPlayer.x + toPlayer.y * toPlayer.y);
-
-	// Avoid division by zero
-	if (length != 0)
-	{
-		// Normalize the vector
-		Vector2f playerDirection = toPlayer / length;
-
-		// Move enemy toward player
-		m_PositionLast = m_Position;
-		m_Position += playerDirection * m_Speed * elapsedTime;
-	}
-
-	// If your sprite uses m_Position for rendering:
-	m_Sprite.setPosition(m_Position);
-
-	// Calculate the angle between mouse and center of screen
-	float angle = atan2(playerPos.y - m_Position.y, playerPos.x - m_Position.x) * 180 / 3.141;
-
-	if (angle < 0) angle += 360;
-
-	if (angle >= 45 && angle < 135)
-	{
-		// facing down
-		direction = Vector2f(0, -1);
-
-	}
-	else if (angle >= 135 && angle < 225)
-	{
-		// facing left
-		direction = Vector2f(-1, 0);
-	}
-	else if (angle >= 225 && angle < 315)
-	{
-		// facing up
-		direction = Vector2f(0, 1);
-	}
-	else
-	{
-		// facing right
-		direction = Vector2f(1, 0);
-	}
-
-	updateTextRect();
-	moveTextureRect();
-
-	if (m_Health < 0)
-	{
-		m_IsDead = true;
-		m_Sprite.setRotation(90);
-		m_Sprite.setOrigin(32, 56);
-	}
-	
-}
-
 float Enemy::getCurrentHP() {
 	return m_Health;
 }
@@ -241,4 +182,298 @@ void Enemy::updateTextRect()
 	{
 		setSpriteFromSheet(IntRect(0, 64, 576, 64), 64);
 	}
+}
+
+void Enemy::followPlayer()
+{
+	// Compute direction vector from enemy to player
+	Vector2f toPlayer = m_PlayerPosition - m_Position;
+
+	// Compute the length (distance)
+	float length = sqrt(toPlayer.x * toPlayer.x + toPlayer.y * toPlayer.y);
+
+	// Avoid division by zero
+	if (length != 0)
+	{
+		// Normalize the vector
+		Vector2f playerDirection = toPlayer / length;
+
+		// Move enemy toward player
+		m_PositionLast = m_Position;
+		m_Position += playerDirection * m_Speed * m_TimeElapsed;
+	}
+
+	// If your sprite uses m_Position for rendering:
+	m_Sprite.setPosition(m_Position);
+
+	// Calculate the angle between mouse and center of screen
+	float angle = atan2(m_PlayerPosition.y - m_Position.y, m_PlayerPosition.x - m_Position.x) * 180 / 3.141;
+
+	if (angle < 0) angle += 360;
+
+	if (angle >= 45 && angle < 135)
+	{
+		// facing down
+		direction = Vector2f(0, -1);
+
+	}
+	else if (angle >= 135 && angle < 225)
+	{
+		// facing left
+		direction = Vector2f(-1, 0);
+	}
+	else if (angle >= 225 && angle < 315)
+	{
+		// facing up
+		direction = Vector2f(0, 1);
+	}
+	else
+	{
+		// facing right
+		direction = Vector2f(1, 0);
+	}
+}
+
+struct Node {
+	int x, y;
+	float gCost; // cost from start
+	float hCost; // heuristic to target
+	Node* parent;
+
+	Node(int _x, int _y, float _g = 0, float _h = 0, Node* _parent = nullptr)
+		: x(_x), y(_y), gCost(_g), hCost(_h), parent(_parent) {
+	}
+
+	float fCost() const { return gCost + hCost; }
+
+	bool operator==(const Node& other) const { return x == other.x && y == other.y; }
+};
+
+// Hash function for unordered_map
+struct NodeHash {
+	size_t operator()(const std::pair<int, int>& p) const {
+		return std::hash<int>()(p.first) ^ std::hash<int>()(p.second << 16);
+	}
+};
+
+float heuristic(int x1, int y1, int x2, int y2) {
+	return std::abs(x1 - x2) + std::abs(y1 - y2);
+}
+
+void Enemy::update(float elapsedTime, const Vector2f& playerPos, Chunk* chunk, vector<NavBox> navBox) {
+	navBoxes = navBox;
+	m_ChunkPtr = chunk;
+	m_TimeElapsed = elapsedTime;
+	m_PlayerPosition = playerPos;
+	m_PositionLast = m_Position;
+
+	m_UpdatePathTimer += elapsedTime;
+
+	float distToPlayer = collision.distance(m_Position, m_PlayerPosition);
+
+	if (distToPlayer < 100 && distToPlayer > 10) {
+		followPlayer();
+	}
+	/*
+	else {
+		// Update path periodically instead of only at the end
+		if (m_Path.empty() || reachedEndOfPath() || m_UpdatePathTimer >= PATH_UPDATE_INTERVAL) {
+			pathfindToPlayer(chunk);
+			m_UpdatePathTimer = 0.0f;
+		}
+		followPath(chunk);
+	}
+	*/
+
+	/*
+	for (auto& nav : navBoxes) { // if player walks into navBox 
+		if (collision.pointInShape(m_Position, nav.getShape())) {
+			revertPosition();
+			m_Path.clear();
+
+			std::cout << "[DEBUG] Collision detected! Recalculating path..." << std::endl;
+
+			pathfindToPlayer(m_ChunkPtr);  // <--- force a new path calculation
+			m_UpdatePathTimer = 0.0f;      // reset timer to avoid double recalculation
+			break;                         // optional: avoid multiple collisions this frame
+		}
+	}
+	*/
+
+	// update collision detection zone
+	m_CollisionBox.left = m_Position.x - 100;
+	m_CollisionBox.top = m_Position.y - 100;
+	m_CollisionBox.width = 200;
+	m_CollisionBox.height = 200;
+
+	updateTextRect();
+	moveTextureRect();
+
+	if (m_Health < 0) {
+		m_IsDead = true;
+		m_Sprite.setRotation(90);
+		m_Sprite.setOrigin(32, 56);
+	}
+}
+
+void Enemy::pathfindToPlayer(Chunk* chunk)
+{
+	int startTileX = screenToTileX(m_Position.x, m_Position.y);
+	int startTileY = screenToTileY(m_Position.x, m_Position.y);
+
+	int endTileX = screenToTileX(m_PlayerPosition.x, m_PlayerPosition.y);
+	int endTileY = screenToTileY(m_PlayerPosition.x, m_PlayerPosition.y);
+
+	std::cout << "[DEBUG] Pathfinding from (" << startTileX << "," << startTileY
+		<< ") to (" << endTileX << "," << endTileY << ")" << std::endl;
+
+	std::priority_queue<std::pair<float, Node*>,
+		std::vector<std::pair<float, Node*>>,
+		std::greater<>> openList;
+	std::unordered_map<std::pair<int, int>, Node*, NodeHash> allNodes;
+	std::unordered_map<std::pair<int, int>, bool, NodeHash> closedList;
+
+	Node* startNode = new Node(startTileX, startTileY, 0, heuristic(startTileX, startTileY, endTileX, endTileY));
+	openList.emplace(startNode->fCost(), startNode);
+	allNodes[{startTileX, startTileY}] = startNode;
+
+	Node* endNode = nullptr;
+	const std::vector<std::pair<int, int>> directions = { {0,1},{1,0},{0,-1},{-1,0} };
+
+	while (!openList.empty())
+	{
+		Node* current = openList.top().second;
+		openList.pop();
+		closedList[{current->x, current->y}] = true;
+
+		if (current->x == endTileX && current->y == endTileY)
+		{
+			endNode = current;
+			break;
+		}
+
+		for (auto& dir : directions)
+		{
+			int nx = current->x + dir.first;
+			int ny = current->y + dir.second;
+
+			if (!chunk->getNode(nx, ny))
+			{
+				std::cout << "tile blocked" << std::endl;
+			}
+
+			if (nx < 0 || nx >= 50 || ny < 0 || ny >= 50) continue;
+			if (!chunk->getNode(nx, ny)) continue;
+			if (closedList[{nx, ny}]) continue;
+
+			float gNew = current->gCost + 1;
+			float hNew = heuristic(nx, ny, endTileX, endTileY);
+
+			auto it = allNodes.find({ nx, ny });
+			if (it == allNodes.end())
+			{
+				Node* neighbor = new Node(nx, ny, gNew, hNew, current);
+				openList.emplace(neighbor->fCost(), neighbor);
+				allNodes[{nx, ny}] = neighbor;
+			}
+			else if (gNew < it->second->gCost)
+			{
+				it->second->gCost = gNew;
+				it->second->parent = current;
+				openList.emplace(it->second->fCost(), it->second);
+			}
+		}
+	}
+
+	m_Path.clear();
+	if (!endNode)
+	{
+		std::cout << "[DEBUG] No path found!" << std::endl;
+	}
+	else
+	{
+		Node* n = endNode;
+		while (n != nullptr)
+		{
+			m_Path.push_back(sf::Vector2i(n->x, n->y));
+			n = n->parent;
+		}
+		std::reverse(m_Path.begin(), m_Path.end());
+		m_CurrentPathIndex = 1;
+
+		std::cout << "[DEBUG] Path found! Nodes: " << m_Path.size() << std::endl;
+	}
+
+	for (auto& p : allNodes) delete p.second;
+}
+
+void Enemy::followPath(Chunk* chunk)
+{
+	if (m_Path.size() <= 1 || m_CurrentPathIndex >= m_Path.size())
+		return;
+
+	int nextX = m_Path[m_CurrentPathIndex].x;
+	int nextY = m_Path[m_CurrentPathIndex].y;
+
+	std::cout << "[DEBUG] Checking next tile: (" << nextX << "," << nextY << ")" << std::endl;
+
+	// Check if the next tile is still walkable
+	if (!chunk->getNode(nextX, nextY)) {
+		std::cout << "[DEBUG] Path blocked at (" << nextX << "," << nextY << ") — recalculating path..." << std::endl;
+
+		m_Path.clear();
+		pathfindToPlayer(chunk);  // immediately find a new route
+		m_UpdatePathTimer = 0.0f;
+		return;
+	}
+
+	// Otherwise, follow the path normally
+	sf::Vector2f target = tileToScreen(nextX, nextY);
+	sf::Vector2f toNode = target - m_Position;
+	float distance = std::sqrt(toNode.x * toNode.x + toNode.y * toNode.y);
+
+	if (distance > 0.01f)
+	{
+		sf::Vector2f direction = toNode / distance;
+		float moveDist = m_Speed * m_TimeElapsed;
+		if (moveDist > distance)
+			moveDist = distance;
+
+		m_Position += direction * moveDist;
+	}
+
+	if (distance < NODE_REACH_THRESHOLD && m_CurrentPathIndex < m_Path.size() - 1)
+	{
+		m_CurrentPathIndex++;
+	}
+
+	m_Sprite.setPosition(m_Position);
+}
+
+
+
+bool Enemy::reachedEndOfPath()
+{
+	return m_CurrentPathIndex >= m_Path.size();
+}
+
+// Screen (pixels) -> Tile (indices)
+int Enemy::screenToTileX(float x, float y) {
+	return static_cast<int>((y / (TILE_SIZE / 2.0f) + x / (TILE_SIZE / 2.0f)) / 2.0f);
+}
+
+int Enemy::screenToTileY(float x, float y) {
+	return static_cast<int>((y / (TILE_SIZE / 2.0f) - x / (TILE_SIZE / 2.0f)) / 2.0f);
+}
+
+// Tile (indices) -> Screen (pixels)
+sf::Vector2f Enemy::tileToScreen(int tileX, int tileY) {
+	float x = (tileX - tileY) * (TILE_SIZE / 2.0f);
+	float y = (tileX + tileY) * (TILE_SIZE / 2.0f);
+
+	// Add half tile offset to move to center
+	x += TILE_SIZE / 2.0f;
+	y += TILE_SIZE / 2.0f;
+
+	return sf::Vector2f(x, y);
 }

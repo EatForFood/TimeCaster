@@ -34,12 +34,23 @@ private:
 
 	Vector2i lastPlayerTile = { -999, -999 };
 	vector<Vector2i> cachedPath;
+
+	Vector2f m_PlayerPosition;
+
+	// Pathfinding
+	vector<Vector2i> m_Path; // path in grid coordinates
+	size_t m_CurrentPathIndex = 1;
+	bool m_AlignedToPath = false;
+	const float PATH_UPDATE_INTERVAL = 1.0f; // Update path every 0.2s
+	float m_UpdatePathTimer = 0.0f;
+	const float NODE_REACH_THRESHOLD = 10.0f; // pixels
+
 public:
 	Enemy();
 
 	void spawn(IntRect arena, Vector2f resolution, int tileSize, String type, int level);
 
-	void update(float elapsedTime, const Vector2f& playerPos, Chunk* chunk);
+	void update(float elapsedTime, const Vector2f& playerPos, Chunk* chunk, vector<NavBox> navBox);
 
 	float getCurrentHP();
 
@@ -70,4 +81,14 @@ public:
 	float getDamage();
 
 	void updateTextRect();
+
+	void followPlayer();
+	void pathfindToPlayer(Chunk* chunk);
+	void followPath(Chunk* chunk);
+
+	bool reachedEndOfPath();
+
+	int screenToTileX(float x, float y);
+	int screenToTileY(float x, float y);
+	Vector2f tileToScreen(int tileX, int tileY);
 };
