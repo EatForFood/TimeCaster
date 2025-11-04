@@ -1406,7 +1406,34 @@ void Engine::run()
 				{
 					spells[i].update(dtAsSeconds);
 
-				
+					sf::FloatRect spellBounds = spells[i].getSprite().getGlobalBounds();
+
+					
+					for (Enemy& enemies : enemyArr)
+					{
+						if (!enemies.isDead()) 
+						{ 
+							if (spellBounds.intersects(enemies.getSprite().getGlobalBounds()))
+							{
+								// Apply damage from spell to enemy
+								enemies.setHealth(-spells[i].getSpellDamage());
+								cout << "Enemy hit for " << spells[i].getSpellDamage() << " damage. Enemy health now " << enemies.getCurrentHP() << endl;
+
+								// Mark enemy as hit
+								enemies.setWasHit(true);
+
+								// Stop the spell; Add check for piercing spells later
+								spells[i].stop();
+							
+								// Play hit sound
+								sound.playHitSound();
+
+								// This spell hit an enemy; stop checking other enemies
+								// Add check for piercing spells later
+								break;						
+							}
+						}
+					}
 				}
 			}
 

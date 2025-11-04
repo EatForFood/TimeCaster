@@ -35,6 +35,13 @@ private:
 	float m_MaxY;
 	float m_MinY;
 
+	// How much Damage will the spell do? Set to 0 if it's non-damaging spell
+	float m_SpellDamage;
+
+	// Will the spell pierce through enemies or objects?
+	bool m_PierceEnemy;
+	bool m_PierceObject;
+
 	// spell animation stuff
 	Sprite m_Sprite;
 	Texture m_Texture;
@@ -77,5 +84,12 @@ public:
 	void setSpriteFromSheet(IntRect textureBox, int tileSize);
 	void moveTextureRect();
 
+	
+
 	Sprite getSprite();
+
+	// Combat related functions
+	float getSpellDamage();
+	bool piercesEnemy();
+	bool piercesObject();
 };
