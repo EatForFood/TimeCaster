@@ -748,6 +748,27 @@ void Player::switchWeapon()
 	}
 }
 
+void Player::switchSpell(int spell)
+{
+	switch (spell) {
+	case 1:
+		m_SpellType = Fireball;
+		break;
+
+	case 2:
+		m_SpellType = Heal;
+		break;
+
+	case 3:
+		m_SpellType = FreezeTime;
+		break;
+
+	case 4:
+		m_SpellType = Phase;
+		break;
+	}
+}
+
 bool Player::equipWeapon(string weaponNameToEquip)
 {
 	Weapon weaponToEquip(weaponNameToEquip, Vector2f(0, 0));
@@ -841,6 +862,10 @@ vector<Weapon>& Player::getEquippedWeapons()
 Player::CombatType Player::getCombatType()
 {
 	return m_CombatType;
+}
+
+Player::SpellType Player::getSpellType() {
+	return m_SpellType;
 }
 
 vector<Equipment>& Player::getEquippedArmour()

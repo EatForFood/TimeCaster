@@ -255,6 +255,7 @@ private:
 	RectangleShape weaponFrame;
 	RectangleShape wandFrame;
 	RectangleShape inventoryBackground;
+	RectangleShape darkInventoryBackground;
 
 	// Item tooltip elements
 	RectangleShape itemTooltipBackground;
@@ -355,13 +356,17 @@ private:
 	RectangleShape spellIndicator;
 
 	Texture indicator;
+	Texture healSpell;
+	Texture freezeTimeSpell;
+	Texture fireBallSpell;
+	Texture phaseSpell;
 
 	RectangleShape swordIcon;
 	RectangleShape wandIcon;
-	Sprite spell1Icon;
-	Sprite spell2Icon;
-	Sprite spell3Icon;
-	Sprite spell4Icon;
+	RectangleShape spell1Icon;
+	RectangleShape spell2Icon;
+	RectangleShape spell3Icon;
+	RectangleShape spell4Icon;
 
 	enum CombatType { Melee, Magic };
 };

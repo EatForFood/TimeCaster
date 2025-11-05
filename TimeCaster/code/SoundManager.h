@@ -58,7 +58,8 @@ private:
 	SoundBuffer storyIntroBuffer;
 	Sound storyIntro;
 
-
+	SoundBuffer swordSwingBuffer;
+	Sound swordSwing;
 public:
 	// SoundManager constructor
 	SoundManager();
@@ -95,4 +96,6 @@ public:
 
 	// Function to play the boss intro sound
 	void playBossIntroSound();
+
+	void playSwordSwing();
 };

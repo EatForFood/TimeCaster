@@ -57,7 +57,8 @@ SoundManager::SoundManager() {
 	bossIntroBuffer.loadFromFile("sound/bossIntro.wav");
 	bossIntro.setBuffer(bossIntroBuffer);
 
-
+	swordSwingBuffer.loadFromFile("sound/swordSwing.wav");
+	swordSwing.setBuffer(swordSwingBuffer);
 } // End of SoundManager constructor
 
 // Function for placing songs within the soundtrack list
@@ -132,4 +133,9 @@ void SoundManager::stopStoryIntroSound() {
 // Function to play the boss intro sound
 void SoundManager::playBossIntroSound() {
 	bossIntro.play();
+}
+
+void SoundManager::playSwordSwing() {
+	if (swordSwing.getStatus() != SoundSource::Status::Playing)
+	swordSwing.play();
 }
