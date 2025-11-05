@@ -795,6 +795,7 @@ Chunk* Engine::getCurrentChunk(float x, float y) {
 
 void Engine::run()
 {
+	initializeInventory();
 	// The main game loop
 	while (window.isOpen())
 	{
@@ -804,8 +805,8 @@ void Engine::run()
 			fps = fps * 0.9f + (1.f / deltaTime) * 0.1f;
 			fpsText.setString("FPS: " + to_string((int)fps));
 		}
-
-		initializeInventory();
+		//initializeInventory();
+	
 
 		// Getting the mouse position and mapping those pixels to coordinates
 		mousePos = Mouse::getPosition(window);
