@@ -67,7 +67,7 @@ public:
 
 	// Launch a new spell
 	void shoot(float startX, float startY,
-		float xTarget, float yTarget);
+		float xTarget, float yTarget, float damage);
 
 	// Tell the calling code where the spell is in the world
 	FloatRect getPosition();

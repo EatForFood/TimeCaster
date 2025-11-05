@@ -1258,7 +1258,7 @@ void Engine::run()
 
 				if (player.getCombatType() == Magic && !player.isCastingSpell() && player.getSpellType() == Player::SpellType::Fireball)
 				{
-					spells[currentSpell].shoot(player.getCenter().x, player.getCenter().y + 10, mouseWorldPosition.x, mouseWorldPosition.y);
+					spells[currentSpell].shoot(player.getCenter().x, player.getCenter().y + 10, mouseWorldPosition.x, mouseWorldPosition.y, player.getEquippedWand()->getDamage() );
 				
 					// Play fireball sound (Change sound based on spell later)
 					sound.playFireballSound();
@@ -1477,10 +1477,10 @@ void Engine::run()
 				}
 			}
 
-			swordIcon.setTextureRect(player.getEquippedWeapons().at(0).getTextureRect());
+			swordIcon.setTextureRect(player.getEquippedSword()->getTextureRect());
 			swordIcon.setOrigin(swordIcon.getSize() / 2.f);
 
-			wandIcon.setTextureRect(player.getEquippedWeapons().at(1).getTextureRect());
+			wandIcon.setTextureRect(player.getEquippedWand()->getTextureRect());
 			wandIcon.setOrigin(wandIcon.getSize() / 2.f);
 
 			if (player.getCombatType() == Player::CombatType::Melee)
