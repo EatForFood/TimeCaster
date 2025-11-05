@@ -433,7 +433,7 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	textureItems = TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png");
 	tooltipBackground = TextureHolder::GetTexture("graphics/UI/tooltipBackground.png");
 	eKeyTexture = TextureHolder::GetTexture("graphics/UI/eKey.png");
-	inventoryBackgroundTexture = TextureHolder::GetTexture("graphics/UI/inventoryBackground.png");
+	inventoryBackgroundTexture = TextureHolder::GetTexture("graphics/UI/inventoryBackground2.png");
 	indicator = TextureHolder::GetTexture("graphics/UI/indicator.png");
 
 	// Equipped item icons
@@ -690,6 +690,11 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	spell4Icon.setSize(Vector2f(60, 60));
 	spell4Icon.setOrigin(spell4Icon.getSize() / 2.f);
 	spell4Icon.setPosition(spellBox4.getPosition() + spellBox4.getSize() / 2.f);
+
+	// Making the inventory background filter black and 25% alpha
+	darkInventoryBackground.setFillColor(Color(0, 0, 0, 64));
+	darkInventoryBackground.setSize(resolution);
+	darkInventoryBackground.setPosition(0, 0);
 }
 
 void Engine::initializeInventory()
@@ -1247,6 +1252,10 @@ void Engine::run()
 			if (Mouse::isButtonPressed(Mouse::Left))
 			{
 				player.Attack();
+				if (player.getCombatType() == Melee) {
+					sound.playSwordSwing();
+				}
+
 				if (player.getCombatType() == Magic && !player.isCastingSpell() && player.getSpellType() == Player::SpellType::Fireball)
 				{
 					spells[currentSpell].shoot(player.getCenter().x, player.getCenter().y + 10, mouseWorldPosition.x, mouseWorldPosition.y);
@@ -1309,7 +1318,6 @@ void Engine::run()
 			player.stopUp();
 			player.stopDown();
 		}
-
 		
 		// Handle the display fps button changing colour based on boolean
 		if (state == State::OPTIONS_MENU)
@@ -1439,8 +1447,7 @@ void Engine::run()
 				{
 					spells[i].update(dtAsSeconds);
 
-					sf::FloatRect spellBounds = spells[i].getSprite().getGlobalBounds();
-
+					FloatRect spellBounds = spells[i].getSprite().getGlobalBounds();
 					
 					for (Enemy& enemies : enemyArr)
 					{

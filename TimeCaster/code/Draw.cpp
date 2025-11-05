@@ -189,6 +189,7 @@ void Engine::draw()
 		if (drawInventory) 
 		{
 			window.draw(filter);
+			window.draw(darkInventoryBackground);
 			window.draw(inventoryBackground);
 			window.draw(playerFrame);
 			//window.draw(playerInFrame);

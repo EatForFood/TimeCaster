@@ -255,6 +255,7 @@ private:
 	RectangleShape weaponFrame;
 	RectangleShape wandFrame;
 	RectangleShape inventoryBackground;
+	RectangleShape darkInventoryBackground;
 
 	// Item tooltip elements
 	RectangleShape itemTooltipBackground;
