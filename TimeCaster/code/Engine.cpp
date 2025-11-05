@@ -1395,6 +1395,7 @@ void Engine::run()
 					for (Enemy& enemies : enemyArr)
 					{
 						enemies.setChunk(i);
+						cout << "chunk set" << endl;
 					}
 				}
 			}

@@ -106,5 +106,6 @@ public:
 
 	void createNodes();
 	bool getNode(int x, int y);
+	Vector2f getChunkLocation();
 
 };
