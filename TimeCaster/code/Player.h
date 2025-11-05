@@ -153,11 +153,15 @@ public:
 	void setManaValue(int mana);
 	void setHealthValue(int health);
 
+	// use mana after casting a spell
+	bool useMana(float manaCost);
+
 private:
 
 	const float START_SPEED = 100;
 	const float START_HEALTH = 50;
 	const float START_MANA = 100;
+	const float START_MANA_RECHARGE = 3;
 	const float START_STAMINA = 100;
 	const float START_STAMINA_RECHARGE = 5;
 	const int START_GOLD = 0;
@@ -181,6 +185,7 @@ private:
 	// Player stats
 	float m_Mana;
 	float m_MaxMana;
+	float m_ManaRecharge;
 	float m_Stamina;
 	float m_MaxStamina;
 	float m_StaminaRecharge;

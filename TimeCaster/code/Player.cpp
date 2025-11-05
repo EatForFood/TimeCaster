@@ -18,6 +18,7 @@ Player::Player()
 	m_MaxHealth = START_HEALTH * 2;
 	m_Mana = START_MANA;
 	m_MaxMana = START_MANA;
+	m_ManaRecharge = START_MANA_RECHARGE;
 	m_Stamina = START_STAMINA;
 	m_MaxStamina = START_STAMINA;
 	m_StaminaRecharge = START_STAMINA_RECHARGE;
@@ -244,6 +245,16 @@ void Player::update(float elapsedTime, Vector2i mousePosition, vector<NavBox> na
 	else if (m_Stamina < m_MaxStamina) {
 		m_Stamina += m_StaminaRecharge * elapsedTime * 0.33; //recharge stamina slower when moving
 	}	
+
+	if (m_Mana < m_MaxMana && m_CombatType == Melee)
+	{
+		m_Mana += m_ManaRecharge * elapsedTime; // recharge mana faster when not using magic
+	}
+	else if (m_Mana < m_MaxMana)
+	{
+		m_Mana += m_ManaRecharge * elapsedTime * 0.66; // recharge mana slower when using magic
+	}
+	
 
 	if (m_UpPressed && !upDisabled)
 	{
@@ -505,7 +516,7 @@ void Player::createNewSave()
 	ofstream saveFile("gamedata/TCSave.txt");
 
 	saveFile << fixed << setprecision(5) << START_SPEED << " " << START_HEALTH << " " << m_MaxHealth << " " << START_STAMINA << " "
-		<< START_STAMINA << " " << START_STAMINA_RECHARGE << " " << START_MANA << " " << START_MANA << " " << START_GOLD << " " << START_KILLS
+		<< START_STAMINA << " " << START_STAMINA_RECHARGE << " " << START_MANA << " " << START_MANA << " " << START_MANA_RECHARGE << " " << START_GOLD << " " << START_KILLS
 		<< " " << START_LEVEL << " " << START_SWORD << " " << START_WAND << " " << START_HEAD_ARMOUR << " " << START_CHEST_ARMOUR << " " 
 		<< START_TROUSER_ARMOUR << " " << START_SHOE_ARMOUR << " " << START_NECK_ARMOUR << " " << 64 << " " << 64
 		<< endl;
@@ -557,6 +568,7 @@ void Player::updateSaveFile()
 		<< m_StaminaRecharge << " " 
 		<< m_Mana << " " 
 		<< m_MaxMana << " " 
+		<< m_ManaRecharge << " "
 		<< m_Gold << " " 
 		<< m_Kills << " " 
 		<< m_Level << " "
@@ -589,6 +601,7 @@ bool Player::loadSaveFile()
 		loadFile >> m_StaminaRecharge;
 		loadFile >> m_Mana;
 		loadFile >> m_MaxMana;
+		loadFile >> m_ManaRecharge;
 
 		loadFile >> m_Gold;
 		loadFile >> m_Kills;
@@ -1060,4 +1073,16 @@ void Player::setManaValue(int mana) {
 
 void Player::setHealthValue(int health) {
 	m_Health = health;
+}
+
+bool Player::useMana(float manaCost) 
+{
+	if (m_Mana >= manaCost) {
+		m_Mana -= manaCost;
+		return true;
+	}
+	else {
+		return false;
+	}
+
 }

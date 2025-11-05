@@ -42,6 +42,9 @@ private:
 	bool m_PierceEnemy;
 	bool m_PierceObject;
 
+	// How much mana does the spell cost?
+	float m_ManaCost;
+
 	// spell animation stuff
 	Sprite m_Sprite;
 	Texture m_Texture;
