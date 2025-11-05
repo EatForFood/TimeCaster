@@ -658,13 +658,13 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	swordIcon.setSize(Vector2f(75, 75));
 	swordIcon.setOrigin(swordIcon.getSize() / 2.f);
 	swordIcon.setPosition(swordBox.getPosition() + swordBox.getSize() / 2.f);
-	swordIcon.setTextureRect(player.getEquippedWeapons().at(0).getTextureRect());
+	equippedSwordIcon.setTextureRect(player.getEquippedSword()->getTextureRect());
 
 	wandIcon.setTexture(&textureItems);
 	wandIcon.setSize(Vector2f(75, 75));
 	wandIcon.setOrigin(wandIcon.getSize() / 2.f);
 	wandIcon.setPosition(wandBox.getPosition() + wandBox.getSize() / 2.f);
-	wandIcon.setTextureRect(player.getEquippedWeapons().at(1).getTextureRect());
+	equippedWandIcon.setTextureRect(player.getEquippedWand()->getTextureRect());
 
 	healSpell = TextureHolder::GetTexture("graphics/UI/healSpell.png");
 	fireBallSpell = TextureHolder::GetTexture("graphics/UI/fireballSpell.png");
@@ -898,13 +898,13 @@ void Engine::run()
 					player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume());
 					player.loadSaveFile();
 
-					equippedSwordIcon.setTextureRect(player.getEquippedWeapons().at(0).getTextureRect());
-					equippedWandIcon.setTextureRect(player.getEquippedWeapons().at(1).getTextureRect());
-					equippedHeadArmourIcon.setTextureRect(player.getEquippedArmour().at(0).getTextureRect());
-					equippedChestArmourIcon.setTextureRect(player.getEquippedArmour().at(1).getTextureRect());
-					equippedTrousersArmourIcon.setTextureRect(player.getEquippedArmour().at(2).getTextureRect());
-					equippedShoeArmourIcon.setTextureRect(player.getEquippedArmour().at(3).getTextureRect());
-					equippedNeckArmourIcon.setTextureRect(player.getEquippedArmour().at(4).getTextureRect());
+					equippedSwordIcon.setTextureRect(player.getEquippedSword()->getTextureRect());
+					equippedWandIcon.setTextureRect(player.getEquippedWand()->getTextureRect());
+					equippedHeadArmourIcon.setTextureRect(player.getEquippedHeadArmour()->getTextureRect());
+					equippedChestArmourIcon.setTextureRect(player.getEquippedChestArmour()->getTextureRect());
+					equippedTrousersArmourIcon.setTextureRect(player.getEquippedTrouserArmour()->getTextureRect());
+					equippedShoeArmourIcon.setTextureRect(player.getEquippedShoeArmour()->getTextureRect());
+					equippedNeckArmourIcon.setTextureRect(player.getEquippedNeckArmour()->getTextureRect());
 
 					// We will modify the next two lines later
 					arena.width = 1900;
@@ -960,13 +960,13 @@ void Engine::run()
 						world.loadWorld();
 
 						// Update equipped item icons
-						equippedSwordIcon.setTextureRect(player.getEquippedWeapons().at(0).getTextureRect());
-						equippedWandIcon.setTextureRect(player.getEquippedWeapons().at(1).getTextureRect());
-						equippedHeadArmourIcon.setTextureRect(player.getEquippedArmour().at(0).getTextureRect());
-						equippedChestArmourIcon.setTextureRect(player.getEquippedArmour().at(1).getTextureRect());
-						equippedTrousersArmourIcon.setTextureRect(player.getEquippedArmour().at(2).getTextureRect());
-						equippedShoeArmourIcon.setTextureRect(player.getEquippedArmour().at(3).getTextureRect());
-						equippedNeckArmourIcon.setTextureRect(player.getEquippedArmour().at(4).getTextureRect());
+						equippedSwordIcon.setTextureRect(player.getEquippedSword()->getTextureRect());
+						equippedWandIcon.setTextureRect(player.getEquippedWand()->getTextureRect());
+						equippedHeadArmourIcon.setTextureRect(player.getEquippedHeadArmour()->getTextureRect());
+						equippedChestArmourIcon.setTextureRect(player.getEquippedChestArmour()->getTextureRect());
+						equippedTrousersArmourIcon.setTextureRect(player.getEquippedTrouserArmour()->getTextureRect());
+						equippedShoeArmourIcon.setTextureRect(player.getEquippedShoeArmour()->getTextureRect());
+						equippedNeckArmourIcon.setTextureRect(player.getEquippedNeckArmour()->getTextureRect());
 
 						// We will modify the next two lines later
 						arena.width = 1900;
@@ -1003,13 +1003,13 @@ void Engine::run()
 						player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume());
 						player.loadSaveFile();
 
-						equippedSwordIcon.setTextureRect(player.getEquippedWeapons().at(0).getTextureRect());
-						equippedWandIcon.setTextureRect(player.getEquippedWeapons().at(1).getTextureRect());
-						equippedHeadArmourIcon.setTextureRect(player.getEquippedArmour().at(0).getTextureRect());
-						equippedChestArmourIcon.setTextureRect(player.getEquippedArmour().at(1).getTextureRect());
-						equippedTrousersArmourIcon.setTextureRect(player.getEquippedArmour().at(2).getTextureRect());
-						equippedShoeArmourIcon.setTextureRect(player.getEquippedArmour().at(3).getTextureRect());
-						equippedNeckArmourIcon.setTextureRect(player.getEquippedArmour().at(4).getTextureRect());
+						equippedSwordIcon.setTextureRect(player.getEquippedSword()->getTextureRect());
+						equippedWandIcon.setTextureRect(player.getEquippedWand()->getTextureRect());
+						equippedHeadArmourIcon.setTextureRect(player.getEquippedHeadArmour()->getTextureRect());
+						equippedChestArmourIcon.setTextureRect(player.getEquippedChestArmour()->getTextureRect());
+						equippedTrousersArmourIcon.setTextureRect(player.getEquippedTrouserArmour()->getTextureRect());
+						equippedShoeArmourIcon.setTextureRect(player.getEquippedShoeArmour()->getTextureRect());
+						equippedNeckArmourIcon.setTextureRect(player.getEquippedNeckArmour()->getTextureRect());
 
 						// We will modify the next two lines later
 						arena.width = 1900;
