@@ -29,6 +29,7 @@ private:
 	float m_Damage = 4; // Change this later to be set dynamically
 
 	Chunk* m_ChunkPtr = nullptr;
+	Vector2f m_ChunkOffset;
 
 	const int TILE_SIZE = 64;
 
@@ -41,9 +42,9 @@ private:
 	vector<Vector2i> m_Path; // path in grid coordinates
 	size_t m_CurrentPathIndex = 1;
 	bool m_AlignedToPath = false;
-	const float PATH_UPDATE_INTERVAL = 1.0f; // Update path every 0.2s
+	const float PATH_UPDATE_INTERVAL = 0.2f; // Update path every 0.2s
 	float m_UpdatePathTimer = 0.0f;
-	const float NODE_REACH_THRESHOLD = 10.0f; // pixels
+	const float NODE_REACH_THRESHOLD = 32.0f; // pixels
 
 public:
 	Enemy();
@@ -91,4 +92,6 @@ public:
 	int screenToTileX(float x, float y);
 	int screenToTileY(float x, float y);
 	Vector2f tileToScreen(int tileX, int tileY);
+
+	void drawDebugPath(sf::RenderWindow& window);
 };

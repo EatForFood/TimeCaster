@@ -267,6 +267,9 @@ void Enemy::update(float elapsedTime, const Vector2f& playerPos, Chunk* chunk, v
 	m_PlayerPosition = playerPos;
 	m_PositionLast = m_Position;
 
+	m_ChunkOffset.x = chunk->getChunkLocation().x * 50;
+	m_ChunkOffset.y = chunk->getChunkLocation().y * 50;
+
 	m_UpdatePathTimer += elapsedTime;
 
 	float distToPlayer = collision.distance(m_Position, m_PlayerPosition);
@@ -274,17 +277,17 @@ void Enemy::update(float elapsedTime, const Vector2f& playerPos, Chunk* chunk, v
 	if (distToPlayer < 100 && distToPlayer > 10) {
 		followPlayer();
 	}
-	/*
-	else {
+	else 
+	{
 		// Update path periodically instead of only at the end
-		if (m_Path.empty() || reachedEndOfPath() || m_UpdatePathTimer >= PATH_UPDATE_INTERVAL) {
+		if (m_Path.empty() || reachedEndOfPath() || m_UpdatePathTimer >= PATH_UPDATE_INTERVAL) 
+		{
 			pathfindToPlayer(chunk);
 			m_UpdatePathTimer = 0.0f;
 		}
 		followPath(chunk);
 	}
-	*/
-
+	
 	/*
 	for (auto& nav : navBoxes) { // if player walks into navBox 
 		if (collision.pointInShape(m_Position, nav.getShape())) {
@@ -318,24 +321,37 @@ void Enemy::update(float elapsedTime, const Vector2f& playerPos, Chunk* chunk, v
 
 void Enemy::pathfindToPlayer(Chunk* chunk)
 {
-	int startTileX = screenToTileX(m_Position.x, m_Position.y);
-	int startTileY = screenToTileY(m_Position.x, m_Position.y);
+	// 1. Get local chunk tiles
+	int startX = screenToTileX(m_Position.x, m_Position.y);
+	int startY = screenToTileY(m_Position.x, m_Position.y);
+	int endX = screenToTileX(m_PlayerPosition.x, m_PlayerPosition.y);
+	int endY = screenToTileY(m_PlayerPosition.x, m_PlayerPosition.y);
 
-	int endTileX = screenToTileX(m_PlayerPosition.x, m_PlayerPosition.y);
-	int endTileY = screenToTileY(m_PlayerPosition.x, m_PlayerPosition.y);
+	// 2. Convert to world coordinates for pathfinding
+	int worldStartX = startX + static_cast<int>(m_ChunkOffset.x);
+	int worldStartY = startY + static_cast<int>(m_ChunkOffset.y);
+	int worldEndX = endX + static_cast<int>(m_ChunkOffset.x);
+	int worldEndY = endY + static_cast<int>(m_ChunkOffset.y);
 
-	std::cout << "[DEBUG] Pathfinding from (" << startTileX << "," << startTileY
-		<< ") to (" << endTileX << "," << endTileY << ")" << std::endl;
+	if (!chunk->getNode(startX, startY))
+		std::cout << "[DEBUG] Start node not walkable!" << std::endl;
+
+	if (!chunk->getNode(endX, endY))
+		std::cout << "[DEBUG] End node not walkable!" << std::endl;
+
+	std::cout << "[DEBUG] Pathfinding from (" << worldStartX << "," << worldStartY
+		<< ") to (" << worldEndX << "," << worldEndY << ")" << std::endl;
 
 	std::priority_queue<std::pair<float, Node*>,
 		std::vector<std::pair<float, Node*>>,
 		std::greater<>> openList;
+
 	std::unordered_map<std::pair<int, int>, Node*, NodeHash> allNodes;
 	std::unordered_map<std::pair<int, int>, bool, NodeHash> closedList;
 
-	Node* startNode = new Node(startTileX, startTileY, 0, heuristic(startTileX, startTileY, endTileX, endTileY));
+	Node* startNode = new Node(worldStartX, worldStartY, 0, heuristic(worldStartX, worldStartY, worldEndX, worldEndY));
 	openList.emplace(startNode->fCost(), startNode);
-	allNodes[{startTileX, startTileY}] = startNode;
+	allNodes[{worldStartX, worldStartY}] = startNode;
 
 	Node* endNode = nullptr;
 	const std::vector<std::pair<int, int>> directions = { {0,1},{1,0},{0,-1},{-1,0} };
@@ -346,7 +362,7 @@ void Enemy::pathfindToPlayer(Chunk* chunk)
 		openList.pop();
 		closedList[{current->x, current->y}] = true;
 
-		if (current->x == endTileX && current->y == endTileY)
+		if (current->x == worldEndX && current->y == worldEndY)
 		{
 			endNode = current;
 			break;
@@ -357,17 +373,19 @@ void Enemy::pathfindToPlayer(Chunk* chunk)
 			int nx = current->x + dir.first;
 			int ny = current->y + dir.second;
 
-			if (!chunk->getNode(nx, ny))
-			{
-				std::cout << "tile blocked" << std::endl;
-			}
+			// Convert world -> local coordinates for chunk query
+			int localX = nx - static_cast<int>(m_ChunkOffset.x);
+			int localY = ny - static_cast<int>(m_ChunkOffset.y);
 
-			if (nx < 0 || nx >= 50 || ny < 0 || ny >= 50) continue;
-			if (!chunk->getNode(nx, ny)) continue;
-			if (closedList[{nx, ny}]) continue;
+			if (localX < 0 || localX >= 50 || localY < 0 || localY >= 50)
+				continue;
+			if (!chunk->getNode(localX, localY))
+				continue;
+			if (closedList[{nx, ny}])
+				continue;
 
 			float gNew = current->gCost + 1;
-			float hNew = heuristic(nx, ny, endTileX, endTileY);
+			float hNew = heuristic(nx, ny, worldEndX, worldEndY);
 
 			auto it = allNodes.find({ nx, ny });
 			if (it == allNodes.end())
@@ -385,6 +403,7 @@ void Enemy::pathfindToPlayer(Chunk* chunk)
 		}
 	}
 
+	// 5. Build path in local coordinates
 	m_Path.clear();
 	if (!endNode)
 	{
@@ -395,13 +414,13 @@ void Enemy::pathfindToPlayer(Chunk* chunk)
 		Node* n = endNode;
 		while (n != nullptr)
 		{
-			m_Path.push_back(sf::Vector2i(n->x, n->y));
+			int localX = n->x - static_cast<int>(m_ChunkOffset.x);
+			int localY = n->y - static_cast<int>(m_ChunkOffset.y);
+			m_Path.push_back(sf::Vector2i(localX, localY));
 			n = n->parent;
 		}
 		std::reverse(m_Path.begin(), m_Path.end());
 		m_CurrentPathIndex = 1;
-
-		std::cout << "[DEBUG] Path found! Nodes: " << m_Path.size() << std::endl;
 	}
 
 	for (auto& p : allNodes) delete p.second;
@@ -447,33 +466,107 @@ void Enemy::followPath(Chunk* chunk)
 		m_CurrentPathIndex++;
 	}
 
+	// Calculate the angle between mouse and center of screen
+	float angle = atan2(target.y - m_Position.y, target.x - m_Position.x) * 180 / 3.141;
+
+	if (angle < 0) angle += 360;
+
+	if (angle >= 45 && angle < 135)
+	{
+		// facing down
+		direction = Vector2f(0, -1);
+
+	}
+	else if (angle >= 135 && angle < 225)
+	{
+		// facing left
+		direction = Vector2f(-1, 0);
+	}
+	else if (angle >= 225 && angle < 315)
+	{
+		// facing up
+		direction = Vector2f(0, 1);
+	}
+	else
+	{
+		// facing right
+		direction = Vector2f(1, 0);
+	}
+
 	m_Sprite.setPosition(m_Position);
 }
-
-
 
 bool Enemy::reachedEndOfPath()
 {
 	return m_CurrentPathIndex >= m_Path.size();
 }
 
-// Screen (pixels) -> Tile (indices)
-int Enemy::screenToTileX(float x, float y) {
-	return static_cast<int>((y / (TILE_SIZE / 2.0f) + x / (TILE_SIZE / 2.0f)) / 2.0f);
+int Enemy::screenToTileX(float x, float y)
+{
+	// Convert screen position to tile coordinates **within the chunk**
+	float worldX = x;
+	float worldY = y;
+
+	// convert world pixel to world tile
+	int tileX = static_cast<int>((worldX / (TILE_SIZE / 2.0f) + worldY / (TILE_SIZE / 4.0f)) / 2.0f);
+	return tileX - static_cast<int>(m_ChunkOffset.x); // convert to local chunk tile
 }
 
-int Enemy::screenToTileY(float x, float y) {
-	return static_cast<int>((y / (TILE_SIZE / 2.0f) - x / (TILE_SIZE / 2.0f)) / 2.0f);
+int Enemy::screenToTileY(float x, float y)
+{
+	float worldX = x;
+	float worldY = y;
+
+	int tileY = static_cast<int>((worldY / (TILE_SIZE / 4.0f) - worldX / (TILE_SIZE / 2.0f)) / 2.0f);
+	return tileY - static_cast<int>(m_ChunkOffset.y); // convert to local chunk tile
 }
 
-// Tile (indices) -> Screen (pixels)
-sf::Vector2f Enemy::tileToScreen(int tileX, int tileY) {
-	float x = (tileX - tileY) * (TILE_SIZE / 2.0f);
-	float y = (tileX + tileY) * (TILE_SIZE / 2.0f);
+sf::Vector2f Enemy::tileToScreen(int tileX, int tileY)
+{
+	// tileX/Y are local to the chunk (0–49)
+	int worldTileX = tileX + static_cast<int>(m_ChunkOffset.x);
+	int worldTileY = tileY + static_cast<int>(m_ChunkOffset.y);
 
-	// Add half tile offset to move to center
+	float x = (worldTileX - worldTileY) * (TILE_SIZE / 2.0f);
+	float y = (worldTileX + worldTileY) * (TILE_SIZE / 4.0f);
+
 	x += TILE_SIZE / 2.0f;
-	y += TILE_SIZE / 2.0f;
+	y += TILE_SIZE / 4.0f;
 
 	return sf::Vector2f(x, y);
+}
+void Enemy::drawDebugPath(sf::RenderWindow& window)
+{
+	if (m_Path.empty())
+		return;
+
+	sf::Color nodeColor(0, 255, 0, 180); // green, semi-transparent
+	sf::Color lineColor(0, 200, 255, 150); // cyan, semi-transparent
+
+	// Draw the nodes
+	for (auto& tile : m_Path)
+	{
+		sf::Vector2f pos = tileToScreen(tile.x, tile.y);
+
+		sf::CircleShape circle(6);
+		circle.setOrigin(3, 3);
+		circle.setPosition(pos);
+		circle.setFillColor(nodeColor);
+
+		window.draw(circle);
+	}
+
+	// Draw connecting lines between nodes
+	for (size_t i = 1; i < m_Path.size(); ++i)
+	{
+		sf::Vector2f start = tileToScreen(m_Path[i - 1].x, m_Path[i - 1].y);
+		sf::Vector2f end = tileToScreen(m_Path[i].x, m_Path[i].y);
+
+		sf::Vertex line[] = {
+			sf::Vertex(start, lineColor),
+			sf::Vertex(end, lineColor)
+		};
+
+		window.draw(line, 2, sf::Lines);
+	}
 }

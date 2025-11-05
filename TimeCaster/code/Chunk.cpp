@@ -529,13 +529,14 @@ void Chunk::placeHouse1(int sx, int sy) { // sx 15, sy 18
 		{
 			placeTile(x, sy, 1, 14, false, false);
 		}
-
+		m_Walkable[x][sy] = false;
 	}
 
 	// House east wall 
 	for (int y = sy - 3; y < sy + 1; y++)
 	{
 		placeTile(sx + 4, y, 1, 14, false, false);
+		m_Walkable[sx][y] = false;
 	}
 
 	// House 2nd floor east wall
@@ -578,6 +579,7 @@ void Chunk::placeHouse2(int sx, int sy) { // sx 15, sy 18
 	for (int x = sx; x < sx + 2; x++)
 	{
 		placeTile(x, sy, 1, 14, false, false);
+		m_Walkable[x][sy] = false;
 	}
 
 	// House east wall 
@@ -591,6 +593,7 @@ void Chunk::placeHouse2(int sx, int sy) { // sx 15, sy 18
 		{
 			placeTile(sx + 1, y, 1, 14, false, false);
 		}
+		m_Walkable[sx][y] = false;
 	}
 	// roof
 	placeTile(sx - 1, sy - 1, 5, 13, true, false);
@@ -626,12 +629,14 @@ void Chunk::placeHouse3(int sx, int sy) { // sx 15, sy 18
 		{
 			placeTile(x, sy, 1, 14, false, false);
 		}
+		m_Walkable[x][sy] = false;
 	}
 
 	// House east wall 
 	for (int y = sy - 1; y < sy + 1; y++)
 	{
 		placeTile(sx + 2, y, 1, 14, false, false);
+		m_Walkable[sx][y] = false;
 	}
 
 	placeTile(sx + 1, sy - 2, 7, 13, true, false);
@@ -660,6 +665,7 @@ void Chunk::placeHouse4(int sx, int sy) { // sx 15, sy 18
 	for (int x = sx; x < sx + 2; x++)
 	{
 		placeTile(x, sy, 1, 14, false, false);
+		m_Walkable[x][sy] = false;
 	}
 
 	// House east wall 
@@ -673,6 +679,7 @@ void Chunk::placeHouse4(int sx, int sy) { // sx 15, sy 18
 		{
 			placeTile(sx + 1, y, 1, 14, false, false);
 		}
+		m_Walkable[sx][y] = false;
 	}
 
 	// House west wall 2
@@ -686,12 +693,14 @@ void Chunk::placeHouse4(int sx, int sy) { // sx 15, sy 18
 		{
 			placeTile(x, sy - 2, 1, 14, false, false);
 		}
+		m_Walkable[x][sy] = false;
 	}
 
 	// House east wall  2
 	for (int y = sy - 3; y < sy - 1; y++)
 	{
 		placeTile(sx + 4, y, 1, 14, false, false); // 64/64 = 1, 896/64 = 14
+		m_Walkable[sx][y] = false;
 	}
 
 	placeTile(sx + 3, sy - 4, 7, 13, true, false); // 448/64 = 7, 832/64 = 13
@@ -1185,4 +1194,9 @@ void Chunk::createNodes()
 bool Chunk::getNode(int x, int y)
 {
 	return m_Walkable[x][y];
+}
+
+Vector2f Chunk::getChunkLocation()
+{
+	return m_Chunk;
 }
