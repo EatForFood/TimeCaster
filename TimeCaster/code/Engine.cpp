@@ -1262,7 +1262,7 @@ void Engine::run()
 				
 					// Play fireball sound (Change sound based on spell later)
 					sound.playFireballSound();
-					
+
 					currentSpell++;
 					if (currentSpell > 99)
 					{
