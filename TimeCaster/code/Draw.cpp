@@ -509,9 +509,13 @@ void Engine::draw()
 			window.draw(wandBox);
 			window.draw(wandIcon);
 			window.draw(spellBox1);
+			window.draw(spell1Icon);
 			window.draw(spellBox2);
+			window.draw(spell2Icon);
 			window.draw(spellBox3);
+			window.draw(spell3Icon);
 			window.draw(spellBox4);
+			window.draw(spell4Icon);
 			window.draw(weaponIndicator);
 			window.draw(spellIndicator);
 			window.setView(mainView);

@@ -665,6 +665,31 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	wandIcon.setOrigin(wandIcon.getSize() / 2.f);
 	wandIcon.setPosition(wandBox.getPosition() + wandBox.getSize() / 2.f);
 	wandIcon.setTextureRect(player.getEquippedWeapons().at(1).getTextureRect());
+
+	healSpell = TextureHolder::GetTexture("graphics/UI/healSpell.png");
+	fireBallSpell = TextureHolder::GetTexture("graphics/UI/fireballSpell.png");
+	phaseSpell = TextureHolder::GetTexture("graphics/UI/phaseSpell.png");
+	freezeTimeSpell = TextureHolder::GetTexture("graphics/UI/freezeTimeSpell.png");
+	
+	spell1Icon.setTexture(&fireBallSpell);
+	spell1Icon.setSize(Vector2f(60, 60));
+	spell1Icon.setOrigin(spell1Icon.getSize() / 2.f);
+	spell1Icon.setPosition(spellBox1.getPosition() + spellBox1.getSize() / 2.f);
+
+	spell2Icon.setTexture(&healSpell);
+	spell2Icon.setSize(Vector2f(60, 60));
+	spell2Icon.setOrigin(spell2Icon.getSize() / 2.f);
+	spell2Icon.setPosition(spellBox2.getPosition() + spellBox2.getSize() / 2.f);
+
+	spell3Icon.setTexture(&freezeTimeSpell);
+	spell3Icon.setSize(Vector2f(60, 60));
+	spell3Icon.setOrigin(spell3Icon.getSize() / 2.f);
+	spell3Icon.setPosition(spellBox3.getPosition() + spellBox3.getSize() / 2.f);
+
+	spell4Icon.setTexture(&phaseSpell);
+	spell4Icon.setSize(Vector2f(60, 60));
+	spell4Icon.setOrigin(spell4Icon.getSize() / 2.f);
+	spell4Icon.setPosition(spellBox4.getPosition() + spellBox4.getSize() / 2.f);
 }
 
 void Engine::initializeInventory()
@@ -1149,18 +1174,21 @@ void Engine::run()
 				{
 					// Increase health
 					player.upgradeHealth();
+					player.switchSpell(1);
 				}
 
 				if (event.key.code == Keyboard::Num2 && state == State::PLAYING)
 				{
 					// Increase stamina
 					player.upgradeStamina();
+					player.switchSpell(2);
 				}
 
 				if (event.key.code == Keyboard::Num3 && state == State::PLAYING)
 				{
 					// Increase health
 					player.upgradeMana();
+					player.switchSpell(3);
 				}
 
 				if (event.key.code == Keyboard::Num4 && state == State::PLAYING)
@@ -1173,6 +1201,7 @@ void Engine::run()
 					{
 						cout << "No space in inventory" << endl;
 					}
+					player.switchSpell(4);
 				}
 
 				if (event.key.code == Keyboard::Num5 && state == State::PLAYING)
@@ -1218,7 +1247,7 @@ void Engine::run()
 			if (Mouse::isButtonPressed(Mouse::Left))
 			{
 				player.Attack();
-				if (player.getCombatType() == Magic && !player.isCastingSpell())
+				if (player.getCombatType() == Magic && !player.isCastingSpell() && player.getSpellType() == Player::SpellType::Fireball)
 				{
 					spells[currentSpell].shoot(player.getCenter().x, player.getCenter().y + 10, mouseWorldPosition.x, mouseWorldPosition.y);
 				
@@ -1454,6 +1483,24 @@ void Engine::run()
 			else
 			{
 				weaponIndicator.setPosition(wandBox.getPosition().x + 37.5, wandBox.getPosition().y - 25);
+			}
+
+			switch (player.getSpellType()) {
+			case Player::SpellType::Fireball:
+				spellIndicator.setPosition(spell1Icon.getPosition().x, spell1Icon.getPosition().y - 62.5);
+				break;
+
+			case Player::SpellType::Heal:
+				spellIndicator.setPosition(spell2Icon.getPosition().x, spell2Icon.getPosition().y - 62.5);
+				break;
+
+			case Player::SpellType::FreezeTime:
+				spellIndicator.setPosition(spell3Icon.getPosition().x, spell3Icon.getPosition().y - 62.5);
+				break;
+
+			case Player::SpellType::Phase:
+				spellIndicator.setPosition(spell4Icon.getPosition().x, spell4Icon.getPosition().y - 62.5);
+				break;
 			}
 			
 

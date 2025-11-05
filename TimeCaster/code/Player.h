@@ -20,6 +20,7 @@ public:
 	void spawn(IntRect arena, Vector2f resolution, int tileSize, int level);
 
 	enum CombatType { Melee, Magic };
+	enum SpellType { Heal, Fireball, FreezeTime, Phase};
 
 	// Handle the player getting hit by an enemy
 	bool hit(Time timeHit, float damage, int iFrames);
@@ -39,6 +40,7 @@ public:
 	void stopUp();
 	void stopDown();
 	CombatType getCombatType();
+	SpellType getSpellType();
 
 	// We will call this function once every frame
 	void update(float elapsedTime, Vector2i mousePosition, vector<NavBox> navBox);
@@ -116,6 +118,7 @@ public:
 	//Item getEquippedWeapon();
 
 	void switchWeapon();
+	void switchSpell(int spell);
 	bool equipWeapon(string weaponNameToEquip);
 
 	vector<Equipment>& getEquippedArmour();
@@ -206,6 +209,7 @@ private:
 	float m_Volume;
 
 	CombatType m_CombatType = Melee;
+	SpellType m_SpellType = Fireball;
 	
 	// When was the player last hit
 	Time m_LastHit;
@@ -233,6 +237,4 @@ private:
 	FloatRect m_RenderArea;
 
 	bool inCell = false;
-
-
 };
