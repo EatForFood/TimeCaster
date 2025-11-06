@@ -92,6 +92,7 @@ private:
 
 	Color defaultFilter = Color(199, 56, 20, 40);
 	Color skeletonRuinsFilter = Color(199, 56, 30, 60);
+	Color timeFrozenFilter = Color(173, 216, 230, 50);
 
 	// The boundaries of the arena
 	IntRect arena;
@@ -369,4 +370,7 @@ private:
 	RectangleShape spell4Icon;
 
 	enum CombatType { Melee, Magic };
+
+	bool timeFrozen;
+	Clock timeFrozenTimer;
 };

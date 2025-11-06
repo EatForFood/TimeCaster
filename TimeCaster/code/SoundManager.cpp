@@ -29,9 +29,9 @@ SoundManager::SoundManager() {
 	soundtrack4Buffer.loadFromFile("sound/soundtrack4.ogg");
 	soundtrack4.setBuffer(soundtrack4Buffer);
 
-	/***********
+	/*****************
 	Other sounds/music
-	************/
+	*****************/
 	
 	// Loads start game sound file into buffer
 	startGameBuffer.loadFromFile("sound/startGame.wav");
@@ -52,7 +52,7 @@ SoundManager::SoundManager() {
 	// Loads story intro sound from file into buffer
 	storyIntroBuffer.loadFromFile("sound/storyIntro.wav");
 	storyIntro.setBuffer(storyIntroBuffer);
-
+	 
 	// Loads boss intro sound from file into buffer
 	bossIntroBuffer.loadFromFile("sound/bossIntro.wav");
 	bossIntro.setBuffer(bossIntroBuffer);

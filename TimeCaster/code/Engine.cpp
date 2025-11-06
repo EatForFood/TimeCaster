@@ -49,7 +49,11 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	}
 
 	filter.setSize(resolution);
-	filter.setFillColor(defaultFilter);
+	
+	if (!timeFrozen) {
+		filter.setFillColor(defaultFilter);
+	}
+	
 
 	player.loadConfigFile();
 
@@ -695,6 +699,8 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	darkInventoryBackground.setFillColor(Color(0, 0, 0, 64));
 	darkInventoryBackground.setSize(resolution);
 	darkInventoryBackground.setPosition(0, 0);
+
+	timeFrozen = false;
 }
 
 void Engine::initializeInventory()
@@ -1270,6 +1276,11 @@ void Engine::run()
 					}
 					player.castingSpell(true);
 				}
+				else if (player.getCombatType() == Magic && !player.isCastingSpell() && player.getSpellType() == Player::SpellType::FreezeTime && !timeFrozen)
+				{
+					timeFrozen = true;
+					timeFrozenTimer.restart();
+				}
 			}
 
 			// Handle the pressing and releasing of the WASD keys
@@ -1367,6 +1378,10 @@ void Engine::run()
 		/*********************************************************************
 		                           UPDATE THE FRAME
 		**********************************************************************/
+		if (timeFrozenTimer.getElapsedTime().asSeconds() > 5) {
+			timeFrozen = false;
+		}
+		
 		if (state == State::PLAYING)
 		{
 			// Update the delta time
@@ -1399,9 +1414,13 @@ void Engine::run()
 				}
 			}
 
+			// Update the player
 			if (state == State::PLAYING && !drawInventory) {
-				// Update the player
 				player.update(dtAsSeconds, Mouse::getPosition(), world.getNavBoxes(player.getChunk()));
+			}
+			
+
+			if (state == State::PLAYING && !drawInventory && !timeFrozen) {
 
 				// Update the vector of enemies if within player's render area
 				for (Enemy& enemies : enemyArr)
@@ -1425,7 +1444,7 @@ void Engine::run()
 								{
 									enemies.setWasHit(false);
 								}
-							}						
+							}
 						}
 					}
 				}
@@ -1441,36 +1460,38 @@ void Engine::run()
 			mainView.setCenter(player.getCenter().x, player.getCenter().y - 10);
 
 			// Update any spells that are in-flight
-			for (int i = 0; i < 100; i++)
-			{
-				if (spells[i].isInFlight())
+			if (!timeFrozen) {
+				for (int i = 0; i < 100; i++)
 				{
-					spells[i].update(dtAsSeconds);
-
-					FloatRect spellBounds = spells[i].getSprite().getGlobalBounds();
-					
-					for (Enemy& enemies : enemyArr)
+					if (spells[i].isInFlight())
 					{
-						if (!enemies.isDead()) 
-						{ 
-							if (spellBounds.intersects(enemies.getSprite().getGlobalBounds()))
+						spells[i].update(dtAsSeconds);
+
+						FloatRect spellBounds = spells[i].getSprite().getGlobalBounds();
+
+						for (Enemy& enemies : enemyArr)
+						{
+							if (!enemies.isDead())
 							{
-								// Apply damage from spell to enemy
-								enemies.setHealth(-spells[i].getSpellDamage());
-								cout << "Enemy hit for " << spells[i].getSpellDamage() << " damage. Enemy health now " << enemies.getCurrentHP() << endl;
+								if (spellBounds.intersects(enemies.getSprite().getGlobalBounds()))
+								{
+									// Apply damage from spell to enemy
+									enemies.setHealth(-spells[i].getSpellDamage());
+									cout << "Enemy hit for " << spells[i].getSpellDamage() << " damage. Enemy health now " << enemies.getCurrentHP() << endl;
 
-								// Mark enemy as hit
-								enemies.setWasHit(true);
+									// Mark enemy as hit
+									enemies.setWasHit(true);
 
-								// Stop the spell; Add check for piercing spells later
-								spells[i].stop();
-							
-								// Play hit sound
-								sound.playHitSound();
+									// Stop the spell; Add check for piercing spells later
+									spells[i].stop();
 
-								// This spell hit an enemy; stop checking other enemies
-								// Add check for piercing spells later
-								break;						
+									// Play hit sound
+									sound.playHitSound();
+
+									// This spell hit an enemy; stop checking other enemies
+									// Add check for piercing spells later
+									break;
+								}
 							}
 						}
 					}

@@ -20,8 +20,11 @@ void Engine::draw()
 		{
 			filter.setFillColor(skeletonRuinsFilter);
 		}
-		else
+		else if (timeFrozen)
 		{
+			filter.setFillColor(timeFrozenFilter);
+		}
+		else {
 			filter.setFillColor(defaultFilter);
 		}
 
