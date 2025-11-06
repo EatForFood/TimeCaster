@@ -134,6 +134,7 @@ void Engine::draw()
 
 		drawables.clear();
 
+		enemyArr[0].drawDebugPath(window);
 
 		if (!player.getInCell())
 		{

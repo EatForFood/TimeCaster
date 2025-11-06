@@ -18,8 +18,11 @@ Spell::Spell()
 	
 }
 
-void Spell::shoot(float startX, float startY, float targetX, float targetY)
+void Spell::shoot(float startX, float startY, float targetX, float targetY, float spellDamage)
 {
+	// Take damage based off of wand
+	m_SpellDamage = spellDamage;
+
 	// Keep track of the spell
 	m_InFlight = true;
 	m_Position.x = startX;
