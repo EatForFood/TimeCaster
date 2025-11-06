@@ -43,8 +43,6 @@ public:
 
 	void generateWorld();
 
-	bool isWorldLoaded();
-
 
 
 protected: 
@@ -68,7 +66,7 @@ private:
 
 	bool windowedMode = false;
 
-	// Has the world loaded?
+	// Anything using multiple threads should use atomic variables
 	std::atomic<bool> worldLoaded;
 
 	Difficulty difficulty;
@@ -230,6 +228,8 @@ private:
 	int currentChar = 0;
 
 	Text skipIntroText; // Create the Text object
+
+	Text loadWorldText;
 
 	Texture textureHeadArmourFrame;
 	Texture textureChestArmourFrame;
