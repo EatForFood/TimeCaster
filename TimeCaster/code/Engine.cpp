@@ -945,8 +945,7 @@ void Engine::run()
 					Listener::setGlobalVolume(player.getVolume());
 				
 					worldLoaded = false;
-					thread worldThread(&Engine::generateWorld, this);
-					worldThread.join();
+					generateWorld();
 					
 				}
 
