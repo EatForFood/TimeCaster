@@ -140,9 +140,9 @@ public:
 
 	bool equipArmour(string armourNameToEquip);
 
-	void healHealth(int healthToHeal);
-	void healMana(int manaToRestore);
-	void healStamina(int staminaToRestore);
+	void healHealth(float healthToHeal);
+	void healMana(float manaToRestore);
+	void healStamina(float staminaToRestore);
 
 	Vector2f worldPosition;
 	Vector2f inventoryPosition = Vector2f(500,500);

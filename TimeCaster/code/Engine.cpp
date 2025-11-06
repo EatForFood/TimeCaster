@@ -1270,13 +1270,13 @@ void Engine::run()
 				
 					if (player.getCombatType() == Magic && !player.isCastingSpell() && player.getSpellType() == Player::SpellType::Fireball)
 					{
-						if (player.useMana(5))
+						if (player.useMana(5.0f))
 						{
 							spells[currentSpell].shoot(player.getCenter().x, player.getCenter().y + 10, mouseWorldPosition.x, mouseWorldPosition.y, player.getEquippedWand()->getDamage());
 
 
 
-							// Play fireball sound (Change sound based on spell later)
+							// Play fireball sound
 							sound.playFireballSound();
 
 							currentSpell++;
@@ -1289,16 +1289,20 @@ void Engine::run()
 					}
 				else if (player.getCombatType() == Magic && !player.isCastingSpell() && player.getSpellType() == Player::SpellType::FreezeTime && !timeFrozen && timeFrozenTimer.getElapsedTime().asSeconds() > 1)
 				{
-				
 					timeFrozen = true;
 					timeFrozenTimer.restart();
 				}
 				else if (player.getCombatType() == Magic && !player.isCastingSpell() && player.getSpellType() == Player::SpellType::FreezeTime && timeFrozen && timeFrozenTimer.getElapsedTime().asSeconds() > 1)
 				{
-
-						timeFrozen = false;
-						timeFrozenTimer.restart();
-						
+					timeFrozen = false;
+					timeFrozenTimer.restart();	
+				}
+				else if (player.getCombatType() == Magic && !player.isCastingSpell() && player.getSpellType() == Player::SpellType::Heal)
+				{
+					if (player.useMana(0.5f))
+					{
+						player.healHealth(0.25f);
+					}		
 				}
 			}
 

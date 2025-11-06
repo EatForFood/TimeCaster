@@ -1027,21 +1027,21 @@ void Player::Attack()
 	updateTextRect();
 }
 
-void Player::healHealth(int healthToRestore) {
+void Player::healHealth(float healthToRestore) {
 	m_Health += healthToRestore;
 	if (m_Health > m_MaxHealth) {
 		m_Health = m_MaxHealth;
 	}
 }
 
-void Player::healMana(int manaToRestore) {
+void Player::healMana(float manaToRestore) {
 	m_Mana += manaToRestore;
 	if (m_Mana > m_MaxMana) {
 		m_Mana = m_MaxMana;
 	}
 }
 
-void Player::healStamina(int staminaToRestore) {
+void Player::healStamina(float staminaToRestore) {
 	m_Stamina += staminaToRestore;
 	if (m_Stamina > m_MaxStamina) {
 		m_Stamina = m_MaxStamina;
