@@ -67,7 +67,7 @@ private:
 	bool windowedMode = false;
 
 	// Anything using multiple threads should use atomic variables
-	std::atomic<bool> worldLoaded;
+	//std::atomic<bool> worldLoaded;
 
 	Difficulty difficulty;
 
