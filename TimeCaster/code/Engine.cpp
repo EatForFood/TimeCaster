@@ -18,7 +18,7 @@
 #include "Equipment.h"
 #include "Enemy.h"
 #include <string>
-//#include <thread>
+#include <thread>
 
 
 using namespace std;
@@ -944,8 +944,8 @@ void Engine::run()
 					displayFps = player.getDisplayFps();
 					Listener::setGlobalVolume(player.getVolume());
 				
-					//worldLoaded = false;
-					generateWorld(); // Maybe try to multi-thread this later
+					worldLoaded = false;
+					generateWorld();
 					
 				}
 
@@ -1157,7 +1157,7 @@ void Engine::run()
 						storyIntroText.setString(fullText);
 						skipAnimation = true;
 					}
-					else if (state == State::STORY_INTRO && skipAnimation) {
+					else if (state == State::STORY_INTRO && skipAnimation && worldLoaded) {
 						sound.stopStoryIntroSound();
 						state = State::PLAYING;
 						displayedText = "";
@@ -1882,10 +1882,10 @@ void Engine::run()
 
 void Engine::generateWorld()
 {
-	//skipIntroText.setString("--- World is loading... ---");
+	skipIntroText.setString("--- World is loading... ---");
 	world.loadWorld();
 	populateChunkVector();
-	//worldLoaded = true;
-	//skipIntroText.setString("--- Press space to skip ---");
+	worldLoaded = true;
+	skipIntroText.setString("--- Press space to skip ---");
 }
 
