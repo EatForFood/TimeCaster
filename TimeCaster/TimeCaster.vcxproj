@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="code\Pathfinder.h" />
     <ClInclude Include="code\Spell.h" />
     <ClInclude Include="code\Cell.h" />
     <ClInclude Include="code\Character.h" />
@@ -40,6 +41,7 @@
     <ClInclude Include="code\World.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="code\Pathfinder.cpp" />
     <ClCompile Include="code\Spell.cpp" />
     <ClCompile Include="code\Cell.cpp" />
     <ClCompile Include="code\Character.cpp" />
