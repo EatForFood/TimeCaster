@@ -55,7 +55,6 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	if (!timeFrozen) {
 		filter.setFillColor(defaultFilter);
 	}
-	
 
 	player.loadConfigFile();
 
@@ -1268,25 +1267,23 @@ void Engine::run()
 					sound.playSwordSwing();
 				}
 				
-					if (player.getCombatType() == Magic && !player.isCastingSpell() && player.getSpellType() == Player::SpellType::Fireball)
+				if (player.getCombatType() == Magic && !player.isCastingSpell() && player.getSpellType() == Player::SpellType::Fireball)
+				{
+					if (player.useMana(5.0f))
 					{
-						if (player.useMana(5.0f))
+						spells[currentSpell].shoot(player.getCenter().x, player.getCenter().y + 10, mouseWorldPosition.x, mouseWorldPosition.y, player.getEquippedWand()->getDamage());
+
+						// Play fireball sound
+						sound.playFireballSound();
+
+						currentSpell++;
+						if (currentSpell > 99)
 						{
-							spells[currentSpell].shoot(player.getCenter().x, player.getCenter().y + 10, mouseWorldPosition.x, mouseWorldPosition.y, player.getEquippedWand()->getDamage());
-
-
-
-							// Play fireball sound
-							sound.playFireballSound();
-
-							currentSpell++;
-							if (currentSpell > 99)
-							{
-								currentSpell = 0;
-							}
-							player.castingSpell(true);
+							currentSpell = 0;
 						}
+						player.castingSpell(true);
 					}
+				}
 				else if (player.getCombatType() == Magic && !player.isCastingSpell() && player.getSpellType() == Player::SpellType::FreezeTime && !timeFrozen && timeFrozenTimer.getElapsedTime().asSeconds() > 1)
 				{
 					timeFrozen = true;
@@ -1295,9 +1292,9 @@ void Engine::run()
 				else if (player.getCombatType() == Magic && !player.isCastingSpell() && player.getSpellType() == Player::SpellType::FreezeTime && timeFrozen && timeFrozenTimer.getElapsedTime().asSeconds() > 1)
 				{
 					timeFrozen = false;
-					timeFrozenTimer.restart();	
+					timeFrozenTimer.restart();
 				}
-				else if (player.getCombatType() == Magic && !player.isCastingSpell() && player.getSpellType() == Player::SpellType::Heal)
+				else if (player.getCombatType() == Magic && !player.isCastingSpell() && player.getSpellType() == Player::SpellType::Heal && player.getHealth() < player.getMaxHealth())
 				{
 					if (player.useMana(0.5f))
 					{
@@ -1407,7 +1404,6 @@ void Engine::run()
 			}
 			else 
 				timeFrozen = false;
-			
 		}
 		
 		if (state == State::PLAYING)
@@ -1675,25 +1671,28 @@ void Engine::run()
 						if (player.equipArmour(clickedItem.getName())) equippedNeckArmourIcon.setTextureRect(clickedItem.getTextureRect());
 					}
 
-					if (clickedItem.getIcon().getGlobalBounds().intersects(playerInFrame.getGlobalBounds())
-						&& clickedItem.getType() == Item::Consumable)
+					if (clickedItem.getIcon().getGlobalBounds().intersects(playerInFrame.getGlobalBounds()) && clickedItem.getType() == Item::Consumable)
 					{
 						cout << "Item used!";
-						if (clickedItem.getName() == "Health_Potion")
+						if (clickedItem.getName() == "Health_Potion" && player.getHealth() < player.getMaxHealth())
 						{
 							player.healHealth(clickedItem.getRestoreValue()); // heal health
+							clickedItem = Item("null", Vector2f(0, 0));
+							placed = true;
 						}
-						else if (clickedItem.getName() == "Mana_Potion")
+						else if (clickedItem.getName() == "Mana_Potion" && player.getMana() < player.getMaxMana())
 						{
 							player.healMana(clickedItem.getRestoreValue()); // restore mana
+							clickedItem = Item("null", Vector2f(0, 0));
+							placed = true;
 						}
-						else if (clickedItem.getName() == "Stamina_Potion")
+						else if (clickedItem.getName() == "Stamina_Potion" && player.getStamina() < player.getMaxStamina())
 						{
 							player.healStamina(clickedItem.getRestoreValue()); // restore stamina
+							clickedItem = Item("null", Vector2f(0, 0));
+							placed = true;
 						}
-						clickedItem = Item("null", Vector2f(0, 0));
-						placed = true;
-
+						
 						tutorialStage = 2;
 					}
 
@@ -1889,4 +1888,3 @@ void Engine::generateWorld()
 	worldLoaded = true;
 	skipIntroText.setString("--- Press space to skip ---");
 }
-

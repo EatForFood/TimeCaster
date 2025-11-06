@@ -198,7 +198,7 @@ void Engine::draw()
 			window.draw(darkInventoryBackground);
 			window.draw(inventoryBackground);
 			window.draw(playerFrame);
-			//window.draw(playerInFrame);
+			window.draw(playerInFrame);
 			window.draw(headArmourFrame);
 			window.draw(chestArmourFrame);
 			window.draw(trousersArmourFrame);
