@@ -29,12 +29,12 @@ private:
 	float m_Damage = 4; // Change this later to be set dynamically
 
 	Chunk* m_ChunkPtr = nullptr;
-	Vector2f m_ChunkOffset;
+	Vector2i m_ChunkOffset;
 
 	const int TILE_SIZE = 64;
 
-	Vector2i lastPlayerTile = { -999, -999 };
-	vector<Vector2i> cachedPath;
+	Vector2i m_LastPlayerTile;
+	vector<Vector2i> m_CachedPath;
 
 	Vector2f m_PlayerPosition;
 
@@ -51,7 +51,7 @@ public:
 
 	void spawn(IntRect arena, Vector2f resolution, int tileSize, String type, int level);
 
-	void update(float elapsedTime, const Vector2f& playerPos, Chunk* chunk, vector<NavBox> navBox);
+	void update(float elapsedTime, const Vector2f& playerPos, Chunk* chunk, int playerChunk, vector<NavBox> navBox);
 
 	float getCurrentHP();
 
@@ -92,6 +92,7 @@ public:
 	int screenToTileX(float x, float y);
 	int screenToTileY(float x, float y);
 	Vector2f tileToScreen(int tileX, int tileY);
+	int tileDistance(const Vector2i& a, const Vector2i& b);
 
 	void drawDebugPath(sf::RenderWindow& window);
 };
