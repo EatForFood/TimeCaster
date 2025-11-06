@@ -946,7 +946,7 @@ void Engine::run()
 				
 					worldLoaded = false;
 					thread worldThread(&Engine::generateWorld, this);
-					worldThread.detach();
+					worldThread.join();
 					
 				}
 
