@@ -1287,19 +1287,19 @@ void Engine::run()
 							player.castingSpell(true);
 						}
 					}
-				else if (player.getCombatType() == Magic && !player.isCastingSpell() && player.getSpellType() == Player::SpellType::FreezeTime && !timeFrozen)
+				else if (player.getCombatType() == Magic && !player.isCastingSpell() && player.getSpellType() == Player::SpellType::FreezeTime && !timeFrozen && timeFrozenTimer.getElapsedTime().asSeconds() > 1)
 				{
 				
 					timeFrozen = true;
-				//	timeFrozenTimer.restart();
+					timeFrozenTimer.restart();
 				}
-
-				else if (player.getCombatType() == Magic && !player.isCastingSpell() && player.getSpellType() == Player::SpellType::FreezeTime && timeFrozen)
-					{
+				else if (player.getCombatType() == Magic && !player.isCastingSpell() && player.getSpellType() == Player::SpellType::FreezeTime && timeFrozen && timeFrozenTimer.getElapsedTime().asSeconds() > 1)
+				{
 
 						timeFrozen = false;
-						//timeFrozenTimer.restart();
-					}
+						timeFrozenTimer.restart();
+						
+				}
 			}
 
 			// Handle the pressing and releasing of the WASD keys
