@@ -1413,11 +1413,6 @@ void Engine::run()
 				if (collision.pointInShape(player.getPosition(), world.getChunkArea(i).getShape())) // find players current chunk
 				{
 					player.setChunk(i);
-					for (Enemy& enemies : enemyArr)
-					{
-						enemies.setChunk(i);
-						cout << "chunk set" << endl;
-					}
 				}
 			}
 
@@ -1436,7 +1431,15 @@ void Engine::run()
 					{
 						if (!enemies.isDead())
 						{
-							enemies.update(dtAsSeconds, player.getPosition(), getCurrentChunk(enemies.getPosition().x, enemies.getPosition().y), world.getNavBoxes(enemies.getChunk()));
+							enemies.update(dtAsSeconds, player.getPosition(), getCurrentChunk(enemies.getPosition().x, enemies.getPosition().y), player.getChunk(), world.getNavBoxes(enemies.getChunk()));
+
+							for (int i = 0; i < world.getWorldSize(); i++)
+							{
+								if (collision.pointInShape(enemies.getPosition(), world.getChunkArea(i).getShape())) // find enemies current chunk
+								{
+									enemies.setChunk(i);	
+								}
+							}
 
 							if (player.getColBox().intersects(enemies.getSprite().getGlobalBounds()))
 							{

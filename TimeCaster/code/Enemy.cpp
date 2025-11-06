@@ -260,7 +260,7 @@ float heuristic(int x1, int y1, int x2, int y2) {
 	return std::abs(x1 - x2) + std::abs(y1 - y2);
 }
 
-void Enemy::update(float elapsedTime, const Vector2f& playerPos, Chunk* chunk, vector<NavBox> navBox) {
+void Enemy::update(float elapsedTime, const Vector2f& playerPos, Chunk* chunk, int playerChunk, vector<NavBox> navBox) {
 	navBoxes = navBox;
 	m_ChunkPtr = chunk;
 	m_TimeElapsed = elapsedTime;
@@ -274,17 +274,43 @@ void Enemy::update(float elapsedTime, const Vector2f& playerPos, Chunk* chunk, v
 
 	float distToPlayer = collision.distance(m_Position, m_PlayerPosition);
 
-	if (distToPlayer < 100 && distToPlayer > 10) {
+	// Get enemy & player tile positions
+	sf::Vector2i enemyTile(screenToTileX(m_Position.x, m_Position.y),
+		screenToTileY(m_Position.x, m_Position.y));
+	sf::Vector2i playerTile(screenToTileX(m_PlayerPosition.x, m_PlayerPosition.y),
+		screenToTileY(m_PlayerPosition.x, m_PlayerPosition.y));
+
+	int distanceMoved = std::max(std::abs(playerTile.x - m_LastPlayerTile.x),std::abs(playerTile.y - m_LastPlayerTile.y));
+
+	if (m_Chunk != playerChunk && distToPlayer < 640)
+	{
 		followPlayer();
 	}
-	else 
+	else if (distToPlayer < 128 && distToPlayer > 10) 
 	{
-		// Update path periodically instead of only at the end
-		if (m_Path.empty() || reachedEndOfPath() || m_UpdatePathTimer >= PATH_UPDATE_INTERVAL) 
+		followPlayer();
+	}
+	else
+	{
+		if (m_UpdatePathTimer >= PATH_UPDATE_INTERVAL)
 		{
-			pathfindToPlayer(chunk);
+			if (m_CachedPath.empty() || distanceMoved > 2)
+			{
+				std::cout << "[DEBUG] Recalculating path (player moved " << distanceMoved << " tiles)\n";
+
+				pathfindToPlayer(chunk);   // existing function
+				m_CachedPath = m_Path;     // save result
+				m_LastPlayerTile = playerTile;
+			}
+			else
+			{
+				// Reuse cached path
+				m_Path = m_CachedPath;
+			}
+
 			m_UpdatePathTimer = 0.0f;
 		}
+
 		followPath(chunk);
 	}
 	
@@ -503,38 +529,31 @@ bool Enemy::reachedEndOfPath()
 
 int Enemy::screenToTileX(float x, float y)
 {
-	// Convert screen position to tile coordinates **within the chunk**
-	float worldX = x;
-	float worldY = y;
-
-	// convert world pixel to world tile
-	int tileX = static_cast<int>((worldX / (TILE_SIZE / 2.0f) + worldY / (TILE_SIZE / 4.0f)) / 2.0f);
-	return tileX - static_cast<int>(m_ChunkOffset.x); // convert to local chunk tile
+	x -= TILE_SIZE / 2.0f;
+	y -= TILE_SIZE / 4.0f;
+	int tileX = static_cast<int>(std::floor((x / (TILE_SIZE / 2.0f) + y / (TILE_SIZE / 4.0f)) / 2.0f));
+	return tileX - m_ChunkOffset.x;
 }
 
 int Enemy::screenToTileY(float x, float y)
 {
-	float worldX = x;
-	float worldY = y;
-
-	int tileY = static_cast<int>((worldY / (TILE_SIZE / 4.0f) - worldX / (TILE_SIZE / 2.0f)) / 2.0f);
-	return tileY - static_cast<int>(m_ChunkOffset.y); // convert to local chunk tile
+	x -= TILE_SIZE / 2.0f;
+	y -= TILE_SIZE / 4.0f;
+	int tileY = static_cast<int>(std::floor((y / (TILE_SIZE / 4.0f) - x / (TILE_SIZE / 2.0f)) / 2.0f));
+	return tileY - m_ChunkOffset.y;
 }
 
 sf::Vector2f Enemy::tileToScreen(int tileX, int tileY)
 {
-	// tileX/Y are local to the chunk (0–49)
-	int worldTileX = tileX + static_cast<int>(m_ChunkOffset.x);
-	int worldTileY = tileY + static_cast<int>(m_ChunkOffset.y);
-
+	int worldTileX = tileX + m_ChunkOffset.x;
+	int worldTileY = tileY + m_ChunkOffset.y;
 	float x = (worldTileX - worldTileY) * (TILE_SIZE / 2.0f);
 	float y = (worldTileX + worldTileY) * (TILE_SIZE / 4.0f);
-
 	x += TILE_SIZE / 2.0f;
 	y += TILE_SIZE / 4.0f;
-
 	return sf::Vector2f(x, y);
 }
+
 void Enemy::drawDebugPath(sf::RenderWindow& window)
 {
 	if (m_Path.empty())
@@ -569,4 +588,9 @@ void Enemy::drawDebugPath(sf::RenderWindow& window)
 
 		window.draw(line, 2, sf::Lines);
 	}
+}
+
+int Enemy::tileDistance(const sf::Vector2i& a, const sf::Vector2i& b)
+{
+	return std::max(std::abs(a.x - b.x), std::abs(a.y - b.y));
 }
