@@ -1289,9 +1289,17 @@ void Engine::run()
 					}
 				else if (player.getCombatType() == Magic && !player.isCastingSpell() && player.getSpellType() == Player::SpellType::FreezeTime && !timeFrozen)
 				{
+				
 					timeFrozen = true;
-					timeFrozenTimer.restart();
+				//	timeFrozenTimer.restart();
 				}
+
+				else if (player.getCombatType() == Magic && !player.isCastingSpell() && player.getSpellType() == Player::SpellType::FreezeTime && timeFrozen)
+					{
+
+						timeFrozen = false;
+						//timeFrozenTimer.restart();
+					}
 			}
 
 			// Handle the pressing and releasing of the WASD keys
@@ -1389,8 +1397,13 @@ void Engine::run()
 		/*********************************************************************
 		                           UPDATE THE FRAME
 		**********************************************************************/
-		if (timeFrozenTimer.getElapsedTime().asSeconds() > 5) {
-			timeFrozen = false;
+		if (timeFrozen) {
+			if (player.useMana(0.25f)) {
+				// do nothing, time remains frozen
+			}
+			else 
+				timeFrozen = false;
+			
 		}
 		
 		if (state == State::PLAYING)
