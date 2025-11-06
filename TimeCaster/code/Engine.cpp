@@ -1884,7 +1884,7 @@ void Engine::run()
 void Engine::generateWorld()
 {
 	skipIntroText.setString("--- World is loading... ---");
-	world.loadWorld();
+	world.newWorld();
 	populateChunkVector();
 	worldLoaded = true;
 	skipIntroText.setString("--- Press space to skip ---");
