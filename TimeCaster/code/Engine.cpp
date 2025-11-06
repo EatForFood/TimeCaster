@@ -943,19 +943,11 @@ void Engine::run()
 					windowedMode = player.getWindowedMode();
 					displayFps = player.getDisplayFps();
 					Listener::setGlobalVolume(player.getVolume());
-					//thread worldThread(&World::newWorld, &world);
-					//worldThread.join();
-					
-					//world.newWorld();
-					//thread chunkThread(&Engine::populateChunkVector, this);
-					//chunkThread.join();
-					//ExitThread(0);
-					//populateChunkVector();
-					//loadWorld();
+				
 					worldLoaded = false;
 					thread worldThread(&Engine::generateWorld, this);
 					worldThread.detach();
-					//generateWorld();
+					
 				}
 
 				// Player hit the load game button in the main menu
