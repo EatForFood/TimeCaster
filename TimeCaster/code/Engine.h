@@ -13,6 +13,7 @@
 #include "Item.h"
 #include "Enemy.h"
 #include <string>
+#include <atomic>
 
 class Engine
 {
@@ -40,6 +41,10 @@ public:
 
 	void populateChunkVector();
 
+	void generateWorld();
+
+	bool isWorldLoaded();
+
 
 
 protected: 
@@ -62,6 +67,9 @@ private:
 	Vector2f resolution;
 
 	bool windowedMode = false;
+
+	// Has the world loaded?
+	std::atomic<bool> worldLoaded;
 
 	Difficulty difficulty;
 
