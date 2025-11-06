@@ -1268,19 +1268,20 @@ void Engine::run()
 						if (player.useMana(5))
 						{
 							spells[currentSpell].shoot(player.getCenter().x, player.getCenter().y + 10, mouseWorldPosition.x, mouseWorldPosition.y, player.getEquippedWand()->getDamage());
-						
-						
-				
-					// Play fireball sound (Change sound based on spell later)
-					sound.playFireballSound();
-					
-					currentSpell++;
-					if (currentSpell > 99)
-					{
-						currentSpell = 0;
+
+
+
+							// Play fireball sound (Change sound based on spell later)
+							sound.playFireballSound();
+
+							currentSpell++;
+							if (currentSpell > 99)
+							{
+								currentSpell = 0;
+							}
+							player.castingSpell(true);
+						}
 					}
-					player.castingSpell(true);
-				}
 				else if (player.getCombatType() == Magic && !player.isCastingSpell() && player.getSpellType() == Player::SpellType::FreezeTime && !timeFrozen)
 				{
 					timeFrozen = true;
