@@ -499,7 +499,7 @@ int Player::getGold()
 	return m_Gold;
 }
 
-void Player::setGold(int amount)
+void Player::addGold(int amount)
 {
 	m_Gold += amount;
 }
@@ -1120,7 +1120,6 @@ bool Player::useMana(float manaCost)
 bool Player::reward(int rewardAmount)
 {
 	m_Kills++;
-	m_Gold += rewardAmount;
 	m_Exp += rewardAmount;
 	if (m_Exp >= 100)
 	{

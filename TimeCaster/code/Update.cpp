@@ -92,6 +92,9 @@ void Engine::update()
 							levelUp = true;
 						}
 
+						for (int i = 0; i < (rand() % 10); i++) {
+							items.emplace_back("Gold", Vector2f(enemies.getPosition().x, enemies.getPosition().y));
+						}
 					}
 				}
 			}
@@ -439,20 +442,28 @@ void Engine::update()
 
 			if (player.getGlobalBounds().intersects(items[i].getPosition()))
 			{
-				bool placed = false;
-				for (size_t j = 0; j < storedItems.size(); j++)
+				if (items[i].getName() == "Gold")
 				{
-					if (storedItems[j].isNull())
-					{
-						storedItems[j] = move(items[i]);
-						storedItems[j].getIcon().setPosition(emptyFrames[j].getPosition());
-						currentItems++;
-						items.erase(items.begin() + i);
-						placed = true;
-						break;
-					}
+					player.addGold(1);
+					items.erase(items.begin() + i);
 				}
-				if (!placed) ++i;
+				else
+				{
+					bool placed = false;
+					for (size_t j = 0; j < storedItems.size(); j++)
+					{
+						if (storedItems[j].isNull())
+						{
+							storedItems[j] = move(items[i]);
+							storedItems[j].getIcon().setPosition(emptyFrames[j].getPosition());
+							currentItems++;
+							items.erase(items.begin() + i);
+							placed = true;
+							break;
+						}
+					}
+					if (!placed) ++i;
+				}
 			}
 			else
 			{

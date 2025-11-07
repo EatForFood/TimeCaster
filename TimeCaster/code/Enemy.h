@@ -48,11 +48,12 @@ private:
 	const float PATH_UPDATE_INTERVAL = 0.2f; // Update path every 0.2s
 	float m_UpdatePathTimer = 0.0f;
 	const float NODE_REACH_THRESHOLD = 32.0f; // pixels
+	const int FOLLOW_DISTANCE = 492;
 
 public:
 	Enemy();
 
-	void spawn(IntRect arena, Vector2f resolution, int tileSize, String type, int level);
+	void spawn(string type, Vector2i position, int level);
 
 	void update(float elapsedTime, const Vector2f& playerPos, Chunk* chunk, int playerChunk, vector<NavBox> navBox);
 

@@ -61,7 +61,17 @@ protected:
 		Vector2i position;
 	};
 
+	struct EnemySpawn
+	{
+		string type;
+		Vector2i position;
+	};
+
 	vector<Structure> structures;
+	vector<EnemySpawn> enemySpawns;
+
+	vector<Vector2i> enemyLocations;
+	vector<string> enemyTypes;
 
 	bool blockedTiles[50][50];
 public:
@@ -107,5 +117,10 @@ public:
 	void createNodes();
 	bool getNode(int x, int y);
 	Vector2f getChunkLocation();
+
+	void CreateEnemySpawn(string type, Vector2i position);
+
+	vector<Vector2i>getEnemyLocations();
+	vector<string>getEnemyTypes();
 
 };

@@ -919,15 +919,7 @@ void Engine::run()
 
 					// Spawn the player in the middle of the arena
 					player.spawn(arena, resolution, tileSize, player.getPlayerLevel());
-
-					for (int i = 0; i < 1; ++i)
-					{
-						Enemy e;
-						e.spawn(arena, resolution, tileSize, "Skeleton", player.getPlayerLevel());
-						enemyArr.push_back(e);
-					}
-					
-
+				
 					// Reset the clock so there isn't a frame jump
 					clock.restart();
 
@@ -1221,7 +1213,7 @@ void Engine::run()
 					// I can make a function for it if needed	
 					if (storedItems[0].isNull()) cout << "null item attempted to be sold" << endl;
 
-					player.setGold(player.getGold() + storedItems[0].getValue());
+					player.addGold(player.getGold() + storedItems[0].getValue());
 					cout << "Sold " << " for " << storedItems[0].getValue() << " gold." << endl;
 					cout << "You now have " << player.getGold() << " gold." << endl;
 					storedItems[0] = Item("null", Vector2f(0, 0));
@@ -1399,7 +1391,7 @@ void Engine::run()
 			player.setManaValue(0);
 		}
 
-		update();
+		update(); // update game 
 
 		if (state == State::MAIN_MENU)
 		{
@@ -1472,6 +1464,26 @@ void Engine::generateWorld()
 	skipIntroText.setString("--- World is loading... ---");
 	world.newWorld();
 	populateChunkVector();
+
+	vector<string> worldEnemyTypes;
+	vector<Vector2i> worldEnemyLocations;
+
+	for (int i = 0; i < world.getWorldSize(); i++)
+	{
+		vector<string> chunkEnemyTypes = world.getChunk(i)->getEnemyTypes();
+		vector<Vector2i> chunkEnemyLocations = world.getChunk(i)->getEnemyLocations();
+
+		worldEnemyTypes.insert(worldEnemyTypes.end(), chunkEnemyTypes.begin(), chunkEnemyTypes.end());
+		worldEnemyLocations.insert(worldEnemyLocations.end(), chunkEnemyLocations.begin(), chunkEnemyLocations.end());
+	}
+
+	for (int i = 0; i < worldEnemyTypes.size(); i++)
+	{
+		Enemy e;
+		e.spawn(worldEnemyTypes[i], worldEnemyLocations[i], player.getPlayerLevel());
+		enemyArr.push_back(e);
+	}
+
 	worldLoaded = true;
 	skipIntroText.setString("--- Press space to skip ---");
 }

@@ -16,7 +16,8 @@ Enemy::Enemy() {
 	m_Speed = START_SPEED;
 }
 
-void Enemy::spawn(IntRect arena, Vector2f resolution, int tileSize, String type, int level) {
+void Enemy::spawn(string type, Vector2i position, int level) {
+
 	m_Hitbox.left = m_Position.x - 20;
 	m_Hitbox.width = 40;
 	m_Hitbox.top = m_Position.y - 20;
@@ -26,18 +27,6 @@ void Enemy::spawn(IntRect arena, Vector2f resolution, int tileSize, String type,
 	m_MaxHealth = START_HEALTH * (1 + (m_Level - 1) * 0.1f); // Increase health by 10% per level
 	m_MaxHealth = START_HEALTH * (1 + (m_Level - 1) * 0.1f); // Increase max health by 10% per level
 
-	// Copy the details of the arena to the enemy's m_Arena
-	m_Arena.left = arena.left;
-	m_Arena.width = arena.width;
-	m_Arena.top = arena.top;
-	m_Arena.height = arena.height;
-
-	// Remember how big the tiles are in this arena
-	m_TileSize = tileSize;
-
-	// Strore the resolution for future use
-	m_Resolution.x = resolution.x;
-	m_Resolution.y = resolution.y;
 
 	// Associate a texture with the sprite
 	if (type == "Knight") {
@@ -63,8 +52,101 @@ void Enemy::spawn(IntRect arena, Vector2f resolution, int tileSize, String type,
 
 	m_RenderArea = FloatRect(0, 0, 1920, 1080);
 
-	m_Position.x = 100;
-	m_Position.y = 100;
+	m_Position.x = position.x;
+	m_Position.y = position.y;
+	m_Sprite.setPosition(m_Position);
+}
+
+void Enemy::update(float elapsedTime, const Vector2f& playerPos, Chunk* chunk, int playerChunk, vector<NavBox> navBox) {
+
+	updateTextRect();
+
+	navBoxes = navBox;
+	m_ChunkPtr = chunk;
+	m_TimeElapsed = elapsedTime;
+	m_PlayerPosition = playerPos;
+	m_PositionLast = m_Position;
+
+	m_ChunkOffset.x = chunk->getChunkLocation().x * 50;
+	m_ChunkOffset.y = chunk->getChunkLocation().y * 50;
+
+	m_UpdatePathTimer += elapsedTime;
+
+	float distToPlayer = collision.distance(m_Position, m_PlayerPosition);
+
+	// Get enemy & player tile positions
+	sf::Vector2i enemyTile(screenToTileX(m_Position.x, m_Position.y),
+		screenToTileY(m_Position.x, m_Position.y));
+	sf::Vector2i playerTile(screenToTileX(m_PlayerPosition.x, m_PlayerPosition.y),
+		screenToTileY(m_PlayerPosition.x, m_PlayerPosition.y));
+
+	int distanceMoved = std::max(std::abs(playerTile.x - m_LastPlayerTile.x), std::abs(playerTile.y - m_LastPlayerTile.y));
+
+	if (m_Chunk != playerChunk && distToPlayer < FOLLOW_DISTANCE)
+	{
+		followPlayer();
+		moveTextureRect();
+	}
+	else if (distToPlayer < 128 && distToPlayer > 10) // switch to follow behaviour when close
+	{
+		followPlayer();
+		moveTextureRect();
+	}
+	else if (distToPlayer < FOLLOW_DISTANCE)
+	{
+		if (m_UpdatePathTimer >= PATH_UPDATE_INTERVAL)
+		{
+			if (m_CachedPath.empty() || distanceMoved > 2)
+			{
+				std::cout << "[DEBUG] Recalculating path (player moved " << distanceMoved << " tiles)\n";
+
+				pathfindToPlayer(chunk);   // existing function
+				m_CachedPath = m_Path;     // save result
+				m_LastPlayerTile = playerTile;
+			}
+			else
+			{
+				// Reuse cached path
+				m_Path = m_CachedPath;
+			}
+
+			m_UpdatePathTimer = 0.0f;
+		}
+
+		followPath(chunk);
+		moveTextureRect();
+	}
+	else
+	{
+		// wander behaviour
+	}
+
+	/*
+	for (auto& nav : navBoxes) { // if player walks into navBox
+		if (collision.pointInShape(m_Position, nav.getShape())) {
+			revertPosition();
+			m_Path.clear();
+
+			std::cout << "[DEBUG] Collision detected! Recalculating path..." << std::endl;
+
+			pathfindToPlayer(m_ChunkPtr);  // <--- force a new path calculation
+			m_UpdatePathTimer = 0.0f;      // reset timer to avoid double recalculation
+			break;                         // optional: avoid multiple collisions this frame
+		}
+	}
+	*/
+
+	// update collision detection zone
+	m_CollisionBox.left = m_Position.x - 100;
+	m_CollisionBox.top = m_Position.y - 100;
+	m_CollisionBox.width = 200;
+	m_CollisionBox.height = 200;
+
+	if (!m_IsDead && m_Health <= 0) {
+		m_IsDead = true;
+		m_Sprite.setRotation(90);
+		m_Sprite.setOrigin(32, 56);
+	}
 }
 
 void Enemy::moveLeft()
@@ -259,91 +341,6 @@ struct NodeHash {
 
 float heuristic(int x1, int y1, int x2, int y2) {
 	return std::abs(x1 - x2) + std::abs(y1 - y2);
-}
-
-void Enemy::update(float elapsedTime, const Vector2f& playerPos, Chunk* chunk, int playerChunk, vector<NavBox> navBox) {
-	navBoxes = navBox;
-	m_ChunkPtr = chunk;
-	m_TimeElapsed = elapsedTime;
-	m_PlayerPosition = playerPos;
-	m_PositionLast = m_Position;
-
-	m_ChunkOffset.x = chunk->getChunkLocation().x * 50;
-	m_ChunkOffset.y = chunk->getChunkLocation().y * 50;
-
-	m_UpdatePathTimer += elapsedTime;
-
-	float distToPlayer = collision.distance(m_Position, m_PlayerPosition);
-
-	// Get enemy & player tile positions
-	sf::Vector2i enemyTile(screenToTileX(m_Position.x, m_Position.y),
-		screenToTileY(m_Position.x, m_Position.y));
-	sf::Vector2i playerTile(screenToTileX(m_PlayerPosition.x, m_PlayerPosition.y),
-		screenToTileY(m_PlayerPosition.x, m_PlayerPosition.y));
-
-	int distanceMoved = std::max(std::abs(playerTile.x - m_LastPlayerTile.x),std::abs(playerTile.y - m_LastPlayerTile.y));
-
-	if (m_Chunk != playerChunk && distToPlayer < 640)
-	{
-		followPlayer();
-	}
-	else if (distToPlayer < 128 && distToPlayer > 10) 
-	{
-		followPlayer();
-	}
-	else
-	{
-		if (m_UpdatePathTimer >= PATH_UPDATE_INTERVAL)
-		{
-			if (m_CachedPath.empty() || distanceMoved > 2)
-			{
-				std::cout << "[DEBUG] Recalculating path (player moved " << distanceMoved << " tiles)\n";
-
-				pathfindToPlayer(chunk);   // existing function
-				m_CachedPath = m_Path;     // save result
-				m_LastPlayerTile = playerTile;
-			}
-			else
-			{
-				// Reuse cached path
-				m_Path = m_CachedPath;
-			}
-
-			m_UpdatePathTimer = 0.0f;
-		}
-
-		followPath(chunk);
-	}
-	
-	/*
-	for (auto& nav : navBoxes) { // if player walks into navBox 
-		if (collision.pointInShape(m_Position, nav.getShape())) {
-			revertPosition();
-			m_Path.clear();
-
-			std::cout << "[DEBUG] Collision detected! Recalculating path..." << std::endl;
-
-			pathfindToPlayer(m_ChunkPtr);  // <--- force a new path calculation
-			m_UpdatePathTimer = 0.0f;      // reset timer to avoid double recalculation
-			break;                         // optional: avoid multiple collisions this frame
-		}
-	}
-	*/
-
-	// update collision detection zone
-	m_CollisionBox.left = m_Position.x - 100;
-	m_CollisionBox.top = m_Position.y - 100;
-	m_CollisionBox.width = 200;
-	m_CollisionBox.height = 200;
-
-	updateTextRect();
-	moveTextureRect();
-	
-	if(!m_IsDead && m_Health <= 0) {
-		m_IsDead = true;
-		m_Sprite.setRotation(90);
-		m_Sprite.setOrigin(32, 56);
-	}
 }
 
 void Enemy::pathfindToPlayer(Chunk* chunk)

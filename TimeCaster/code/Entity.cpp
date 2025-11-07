@@ -78,7 +78,7 @@ void Entity::spawn(String type, float x, float y)
 
     if (type == "bush4")
     {
-        m_Sprite = Sprite(TextureHolder::GetTexture("graphics/bush/trees/bush4.png"));
+        m_Sprite = Sprite(TextureHolder::GetTexture("graphics/bush/bushes/bush4.png"));
         m_Sprite.setOrigin(m_Sprite.getTextureRect().width / 2, 60);
     }
 

@@ -76,7 +76,7 @@ public:
 	float getMaxStamina();
 	float getStaminaRecharge();
 	int getGold();
-	void setGold(int amount);
+	void addGold(int amount);
 	float getSpeed();
 	int getPlayerLevel();
 	void setPlayerLevel(int level);

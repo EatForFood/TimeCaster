@@ -409,14 +409,17 @@ Chunk::Chunk(String type, Vector2f chunk, bool load)
 					if (chance == 0)
 					{
 						placeHouse2(x, y);
+						CreateEnemySpawn("Skeleton", Vector2i(x - 1, y + 1));
 					}
 					else if (chance == 1)
 					{
 						placeHouse3(x, y);
+						CreateEnemySpawn("Skeleton", Vector2i(x - 1, y + 1));
 					}
 					else if (chance == 2)
 					{
 						placeHouse4(x, y);
+						CreateEnemySpawn("Skeleton", Vector2i(x - 1, y + 1));
 					}
 				}
 			}
@@ -1199,4 +1202,32 @@ bool Chunk::getNode(int x, int y)
 Vector2f Chunk::getChunkLocation()
 {
 	return m_Chunk;
+}
+
+void Chunk::CreateEnemySpawn(string type, Vector2i position)
+{
+	// Compute local → world tile position
+	int worldTileX = position.x + offset.x;
+	int worldTileY = position.y + offset.y;
+
+	// Convert tile coordinates to isometric world pixels
+	float pixelX = (worldTileX - worldTileY) * (TILE_SIZE / 2.0f);
+	float pixelY = (worldTileX + worldTileY) * (TILE_SIZE / 4.0f);
+
+	// Center enemy in the tile
+	pixelX += TILE_SIZE / 2.0f;
+	pixelY += TILE_SIZE / 4.0f;
+
+	enemyLocations.emplace_back(sf::Vector2i(static_cast<int>(pixelX), static_cast<int>(pixelY)));
+	enemyTypes.emplace_back(type);
+}
+
+vector<Vector2i> Chunk::getEnemyLocations()
+{
+	return enemyLocations;
+}
+
+vector<string> Chunk::getEnemyTypes()
+{
+	return enemyTypes;
 }
