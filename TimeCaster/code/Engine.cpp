@@ -1291,17 +1291,21 @@ void Engine::run()
 				else if (player.getCombatType() == Magic && !player.isCastingSpell() && player.getSpellType() == Player::SpellType::FreezeTime && !timeFrozen && timeFrozenTimer.getElapsedTime().asSeconds() > 1)
 				{
 					timeFrozen = true;
+					sound.playTimeStopCastSound();
 					timeFrozenTimer.restart();
 				}
 				else if (player.getCombatType() == Magic && !player.isCastingSpell() && player.getSpellType() == Player::SpellType::FreezeTime && timeFrozen && timeFrozenTimer.getElapsedTime().asSeconds() > 1)
 				{
 					timeFrozen = false;
+					sound.playTimeStopEndSound();
+					sound.stopTimeStopActiveSound();
 					timeFrozenTimer.restart();
 				}
 				else if (player.getCombatType() == Magic && !player.isCastingSpell() && player.getSpellType() == Player::SpellType::Heal && player.getHealth() < player.getMaxHealth())
 				{
 					if (player.useMana(0.5f))
 					{
+						sound.playHealSound();
 						player.healHealth(0.25f);
 					}		
 				}
