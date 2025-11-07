@@ -6,14 +6,18 @@ using namespace std;
 void Engine::update()
 {
 	/*********************************************************************
-						   UPDATE THE FRAME
+							   UPDATE THE FRAME
 	**********************************************************************/
 	if (timeFrozen) {
-		if (player.useMana(0.25f)) {
-			// do nothing, time remains frozen
-		}
+		if (player.useMana(0.25f))
+			sound.playTimeStopActiveSound();
 		else
+		{
+			sound.playTimeStopEndSound();
+			sound.stopTimeStopActiveSound();
 			timeFrozen = false;
+		}
+
 	}
 
 	if (state == State::PLAYING)
@@ -465,5 +469,4 @@ void Engine::update()
 		}
 
 	} // End updating the scene
-}
-
+}1
