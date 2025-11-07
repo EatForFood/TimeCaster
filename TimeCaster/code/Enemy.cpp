@@ -668,3 +668,8 @@ bool Enemy::isLooted()
 {
 	return m_Looted;
 }
+
+float Enemy::getAttackDamage()
+{
+	return m_AttackDmg;
+}

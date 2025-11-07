@@ -98,6 +98,8 @@ public:
 
 	void Attack();
 
+	float getAttackDamage();
+
 	int screenToTileX(float x, float y);
 	int screenToTileY(float x, float y);
 	Vector2f tileToScreen(int tileX, int tileY);
