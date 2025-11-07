@@ -20,7 +20,6 @@
 #include <string>
 #include <thread>
 
-
 using namespace std;
 using namespace sf;
 
@@ -190,6 +189,8 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	storedItems[11] = Equipment("Family_Locket", Vector2f(0, 0));
 	storedItems[12] = Weapon("Armoured_Boots", Vector2f(0, 0));
 	storedItems[13] = Item("Health_Potion", Vector2f(0, 0));
+	storedItems[14] = Item("Mana_Potion", Vector2f(0, 0));
+	storedItems[15] = Item("Stamina_Potion", Vector2f(0, 0));
 
 	/***********
 	Main Menu UI

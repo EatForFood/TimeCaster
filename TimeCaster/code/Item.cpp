@@ -52,9 +52,9 @@ Item::Item(String type, Vector2f position)
 	if (m_Name == "Health_Potion")
 	{
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
-		m_Sprite.setTextureRect(IntRect(66, 800, 32, 32));
+		m_Sprite.setTextureRect(IntRect(64, 800, 32, 32));
 		m_Icon.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
-		m_Icon.setTextureRect(IntRect(66, 800, 32, 32));
+		m_Icon.setTextureRect(IntRect(64, 800, 32, 32));
 		FloatRect bounds = m_Icon.getLocalBounds();
 		m_Icon.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
 		m_Icon.setScale(2.3125, 2.3125);
@@ -65,7 +65,6 @@ Item::Item(String type, Vector2f position)
 	}
 	if (m_Name == "Mana_Potion")
 	{
-
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
 		m_Sprite.setTextureRect(IntRect(480, 1472, 32, 32));
 		m_Icon.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
@@ -81,20 +80,17 @@ Item::Item(String type, Vector2f position)
 	if (m_Name == "Stamina_Potion")
 	{
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
-		m_Sprite.setTextureRect(IntRect(260, 1470, 32, 32));
+		m_Sprite.setTextureRect(IntRect(256, 1472, 32, 32));
 		m_Icon.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
-		m_Icon.setTextureRect(IntRect(260, 1470, 32, 32));
+		m_Icon.setTextureRect(IntRect(256, 1472, 32, 32));
 		FloatRect bounds = m_Icon.getLocalBounds();
 		m_Icon.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
 		m_Icon.setScale(2.3125, 2.3125);
 		m_Value = 15;
-		m_Armour = 0;
 		m_RestoreValue = 50;
 		m_ItemType = Consumable;
-
 		m_Sprite.setOrigin(25, 25);
 	}
-
 
 	m_SecondsSinceSpawn = 0;
 	m_Spawned = true;
