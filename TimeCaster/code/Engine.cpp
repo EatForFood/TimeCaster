@@ -1233,6 +1233,11 @@ void Engine::run()
 					storedItems[0] = Item("null", Vector2f(0, 0));
 				}
 
+				if (event.key.code == Keyboard::Num6 && state == State::PLAYING)
+				{
+					player.reward(50);
+				}
+
 				if (event.key.code == Keyboard::Num8 && state == State::PLAYING)
 				{
 					player.hit(gameTimeTotal, 10, 200);
@@ -1475,6 +1480,10 @@ void Engine::run()
 								}
 							}
 						}
+						if (enemies.isDead() && !enemies.isLooted())
+						{
+							player.reward(enemies.loot());
+						}
 					}
 				}
 			}
@@ -1506,7 +1515,7 @@ void Engine::run()
 								{
 									// Apply damage from spell to enemy
 									enemies.setHealth(-spells[i].getSpellDamage());
-									cout << "Enemy hit for " << spells[i].getSpellDamage() << " damage. Enemy health now " << enemies.getCurrentHP() << endl;
+									//cout << "Enemy hit for " << spells[i].getSpellDamage() << " damage. Enemy health now " << enemies.getCurrentHP() << endl;
 
 									// Mark enemy as hit
 									enemies.setWasHit(true);

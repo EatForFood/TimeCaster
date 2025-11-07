@@ -566,7 +566,7 @@ bool Player::loadConfigFile()
 	{
 		loadFile >> m_DifficultyString;
 		loadFile >> m_WindowedMode;
-		loadFile >> m_DisplayFPS;2
+		loadFile >> m_DisplayFPS;
 		loadFile >> m_Volume;
 		return true;
 	}
@@ -1112,4 +1112,22 @@ bool Player::useMana(float manaCost)
 		return false;
 	}
 
+}
+
+void Player::reward(int rewardAmount)
+{
+	m_Kills++;
+	m_Gold += rewardAmount;
+	m_Exp += rewardAmount;
+	//cout increase of gold exp and kills
+	cout << "Gold increased by " << rewardAmount << " to " << m_Gold << endl;
+	cout << "Exp increased by " << rewardAmount << " to " << m_Exp << endl;
+	cout << "Kills increased by 1 to " << m_Kills << endl;
+	if (m_Exp >= 100)
+	{
+		// level up
+		m_Level++;
+		m_Exp -= 100;
+		cout << "Player leveled up to level " << m_Level << "!" << endl;
+	}
 }

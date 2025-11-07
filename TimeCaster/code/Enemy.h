@@ -23,6 +23,9 @@ private:
 	bool m_MoveUp = false;
 	bool m_MoveDown = false;
 	bool m_IsMoving = false;
+	bool m_Looted = false;
+
+	float m_KillValue; // How much gold / Exp the enemy gives when killed
 
 	int m_Chunk; // Enemy's current chunk
 
@@ -88,6 +91,9 @@ public:
 	void followPath(Chunk* chunk);
 
 	bool reachedEndOfPath();
+
+	bool isLooted();
+	int loot();
 
 	int screenToTileX(float x, float y);
 	int screenToTileY(float x, float y);

@@ -152,6 +152,7 @@ public:
 	void setStaminaValue(int stam);
 	void setManaValue(int mana);
 	void setHealthValue(int health);
+	void reward(int rewardAmount);
 
 	// use mana after casting a spell
 	bool useMana(float manaCost);
