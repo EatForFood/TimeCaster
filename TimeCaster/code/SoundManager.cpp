@@ -45,6 +45,22 @@ SoundManager::SoundManager() {
 	fireballBuffer.loadFromFile("sound/fireball.wav");
 	fireball.setBuffer(fireballBuffer);
 
+	// Loads time stop cast sound into buffer
+	timeStopCastBuffer.loadFromFile("sound/timeStopCast.wav");
+	timeStopCast.setBuffer(timeStopCastBuffer);
+
+	// Loads time stop active sound into buffer
+	timeStopActiveBuffer.loadFromFile("sound/timeStopActive.wav");
+	timeStopActive.setBuffer(timeStopActiveBuffer);
+
+	// Loads time stop end sound into buffer
+	timeStopEndBuffer.loadFromFile("sound/timeStopEnd.wav");
+	timeStopEnd.setBuffer(timeStopEndBuffer);
+
+	// Loads heal spell sound into buffer
+	healBuffer.loadFromFile("sound/heal.wav");
+	heal.setBuffer(healBuffer);
+
 	// Loads click sound from file into buffer
 	clickBuffer.loadFromFile("sound/buttonClick.wav");
 	buttonClick.setBuffer(clickBuffer);
