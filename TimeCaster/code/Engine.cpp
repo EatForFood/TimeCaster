@@ -1229,7 +1229,7 @@ void Engine::run()
 
 				if (event.key.code == Keyboard::Num6 && state == State::PLAYING)
 				{
-					if (player.reward(50))
+					if (player.reward(80))
 					{
 						drawInventory = true;
 						levelUp = true;
@@ -1480,7 +1480,12 @@ void Engine::run()
 						}
 						if (enemies.isDead() && !enemies.isLooted())
 						{
-							player.reward(enemies.loot());
+							if (player.reward(enemies.loot()))
+							{
+								drawInventory = true;
+								levelUp = true;
+							}
+							
 						}
 					}
 				}
