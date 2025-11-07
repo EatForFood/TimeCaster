@@ -46,6 +46,22 @@ private:
 	SoundBuffer fireballBuffer;
 	Sound fireball;
 
+	// Prepare the time stop cast sound
+	SoundBuffer timeStopCastBuffer;
+	Sound timeStopCast;
+
+	// Prepare the time stop active sound
+	SoundBuffer timeStopActiveBuffer;
+	Sound timeStopActive;
+
+	// Prepare the time stop end sound
+	SoundBuffer timeStopEndBuffer;
+	Sound timeStopEnd;
+
+	// Prepare the heal spell sound
+	SoundBuffer healBuffer;
+	Sound heal;
+
 	// Prepare the button click sound
 	SoundBuffer clickBuffer;
 	Sound buttonClick;
