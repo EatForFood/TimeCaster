@@ -96,6 +96,8 @@ public:
 	bool isLooted();
 	int loot();
 
+	void Attack();
+
 	int screenToTileX(float x, float y);
 	int screenToTileY(float x, float y);
 	Vector2f tileToScreen(int tileX, int tileY);

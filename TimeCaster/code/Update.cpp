@@ -75,6 +75,7 @@ void Engine::update()
 
 						if (player.getColBox().intersects(enemies.getSprite().getGlobalBounds()))
 						{
+							enemies.Attack();
 							if (player.getWeapon().getGlobalBounds().intersects(enemies.getSprite().getGlobalBounds()) && player.isAttacking() && !enemies.wasHit())
 							{
 								enemies.setHealth(-player.getAttackDamage());
