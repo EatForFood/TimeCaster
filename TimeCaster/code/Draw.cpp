@@ -213,6 +213,8 @@ void Engine::draw()
 
 			window.draw(killsText);
 			window.draw(goldCountText);
+			window.draw(expText);
+			window.draw(levelsText);
 			window.draw(backgroundInvHealthBar);
 			window.draw(invHealthBar);
 			window.draw(invHealthBarText);

@@ -161,6 +161,10 @@ private:
 
 	Text goldCountText;
 
+	Text expText;
+
+	Text levelsText;
+
 	Text fpsText;
 
 	RectangleShape healthBar; // Health bar (in world)

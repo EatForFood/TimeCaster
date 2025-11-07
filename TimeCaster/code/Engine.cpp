@@ -540,7 +540,7 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	killsText.setString("Kills: " + to_string(player.getKillCount())); // Set the label text
 	killsText.setFont(font); // Assign the font
 	killsText.setCharacterSize(fontSize); // Set the text size
-	killsText.setFillColor(Color::Black);
+	killsText.setFillColor(Color::White);
 	textBounds = killsText.getLocalBounds();
 	killsText.setPosition((viewCentre.x - (textBounds.width / 2.f) - textBounds.left) - 50, 260);
 
@@ -548,9 +548,28 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	goldCountText.setFont(font);
 	goldCountText.setCharacterSize(fontSize);
 	goldCountText.setString("Gold: " + player.getGold());
-	goldCountText.setFillColor(Color::Black);
+	goldCountText.setFillColor(Color::White);
 	textBounds = goldCountText.getLocalBounds();
 	goldCountText.setPosition((viewCentre.x - (textBounds.width / 2.f) - textBounds.left) - 50, 310);
+
+	// Exp text
+	expText.setFont(font);
+	expText.setCharacterSize(fontSize);
+	expText.setString("EXP: " + to_string(player.getPlayerLevel()) + " / " + "100");
+	expText.setFillColor(Color::White);
+	textBounds = expText.getLocalBounds();
+	expText.setPosition((viewCentre.x - (textBounds.width / 2.f) - textBounds.left) - 20, 360);
+
+	// Level text
+	levelsText.setFont(font);
+	levelsText.setCharacterSize(fontSize);
+	levelsText.setString("Level: " + to_string(player.getPlayerLevel()));
+	levelsText.setFillColor(Color::White);
+	textBounds = levelsText.getLocalBounds();
+	levelsText.setPosition((viewCentre.x - (textBounds.width / 2.f) - textBounds.left) - 40, 410);
+
+
+
 
 	invHealthBar.setFillColor(Color::Red);
 	invHealthBar.setPosition(viewCentre.x - 360, 775);

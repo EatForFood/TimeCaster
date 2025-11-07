@@ -1133,3 +1133,8 @@ bool Player::reward(int rewardAmount)
 		return false;
 	}
 }
+
+int Player::getExp()
+{
+	return m_Exp;
+}

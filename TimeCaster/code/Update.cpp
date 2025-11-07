@@ -396,16 +396,31 @@ void Engine::update()
 		framesSinceLastHUDUpdate++;
 		// Calculate FPS every fpsMeasurementFrameInterval frames
 
-		// Update the gold text
-		stringstream ssGoldCount;
-		ssGoldCount << "Gold: " << player.getGold();
-		goldCountText.setString(ssGoldCount.str());
 
-		// Update the kills text
+
+
 		if (drawInventory) {
+			// Update the kills text
 			stringstream ssKillCount;
 			ssKillCount << "Kills: " << player.getKillCount();
 			killsText.setString(ssKillCount.str());
+
+			// Update the gold text
+			stringstream ssGoldCount;
+			ssGoldCount << "Gold: " << player.getGold();
+			goldCountText.setString(ssGoldCount.str());
+
+			// Update the levels text
+			stringstream ssLevels;
+			ssLevels << "Level: " << player.getPlayerLevel();
+			levelsText.setString(ssLevels.str());
+
+			// Update the exp text
+			stringstream ssExp;
+			ssExp << "EXP: " << player.getExp() << " / " << "100";
+			expText.setString(ssExp.str());
+
+
 
 			stringstream ssHealthBar;
 			ssHealthBar << int(player.getHealth()) << " / " << int(player.getMaxHealth());

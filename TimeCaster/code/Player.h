@@ -136,6 +136,8 @@ public:
 
 	void Attack();
 
+	int getExp();
+
 	bool isAttacking();
 
 	bool equipArmour(string armourNameToEquip);
