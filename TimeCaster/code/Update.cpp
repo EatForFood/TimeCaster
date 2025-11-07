@@ -221,8 +221,8 @@ void Engine::update()
 					clickedItem = storedItems[i]; // copy to clickedItem
 
 					itemLastIndex = i; // save original slot
-					itemLastX = clickedItem.getIcon().getPosition().x;
-					itemLastY = clickedItem.getIcon().getPosition().y;
+					itemLastX = storedItems[i].getIcon().getPosition().x;
+					itemLastY = storedItems[i].getIcon().getPosition().y;
 
 					storedItems[i] = Item("null", Vector2f(0, 0)); // empty original slot
 					draggingItem = true;
@@ -268,8 +268,9 @@ void Engine::update()
 					if (storedItems[i].isNull() &&
 						clickedItem.getIcon().getGlobalBounds().intersects(emptyFrames[i].getGlobalBounds()))
 					{
-						storedItems[i] = clickedItem;                  // copy item into slot
-						clickedItem.getIcon().setPosition(emptyFrames[i].getPosition());
+						storedItems[i] = clickedItem;  // copy item into slot
+						storedItems[i].getIcon().setPosition(emptyFrames[i].getPosition().x, emptyFrames[i].getPosition().y); //set icon position to slot position
+						clickedItem = Item("null", Vector2f(0, 0)); // empty clickedItem
 						placed = true;
 						break;
 					}
@@ -285,7 +286,7 @@ void Engine::update()
 				// placed is not being made true on purpose, the player will still need to carry the items they equip
 				// we can change this later though
 
-		// Try to equip as wand if dropped on wand slot
+				// Try to equip as wand if dropped on wand slot
 				if (clickedItem.getIcon().getGlobalBounds().intersects(wandFrame.getGlobalBounds())
 					&& clickedItem.getType() == Item::MagicWeapon)
 				{
