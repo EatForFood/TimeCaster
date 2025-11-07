@@ -61,6 +61,7 @@
     <ClCompile Include="code\SoundManager.cpp" />
     <ClCompile Include="code\TextureHolder.cpp" />
     <ClCompile Include="code\Engine.cpp" />
+    <ClCompile Include="code\Update.cpp" />
     <ClCompile Include="code\Weapon.cpp" />
     <ClCompile Include="code\World.cpp" />
   </ItemGroup>
