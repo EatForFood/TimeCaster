@@ -1772,7 +1772,7 @@ void Engine::run()
 
 			// Update the gold text
 			stringstream ssGoldCount;
-			ssGoldCount << "Gold:" << player.getGold();
+			ssGoldCount << "Gold: " << player.getGold();
 			goldCountText.setString(ssGoldCount.str());
 
 			// Update the kills text
