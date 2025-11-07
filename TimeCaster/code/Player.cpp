@@ -412,21 +412,24 @@ void Player::upgradeSpeed()
 
 void Player::upgradeHealth()
 {
-	// 20% max health upgrade
-	m_MaxHealth += (START_HEALTH * .2);
+	// 25% max health upgrade
+	// Multiply by 2 as the player starts with half health
+	m_MaxHealth += (START_HEALTH * 2 * .25);
+	m_Health += (START_HEALTH * 2 * .25);
 }
 
 void Player::upgradeStamina()
 {
 	// 25% max Stamina upgrade
-	//25% because dodging takes 50 stamina so you'd get half of one more dodge
 	m_MaxStamina += (START_STAMINA * 0.25f);
+	m_Stamina += (START_STAMINA * 0.25f);
 }
 
 void Player::upgradeMana()
 {
-	// 20% max Mana upgrade
-	m_MaxMana += (START_MANA * .2);
+	// 25% max Mana upgrade
+	m_MaxMana += (START_MANA * .25);
+	m_Mana += (START_MANA * .25);
 }
 void Player::increaseHealthLevel(int amount)
 {
@@ -1114,20 +1117,20 @@ bool Player::useMana(float manaCost)
 
 }
 
-void Player::reward(int rewardAmount)
+bool Player::reward(int rewardAmount)
 {
 	m_Kills++;
 	m_Gold += rewardAmount;
 	m_Exp += rewardAmount;
-	//cout increase of gold exp and kills
-	cout << "Gold increased by " << rewardAmount << " to " << m_Gold << endl;
-	cout << "Exp increased by " << rewardAmount << " to " << m_Exp << endl;
-	cout << "Kills increased by 1 to " << m_Kills << endl;
 	if (m_Exp >= 100)
 	{
 		// level up
-		m_Level++;
 		m_Exp -= 100;
-		cout << "Player leveled up to level " << m_Level << "!" << endl;
+		m_Level++;
+		return true;
+	}
+	else
+	{
+		return false;
 	}
 }

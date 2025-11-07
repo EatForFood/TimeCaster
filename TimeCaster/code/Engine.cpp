@@ -112,20 +112,6 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	viewCentre = mainView.getCenter();
 	pausedText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 400);
 
-	// Levelling up
-	levelUpText.setFont(font);
-	levelUpText.setCharacterSize(80);
-	levelUpText.setFillColor(Color::White);
-	levelUpText.setPosition(150, 250);
-	levelUpStream <<
-		"1- Increased rate of fire" <<
-		"\n2- Increased clip size(next reload)" <<
-		"\n3- Increased max health" <<
-		"\n4- Increased run speed" <<
-		"\n5- More and better health pickups" <<
-		"\n6- More and better ammo pickups";
-	levelUpText.setString(levelUpStream.str());
-
 	// FPS text
 	fpsText.setFont(font);
 	fpsText.setCharacterSize(fontSize - 5);
@@ -620,6 +606,13 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	tutorialText.setString("You sustained some damage while fleeing from the dragon. Press Tab to open your inventory and heal");
 	textBounds = tutorialText.getLocalBounds();
 	tutorialText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 900);
+
+	levelUpText.setFont(font);
+	levelUpText.setCharacterSize(fontSize);
+	levelUpText.setFillColor(Color::Green);
+	levelUpText.setString("Level up! Click on the bar you wish to upgrade.");
+	textBounds = levelUpText.getLocalBounds();
+	levelUpText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 900);
 
 	inventoryBackground.setTexture(&inventoryBackgroundTexture);
 	inventoryBackground.setSize(Vector2f(1000, 800));
@@ -1167,7 +1160,7 @@ void Engine::run()
 					}
 				}
 
-				if (state == State::PLAYING && event.key.code == Keyboard::Tab && tutorialStage != 1) {
+				if (state == State::PLAYING && event.key.code == Keyboard::Tab && tutorialStage != 1 && !levelUp) {
 					if (drawInventory) {
 						drawInventory = false;
 					}
@@ -1181,6 +1174,7 @@ void Engine::run()
 						textBounds = tutorialText.getLocalBounds();
 						tutorialText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 900);
 					}
+					
 				}
 			}
 
@@ -1235,7 +1229,11 @@ void Engine::run()
 
 				if (event.key.code == Keyboard::Num6 && state == State::PLAYING)
 				{
-					player.reward(50);
+					if (player.reward(50))
+					{
+						drawInventory = true;
+						levelUp = true;
+					}
 				}
 
 				if (event.key.code == Keyboard::Num8 && state == State::PLAYING)
@@ -1570,9 +1568,30 @@ void Engine::run()
 			}
 			
 
-			// Drag items the player clicks on
-			if (drawInventory)
+			
+			// Level up the player
+			if (drawInventory && levelUp)
 			{
+					if (Mouse::isButtonPressed(Mouse::Left) && invHealthBar.getGlobalBounds().contains(worldPos))
+					{
+						player.upgradeHealth();
+						levelUp = false;
+					}
+					else if (Mouse::isButtonPressed(Mouse::Left) && invStamBar.getGlobalBounds().contains(worldPos))
+					{
+						player.upgradeStamina();
+						levelUp = false;
+					}
+					else if (Mouse::isButtonPressed(Mouse::Left) && invManaBar.getGlobalBounds().contains(worldPos))
+					{
+						player.upgradeMana();
+						levelUp = false;
+					}
+			}
+			// Drag items the player clicks on
+			else if (drawInventory)
+			{
+
 				player.setSpritePosition(Vector2f(player.getPosition().x,player.getPosition().y));
 
 				bool draggingFromInventory = false;

@@ -69,6 +69,8 @@ private:
 	// Anything using multiple threads should use atomic variables
 	std::atomic<bool> worldLoaded;
 
+	bool levelUp = false;
+
 	Difficulty difficulty;
 
 	Player player;
