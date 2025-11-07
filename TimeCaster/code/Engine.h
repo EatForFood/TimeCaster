@@ -37,6 +37,8 @@ public:
 
 	void draw();
 
+	void update();
+
 	Chunk* getCurrentChunk(float x, float y);
 
 	void populateChunkVector();
