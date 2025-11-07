@@ -75,6 +75,16 @@ void Engine::update()
 
 						if (player.getColBox().intersects(enemies.getSprite().getGlobalBounds()))
 						{
+							enemies.Attack();
+							// Handle player getting hit by enemy
+							// TODO: Add weapon to enemy hands and use that instead
+							if (player.getGlobalBounds().intersects(enemies.getGlobalBounds()) && enemies.isAttacking())
+							{
+								if (player.hit(gameTimeTotal, enemies.getAttackDamage(), 1000))
+								{
+									sound.playHitSound();
+								}
+							}
 							if (player.getWeapon().getGlobalBounds().intersects(enemies.getSprite().getGlobalBounds()) && player.isAttacking() && !enemies.wasHit())
 							{
 								enemies.setHealth(-player.getAttackDamage());

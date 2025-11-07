@@ -59,6 +59,20 @@ void Enemy::spawn(string type, Vector2i position, int level) {
 
 void Enemy::update(float elapsedTime, const Vector2f& playerPos, Chunk* chunk, int playerChunk, vector<NavBox> navBox) {
 
+	if (m_IsAttacking)
+	{
+		moveTextureRect();
+
+		if (getAniCounter() == 0)
+		{
+			m_IsAttacking = false;
+			resetAniCounter();
+
+			m_Sprite.setTexture(TextureHolder::GetTexture("graphics/enemies/skeleton.png"));
+			m_Sprite.setOrigin(32, 32);
+			m_Sprite.setScale(0.75, 0.75);
+		}
+	}
 	updateTextRect();
 
 	navBoxes = navBox;
@@ -147,6 +161,32 @@ void Enemy::update(float elapsedTime, const Vector2f& playerPos, Chunk* chunk, i
 		m_Sprite.setRotation(90);
 		m_Sprite.setOrigin(32, 56);
 	}
+}
+
+void Enemy::Attack()
+{
+
+	if (m_IsAttacking)
+	{
+		return;
+	}
+
+	resetAniCounter();
+	m_IsAttacking = true;
+
+
+	m_Sprite.setTexture(TextureHolder::GetTexture("graphics/enemies/skeletonAttack.png"));
+	m_Sprite.setOrigin(32, 32);
+	m_Sprite.setScale(0.75f, 0.75f);
+
+	
+	setSpriteFromSheet(IntRect(0, 0, 385, 64), 64);
+
+	m_SpriteWeapon = Sprite(TextureHolder::GetTexture("graphics/player/weapon/Pirate's_Scimtar.png"));
+	m_SpriteWeapon.setOrigin(32, 32);
+	m_SpriteWeapon.setScale(0.75, 0.75);
+
+	updateTextRect();
 }
 
 void Enemy::moveLeft()
@@ -246,24 +286,49 @@ float Enemy::getDamage()
 
 void Enemy::updateTextRect()
 {
-	if (direction == Vector2f(0, 1)) // up
+	if (!m_IsAttacking)
 	{
-		setSpriteFromSheet(IntRect(0, 0, 576, 64), 64);
-	}
+		if (direction == Vector2f(0, 1)) // up
+		{
+			setSpriteFromSheet(IntRect(0, 0, 576, 64), 64);
+		}
 
-	if (direction == Vector2f(0, -1)) // down
-	{
-		setSpriteFromSheet(IntRect(0, 128, 576, 64), 64);
-	}
+		if (direction == Vector2f(0, -1)) // down
+		{
+			setSpriteFromSheet(IntRect(0, 128, 576, 64), 64);
+		}
 
-	if (direction == Vector2f(1, 0)) // right
-	{
-		setSpriteFromSheet(IntRect(0, 192, 576, 64), 64);
-	}
+		if (direction == Vector2f(1, 0)) // right
+		{
+			setSpriteFromSheet(IntRect(0, 192, 576, 64), 64);
+		}
 
-	if (direction == Vector2f(-1, 0)) // left
+		if (direction == Vector2f(-1, 0)) // left
+		{
+			setSpriteFromSheet(IntRect(0, 64, 576, 64), 64);
+		}
+	}
+	else 
 	{
-		setSpriteFromSheet(IntRect(0, 64, 576, 64), 64);
+		if (direction == Vector2f(0, 1)) // up
+		{
+			setSpriteFromSheet(IntRect(0, 0, 385, 64), 64);
+		}
+
+		if (direction == Vector2f(0, -1)) // down
+		{
+			setSpriteFromSheet(IntRect(0, 128, 385, 64), 64);
+		}
+
+		if (direction == Vector2f(1, 0)) // right
+		{
+			setSpriteFromSheet(IntRect(0, 192, 385, 64), 64);
+		}
+
+		if (direction == Vector2f(-1, 0)) // left
+		{
+			setSpriteFromSheet(IntRect(0, 64, 385, 64), 64);
+		}
 	}
 }
 
@@ -602,4 +667,9 @@ int Enemy::loot()
 bool Enemy::isLooted()
 {
 	return m_Looted;
+}
+
+float Enemy::getAttackDamage()
+{
+	return m_AttackDmg;
 }
