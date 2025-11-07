@@ -469,4 +469,4 @@ void Engine::update()
 		}
 
 	} // End updating the scene
-}1
+}
