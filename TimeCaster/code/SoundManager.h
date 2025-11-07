@@ -46,6 +46,22 @@ private:
 	SoundBuffer fireballBuffer;
 	Sound fireball;
 
+	// Prepare the time stop cast sound
+	SoundBuffer timeStopCastBuffer;
+	Sound timeStopCast;
+
+	// Prepare the time stop active sound
+	SoundBuffer timeStopActiveBuffer;
+	Sound timeStopActive;
+
+	// Prepare the time stop end sound
+	SoundBuffer timeStopEndBuffer;
+	Sound timeStopEnd;
+
+	// Prepare the heal spell sound
+	SoundBuffer healBuffer;
+	Sound heal;
+
 	// Prepare the button click sound
 	SoundBuffer clickBuffer;
 	Sound buttonClick;
@@ -84,6 +100,21 @@ public:
 
 	// Function to play the Fireball sound
 	void playFireballSound();
+
+	// Function to play the time stop cast sound
+	void playTimeStopCastSound();
+
+	// Function to play the time stop active sound
+	void playTimeStopActiveSound();
+
+	// Function to end the time stop active sound
+	void stopTimeStopActiveSound();
+
+	// Function to play the time stop end sound
+	void playTimeStopEndSound();
+
+	// Function to play the heal sound
+	void playHealSound();
 
 	// Function to play the button click sound
 	void playButtonClickSound();

@@ -221,3 +221,9 @@ void Character::castingSpell(bool casting)
 {
 	m_CastingSpell = casting;
 }
+
+
+void Character::setDifficultyMult(float mult)
+{
+	m_DifficultyMult = mult;
+}

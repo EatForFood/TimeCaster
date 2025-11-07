@@ -932,7 +932,8 @@ void Engine::run()
 					worldLoaded = false;
 					thread worldThread(&Engine::generateWorld, this);
 					worldThread.detach();
-					
+
+					setDifficulty();
 				}
 
 				// Player hit the load game button in the main menu
@@ -992,6 +993,7 @@ void Engine::run()
 						displayFps = player.getDisplayFps();
 						Listener::setGlobalVolume(player.getVolume());
 						populateChunkVector();
+						setDifficulty();
 					}
 					else {
 						// No save file so create a new one with default values and load it	
@@ -1038,6 +1040,7 @@ void Engine::run()
 						displayFps = player.getDisplayFps();
 						Listener::setGlobalVolume(player.getVolume());
 						populateChunkVector();
+						setDifficulty();
 					}
 				}
 
@@ -1283,17 +1286,21 @@ void Engine::run()
 				else if (player.getCombatType() == Magic && !player.isCastingSpell() && player.getSpellType() == Player::SpellType::FreezeTime && !timeFrozen && timeFrozenTimer.getElapsedTime().asSeconds() > 1)
 				{
 					timeFrozen = true;
+					sound.playTimeStopCastSound();
 					timeFrozenTimer.restart();
 				}
 				else if (player.getCombatType() == Magic && !player.isCastingSpell() && player.getSpellType() == Player::SpellType::FreezeTime && timeFrozen && timeFrozenTimer.getElapsedTime().asSeconds() > 1)
 				{
 					timeFrozen = false;
+					sound.playTimeStopEndSound();
+					sound.stopTimeStopActiveSound();
 					timeFrozenTimer.restart();
 				}
 				else if (player.getCombatType() == Magic && !player.isCastingSpell() && player.getSpellType() == Player::SpellType::Heal && player.getHealth() < player.getMaxHealth())
 				{
 					if (player.useMana(0.5f))
 					{
+						sound.playHealSound();
 						player.healHealth(0.25f);
 					}		
 				}
@@ -1486,4 +1493,17 @@ void Engine::generateWorld()
 
 	worldLoaded = true;
 	skipIntroText.setString("--- Press space to skip ---");
+}
+
+void Engine::setDifficulty()
+{
+	if (difficulty == Difficulty::Easy) {
+		player.setDifficultyMult(0.75f);
+	}
+	else if (difficulty == Difficulty::Medium) {
+		player.setDifficultyMult(1.0f);
+	}
+	else if (difficulty == Difficulty::Hard) {
+		player.setDifficultyMult(1.25f);
+	}
 }
