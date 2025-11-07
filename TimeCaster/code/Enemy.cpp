@@ -51,6 +51,7 @@ void Enemy::spawn(IntRect arena, Vector2f resolution, int tileSize, String type,
 		m_Speed = 50;
 		m_Health = 50;
 		m_AttackDmg = 20;
+		m_KillValue = 20;
 	}
 	else if (type == "Dragon") {
 		m_Sprite = Sprite(TextureHolder::GetTexture("graphics/enemies/dragon.png"));
@@ -337,8 +338,8 @@ void Enemy::update(float elapsedTime, const Vector2f& playerPos, Chunk* chunk, i
 
 	updateTextRect();
 	moveTextureRect();
-
-	if (m_Health < 0) {
+	
+	if(!m_IsDead && m_Health <= 0) {
 		m_IsDead = true;
 		m_Sprite.setRotation(90);
 		m_Sprite.setOrigin(32, 56);
@@ -593,4 +594,15 @@ void Enemy::drawDebugPath(sf::RenderWindow& window)
 int Enemy::tileDistance(const sf::Vector2i& a, const sf::Vector2i& b)
 {
 	return std::max(std::abs(a.x - b.x), std::abs(a.y - b.y));
+}
+
+int Enemy::loot()
+{
+	m_Looted = true;
+	return m_KillValue;
+}
+
+bool Enemy::isLooted()
+{
+	return m_Looted;
 }

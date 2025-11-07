@@ -412,21 +412,24 @@ void Player::upgradeSpeed()
 
 void Player::upgradeHealth()
 {
-	// 20% max health upgrade
-	m_MaxHealth += (START_HEALTH * .2);
+	// 25% max health upgrade
+	// Multiply by 2 as the player starts with half health
+	m_MaxHealth += (START_HEALTH * 2 * .25);
+	m_Health += (START_HEALTH * 2 * .25);
 }
 
 void Player::upgradeStamina()
 {
 	// 25% max Stamina upgrade
-	//25% because dodging takes 50 stamina so you'd get half of one more dodge
 	m_MaxStamina += (START_STAMINA * 0.25f);
+	m_Stamina += (START_STAMINA * 0.25f);
 }
 
 void Player::upgradeMana()
 {
-	// 20% max Mana upgrade
-	m_MaxMana += (START_MANA * .2);
+	// 25% max Mana upgrade
+	m_MaxMana += (START_MANA * .25);
+	m_Mana += (START_MANA * .25);
 }
 void Player::increaseHealthLevel(int amount)
 {
@@ -515,10 +518,29 @@ void Player::createNewSave()
 {
 	ofstream saveFile("gamedata/TCSave.txt");
 
-	saveFile << fixed << setprecision(5) << START_SPEED << " " << START_HEALTH << " " << m_MaxHealth << " " << START_STAMINA << " "
-		<< START_STAMINA << " " << START_STAMINA_RECHARGE << " " << START_MANA << " " << START_MANA << " " << START_MANA_RECHARGE << " " << START_GOLD << " " << START_KILLS
-		<< " " << START_LEVEL << " " << START_SWORD << " " << START_WAND << " " << START_HEAD_ARMOUR << " " << START_CHEST_ARMOUR << " " 
-		<< START_TROUSER_ARMOUR << " " << START_SHOE_ARMOUR << " " << START_NECK_ARMOUR << " " << 64 << " " << 64
+	saveFile << fixed << setprecision(5) 
+		<< START_SPEED << " " 
+		<< START_HEALTH << " " 
+		<< m_MaxHealth << " " 
+		<< START_STAMINA << " "
+		<< START_STAMINA << " " 
+		<< START_STAMINA_RECHARGE << " " 
+		<< START_MANA << " " 
+		<< START_MANA << " " 
+		<< START_MANA_RECHARGE << " " 
+		<< START_GOLD << " " 
+		<< START_KILLS << " " 
+		<< START_EXP << " "
+		<< START_LEVEL << " " 
+		<< START_SWORD << " "
+		<< START_WAND << " " 
+		<< START_HEAD_ARMOUR << " " 
+		<< START_CHEST_ARMOUR << " " 
+		<< START_TROUSER_ARMOUR << " " 
+		<< START_SHOE_ARMOUR << " " 
+		<< START_NECK_ARMOUR << " " 
+		<< 64 << " " 
+		<< 64	
 		<< endl;
 	m_EquippedWeapons[0] = (Weapon(START_SWORD, Vector2f(0, 0)));
 	m_EquippedWeapons[1] = (Weapon(START_WAND, Vector2f(0, 0)));
@@ -571,6 +593,7 @@ void Player::updateSaveFile()
 		<< m_ManaRecharge << " "
 		<< m_Gold << " " 
 		<< m_Kills << " " 
+		<< m_Exp << " "
 		<< m_Level << " "
 		<< m_EquippedWeapons[0].getName() << " " 
 		<< m_EquippedWeapons[1].getName() << " " 
@@ -580,7 +603,7 @@ void Player::updateSaveFile()
 		<< m_EquippedArmour[3].getName() << " " 
 		<< m_EquippedArmour[4].getName()  << " "
 		<< m_Position.x << " " 
-		<< m_Position.y << " "
+		<< m_Position.y
 		<< std::endl; 
 		
 	saveFile.close();
@@ -605,6 +628,7 @@ bool Player::loadSaveFile()
 
 		loadFile >> m_Gold;
 		loadFile >> m_Kills;
+		loadFile >> m_Exp;
 		loadFile >> m_Level;
 		
 		loadFile >> m_EquippedSwordName;
@@ -624,7 +648,7 @@ bool Player::loadSaveFile()
 		equipArmour(m_EquippedTrouserArmourName);
 		equipArmour(m_EquippedShoeArmourName);
 		equipArmour(m_EquippedNeckArmourName);
-		//equipWeapon(m_EquippedWandName);
+		equipWeapon(m_EquippedWandName);
 		equipWeapon(m_EquippedSwordName); // equip sword last so that melee is the default combat type
 		return true;
 	}
@@ -861,6 +885,12 @@ bool Player::equipArmour(string armourNameToEquip)
 		updateTextRect();
 		return true;
 	}
+	else if (armourToEquip.getType() == Item::NeckArmour)
+	{
+		// equip the armour
+		m_EquippedArmour[4] = armourToEquip;
+		return true;
+	}
 	else
 	{
 		return false;
@@ -1085,4 +1115,22 @@ bool Player::useMana(float manaCost)
 		return false;
 	}
 
+}
+
+bool Player::reward(int rewardAmount)
+{
+	m_Kills++;
+	m_Gold += rewardAmount;
+	m_Exp += rewardAmount;
+	if (m_Exp >= 100)
+	{
+		// level up
+		m_Exp -= 100;
+		m_Level++;
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }

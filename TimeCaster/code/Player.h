@@ -152,6 +152,7 @@ public:
 	void setStaminaValue(int stam);
 	void setManaValue(int mana);
 	void setHealthValue(int health);
+	bool reward(int rewardAmount);
 
 	// use mana after casting a spell
 	bool useMana(float manaCost);
@@ -167,6 +168,7 @@ private:
 	const int START_GOLD = 0;
 	const int START_KILLS = 0;
 	const int START_LEVEL = 1;
+	const int START_EXP = 0;
 	const string START_SWORD = "Iron_Sword";
 	const string START_WAND = "Wooden_Wand";
 	const string START_HEAD_ARMOUR = "Family_Hood";
@@ -191,7 +193,7 @@ private:
 	float m_StaminaRecharge;
 	int m_Gold;
 	int m_Kills;
-
+	int m_Exp;
 	string m_EquippedSwordName;
 	string m_EquippedWandName;
 	string m_EquippedHeadArmourName;
