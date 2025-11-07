@@ -1291,11 +1291,14 @@ void Engine::run()
 				else if (player.getCombatType() == Magic && !player.isCastingSpell() && player.getSpellType() == Player::SpellType::FreezeTime && !timeFrozen && timeFrozenTimer.getElapsedTime().asSeconds() > 1)
 				{
 					timeFrozen = true;
+					sound.playTimeStopCastSound();
 					timeFrozenTimer.restart();
 				}
 				else if (player.getCombatType() == Magic && !player.isCastingSpell() && player.getSpellType() == Player::SpellType::FreezeTime && timeFrozen && timeFrozenTimer.getElapsedTime().asSeconds() > 1)
 				{
 					timeFrozen = false;
+					sound.playTimeStopEndSound();
+					sound.stopTimeStopActiveSound();
 					timeFrozenTimer.restart();
 				}
 				else if (player.getCombatType() == Magic && !player.isCastingSpell() && player.getSpellType() == Player::SpellType::Heal && player.getHealth() < player.getMaxHealth())
@@ -1404,11 +1407,15 @@ void Engine::run()
 		                           UPDATE THE FRAME
 		**********************************************************************/
 		if (timeFrozen) {
-			if (player.useMana(0.25f)) {
-				// do nothing, time remains frozen
-			}
-			else 
+			if (player.useMana(0.25f)) 
+				sound.playTimeStopActiveSound();
+			else
+			{
+				sound.playTimeStopEndSound();
+				sound.stopTimeStopActiveSound();
 				timeFrozen = false;
+			}
+				
 		}
 		
 		if (state == State::PLAYING)

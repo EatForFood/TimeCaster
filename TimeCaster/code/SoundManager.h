@@ -107,6 +107,9 @@ public:
 	// Function to play the time stop active sound
 	void playTimeStopActiveSound();
 
+	// Function to end the time stop active sound
+	void stopTimeStopActiveSound();
+
 	// Function to play the time stop end sound
 	void playTimeStopEndSound();
 

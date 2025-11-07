@@ -161,7 +161,12 @@ void SoundManager::playTimeStopCastSound() {
 }
 
 void SoundManager::playTimeStopActiveSound() {
-	timeStopActive.play();
+	if (timeStopActive.getStatus() != SoundSource::Status::Playing)
+		timeStopActive.play();
+}
+
+void SoundManager::stopTimeStopActiveSound() {
+	timeStopActive.stop();
 }
 
 void SoundManager::playTimeStopEndSound() {
