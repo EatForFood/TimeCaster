@@ -941,15 +941,7 @@ void Engine::run()
 					thread worldThread(&Engine::generateWorld, this);
 					worldThread.detach();
 
-					if (difficulty == Difficulty::Easy) {
-						player.setDifficultyMult(0.75f);
-					}
-					else if (difficulty == Difficulty::Medium) {
-						player.setDifficultyMult(1.0f);
-					}
-					else if (difficulty == Difficulty::Hard) {
-						player.setDifficultyMult(1.25f);
-					}
+					setDifficulty();
 				}
 
 				// Player hit the load game button in the main menu
@@ -1009,6 +1001,7 @@ void Engine::run()
 						displayFps = player.getDisplayFps();
 						Listener::setGlobalVolume(player.getVolume());
 						populateChunkVector();
+						setDifficulty();
 					}
 					else {
 						// No save file so create a new one with default values and load it	
@@ -1055,6 +1048,7 @@ void Engine::run()
 						displayFps = player.getDisplayFps();
 						Listener::setGlobalVolume(player.getVolume());
 						populateChunkVector();
+						setDifficulty();
 					}
 				}
 
@@ -1487,4 +1481,17 @@ void Engine::generateWorld()
 	populateChunkVector();
 	worldLoaded = true;
 	skipIntroText.setString("--- Press space to skip ---");
+}
+
+void Engine::setDifficulty()
+{
+	if (difficulty == Difficulty::Easy) {
+		player.setDifficultyMult(0.75f);
+	}
+	else if (difficulty == Difficulty::Medium) {
+		player.setDifficultyMult(1.0f);
+	}
+	else if (difficulty == Difficulty::Hard) {
+		player.setDifficultyMult(1.25f);
+	}
 }

@@ -45,6 +45,8 @@ public:
 
 	void generateWorld();
 
+	void setDifficulty();
+
 
 
 protected: 
