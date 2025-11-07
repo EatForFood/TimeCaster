@@ -624,7 +624,7 @@ bool Player::loadSaveFile()
 		equipArmour(m_EquippedTrouserArmourName);
 		equipArmour(m_EquippedShoeArmourName);
 		equipArmour(m_EquippedNeckArmourName);
-		//equipWeapon(m_EquippedWandName);
+		equipWeapon(m_EquippedWandName);
 		equipWeapon(m_EquippedSwordName); // equip sword last so that melee is the default combat type
 		return true;
 	}
@@ -859,6 +859,12 @@ bool Player::equipArmour(string armourNameToEquip)
 		m_SpriteShoes.setOrigin(32, 32);		m_SpriteShoes.setScale(0.75, 0.75);
 
 		updateTextRect();
+		return true;
+	}
+	else if (armourToEquip.getType() == Item::NeckArmour)
+	{
+		// equip the armour
+		m_EquippedArmour[4] = armourToEquip;
 		return true;
 	}
 	else
