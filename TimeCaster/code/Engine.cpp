@@ -1302,6 +1302,7 @@ void Engine::run()
 				{
 					if (player.useMana(0.5f))
 					{
+						sound.playHealSound();
 						player.healHealth(0.25f);
 					}		
 				}

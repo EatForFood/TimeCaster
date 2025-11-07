@@ -101,6 +101,18 @@ public:
 	// Function to play the Fireball sound
 	void playFireballSound();
 
+	// Function to play the time stop cast sound
+	void playTimeStopCastSound();
+
+	// Function to play the time stop active sound
+	void playTimeStopActiveSound();
+
+	// Function to play the time stop end sound
+	void playTimeStopEndSound();
+
+	// Function to play the heal sound
+	void playHealSound();
+
 	// Function to play the button click sound
 	void playButtonClickSound();
 

@@ -58,7 +58,7 @@ SoundManager::SoundManager() {
 	timeStopEnd.setBuffer(timeStopEndBuffer);
 
 	// Loads heal spell sound into buffer
-	healBuffer.loadFromFile("sound/heal.wav");
+	healBuffer.loadFromFile("sound/heal.mp3");
 	heal.setBuffer(healBuffer);
 
 	// Loads click sound from file into buffer
@@ -154,4 +154,21 @@ void SoundManager::playBossIntroSound() {
 void SoundManager::playSwordSwing() {
 	if (swordSwing.getStatus() != SoundSource::Status::Playing)
 	swordSwing.play();
+}
+
+void SoundManager::playTimeStopCastSound() {
+	timeStopCast.play();
+}
+
+void SoundManager::playTimeStopActiveSound() {
+	timeStopActive.play();
+}
+
+void SoundManager::playTimeStopEndSound() {
+	timeStopEnd.play();
+}
+
+void SoundManager::playHealSound() {
+	if (heal.getStatus() != SoundSource::Status::Playing)
+		heal.play();
 }
