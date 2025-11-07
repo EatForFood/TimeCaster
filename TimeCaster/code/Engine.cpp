@@ -940,7 +940,16 @@ void Engine::run()
 					worldLoaded = false;
 					thread worldThread(&Engine::generateWorld, this);
 					worldThread.detach();
-					
+
+					if (difficulty == Difficulty::Easy) {
+						player.setDifficultyMult(0.75f);
+					}
+					else if (difficulty == Difficulty::Medium) {
+						player.setDifficultyMult(1.0f);
+					}
+					else if (difficulty == Difficulty::Hard) {
+						player.setDifficultyMult(1.25f);
+					}
 				}
 
 				// Player hit the load game button in the main menu

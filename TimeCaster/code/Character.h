@@ -110,6 +110,7 @@ protected:
 	bool m_WasHit = false;
 
 	bool m_CastingSpell = false;
+	float m_DifficultyMult = 1.0f;
 
 public:
 
@@ -170,5 +171,8 @@ public:
 
 	bool isCastingSpell();
 	void castingSpell(bool casting);
+
+	void setDifficultyMult(float mult);
+
 };
 

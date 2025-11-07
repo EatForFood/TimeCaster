@@ -104,7 +104,7 @@ bool Player::hit(Time timeHit, float damage, int iFrames)
 	{
 		m_IFrames = iFrames;
 		m_LastHit = timeHit;
-		m_Health -= damage; 
+		m_Health -= damage * m_DifficultyMult; 
 		return true;
 	}
 	else
