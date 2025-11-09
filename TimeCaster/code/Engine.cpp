@@ -352,7 +352,7 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	{
 		windowedModeButton.setFillColor(Color::Red);
 	}
-	windowedModeButton.setSize(Vector2f(400, 80));
+	windowedModeButton.setSize(Vector2f(350, 80));
 	textBounds = windowedModeButton.getLocalBounds();
 	viewCentre = mainView.getCenter();
 	windowedModeButton.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 500);
@@ -379,7 +379,7 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	{
 		vSyncButton.setFillColor(Color::Red);
 	}
-	vSyncButton.setSize(Vector2f(400, 80));
+	vSyncButton.setSize(Vector2f(200, 80));
 	textBounds = vSyncButton.getLocalBounds();
 	viewCentre = mainView.getCenter();
 	vSyncButton.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 600);
