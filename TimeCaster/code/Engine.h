@@ -70,6 +70,8 @@ private:
 
 	bool windowedMode = false;
 
+	bool vSync = false;
+
 	// Anything using multiple threads should use atomic variables
 	std::atomic<bool> worldLoaded;
 
@@ -223,6 +225,11 @@ private:
 	RectangleShape windowedModeButton;
 
 	Text windowedModeButtonText;
+
+	// VSync button
+	RectangleShape vSyncButton;
+
+	Text vSyncButtonText;
 
 	RectangleShape difficultyButton;
 

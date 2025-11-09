@@ -27,9 +27,12 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 {
 	player.loadConfigFile();
 
+	// Set a high framerate limit (TODO: allow player to configure FPS limit)
+	window.setFramerateLimit(144);
 //	difficulty = Difficulty::Medium;
 	difficulty = stringToDifficulty(player.getdifficultyString());
 	windowedMode = player.getWindowedMode();
+	vSync = player.getVSync();
 	displayFps = player.getDisplayFps();
 	Listener::setGlobalVolume(player.getVolume());
 
@@ -47,6 +50,14 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	}
 	else {
 		window.create(VideoMode(resolution.x, resolution.y), "TimeCaster", Style::Fullscreen);
+	}
+
+	if (vSync == true)
+	{
+		window.setVerticalSyncEnabled(true);
+	}
+	else {
+		window.setVerticalSyncEnabled(false);
 	}
 
 	filter.setSize(resolution);
@@ -331,6 +342,8 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	y = displayFPSButton.getPosition().y + (displayFPSButton.getSize().y / 2.f) - (textBounds.height / 2.f);
 	displayFPSButtonText.setPosition(x - textBounds.left, y - textBounds.top);
 
+
+	// Windowed mode button
 	if (windowedMode)
 	{
 		windowedModeButton.setFillColor(Color::Green);
@@ -345,6 +358,8 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	windowedModeButton.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 500);
 	windowedModeButton.setTexture(&textureMainMenuButton2);
 
+
+
 	// Windowed mode button text
 	windowedModeButtonText.setString("Windowed Mode"); // Set the display text
 	windowedModeButtonText.setFont(font); // Assign the font
@@ -354,6 +369,32 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	x = windowedModeButton.getPosition().x + (windowedModeButton.getSize().x / 2.f) - (textBounds.width / 2.f);
 	y = windowedModeButton.getPosition().y + (windowedModeButton.getSize().y / 2.f) - (textBounds.height / 2.f);
 	windowedModeButtonText.setPosition(x - textBounds.left, y - textBounds.top);
+
+	// VSync button
+	if (vSync)
+	{
+		vSyncButton.setFillColor(Color::Green);
+	}
+	else
+	{
+		vSyncButton.setFillColor(Color::Red);
+	}
+	vSyncButton.setSize(Vector2f(400, 80));
+	textBounds = vSyncButton.getLocalBounds();
+	viewCentre = mainView.getCenter();
+	vSyncButton.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 600);
+	vSyncButton.setTexture(&textureMainMenuButton2);
+
+	
+
+	vSyncButtonText.setString("Vsync"); // Set the display text
+	vSyncButtonText.setFont(font); // Assign the font
+	vSyncButtonText.setCharacterSize(fontSize - 5);
+	vSyncButtonText.setFillColor(Color::Black);
+	textBounds = vSyncButtonText.getLocalBounds();
+	x = vSyncButton.getPosition().x + (vSyncButton.getSize().x / 2.f) - (textBounds.width / 2.f);
+	y = vSyncButton.getPosition().y + (vSyncButton.getSize().y / 2.f) - (textBounds.height / 2.f);
+	vSyncButtonText.setPosition(x - textBounds.left, y - textBounds.top);
 
 	// Display difficulty button
 	if (difficulty == Difficulty::Easy)
@@ -915,7 +956,7 @@ void Engine::run()
 					startSoundPlayed = true;
 
 					player.createNewSave();
-					player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume());
+					player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume(), vSync);
 					player.loadSaveFile();
 
 					equippedSwordIcon.setTextureRect(player.getEquippedSword()->getTextureRect());
@@ -1009,6 +1050,7 @@ void Engine::run()
 						player.loadConfigFile();
 						difficulty = stringToDifficulty(player.getdifficultyString());
 						windowedMode = player.getWindowedMode();
+						vSync = player.getVSync();
 						displayFps = player.getDisplayFps();
 						Listener::setGlobalVolume(player.getVolume());
 						populateChunkVector();
@@ -1017,7 +1059,7 @@ void Engine::run()
 					else {
 						// No save file so create a new one with default values and load it	
 						player.createNewSave();
-						player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume());
+						player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume(), vSync);
 						player.loadSaveFile();
 
 						equippedSwordIcon.setTextureRect(player.getEquippedSword()->getTextureRect());
@@ -1056,6 +1098,7 @@ void Engine::run()
 						player.loadConfigFile();
 						difficulty = stringToDifficulty(player.getdifficultyString());
 						windowedMode = player.getWindowedMode();
+						vSync = player.getVSync();
 						displayFps = player.getDisplayFps();
 						Listener::setGlobalVolume(player.getVolume());
 						populateChunkVector();
@@ -1092,7 +1135,7 @@ void Engine::run()
 				{
 					sound.playButtonClickSound();
 					world.clearWorld();
-					player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume());
+					player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume(), vSync);
 					state = State::MAIN_MENU;
 				}
 
@@ -1119,7 +1162,7 @@ void Engine::run()
 					}
 				}
 
-				// Player hit the display fps button
+				// Player hit the windowed mode button
 				if (windowedModeButton.getGlobalBounds().contains(worldPos) && state == State::OPTIONS_MENU && event.mouseButton.button == Mouse::Left)
 				{
 					if (windowedMode) {
@@ -1131,6 +1174,20 @@ void Engine::run()
 						sound.playButtonClickSound();
 						windowedMode = true;
 						window.create(VideoMode(resolution.x, resolution.y), "TimeCaster", Style::Default);
+					}
+				}
+				//Player hit the vSync button
+				if (vSyncButton.getGlobalBounds().contains(worldPos) && state == State::OPTIONS_MENU && event.mouseButton.button == Mouse::Left)
+				{
+					if (vSync) {
+						sound.playButtonClickSound();
+						vSync = false;
+						window.setVerticalSyncEnabled(false);
+					}
+					else {
+						sound.playButtonClickSound();
+						vSync = true;
+						window.setVerticalSyncEnabled(true);
 					}
 				}
 
@@ -1390,6 +1447,13 @@ void Engine::run()
 				windowedModeButton.setFillColor(Color::Red);
 			}
 
+			if (vSync) {
+				vSyncButton.setFillColor(Color::Green);
+			}
+			else {
+				vSyncButton.setFillColor(Color::Red);
+			}
+
 			// Change colour of difficultyButton based on selected difficulty
 			if (difficulty == Difficulty::Easy)
 			{
@@ -1477,7 +1541,7 @@ void Engine::run()
 			}
 			if (!dragging && isDragging) {
 				// Save volume to config file
-				player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume());
+				player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume(), vSync);
 				isDragging = false;
 			}
 		}

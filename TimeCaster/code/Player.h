@@ -92,7 +92,7 @@ public:
 
 	// make a new save file with default values
 	void createNewSave();
-	void createConfigFile(string difficultyString, bool windowedMode, bool displayFPS, float volume);
+	void createConfigFile(string difficultyString, bool windowedMode, bool displayFPS, float volume, bool vSync);
 	//save and load player stats/position/etc.
 	void updateSaveFile();
 	//load player stats/position/etc. from save file
@@ -102,6 +102,7 @@ public:
 	bool getWindowedMode();
 	bool getDisplayFps();
 	float getVolume();
+	bool getVSync();
 
 	void setChunk(int chunk);
 	int getChunk();
@@ -204,7 +205,12 @@ private:
 	string m_EquippedShoeArmourName;
 	string m_EquippedNeckArmourName;
 
+	// Config variables
 	bool m_WindowedMode;
+	string m_DifficultyString;
+	bool m_DisplayFPS;
+	float m_Volume;
+	bool m_VSync;
 
 	// Dodge variables
 	bool m_IsDodging = false;
@@ -213,9 +219,6 @@ private:
 	Clock m_CooldownClock;
 	float m_DodgeDuration = 0.2f; // 200ms dodge
 	float m_DodgeCooldown = 1.0f; // 1 second cooldown on dodge
-	string m_DifficultyString;
-	bool m_DisplayFPS;
-	float m_Volume;
 
 	CombatType m_CombatType = Melee;
 	SpellType m_SpellType = Fireball;

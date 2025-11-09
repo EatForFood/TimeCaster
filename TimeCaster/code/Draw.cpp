@@ -573,6 +573,8 @@ void Engine::draw()
 		window.draw(difficultyButtonText);
 		window.draw(windowedModeButton);
 		window.draw(windowedModeButtonText);
+		window.draw(vSyncButton);
+		window.draw(vSyncButtonText);
 	}
 
 	if (state == State::STORY_INTRO)
