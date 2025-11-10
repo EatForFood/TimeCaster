@@ -249,4 +249,8 @@ private:
 	FloatRect m_RenderArea;
 
 	bool inCell = false;
+
+	// player hit-box size
+	const int HITBOX_HEIGHT = 24;
+	const int HITBOX_WIDTH = 12;
 };

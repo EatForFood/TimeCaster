@@ -73,19 +73,19 @@ void Engine::update()
 							}
 						}
 
-						if (player.getColBox().intersects(enemies.getSprite().getGlobalBounds()))
+						if (player.getSprite().getGlobalBounds().intersects(enemies.getSprite().getGlobalBounds()))
 						{
 							enemies.Attack();
 							// Handle player getting hit by enemy
 							// TODO: Add weapon to enemy hands and use that instead
-							if (player.getGlobalBounds().intersects(enemies.getGlobalBounds()) && enemies.isAttacking())
+							if (player.getHitBox().intersects(enemies.getHitBox()) && enemies.isAttacking())
 							{
 								if (player.hit(gameTimeTotal, enemies.getAttackDamage(), 1000))
 								{
 									sound.playHitSound();
 								}
 							}
-							if (player.getWeapon().getGlobalBounds().intersects(enemies.getSprite().getGlobalBounds()) && player.isAttacking() && !enemies.wasHit())
+							if (player.getWeapon().getGlobalBounds().intersects(enemies.getHitBox()) && player.isAttacking() && !enemies.wasHit())
 							{
 								enemies.setHealth(-player.getAttackDamage());
 								enemies.setWasHit(true);
@@ -137,7 +137,7 @@ void Engine::update()
 					{
 						if (!enemies.isDead())
 						{
-							if (spellBounds.intersects(enemies.getSprite().getGlobalBounds()))
+							if (spells[i].getSprite().getGlobalBounds().intersects(enemies.getHitBox()))
 							{
 								// Apply damage from spell to enemy
 								enemies.setHealth(-spells[i].getSpellDamage());

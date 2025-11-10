@@ -57,6 +57,11 @@ private:
 	float m_TimeElapsed;
 	float m_AnimationTimer = 0;
 
+	// spell hitbox
+	FloatRect m_Hitbox;
+	int m_HitboxWidth;
+	int m_HitboxHeight;
+
 // Public function prototypes go here
 public:
 	// The constructor
@@ -87,7 +92,7 @@ public:
 	void setSpriteFromSheet(IntRect textureBox, int tileSize);
 	void moveTextureRect();
 
-	
+	FloatRect getHitbox();
 
 	Sprite getSprite();
 

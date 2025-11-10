@@ -61,10 +61,10 @@ Player::Player()
 void Player::spawn(IntRect arena, Vector2f resolution, int tileSize, int level)
 {
 	// assign player's hitbox
-	m_Hitbox.left = m_Position.x - 12;
-	m_Hitbox.width = 24;
-	m_Hitbox.top = m_Position.y - 12;
-	m_Hitbox.height = 24;
+	m_Hitbox.left = m_Position.x - HITBOX_WIDTH / 2;
+	m_Hitbox.width = HITBOX_WIDTH;
+	m_Hitbox.top = m_Position.y - HITBOX_HEIGHT / 2;
+	m_Hitbox.height = HITBOX_HEIGHT;
 
 	m_Level = level;
 

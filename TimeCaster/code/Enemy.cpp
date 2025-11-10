@@ -35,11 +35,18 @@ void Enemy::spawn(string type, Vector2i position, int level) {
 	else if (type == "Goblin") {
 		m_Sprite = Sprite(TextureHolder::GetTexture("graphics/enemies/goblin.png"));
 	}
+	else if (type == "Orc") {
+		m_Sprite = Sprite(TextureHolder::GetTexture("graphics/enemies/orc.png"));
+		m_Speed = 60;
+		m_Health = 50;
+		m_AttackDmg = 20;
+		m_KillValue = 10;
+	}
 	else if (type == "Skeleton") {
 		m_Sprite = Sprite(TextureHolder::GetTexture("graphics/enemies/skeleton.png"));
 		m_Speed = 50;
-		m_Health = 50;
-		m_AttackDmg = 20;
+		m_Health = 80;
+		m_AttackDmg = 30;
 		m_KillValue = 20;
 	}
 	else if (type == "Dragon") {
@@ -68,9 +75,18 @@ void Enemy::update(float elapsedTime, const Vector2f& playerPos, Chunk* chunk, i
 			m_IsAttacking = false;
 			resetAniCounter();
 
-			m_Sprite.setTexture(TextureHolder::GetTexture("graphics/enemies/skeleton.png"));
-			m_Sprite.setOrigin(32, 32);
-			m_Sprite.setScale(0.75, 0.75);
+			if (m_Type == "Skeleton")
+			{
+				m_Sprite.setTexture(TextureHolder::GetTexture("graphics/enemies/skeleton.png"));
+				m_Sprite.setOrigin(32, 32);
+				m_Sprite.setScale(0.75, 0.75);
+			}
+			else if (m_Type == "Orc")
+			{
+				m_Sprite.setTexture(TextureHolder::GetTexture("graphics/enemies/orc.png"));
+				m_Sprite.setOrigin(32, 32);
+				m_Sprite.setScale(0.75, 0.75);
+			}
 		}
 	}
 	updateTextRect();
@@ -156,6 +172,12 @@ void Enemy::update(float elapsedTime, const Vector2f& playerPos, Chunk* chunk, i
 	m_CollisionBox.width = 200;
 	m_CollisionBox.height = 200;
 
+	// update enemy hitbox
+	m_Hitbox.left = m_Position.x - m_Hitbox_Width / 2;
+	m_Hitbox.width = m_Hitbox_Width;
+	m_Hitbox.top = m_Position.y - m_Hitbox_Height / 2;
+	m_Hitbox.height = m_Hitbox_Height;
+
 	if (!m_IsDead && m_Health <= 0) {
 		m_IsDead = true;
 		m_Sprite.setRotation(90);
@@ -174,10 +196,18 @@ void Enemy::Attack()
 	resetAniCounter();
 	m_IsAttacking = true;
 
-
-	m_Sprite.setTexture(TextureHolder::GetTexture("graphics/enemies/skeletonAttack.png"));
-	m_Sprite.setOrigin(32, 32);
-	m_Sprite.setScale(0.75f, 0.75f);
+	if (m_Type == "Skeleton")
+	{
+		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/enemies/skeletonAttack.png"));
+		m_Sprite.setOrigin(32, 32);
+		m_Sprite.setScale(0.75f, 0.75f);
+	}
+	else if (m_Type == "Orc")
+	{
+		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/enemies/orcAttack.png"));
+		m_Sprite.setOrigin(32, 32);
+		m_Sprite.setScale(0.75f, 0.75f);
+	}
 
 	
 	setSpriteFromSheet(IntRect(0, 0, 385, 64), 64);

@@ -76,6 +76,11 @@ void Spell::shoot(float startX, float startY, float targetX, float targetY, floa
 
 	// Rotate the sprite
 	m_Sprite.setRotation(angle);
+
+	m_Hitbox.left = m_Position.x - m_HitboxWidth / 2;
+	m_Hitbox.width = m_HitboxWidth;
+	m_Hitbox.top = m_Position.y - m_HitboxHeight / 2;
+	m_Hitbox.height = m_HitboxHeight;
 	
 	// Position the spell ready to be drawn
 	setSpriteFromSheet(IntRect(0,0,512,64), 64);
@@ -112,6 +117,11 @@ void Spell::update(float elapsedTime)
 
 	// Move the spell
 	m_Sprite.setPosition(m_Position);
+
+	m_Hitbox.left = m_Position.x - m_HitboxWidth / 2;
+	m_Hitbox.width = m_HitboxWidth;
+	m_Hitbox.top = m_Position.y - m_HitboxHeight / 2;
+	m_Hitbox.height = m_HitboxHeight;
 
 	// Has the spell gone out of range?
 	if (m_Position.x < m_MinX || m_Position.x > m_MaxX ||
@@ -206,4 +216,9 @@ bool Spell::piercesEnemy()
 bool Spell::piercesObject()
 {
 	return m_PierceObject;
+}
+
+FloatRect Spell::getHitbox()
+{
+	return m_Hitbox;
 }

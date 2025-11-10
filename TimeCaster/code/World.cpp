@@ -24,7 +24,7 @@ void World::newWorld()
     // Possible chunk types (excluding "spawn")
     vector<string> chunkTypes = {
         "forest", "forest", "forest",
-        "goblinVillage",
+        "goblinVillage", "skeletonRuins",
     };
 
     // Set up random generator (mercene twister)
@@ -39,12 +39,6 @@ void World::newWorld()
             {
                 // Center chunk is always spawn
                 string type = "spawn";
-                out << type << " " << x << " " << y << "\n";
-                chunks.emplace_back(type, Vector2f(x, y), false);
-            }
-            else if (x == 0 && y == -1)
-            {
-                string type = "skeletonRuins";
                 out << type << " " << x << " " << y << "\n";
                 chunks.emplace_back(type, Vector2f(x, y), false);
             }

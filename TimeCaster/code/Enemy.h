@@ -50,6 +50,10 @@ private:
 	const float NODE_REACH_THRESHOLD = 32.0f; // pixels
 	const int FOLLOW_DISTANCE = 492;
 
+	// enemy hit-box size
+	int m_Hitbox_Height = 24;
+	int m_Hitbox_Width = 24;
+
 public:
 	Enemy();
 
