@@ -31,8 +31,7 @@ Item::Item(String type, Vector2f position)
 
 		m_ItemType = null;
 	}
-
-	if (m_Name == "Gold")
+	else if (m_Name == "Gold")
 	{
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/goldCoin.png"));
 		m_Icon.setTexture(TextureHolder::GetTexture("graphics/items/goldCoinIcon.png"));
@@ -48,8 +47,7 @@ Item::Item(String type, Vector2f position)
 		//m_NullItem = false;
 		m_ItemType = Consumable;
 	}
-
-	if (m_Name == "Health_Potion")
+	else if (m_Name == "Health_Potion")
 	{
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
 		m_Sprite.setTextureRect(IntRect(64, 800, 32, 32));
@@ -63,7 +61,7 @@ Item::Item(String type, Vector2f position)
 		m_ItemType = Consumable;
 		m_Sprite.setOrigin(25, 25);
 	}
-	if (m_Name == "Mana_Potion")
+	else if (m_Name == "Mana_Potion")
 	{
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
 		m_Sprite.setTextureRect(IntRect(480, 1472, 32, 32));
@@ -77,7 +75,7 @@ Item::Item(String type, Vector2f position)
 		m_ItemType = Consumable;
 		m_Sprite.setOrigin(25, 25);
 	}
-	if (m_Name == "Stamina_Potion")
+	else if (m_Name == "Stamina_Potion")
 	{
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
 		m_Sprite.setTextureRect(IntRect(256, 1472, 32, 32));
@@ -90,6 +88,13 @@ Item::Item(String type, Vector2f position)
 		m_RestoreValue = 50;
 		m_ItemType = Consumable;
 		m_Sprite.setOrigin(25, 25);
+	}
+	else
+	{
+		m_Value = 0;
+		m_Sprite.setOrigin(5, 5);
+		//m_NullItem = true;
+		m_ItemType = null;
 	}
 
 	m_SecondsSinceSpawn = 0;
