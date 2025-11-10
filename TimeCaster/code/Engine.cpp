@@ -757,7 +757,28 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 
 	timeFrozen = false;
 }
+// TODO: Move Inventory functions to a new Inventory cpp file
 
+bool Engine::sellItem(int itemIndex)
+{
+	if (storedItems[itemIndex].isNull())
+	{
+		return false;
+	}
+	else
+	{
+		int goldToAdd = storedItems[itemIndex].getValue() * 0.75f; // Sell for 75 percent of the value, But not less than 1 gold
+		if (goldToAdd < 1)
+		{
+			goldToAdd = 1; 
+		}
+		player.addGold(goldToAdd); 
+		storedItems[itemIndex] = Item("null", Vector2f(0, 0));
+		initializeInventory();
+		return true;
+	}
+
+}
 void Engine::initializeInventory()
 {
 	int startX = viewCentre.x - 350;
