@@ -1195,11 +1195,24 @@ void Engine::run()
 			if (event.type == Event::KeyPressed)
 			{
 				/* below are debug functions, comment them out in full build / when needed */
+				if (event.key.code == Keyboard::O && state == State::PLAYING)
+				{
+					if (drawShop) {
+						drawShop = false;
+						cout << "Closing shop" << endl;
+					}
+					else {
+						drawShop = true;
+						cout << "Opening shop" << endl;
+					}
+				}
+
 				if (event.key.code == Keyboard::Num1 && state == State::PLAYING)
 				{
 					// Increase health
 					player.upgradeHealth();
 					player.switchSpell(1);
+			
 				}
 
 				if (event.key.code == Keyboard::Num2 && state == State::PLAYING)

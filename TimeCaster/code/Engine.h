@@ -357,6 +357,8 @@ private:
 	// Boolean for whether to draw the inventory or not
 	bool drawInventory = false;
 
+	bool drawShop = false;
+
 	int x;
 	int y;
 
