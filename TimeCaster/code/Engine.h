@@ -49,6 +49,8 @@ public:
 
 	void setDifficulty();
 
+	bool sellItem(int itemIndex);
+
 
 
 protected: 
