@@ -576,7 +576,7 @@ void Chunk::placeHouse1(int sx, int sy) { // sx 15, sy 18
 	sy += offset.y;
 	NavBox navbox(sx + 1, sy - 3, 5, 4);
 	navBoxes.push_back(navbox);
-	
+
 }
 
 void Chunk::placeHouse2(int sx, int sy) { // sx 15, sy 18
@@ -1090,6 +1090,14 @@ void Chunk::saveChunk()
 	}
 	outFile << "STRUCTURES_END\n";
 
+	// --- Save enemy spawns ---
+	outFile << "SPAWNS_BEGIN\n";
+	outFile << enemyTypes.size() << "\n";
+	for (size_t i = 0; i < enemyTypes.size(); ++i) {
+		outFile << enemyTypes[i] << " " << enemyLocations[i].x << " " << enemyLocations[i].y << "\n";
+	}
+	outFile << "SPAWNS_END\n";
+
 	outFile.close();
 }
 
@@ -1134,6 +1142,8 @@ void Chunk::loadChunk()
 	// --- Load structures ---
 	string line;
 	structures.clear();
+	enemyTypes.clear();
+	enemyLocations.clear();
 
 	while (getline(inFile, line)) {
 		if (line == "STRUCTURES_BEGIN") {
@@ -1145,9 +1155,30 @@ void Chunk::loadChunk()
 				inFile >> s.type >> s.position.x >> s.position.y;
 				structures.push_back(s);
 
-				// Optional: recreate or spawn structure in the world
 				placeStructure(s.type, s.position);
 			}
+		}
+
+		else if (line == "SPAWNS_BEGIN") {
+			size_t spawnCount;
+			inFile >> spawnCount;
+
+			for (size_t i = 0; i < spawnCount; ++i) {
+				string type;
+				int x, y;
+				inFile >> type >> x >> y;
+
+				// store in your separate vectors
+				enemyTypes.push_back(type);
+				enemyLocations.push_back(Vector2i(x, y));
+
+				// or, if you prefer using your existing CreateEnemySpawn:
+				// CreateEnemySpawn(type, Vector2i(x, y));
+			}
+		}
+
+		else if (line == "SPAWNS_END") {
+			break; // done loading
 		}
 	}
 
@@ -1190,7 +1221,7 @@ void Chunk::placeStructure(String type, Vector2i position)
 void Chunk::createNodes()
 {
 	for (int x = 0; x < 50; x++) {
-		for (int y = 0; y < 50; y++) 
+		for (int y = 0; y < 50; y++)
 		{
 			m_Walkable[x][y] = true;
 		}
@@ -1221,7 +1252,7 @@ void Chunk::CreateEnemySpawn(string type, Vector2i position)
 	pixelX += TILE_SIZE / 2.0f;
 	pixelY += TILE_SIZE / 4.0f;
 
-	enemyLocations.emplace_back(sf::Vector2i(static_cast<int>(pixelX), static_cast<int>(pixelY)));
+	enemyLocations.emplace_back(Vector2i(pixelX, pixelY));
 	enemyTypes.emplace_back(type);
 }
 

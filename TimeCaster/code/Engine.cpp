@@ -1055,6 +1055,7 @@ void Engine::run()
 						Listener::setGlobalVolume(player.getVolume());
 						populateChunkVector();
 						setDifficulty();
+						spawnEnemies();
 					}
 					else {
 						// No save file so create a new one with default values and load it	
@@ -1103,6 +1104,7 @@ void Engine::run()
 						Listener::setGlobalVolume(player.getVolume());
 						populateChunkVector();
 						setDifficulty();
+						spawnEnemies();
 					}
 				}
 
@@ -1554,7 +1556,26 @@ void Engine::generateWorld()
 	skipIntroText.setString("--- World is loading... ---");
 	world.newWorld();
 	populateChunkVector();
+	spawnEnemies();
+	worldLoaded = true;
+	skipIntroText.setString("--- Press space to skip ---");
+}
 
+void Engine::setDifficulty()
+{
+	if (difficulty == Difficulty::Easy) {
+		player.setDifficultyMult(0.75f);
+	}
+	else if (difficulty == Difficulty::Medium) {
+		player.setDifficultyMult(1.0f);
+	}
+	else if (difficulty == Difficulty::Hard) {
+		player.setDifficultyMult(1.25f);
+	}
+}
+
+void Engine::spawnEnemies()
+{
 	vector<string> worldEnemyTypes;
 	vector<Vector2i> worldEnemyLocations;
 
@@ -1572,21 +1593,5 @@ void Engine::generateWorld()
 		Enemy e;
 		e.spawn(worldEnemyTypes[i], worldEnemyLocations[i], player.getPlayerLevel());
 		enemyArr.push_back(e);
-	}
-
-	worldLoaded = true;
-	skipIntroText.setString("--- Press space to skip ---");
-}
-
-void Engine::setDifficulty()
-{
-	if (difficulty == Difficulty::Easy) {
-		player.setDifficultyMult(0.75f);
-	}
-	else if (difficulty == Difficulty::Medium) {
-		player.setDifficultyMult(1.0f);
-	}
-	else if (difficulty == Difficulty::Hard) {
-		player.setDifficultyMult(1.25f);
 	}
 }
