@@ -164,6 +164,17 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	manaBarContainer.setPosition(10, 110);
 
 	storedItems.resize(16, Item("null", Vector2f(300, 650)));
+	shopItems.resize(8, Item("null", Vector2f(0, 0)));
+	// Debug shop item initialization
+	shopItems[0] = Weapon("Silver_Wand", Vector2f(300, 650));
+	shopItems[1] = Weapon("Pirate's_Scimitar", Vector2f(450, 650));
+	shopItems[2] = Equipment("Leather_Cap", Vector2f(600, 650));
+	shopItems[3] = Equipment("Leather_Chestplate", Vector2f(750, 950));
+	shopItems[4] = Equipment("Leather_Leggings", Vector2f(900, 650));
+	shopItems[5] = Equipment("Leather_Boots", Vector2f(1050, 650));
+	shopItems[6] = Item("Health_Potion", Vector2f(1200, 650));
+	shopItems[7] = Item("Mana_Potion", Vector2f(1350, 650));
+
 
 	//Item 0 is sword (melee combat), item 1 is wand (magic combat)
 	m_EquippedWeapons.resize(2, Weapon("null", Vector2f(0, 0)));
@@ -798,6 +809,13 @@ Chunk* Engine::getCurrentChunk(float x, float y) {
 void Engine::run()
 {
 	initializeInventory();
+	// Posistion shop items
+	for (int i = 0; i < shopItems.size(); i++) {
+		if (!shopItems[i].isNull()) {
+			shopItems[i].getIcon().setPosition(emptyFrames[i].getPosition());
+		}
+	}
+
 	// The main game loop
 	while (window.isOpen())
 	{

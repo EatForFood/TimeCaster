@@ -186,19 +186,20 @@ void Engine::draw()
 		// Switch to the HUD view
 		window.setView(hudView);
 
-		// Simple shop overlay: reuse inventory visuals but stripped down
+		
 		if (drawShop)
 		{
 			window.draw(darkInventoryBackground);
 			window.draw(inventoryBackground);
 
-			// Draw empty frames
-			for (auto& frame : emptyFrames) {
-				window.draw(frame);
+			// Draw 8 empty frames for item 
+			for (int i = 0; i < 8; i++) {
+				window.draw(emptyFrames[i]);
 			}
 
-			// Draw stored itemm icons
-			for (auto& icons : storedItems) {
+
+			// Draw shop item icons
+			for (auto& icons : shopItems) {
 				window.draw(icons.getIcon());
 			}
 

@@ -299,6 +299,7 @@ private:
 	int draggedIndex = -1;
 	int maxItems = 16; // max amount of item slots
 	vector<Item> storedItems;
+	vector<Item> shopItems;
 	vector<RectangleShape> emptyFrames;
 	vector<Item> allItems;     // all possible item
 	vector<Weapon>& m_EquippedWeapons;
