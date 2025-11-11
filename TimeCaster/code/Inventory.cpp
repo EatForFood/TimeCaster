@@ -120,3 +120,32 @@ bool Engine::sellItem(int itemIndex)
 	}
 
 }
+
+// 0 = item does not exist, 1 = success, 2 = no space in inventory, 3 = not enough gold
+int Engine::buyItem(int itemIndex)
+{
+	if (shopItems[itemIndex].isNull())
+	{
+		return 0; // 0 means item does not exist
+	}
+	else
+	{
+		int itemCost = shopItems[itemIndex].getValue();
+		if (player.getGold() >= itemCost)
+		{
+			if (addItemToInventory(shopItems[itemIndex].getName()))
+			{
+				player.addGold(-itemCost);
+				return 1; // 1 means success
+			}
+			else
+			{
+				return 2; // 2 means no space in inventory
+			}
+		}
+		else
+		{
+			return false; // 3 means not enough gold
+		}
+	}
+}

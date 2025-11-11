@@ -48,6 +48,8 @@ public:
 	void spawnEnemies();
 
 	void setDifficulty();
+	
+	int buyItem(int itemIndex);
 
 	bool sellItem(int itemIndex);
 

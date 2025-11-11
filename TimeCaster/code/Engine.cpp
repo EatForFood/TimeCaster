@@ -1213,6 +1213,9 @@ void Engine::run()
 			if (event.type == Event::KeyPressed)
 			{
 				/* below are debug functions, comment them out in full build / when needed */
+				
+				// Debug shop toggle
+				// Shop is still very much WIP
 				if (event.key.code == Keyboard::O && state == State::PLAYING)
 				{
 					if (drawShop) {
@@ -1262,16 +1265,10 @@ void Engine::run()
 					player.switchSpell(4);
 				}
 
+
 				if (event.key.code == Keyboard::Num5 && state == State::PLAYING)
 				{
-					//Selling item example, the storedItems index will need to be set somehow but the rest can be copy and pasted 
-					// I can make a function for it if needed	
-					if (storedItems[0].isNull()) cout << "null item attempted to be sold" << endl;
-
-					player.addGold(player.getGold() + storedItems[0].getValue());
-					cout << "Sold " << " for " << storedItems[0].getValue() << " gold." << endl;
-					cout << "You now have " << player.getGold() << " gold." << endl;
-					storedItems[0] = Item("null", Vector2f(0, 0));
+					player.addGold(100);
 				}
 
 				if (event.key.code == Keyboard::Num6 && state == State::PLAYING)
@@ -1282,6 +1279,7 @@ void Engine::run()
 						levelUp = true;
 					}
 				}
+
 
 				if (event.key.code == Keyboard::Num8 && state == State::PLAYING)
 				{
