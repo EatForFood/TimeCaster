@@ -51,7 +51,9 @@ public:
 
 	bool sellItem(int itemIndex);
 
+	void displayInventoryTooltips();
 
+	void displayShopTooltips();
 
 protected: 
 	string cleanItemName(string itemName);
