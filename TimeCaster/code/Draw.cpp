@@ -636,12 +636,10 @@ void Engine::displayInventoryTooltips()
 
 void Engine::displayShopTooltips()
 {
-	// Map mouse pixel coordinates to HUD view coordinates so bounds checks match HUD elements
-	Vector2f hudPos = window.mapPixelToCoords(Mouse::getPosition(window), hudView);
 
 	for (int i = 0; i < shopItems.size(); i++)
 	{
-		if (shopItems[i].getIcon().getGlobalBounds().contains(hudPos) && !Mouse::isButtonPressed(Mouse::Left) && !draggingItem)
+		if (shopItems[i].getIcon().getGlobalBounds().contains(worldPos) && !Mouse::isButtonPressed(Mouse::Left) && !draggingItem)
 		{
 			Item::ItemType type = shopItems[i].getType();
 
