@@ -195,7 +195,26 @@ void Engine::update()
 			break;
 		}
 
+		if (drawShop)
+		{
+			for (int i = 0; i < shopItems.size(); i++)
+			{
+				if (!shopItems[i].isNull() && shopItems[i].getIcon().getGlobalBounds().contains(worldPos.x - 25, worldPos.y - 25) &&
+					Mouse::isButtonPressed(Mouse::Left))
+				{
+					if (buyItem(i) == 1)
+					{
+						shopItems[i] = Item("null", Vector2f(0, 0));
+					}
+					else
+					{
+						// Handle other failed purchase cases here
+					}
+					break;
+				}
+			}
 
+		}
 
 		// Level up the player
 		if (drawInventory && levelUp)

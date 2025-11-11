@@ -164,6 +164,17 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	manaBarContainer.setPosition(10, 110);
 
 	storedItems.resize(16, Item("null", Vector2f(300, 650)));
+	shopItems.resize(8, Item("null", Vector2f(0, 0)));
+	// Debug shop item initialization
+	shopItems[0] = Weapon("Silver_Wand", Vector2f(300, 650));
+	shopItems[1] = Weapon("Pirate's_Scimitar", Vector2f(450, 650));
+	shopItems[2] = Equipment("Leather_Cap", Vector2f(600, 650));
+	shopItems[3] = Equipment("Leather_Chestplate", Vector2f(750, 950));
+	shopItems[4] = Equipment("Leather_Leggings", Vector2f(900, 650));
+	shopItems[5] = Equipment("Leather_Boots", Vector2f(1050, 650));
+	shopItems[6] = Item("Health_Potion", Vector2f(1200, 650));
+	shopItems[7] = Item("Mana_Potion", Vector2f(1350, 650));
+
 
 	//Item 0 is sword (melee combat), item 1 is wand (magic combat)
 	m_EquippedWeapons.resize(2, Weapon("null", Vector2f(0, 0)));
@@ -757,59 +768,6 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 
 	timeFrozen = false;
 }
-// TODO: Move Inventory functions to a new Inventory cpp file
-
-bool Engine::sellItem(int itemIndex)
-{
-	if (storedItems[itemIndex].isNull())
-	{
-		return false;
-	}
-	else
-	{
-		int goldToAdd = storedItems[itemIndex].getValue() * 0.75f; // Sell for 75 percent of the value, But not less than 1 gold
-		if (goldToAdd < 1)
-		{
-			goldToAdd = 1; 
-		}
-		player.addGold(goldToAdd); 
-		storedItems[itemIndex] = Item("null", Vector2f(0, 0));
-		initializeInventory();
-		return true;
-	}
-
-}
-void Engine::initializeInventory()
-{
-	int startX = viewCentre.x - 350;
-	int startY = 600;
-
-	// create empty item r
-	emptyFrames.resize(16);
-	for (int i = 0; i < emptyFrames.size(); i++) {
-		emptyFrames[i].setTexture(&textureEmptyFrame);
-		emptyFrames[i].setSize(Vector2f(75, 75));
-		emptyFrames[i].setOrigin(emptyFrames[i].getSize() / 2.f);
-
-		if (i != 0 && i % 8 == 0) {
-			startY += 100;
-			startX = viewCentre.x - 350;
-		}
-
-		emptyFrames[i].setPosition(startX, startY);
-		startX += 100;
-	}
-	startX = viewCentre.x - 350;
-	startY = 600;
-
-	// Position icons for items that actually exist
-	for (int i = 0; i < storedItems.size(); i++) {
-		if (!storedItems[i].isNull()) {
-			storedItems[i].getIcon().setPosition(emptyFrames[i].getPosition());
-		}
-	}
-}
-
 string Engine::difficultyToString(Difficulty difficulty)
 {
 	switch (difficulty)
@@ -829,70 +787,7 @@ Engine::Difficulty Engine::stringToDifficulty(string str)
 	else return Difficulty::Medium;
 }
 
-void Engine::moveDraggedIcon(Sprite& draggedIcon, Vector2f mousePos)
-{
-	float x = static_cast<float>(mousePos.x);
-	float y = static_cast<float>(mousePos.y);
-	draggedIcon.setPosition(x - 30, y - 30);
-}
 
-bool Engine::addItemToInventory(String itemType)
-{
-	//Check if item is a regular item
-	Item item(itemType, Vector2f(0, 0));
-	if (!item.isNull())
-	{
-		for (int i = 0; i < storedItems.size(); i++)
-		{
-
-			if (storedItems[i].isNull())
-			{
-				storedItems[i] = Item(itemType, Vector2f(0, 0));
-				initializeInventory();
-				return true;
-			}
-		}
-		// No space in inventory
-		return false;
-	}
-	
-	// Check if item is an equipment
-	Equipment equipment(itemType, Vector2f(0, 0));
-	if (!equipment.isNull())
-	{
-		for (int i = 0; i < storedItems.size(); i++)
-		{
-			if (storedItems[i].isNull())
-			{
-				storedItems[i] = Equipment(itemType, Vector2f(0,0));
-				initializeInventory();
-				return true;
-			}
-		}
-		// No space in inventory
-		return false;
-	}
-	
-	// Check if Item is a weapon
-	Weapon weapon(itemType, Vector2f(0, 0));
-	if (!weapon.isNull())
-	{
-		for (int i = 0; i < storedItems.size(); i++)
-		{
-			if (storedItems[i].isNull())
-			{
-				storedItems[i] = Weapon(itemType, Vector2f(0,0));
-				initializeInventory();
-				return true;
-			}
-		}
-		// No space in inventory
-		return false;
-	}
-
-	// Item does not exist
-	return false;
-}
 
 void Engine::populateChunkVector()
 {
@@ -914,6 +809,13 @@ Chunk* Engine::getCurrentChunk(float x, float y) {
 void Engine::run()
 {
 	initializeInventory();
+	// Posistion shop items
+	for (int i = 0; i < shopItems.size(); i++) {
+		if (!shopItems[i].isNull()) {
+			shopItems[i].getIcon().setPosition(emptyFrames[i].getPosition());
+		}
+	}
+
 	// The main game loop
 	while (window.isOpen())
 	{
@@ -1311,11 +1213,27 @@ void Engine::run()
 			if (event.type == Event::KeyPressed)
 			{
 				/* below are debug functions, comment them out in full build / when needed */
+				
+				// Debug shop toggle
+				// Shop is still very much WIP
+				if (event.key.code == Keyboard::O && state == State::PLAYING)
+				{
+					if (drawShop) {
+						drawShop = false;
+						cout << "Closing shop" << endl;
+					}
+					else {
+						drawShop = true;
+						cout << "Opening shop" << endl;
+					}
+				}
+
 				if (event.key.code == Keyboard::Num1 && state == State::PLAYING)
 				{
 					// Increase health
 					player.upgradeHealth();
 					player.switchSpell(1);
+			
 				}
 
 				if (event.key.code == Keyboard::Num2 && state == State::PLAYING)
@@ -1347,16 +1265,10 @@ void Engine::run()
 					player.switchSpell(4);
 				}
 
+
 				if (event.key.code == Keyboard::Num5 && state == State::PLAYING)
 				{
-					//Selling item example, the storedItems index will need to be set somehow but the rest can be copy and pasted 
-					// I can make a function for it if needed	
-					if (storedItems[0].isNull()) cout << "null item attempted to be sold" << endl;
-
-					player.addGold(player.getGold() + storedItems[0].getValue());
-					cout << "Sold " << " for " << storedItems[0].getValue() << " gold." << endl;
-					cout << "You now have " << player.getGold() << " gold." << endl;
-					storedItems[0] = Item("null", Vector2f(0, 0));
+					player.addGold(100);
 				}
 
 				if (event.key.code == Keyboard::Num6 && state == State::PLAYING)
@@ -1367,6 +1279,7 @@ void Engine::run()
 						levelUp = true;
 					}
 				}
+
 
 				if (event.key.code == Keyboard::Num8 && state == State::PLAYING)
 				{

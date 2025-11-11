@@ -183,16 +183,33 @@ void Engine::draw()
 			spriteCursor.setTexture(textureCursorOpen);
 		}
 
-		/*
-		if (player.getPosition().x + 4 < something && player.getPosition().x - 4 > something && player.getPosition().y + 4 < something && player.getPosition().y - 4 > something) {
-			window.draw(eKey);
-		}
-		*/
-
 		// Switch to the HUD view
 		window.setView(hudView);
 
-		if (drawInventory) 
+		
+		if (drawShop)
+		{
+			window.draw(filter);
+			window.draw(darkInventoryBackground);
+			window.draw(inventoryBackground);
+
+			// Draw 8 empty frames for item 
+			for (int i = 0; i < 8; i++) {
+				window.draw(emptyFrames[i]);
+			}
+
+
+			// Draw shop item icons
+			for (auto& icons : shopItems) {
+				window.draw(icons.getIcon());
+			}
+
+			window.setView(mainView);
+			window.draw(spriteCursor);
+			window.setView(hudView);
+			displayShopTooltips();
+		}
+		else if (drawInventory) 
 		{
 			window.draw(filter);
 			window.draw(darkInventoryBackground);
@@ -237,266 +254,13 @@ void Engine::draw()
 			window.draw(equippedShoeArmourIcon);
 			window.draw(equippedNeckArmourIcon);
 			window.draw(clickedItem.getIcon());
-		
+			
 			window.setView(mainView);
 			window.draw(spriteCursor);
 			window.setView(hudView);
 
-			for (int i = 0; i < storedItems.size(); i++)
-			{
-				if (storedItems[i].getIcon().getGlobalBounds().contains(worldPos) && !Mouse::isButtonPressed(Mouse::Left) && !draggingItem)
-				{
-					Item::ItemType type = storedItems[i].getType();
-
-					string itemName = storedItems[i].getName();
-
-					// Remove all underscores from the name for display purposes
-				
-					window.setView(hudView);
-					itemTooltipBackground.setPosition(storedItems[i].getIcon().getPosition().x + 35, storedItems[i].getIcon().getPosition().y - 40);
-					window.draw(itemTooltipBackground);
-
-					valueTooltipText.setString("Value: " + to_string(storedItems[i].getValue()) + " Gold");
-					valueTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 55);
-					window.draw(valueTooltipText);
-
-					itemTooltipName.setString(cleanItemName(itemName));
-
-					if (type == Item::ItemType::MeleeWeapon || type == Item::ItemType::MagicWeapon) {
-						
-						statTooltipText.setString("Damage: " + to_string(storedItems[i].getDamage()));
-
-						if (itemTooltipName.getLocalBounds().width > statTooltipText.getLocalBounds().width && itemTooltipName.getLocalBounds().width > valueTooltipText.getLocalBounds().width)
-						{
-							itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
-						}
-						else if (statTooltipText.getLocalBounds().width > itemTooltipName.getLocalBounds().width && statTooltipText.getLocalBounds().width > valueTooltipText.getLocalBounds().width)
-						{
-							itemTooltipBackground.setSize(Vector2f(statTooltipText.getLocalBounds().width + 55, 100));
-						}
-						else
-						{
-							itemTooltipBackground.setSize(Vector2f(valueTooltipText.getLocalBounds().width + 55, 100));
-						}
-						
-						itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 15);
-						statTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 37);
-
-						window.draw(itemTooltipName);
-						window.draw(statTooltipText);
-					}
-					else if (type == Item::ItemType::HeadArmour || type == Item::ItemType::ChestArmour || type == Item::ItemType::TrouserArmour || 
-						type == Item::ItemType::ShoeArmour || type == Item::ItemType::NeckArmour) {
-
-						statTooltipText.setString("Armour: " + to_string(storedItems[i].getArmour()));
-
-						if (itemTooltipName.getLocalBounds().width > statTooltipText.getLocalBounds().width && itemTooltipName.getLocalBounds().width > valueTooltipText.getLocalBounds().width)
-						{
-							itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
-						}
-						else if (statTooltipText.getLocalBounds().width > itemTooltipName.getLocalBounds().width && statTooltipText.getLocalBounds().width > valueTooltipText.getLocalBounds().width)
-						{
-							itemTooltipBackground.setSize(Vector2f(statTooltipText.getLocalBounds().width + 55, 100));
-						}
-						else
-						{
-							itemTooltipBackground.setSize(Vector2f(valueTooltipText.getLocalBounds().width + 55, 100));
-						}
-
-						itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 15);
-						statTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 37);
-
-						window.draw(itemTooltipName);
-						window.draw(statTooltipText);
-					}
-					else if (type == Item::ItemType::Consumable) {
-						
-						if (itemTooltipName.getLocalBounds().width > statTooltipText.getLocalBounds().width && itemTooltipName.getLocalBounds().width > valueTooltipText.getLocalBounds().width)
-						{
-							itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
-						}
-						else if (statTooltipText.getLocalBounds().width > itemTooltipName.getLocalBounds().width && statTooltipText.getLocalBounds().width > valueTooltipText.getLocalBounds().width)
-						{
-							itemTooltipBackground.setSize(Vector2f(statTooltipText.getLocalBounds().width + 55, 100));
-						}
-						else
-						{
-							itemTooltipBackground.setSize(Vector2f(valueTooltipText.getLocalBounds().width + 55, 100));
-						}
-
-						itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 15);
-				
-						window.draw(itemTooltipName);
-
-					}
-				}
-			}
-			if (weaponFrame.getGlobalBounds().contains(worldPos) && !Mouse::isButtonPressed(Mouse::Left) && !draggingItem && 
-				!player.getEquippedSword()->isNull())
-			{
-				window.setView(hudView);
-
-				string itemName = player.getEquippedSword()->getName();
-
-				itemTooltipName.setString(cleanItemName(itemName));
-
-				itemTooltipBackground.setPosition(equippedSwordIcon.getPosition().x + 35, equippedSwordIcon.getPosition().y - 40);
-				itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
-				
-				valueTooltipText.setString("Value: " + to_string(player.getEquippedSword()->getValue()) + " Gold");
-				valueTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 55);
-				
-				itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 15);
-				
-				statTooltipText.setString("Damage: " + to_string(player.getEquippedSword()->getDamage()));
-				statTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 37);
-
-				window.draw(itemTooltipBackground);
-				window.draw(valueTooltipText);
-				window.draw(itemTooltipName);
-				window.draw(statTooltipText);
-			}
-			if (wandFrame.getGlobalBounds().contains(worldPos) && !Mouse::isButtonPressed(Mouse::Left) && !draggingItem
-				&& !player.getEquippedWand()->isNull())
-			{
-				window.setView(hudView);
-				string itemName = player.getEquippedWand()->getName();
-
-				itemTooltipName.setString(cleanItemName(itemName));
-
-				itemTooltipBackground.setPosition(equippedWandIcon.getPosition().x + 35, equippedWandIcon.getPosition().y - 40);
-				itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
-				
-				valueTooltipText.setString("Value: " + to_string(player.getEquippedWand()->getValue()) + " Gold");
-				valueTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 55);
-				
-				itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 15);
-				
-				statTooltipText.setString("Damage: " + to_string(player.getEquippedWand()->getDamage()));
-				statTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 37);
-				
-				window.draw(itemTooltipBackground);
-				window.draw(valueTooltipText);
-				window.draw(itemTooltipName);
-				window.draw(statTooltipText);
-			}
-			if (headArmourFrame.getGlobalBounds().contains(worldPos) && !Mouse::isButtonPressed(Mouse::Left) && !draggingItem
-				&& !player.getEquippedHeadArmour()->isNull())
-			{
-				window.setView(hudView);
-
-				string itemName = player.getEquippedHeadArmour()->getName();
-
-				itemTooltipName.setString(cleanItemName(itemName));
-
-				itemTooltipBackground.setPosition(equippedHeadArmourIcon.getPosition().x + 35, equippedHeadArmourIcon.getPosition().y - 40);
-				itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
-				
-				valueTooltipText.setString("Value: " + to_string(player.getEquippedHeadArmour()->getValue()) + " Gold");
-				valueTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 55);
-				
-				itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 15);
-				
-				statTooltipText.setString("Armour: " + to_string(player.getEquippedHeadArmour()->getArmour()));
-				statTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 37);
-				
-				window.draw(itemTooltipBackground);
-				window.draw(valueTooltipText);
-				window.draw(itemTooltipName);
-				window.draw(statTooltipText);
-			}
-			if (chestArmourFrame.getGlobalBounds().contains(worldPos) && !Mouse::isButtonPressed(Mouse::Left) && !draggingItem
-				&& !player.getEquippedChestArmour()->isNull())
-			{
-				window.setView(hudView);
-				string itemName = player.getEquippedChestArmour()->getName();
-
-				itemTooltipName.setString(cleanItemName(itemName));
-				itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
-				itemTooltipBackground.setPosition(equippedChestArmourIcon.getPosition().x + 35, equippedChestArmourIcon.getPosition().y - 40);
-				window.draw(itemTooltipBackground);
-				valueTooltipText.setString("Value: " + to_string(player.getEquippedChestArmour()->getValue()) + " Gold");
-				valueTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 55);
-				
-				itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 15);
-				
-				statTooltipText.setString("Armour: " + to_string(player.getEquippedChestArmour()->getArmour()));
-				statTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 37);
-
-				window.draw(itemTooltipBackground);
-				window.draw(valueTooltipText);
-				window.draw(itemTooltipName);
-				window.draw(statTooltipText);
-			}
-			if (trousersArmourFrame.getGlobalBounds().contains(worldPos) && !Mouse::isButtonPressed(Mouse::Left) && !draggingItem
-				&& !player.getEquippedTrouserArmour()->isNull())
-			{
-				window.setView(hudView);
-				string itemName = player.getEquippedTrouserArmour()->getName();
-
-				itemTooltipName.setString(cleanItemName(itemName));
-				itemTooltipBackground.setPosition(equippedTrousersArmourIcon.getPosition().x + 35, equippedTrousersArmourIcon.getPosition().y - 40);
-				itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
-				
-				valueTooltipText.setString("Value: " + to_string(player.getEquippedTrouserArmour()->getValue()) + " Gold");
-				valueTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 55);
-				
-				itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 15);
-				
-				statTooltipText.setString("Armour: " + to_string(player.getEquippedTrouserArmour()->getArmour()));
-				statTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 37);
-
-				window.draw(itemTooltipBackground);
-				window.draw(valueTooltipText);
-				window.draw(itemTooltipName);
-				window.draw(statTooltipText);
-			}
-			if (bootsArmourFrame.getGlobalBounds().contains(worldPos) && !Mouse::isButtonPressed(Mouse::Left) && !draggingItem 
-				&& !player.getEquippedShoeArmour()->isNull())
-			{
-				window.setView(hudView);
-				string itemName = player.getEquippedShoeArmour()->getName();
-
-				itemTooltipName.setString(cleanItemName(itemName));
-				itemTooltipBackground.setPosition(equippedShoeArmourIcon.getPosition().x + 35, equippedShoeArmourIcon.getPosition().y - 40);
-				itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
-				
-				valueTooltipText.setString("Value: " + to_string(player.getEquippedShoeArmour()->getValue()) + " Gold");
-				valueTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 55);
-				
-				itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 15);
-				
-				statTooltipText.setString("Armour: " + to_string(player.getEquippedShoeArmour()->getArmour()));
-				statTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 37);
-				
-				window.draw(itemTooltipBackground);
-				window.draw(valueTooltipText);
-				window.draw(itemTooltipName);
-				window.draw(statTooltipText);
-			}
-			if (neckFrame.getGlobalBounds().contains(worldPos) && !Mouse::isButtonPressed(Mouse::Left) && !draggingItem
-				&& !player.getEquippedNeckArmour()->isNull())
-			{
-				window.setView(hudView);
-				string itemName = player.getEquippedNeckArmour()->getName();
-
-				itemTooltipName.setString(cleanItemName(itemName));
-				itemTooltipBackground.setPosition(equippedNeckArmourIcon.getPosition().x + 35, equippedNeckArmourIcon.getPosition().y - 40);
-				itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
-				
-				valueTooltipText.setString("Value: " + to_string(player.getEquippedNeckArmour()->getValue()) + " Gold");
-				valueTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 55);
-				
-				itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 15);
-				
-				statTooltipText.setString("Armour: " + to_string(player.getEquippedNeckArmour()->getArmour()));
-				statTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 37);
-				
-				window.draw(itemTooltipBackground);
-				window.draw(valueTooltipText);
-				window.draw(itemTooltipName);
-				window.draw(statTooltipText);
-			}
+			displayInventoryTooltips();
+			
 		}
 		else {
 			// Draw all the HUD elements
@@ -541,6 +305,8 @@ void Engine::draw()
 	{
 		window.draw(levelUpText);
 	}
+
+
 
 	if (state == State::MAIN_MENU)
 	{
@@ -604,4 +370,360 @@ string Engine::cleanItemName(string itemName)
 		}
 	}
 	return itemName;
+}
+
+void Engine::displayInventoryTooltips()
+{
+	// Map mouse pixel coordinates to HUD view coordinates so bounds checks match HUD elements
+	Vector2f hudPos = window.mapPixelToCoords(Mouse::getPosition(window), hudView);
+
+	for (int i = 0; i < storedItems.size(); i++)
+	{
+		if (storedItems[i].getIcon().getGlobalBounds().contains(hudPos) && !Mouse::isButtonPressed(Mouse::Left) && !draggingItem)
+		{
+			Item::ItemType type = storedItems[i].getType();
+
+			string itemName = storedItems[i].getName();
+
+			// Remove all underscores from the name for display purposes
+
+			window.setView(hudView);
+			itemTooltipBackground.setPosition(storedItems[i].getIcon().getPosition().x + 35, storedItems[i].getIcon().getPosition().y - 40);
+			window.draw(itemTooltipBackground);
+
+			valueTooltipText.setString("Value: " + to_string(storedItems[i].getValue()) + " Gold");
+			valueTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 55);
+			window.draw(valueTooltipText);
+
+			itemTooltipName.setString(cleanItemName(itemName));
+
+			if (type == Item::ItemType::MeleeWeapon || type == Item::ItemType::MagicWeapon) {
+
+				statTooltipText.setString("Damage: " + to_string(storedItems[i].getDamage()));
+
+				if (itemTooltipName.getLocalBounds().width > statTooltipText.getLocalBounds().width && itemTooltipName.getLocalBounds().width > valueTooltipText.getLocalBounds().width)
+				{
+					itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
+				}
+				else if (statTooltipText.getLocalBounds().width > itemTooltipName.getLocalBounds().width && statTooltipText.getLocalBounds().width > valueTooltipText.getLocalBounds().width)
+				{
+					itemTooltipBackground.setSize(Vector2f(statTooltipText.getLocalBounds().width + 55, 100));
+				}
+				else
+				{
+					itemTooltipBackground.setSize(Vector2f(valueTooltipText.getLocalBounds().width + 55, 100));
+				}
+
+				itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 15);
+				statTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 37);
+
+				window.draw(itemTooltipName);
+				window.draw(statTooltipText);
+			}
+			else if (type == Item::ItemType::HeadArmour || type == Item::ItemType::ChestArmour || type == Item::ItemType::TrouserArmour ||
+				type == Item::ItemType::ShoeArmour || type == Item::ItemType::NeckArmour) {
+
+				statTooltipText.setString("Armour: " + to_string(storedItems[i].getArmour()));
+
+				if (itemTooltipName.getLocalBounds().width > statTooltipText.getLocalBounds().width && itemTooltipName.getLocalBounds().width > valueTooltipText.getLocalBounds().width)
+				{
+					itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
+				}
+				else if (statTooltipText.getLocalBounds().width > itemTooltipName.getLocalBounds().width && statTooltipText.getLocalBounds().width > valueTooltipText.getLocalBounds().width)
+				{
+					itemTooltipBackground.setSize(Vector2f(statTooltipText.getLocalBounds().width + 55, 100));
+				}
+				else
+				{
+					itemTooltipBackground.setSize(Vector2f(valueTooltipText.getLocalBounds().width + 55, 100));
+				}
+
+				itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 15);
+				statTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 37);
+
+				window.draw(itemTooltipName);
+				window.draw(statTooltipText);
+			}
+			else if (type == Item::ItemType::Consumable) {
+
+				if (itemTooltipName.getLocalBounds().width > statTooltipText.getLocalBounds().width && itemTooltipName.getLocalBounds().width > valueTooltipText.getLocalBounds().width)
+				{
+					itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
+				}
+				else if (statTooltipText.getLocalBounds().width > itemTooltipName.getLocalBounds().width && statTooltipText.getLocalBounds().width > valueTooltipText.getLocalBounds().width)
+				{
+					itemTooltipBackground.setSize(Vector2f(statTooltipText.getLocalBounds().width + 55, 100));
+				}
+				else
+				{
+					itemTooltipBackground.setSize(Vector2f(valueTooltipText.getLocalBounds().width + 55, 100));
+				}
+
+				itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 15);
+
+				window.draw(itemTooltipName);
+
+			}
+		}
+	}
+	if (weaponFrame.getGlobalBounds().contains(hudPos) && !Mouse::isButtonPressed(Mouse::Left) && !draggingItem &&
+		!player.getEquippedSword()->isNull())
+	{
+		window.setView(hudView);
+
+		string itemName = player.getEquippedSword()->getName();
+
+		itemTooltipName.setString(cleanItemName(itemName));
+
+		itemTooltipBackground.setPosition(equippedSwordIcon.getPosition().x + 35, equippedSwordIcon.getPosition().y - 40);
+		itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
+
+		valueTooltipText.setString("Value: " + to_string(player.getEquippedSword()->getValue()) + " Gold");
+		valueTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 55);
+
+		itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 15);
+
+		statTooltipText.setString("Damage: " + to_string(player.getEquippedSword()->getDamage()));
+		statTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 37);
+
+		window.draw(itemTooltipBackground);
+		window.draw(valueTooltipText);
+		window.draw(itemTooltipName);
+		window.draw(statTooltipText);
+	}
+	if (wandFrame.getGlobalBounds().contains(hudPos) && !Mouse::isButtonPressed(Mouse::Left) && !draggingItem
+		&& !player.getEquippedWand()->isNull())
+	{
+		window.setView(hudView);
+		string itemName = player.getEquippedWand()->getName();
+
+		itemTooltipName.setString(cleanItemName(itemName));
+
+		itemTooltipBackground.setPosition(equippedWandIcon.getPosition().x + 35, equippedWandIcon.getPosition().y - 40);
+		itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
+
+		valueTooltipText.setString("Value: " + to_string(player.getEquippedWand()->getValue()) + " Gold");
+		valueTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 55);
+
+		itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 15);
+
+		statTooltipText.setString("Damage: " + to_string(player.getEquippedWand()->getDamage()));
+		statTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 37);
+
+		window.draw(itemTooltipBackground);
+		window.draw(valueTooltipText);
+		window.draw(itemTooltipName);
+		window.draw(statTooltipText);
+	}
+	if (headArmourFrame.getGlobalBounds().contains(hudPos) && !Mouse::isButtonPressed(Mouse::Left) && !draggingItem
+		&& !player.getEquippedHeadArmour()->isNull())
+	{
+		window.setView(hudView);
+
+		string itemName = player.getEquippedHeadArmour()->getName();
+
+		itemTooltipName.setString(cleanItemName(itemName));
+
+		itemTooltipBackground.setPosition(equippedHeadArmourIcon.getPosition().x + 35, equippedHeadArmourIcon.getPosition().y - 40);
+		itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
+
+		valueTooltipText.setString("Value: " + to_string(player.getEquippedHeadArmour()->getValue()) + " Gold");
+		valueTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 55);
+
+		itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 15);
+
+		statTooltipText.setString("Armour: " + to_string(player.getEquippedHeadArmour()->getArmour()));
+		statTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 37);
+
+		window.draw(itemTooltipBackground);
+		window.draw(valueTooltipText);
+		window.draw(itemTooltipName);
+		window.draw(statTooltipText);
+	}
+	if (chestArmourFrame.getGlobalBounds().contains(hudPos) && !Mouse::isButtonPressed(Mouse::Left) && !draggingItem
+		&& !player.getEquippedChestArmour()->isNull())
+	{
+		window.setView(hudView);
+		string itemName = player.getEquippedChestArmour()->getName();
+
+		itemTooltipName.setString(cleanItemName(itemName));
+		itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
+		itemTooltipBackground.setPosition(equippedChestArmourIcon.getPosition().x + 35, equippedChestArmourIcon.getPosition().y - 40);
+		window.draw(itemTooltipBackground);
+		valueTooltipText.setString("Value: " + to_string(player.getEquippedChestArmour()->getValue()) + " Gold");
+		valueTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 55);
+
+		itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 15);
+
+		statTooltipText.setString("Armour: " + to_string(player.getEquippedChestArmour()->getArmour()));
+		statTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 37);
+
+		window.draw(itemTooltipBackground);
+		window.draw(valueTooltipText);
+		window.draw(itemTooltipName);
+		window.draw(statTooltipText);
+	}
+	if (trousersArmourFrame.getGlobalBounds().contains(hudPos) && !Mouse::isButtonPressed(Mouse::Left) && !draggingItem
+		&& !player.getEquippedTrouserArmour()->isNull())
+	{
+		window.setView(hudView);
+		string itemName = player.getEquippedTrouserArmour()->getName();
+
+		itemTooltipName.setString(cleanItemName(itemName));
+		itemTooltipBackground.setPosition(equippedTrousersArmourIcon.getPosition().x + 35, equippedTrousersArmourIcon.getPosition().y - 40);
+		itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
+
+		valueTooltipText.setString("Value: " + to_string(player.getEquippedTrouserArmour()->getValue()) + " Gold");
+		valueTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 55);
+
+		itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 15);
+
+		statTooltipText.setString("Armour: " + to_string(player.getEquippedTrouserArmour()->getArmour()));
+		statTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 37);
+
+		window.draw(itemTooltipBackground);
+		window.draw(valueTooltipText);
+		window.draw(itemTooltipName);
+		window.draw(statTooltipText);
+	}
+	if (bootsArmourFrame.getGlobalBounds().contains(hudPos) && !Mouse::isButtonPressed(Mouse::Left) && !draggingItem
+		&& !player.getEquippedShoeArmour()->isNull())
+	{
+		window.setView(hudView);
+		string itemName = player.getEquippedShoeArmour()->getName();
+
+		itemTooltipName.setString(cleanItemName(itemName));
+		itemTooltipBackground.setPosition(equippedShoeArmourIcon.getPosition().x + 35, equippedShoeArmourIcon.getPosition().y - 40);
+		itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
+
+		valueTooltipText.setString("Value: " + to_string(player.getEquippedShoeArmour()->getValue()) + " Gold");
+		valueTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 55);
+
+		itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 15);
+
+		statTooltipText.setString("Armour: " + to_string(player.getEquippedShoeArmour()->getArmour()));
+		statTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 37);
+
+		window.draw(itemTooltipBackground);
+		window.draw(valueTooltipText);
+		window.draw(itemTooltipName);
+		window.draw(statTooltipText);
+	}
+	if (neckFrame.getGlobalBounds().contains(hudPos) && !Mouse::isButtonPressed(Mouse::Left) && !draggingItem
+		&& !player.getEquippedNeckArmour()->isNull())
+	{
+		window.setView(hudView);
+		string itemName = player.getEquippedNeckArmour()->getName();
+
+		itemTooltipName.setString(cleanItemName(itemName));
+		itemTooltipBackground.setPosition(equippedNeckArmourIcon.getPosition().x + 35, equippedNeckArmourIcon.getPosition().y - 40);
+		itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
+
+		valueTooltipText.setString("Value: " + to_string(player.getEquippedNeckArmour()->getValue()) + " Gold");
+		valueTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 55);
+
+		itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 15);
+
+		statTooltipText.setString("Armour: " + to_string(player.getEquippedNeckArmour()->getArmour()));
+		statTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 37);
+
+		window.draw(itemTooltipBackground);
+		window.draw(valueTooltipText);
+		window.draw(itemTooltipName);
+		window.draw(statTooltipText);
+	}
+}
+
+void Engine::displayShopTooltips()
+{
+
+	for (int i = 0; i < shopItems.size(); i++)
+	{
+		if (shopItems[i].getIcon().getGlobalBounds().contains(worldPos) && !Mouse::isButtonPressed(Mouse::Left) && !draggingItem)
+		{
+			Item::ItemType type = shopItems[i].getType();
+
+			string itemName = shopItems[i].getName();
+
+			// Remove all underscores from the name for display purposes
+
+			window.setView(hudView);
+			itemTooltipBackground.setPosition(shopItems[i].getIcon().getPosition().x + 35, shopItems[i].getIcon().getPosition().y - 40);
+			window.draw(itemTooltipBackground);
+
+			valueTooltipText.setString("Value: " + to_string(shopItems[i].getValue()) + " Gold");
+			valueTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 55);
+			window.draw(valueTooltipText);
+
+			itemTooltipName.setString(cleanItemName(itemName));
+
+			if (type == Item::ItemType::MeleeWeapon || type == Item::ItemType::MagicWeapon) {
+
+				statTooltipText.setString("Damage: " + to_string(shopItems[i].getDamage()));
+
+				if (itemTooltipName.getLocalBounds().width > statTooltipText.getLocalBounds().width && itemTooltipName.getLocalBounds().width > valueTooltipText.getLocalBounds().width)
+				{
+					itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
+				}
+				else if (statTooltipText.getLocalBounds().width > itemTooltipName.getLocalBounds().width && statTooltipText.getLocalBounds().width > valueTooltipText.getLocalBounds().width)
+				{
+					itemTooltipBackground.setSize(Vector2f(statTooltipText.getLocalBounds().width + 55, 100));
+				}
+				else
+				{
+					itemTooltipBackground.setSize(Vector2f(valueTooltipText.getLocalBounds().width + 55, 100));
+				}
+
+				itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 15);
+				statTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 37);
+
+				window.draw(itemTooltipName);
+				window.draw(statTooltipText);
+			}
+			else if (type == Item::ItemType::HeadArmour || type == Item::ItemType::ChestArmour || type == Item::ItemType::TrouserArmour ||
+				type == Item::ItemType::ShoeArmour || type == Item::ItemType::NeckArmour) {
+
+				statTooltipText.setString("Armour: " + to_string(shopItems[i].getArmour()));
+
+				if (itemTooltipName.getLocalBounds().width > statTooltipText.getLocalBounds().width && itemTooltipName.getLocalBounds().width > valueTooltipText.getLocalBounds().width)
+				{
+					itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
+				}
+				else if (statTooltipText.getLocalBounds().width > itemTooltipName.getLocalBounds().width && statTooltipText.getLocalBounds().width > valueTooltipText.getLocalBounds().width)
+				{
+					itemTooltipBackground.setSize(Vector2f(statTooltipText.getLocalBounds().width + 55, 100));
+				}
+				else
+				{
+					itemTooltipBackground.setSize(Vector2f(valueTooltipText.getLocalBounds().width + 55, 100));
+				}
+
+				itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 15);
+				statTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 37);
+
+				window.draw(itemTooltipName);
+				window.draw(statTooltipText);
+			}
+			else if (type == Item::ItemType::Consumable) {
+
+				if (itemTooltipName.getLocalBounds().width > statTooltipText.getLocalBounds().width && itemTooltipName.getLocalBounds().width > valueTooltipText.getLocalBounds().width)
+				{
+					itemTooltipBackground.setSize(Vector2f(itemTooltipName.getLocalBounds().width + 55, 100));
+				}
+				else if (statTooltipText.getLocalBounds().width > itemTooltipName.getLocalBounds().width && statTooltipText.getLocalBounds().width > valueTooltipText.getLocalBounds().width)
+				{
+					itemTooltipBackground.setSize(Vector2f(statTooltipText.getLocalBounds().width + 55, 100));
+				}
+				else
+				{
+					itemTooltipBackground.setSize(Vector2f(valueTooltipText.getLocalBounds().width + 55, 100));
+				}
+
+				itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 15);
+
+				window.draw(itemTooltipName);
+
+			}
+		}
+	}
 }

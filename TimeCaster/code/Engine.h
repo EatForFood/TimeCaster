@@ -48,10 +48,14 @@ public:
 	void spawnEnemies();
 
 	void setDifficulty();
+	
+	int buyItem(int itemIndex);
 
 	bool sellItem(int itemIndex);
 
+	void displayInventoryTooltips();
 
+	void displayShopTooltips();
 
 protected: 
 	string cleanItemName(string itemName);
@@ -299,6 +303,7 @@ private:
 	int draggedIndex = -1;
 	int maxItems = 16; // max amount of item slots
 	vector<Item> storedItems;
+	vector<Item> shopItems;
 	vector<RectangleShape> emptyFrames;
 	vector<Item> allItems;     // all possible item
 	vector<Weapon>& m_EquippedWeapons;
@@ -356,6 +361,8 @@ private:
 
 	// Boolean for whether to draw the inventory or not
 	bool drawInventory = false;
+
+	bool drawShop = false;
 
 	int x;
 	int y;

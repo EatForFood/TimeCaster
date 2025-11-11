@@ -41,6 +41,7 @@
     <ClInclude Include="code\World.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="code\Inventory.cpp" />
     <ClCompile Include="code\Pathfinder.cpp" />
     <ClCompile Include="code\Spell.cpp" />
     <ClCompile Include="code\Cell.cpp" />
