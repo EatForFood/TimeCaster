@@ -183,16 +183,30 @@ void Engine::draw()
 			spriteCursor.setTexture(textureCursorOpen);
 		}
 
-		/*
-		if (player.getPosition().x + 4 < something && player.getPosition().x - 4 > something && player.getPosition().y + 4 < something && player.getPosition().y - 4 > something) {
-			window.draw(eKey);
-		}
-		*/
-
 		// Switch to the HUD view
 		window.setView(hudView);
 
-		if (drawInventory) 
+		// Simple shop overlay: reuse inventory visuals but stripped down
+		if (drawShop)
+		{
+			window.draw(darkInventoryBackground);
+			window.draw(inventoryBackground);
+
+			// Draw empty frames
+			for (auto& frame : emptyFrames) {
+				window.draw(frame);
+			}
+
+			// Draw stored itemm icons
+			for (auto& icons : storedItems) {
+				window.draw(icons.getIcon());
+			}
+
+			window.setView(mainView);
+			window.draw(spriteCursor);
+			window.setView(hudView);
+		}
+		else if (drawInventory) 
 		{
 			window.draw(filter);
 			window.draw(darkInventoryBackground);
@@ -237,7 +251,7 @@ void Engine::draw()
 			window.draw(equippedShoeArmourIcon);
 			window.draw(equippedNeckArmourIcon);
 			window.draw(clickedItem.getIcon());
-		
+			
 			window.setView(mainView);
 			window.draw(spriteCursor);
 			window.setView(hudView);
@@ -325,7 +339,7 @@ void Engine::draw()
 						}
 
 						itemTooltipName.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 15);
-				
+					
 						window.draw(itemTooltipName);
 
 					}
@@ -541,6 +555,8 @@ void Engine::draw()
 	{
 		window.draw(levelUpText);
 	}
+
+
 
 	if (state == State::MAIN_MENU)
 	{
