@@ -133,6 +133,8 @@ public:
 	Equipment* getEquippedNeckArmour();
 
 	vector<Item>& getStoredItems();
+
+	bool addItemToInventory(String itemType);
 		
 	void setInCell();
 	bool getInCell();

@@ -183,6 +183,7 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	m_EquippedArmour.resize(5, Equipment("null", Vector2f(0, 0)));
 	
 	// Debug inventory initalization
+	/*
 	m_StoredItems[0] = Weapon("Wooden_Wand", Vector2f(300, 650));
 	m_StoredItems[1] = Weapon("Pirate's_Scimitar", Vector2f(450, 650));
 	m_StoredItems[2] = Weapon("Iron_Sword", Vector2f(600, 650));
@@ -198,7 +199,7 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	m_StoredItems[12] = Weapon("Armoured_Boots", Vector2f(0, 0));
 	m_StoredItems[14] = Item("Mana_Potion", Vector2f(0, 0));
 	m_StoredItems[15] = Item("Stamina_Potion", Vector2f(0, 0));
-
+	*/
 	/***********
 	Main Menu UI
 	************/
@@ -912,6 +913,7 @@ void Engine::run()
 					player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume(), vSync);
 					player.loadSaveFile();
 
+
 					equippedSwordIcon.setTextureRect(player.getEquippedSword()->getTextureRect());
 					equippedWandIcon.setTextureRect(player.getEquippedWand()->getTextureRect());
 					equippedHeadArmourIcon.setTextureRect(player.getEquippedHeadArmour()->getTextureRect());
@@ -950,12 +952,16 @@ void Engine::run()
 
 					tutorialStage = 0;
 
-					addItemToInventory("Health_Potion");
+			//		addItemToInventory("Health_Potion");
+					initializeInventory();
+
 				}
 
 				// Player hit the load game button in the main menu
 				else if (loadGameButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU && event.mouseButton.button == Mouse::Left)
 				{
+		
+					
 					state = State::PLAYING;
 
 					skipAnimation = false;
@@ -970,6 +976,7 @@ void Engine::run()
 					// Loads player stats from text file
 					if (player.loadSaveFile() == true) 
 					{
+
 						// Player loaded successfully
 						world.loadWorld();
 
@@ -1013,12 +1020,14 @@ void Engine::run()
 						populateChunkVector();
 						setDifficulty();
 						spawnEnemies();
+						initializeInventory();
 					}
 					else {
 						// No save file so create a new one with default values and load it	
 						player.createNewSave();
 						player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume(), vSync);
 						player.loadSaveFile();
+
 
 						equippedSwordIcon.setTextureRect(player.getEquippedSword()->getTextureRect());
 						equippedWandIcon.setTextureRect(player.getEquippedWand()->getTextureRect());
@@ -1062,6 +1071,7 @@ void Engine::run()
 						populateChunkVector();
 						setDifficulty();
 						spawnEnemies();
+						initializeInventory();
 					}
 				}
 
@@ -1250,9 +1260,9 @@ void Engine::run()
 
 				if (event.key.code == Keyboard::Num4 && state == State::PLAYING)
 				{
-					if (addItemToInventory("Iron_Sword"))
+					if (player.addItemToInventory("Iron_Sword"))
 					{
-						
+						initializeInventory();
 						cout << "Item added to inventory" << endl;
 				
 					}

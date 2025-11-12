@@ -33,7 +33,6 @@ public:
 
 	void moveDraggedIcon(Sprite& draggedIcon, Vector2f mousePos);
 
-	bool addItemToInventory(String itemType);
 
 	void draw();
 
