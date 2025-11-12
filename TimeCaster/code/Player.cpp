@@ -26,6 +26,8 @@ Player::Player()
 	m_Kills = START_KILLS;
 	m_Level = START_LEVEL;
 
+
+
 	// Associate a texture with the body sprite
 	m_Sprite = Sprite(TextureHolder::GetTexture("graphics/player/playerWalk.png")); 
 	m_Sprite.setOrigin(32, 32);

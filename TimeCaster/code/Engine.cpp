@@ -1467,6 +1467,7 @@ void Engine::run()
 					{
 						sound.playHealSound();
 						player.healHealth(0.25f);
+						particles[100].play(player.getCenter().x -30, player.getCenter().y -30, 0); // 100 is the player's particle, 0-99 for the enemies
 					}		
 				}
 			}
