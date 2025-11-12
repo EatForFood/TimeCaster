@@ -7,7 +7,7 @@ class World
 private:
 
 	int WORLD_SIZE;
-	int GRID_SIZE = sqrt(WORLD_SIZE);
+	int GRID_SIZE;
 	vector<Chunk> chunks;
 
 	Vector2i m_TileTypeF[50][50];
