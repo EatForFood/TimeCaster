@@ -17,7 +17,7 @@ World::World()
 
 void World::newWorld()
 {
-    int half = GRID_SIZE / 2;
+    int half = m_GridSize / 2;
 
     ofstream out("gamedata/TCWorld.txt");
 
@@ -133,4 +133,20 @@ VertexArray World::getForground(int i) {
 Vector2f World::getChunkCenter(int i)
 {
 	return chunks[i].getChunkCenter();
+}
+
+int World::getGridSize()
+{
+    return m_GridSize;
+}
+
+void World::setGridSize(int size)
+{
+    m_GridSize = size;
+    m_WorldSize = size * size;
+}
+
+int World::getWorldSize()
+{
+    return m_WorldSize;
 }
