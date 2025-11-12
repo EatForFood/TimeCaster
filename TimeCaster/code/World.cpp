@@ -148,11 +148,9 @@ void World::increaseGridSize()
 
 void World::decreaseGridSize()
 {
-    m_GridSize -= 2;
-    m_WorldSize = m_GridSize * m_GridSize;
-}
-
-int World::getWorldSize()
-{
-    return m_WorldSize;
+    if (m_GridSize >= 5)
+    {
+        m_GridSize -= 2;
+        m_WorldSize = m_GridSize * m_GridSize;
+    }
 }

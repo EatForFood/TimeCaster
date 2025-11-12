@@ -6,7 +6,7 @@ class World
 {
 private:
 
-	int m_GridSize = 5;
+	int m_GridSize = 3;
 	int m_WorldSize = m_GridSize * m_GridSize;
 	vector<Chunk> chunks;
 
@@ -43,6 +43,5 @@ public:
 	int getGridSize();
 	void increaseGridSize();
 	void decreaseGridSize();
-	int getWorldSize();
 
 };
