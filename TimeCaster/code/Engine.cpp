@@ -784,6 +784,8 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 
 	timeFrozen = false;
 }
+
+// Function to convert difficulty state to string
 string Engine::difficultyToString(Difficulty difficulty)
 {
 	switch (difficulty)
@@ -795,6 +797,7 @@ string Engine::difficultyToString(Difficulty difficulty)
 	return "Unknown";
 }
 
+// Function to convert difficulty in string form to state
 Engine::Difficulty Engine::stringToDifficulty(string str)
 {
 	if (str == "Easy") {return Difficulty::Easy; }
@@ -803,6 +806,7 @@ Engine::Difficulty Engine::stringToDifficulty(string str)
 	else return Difficulty::Medium;
 }
 
+// Function to populate the chunk vector with chunks
 void Engine::populateChunkVector()
 {
 	for (int i = 0; i < world.getWorldSize(); i++) {
@@ -810,6 +814,7 @@ void Engine::populateChunkVector()
 	}
 }
 
+// Function to detect the current chunk an entity finds themselves in
 Chunk* Engine::getCurrentChunk(float x, float y) {
 	for (Chunk& chunk : chunks) {
 		FloatRect area = chunk.getChunkArea().getShape().getGlobalBounds();
@@ -840,7 +845,6 @@ void Engine::run()
 			fpsText.setString("FPS: " + to_string((int)fps));
 		}
 		//initializeInventory();
-	
 
 		// Getting the mouse position and mapping those pixels to coordinates
 		mousePos = Mouse::getPosition(window);
@@ -858,6 +862,7 @@ void Engine::run()
 			//Vector2f worldPos = window.mapPixelToCoords(mousePos);
 			//Moved code to main game loop
 
+			// Zooming in and out using the scroll wheel
 			if (event.type == Event::MouseWheelScrolled)
 			{
 				if (event.mouseWheelScroll.wheel == Mouse::VerticalWheel)
@@ -932,7 +937,6 @@ void Engine::run()
 					player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume(), vSync);
 					player.loadSaveFile();
 
-
 					equippedSwordIcon.setTextureRect(player.getEquippedSword()->getTextureRect());
 					equippedWandIcon.setTextureRect(player.getEquippedWand()->getTextureRect());
 					equippedHeadArmourIcon.setTextureRect(player.getEquippedHeadArmour()->getTextureRect());
@@ -971,16 +975,13 @@ void Engine::run()
 
 					tutorialStage = 0;
 
-			//		addItemToInventory("Health_Potion");
+					// addItemToInventory("Health_Potion");
 					initializeInventory();
-
 				}
 
 				// Player hit the load game button in the main menu
 				else if (loadGameButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU && event.mouseButton.button == Mouse::Left)
 				{
-		
-					
 					state = State::PLAYING;
 
 					skipAnimation = false;
@@ -1046,7 +1047,6 @@ void Engine::run()
 						player.createNewSave();
 						player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume(), vSync);
 						player.loadSaveFile();
-
 
 						equippedSwordIcon.setTextureRect(player.getEquippedSword()->getTextureRect());
 						equippedWandIcon.setTextureRect(player.getEquippedWand()->getTextureRect());
@@ -1293,7 +1293,6 @@ void Engine::run()
 					{
 						initializeInventory();
 						cout << "Item added to inventory" << endl;
-				
 					}
 					else
 					{
@@ -1566,16 +1565,24 @@ void Engine::run()
 	} // End of main game loop
 }
 
+// Function used to generate the world and inform player that world generation is in progress
 void Engine::generateWorld()
 {
-	skipIntroText.setString("--- World is loading... ---");
+	skipIntroText.setString("World is loading...");
+	textBounds = skipIntroText.getLocalBounds();
+	viewCentre = mainView.getCenter();
+	skipIntroText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 1000);
 	world.newWorld();
 	populateChunkVector();
 	spawnEnemies();
 	worldLoaded = true;
 	skipIntroText.setString("--- Press space to skip ---");
+	textBounds = skipIntroText.getLocalBounds();
+	viewCentre = mainView.getCenter();
+	skipIntroText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 1000);
 }
 
+// Sets the player's difficulty multiplier
 void Engine::setDifficulty()
 {
 	if (difficulty == Difficulty::Easy) {
@@ -1589,6 +1596,7 @@ void Engine::setDifficulty()
 	}
 }
 
+// Function used to spawn enemies into the game world
 void Engine::spawnEnemies()
 {
 	vector<string> worldEnemyTypes;
