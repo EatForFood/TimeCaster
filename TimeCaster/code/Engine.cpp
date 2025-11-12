@@ -402,6 +402,30 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	y = vSyncButton.getPosition().y + (vSyncButton.getSize().y / 2.f) - (textBounds.height / 2.f);
 	vSyncButtonText.setPosition(x - textBounds.left, y - textBounds.top);
 
+	// debugMode button
+	if (debugMode)
+	{
+		debugModeButton.setFillColor(Color::Green);
+	}
+	else
+	{
+		debugModeButton.setFillColor(Color::Red);
+	}
+	debugModeButton.setSize(Vector2f(200, 80));
+	textBounds = debugModeButton.getLocalBounds();
+	viewCentre = mainView.getCenter();
+	debugModeButton.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 700);
+	debugModeButton.setTexture(&textureMainMenuButton2);
+
+	debugModeButtonText.setString("Debug Mode"); // Set the display text
+	debugModeButtonText.setFont(font); // Assign the font
+	debugModeButtonText.setCharacterSize(fontSize - 5);
+	debugModeButtonText.setFillColor(Color::Black);
+	textBounds = debugModeButtonText.getLocalBounds();
+	x = debugModeButton.getPosition().x + (debugModeButton.getSize().x / 2.f) - (textBounds.width / 2.f);
+	y = debugModeButton.getPosition().y + (debugModeButton.getSize().y / 2.f) - (textBounds.height / 2.f);
+	debugModeButtonText.setPosition(x - textBounds.left, y - textBounds.top);
+
 	// Display difficulty button
 	if (difficulty == Difficulty::Easy)
 	{
@@ -1155,6 +1179,21 @@ void Engine::run()
 					}
 				}
 
+
+				// Player hit the debug mode button
+				if (debugModeButton.getGlobalBounds().contains(worldPos) && state == State::OPTIONS_MENU && event.mouseButton.button == Mouse::Left)
+				{
+					if (debugMode) {
+						sound.playButtonClickSound();
+						debugMode = false;
+					}
+					else {
+						sound.playButtonClickSound();
+						debugMode = true;
+					}
+				}
+
+
 				// Player hit the difficulty button
 				if (difficultyButton.getGlobalBounds().contains(worldPos) && state == State::OPTIONS_MENU && event.mouseButton.button == Mouse::Left)
 				{
@@ -1214,7 +1253,7 @@ void Engine::run()
 				
 				// Debug shop toggle
 				// Shop is still very much WIP
-				if (event.key.code == Keyboard::O && state == State::PLAYING)
+				if (event.key.code == Keyboard::O && state == State::PLAYING && debugMode)
 				{
 					if (drawShop) {
 						drawShop = false;
@@ -1226,7 +1265,7 @@ void Engine::run()
 					}
 				}
 
-				if (event.key.code == Keyboard::Num1 && state == State::PLAYING)
+				if (event.key.code == Keyboard::Num1 && state == State::PLAYING && debugMode)
 				{
 					// Increase health
 					player.upgradeHealth();
@@ -1234,21 +1273,21 @@ void Engine::run()
 			
 				}
 
-				if (event.key.code == Keyboard::Num2 && state == State::PLAYING)
+				if (event.key.code == Keyboard::Num2 && state == State::PLAYING && debugMode)
 				{
 					// Increase stamina
 					player.upgradeStamina();
 					player.switchSpell(2);
 				}
 
-				if (event.key.code == Keyboard::Num3 && state == State::PLAYING)
+				if (event.key.code == Keyboard::Num3 && state == State::PLAYING && debugMode)
 				{
 					// Increase health
 					player.upgradeMana();
 					player.switchSpell(3);
 				}
 
-				if (event.key.code == Keyboard::Num4 && state == State::PLAYING)
+				if (event.key.code == Keyboard::Num4 && state == State::PLAYING && debugMode)
 				{
 					if (player.addItemToInventory("Iron_Sword"))
 					{
@@ -1262,12 +1301,13 @@ void Engine::run()
 					player.switchSpell(4);
 				}
 
-				if (event.key.code == Keyboard::Num5 && state == State::PLAYING)
+
+				if (event.key.code == Keyboard::Num5 && state == State::PLAYING && debugMode)
 				{
 					player.addGold(100);
 				}
 
-				if (event.key.code == Keyboard::Num6 && state == State::PLAYING)
+				if (event.key.code == Keyboard::Num6 && state == State::PLAYING && debugMode)
 				{
 					if (player.reward(80))
 					{
@@ -1276,24 +1316,24 @@ void Engine::run()
 					}
 				}
 
-				if (event.key.code == Keyboard::Num8 && state == State::PLAYING)
+				if (event.key.code == Keyboard::Num8 && state == State::PLAYING && debugMode)
 				{
 					player.hit(gameTimeTotal, 10, 200);
 				}
 
-				if (event.key.code == Keyboard::Num9 && state == State::PLAYING)
+				if (event.key.code == Keyboard::Num9 && state == State::PLAYING && debugMode)
 				{
 					player.hit(gameTimeTotal, 30, 1000);
 				}
 
-				if (event.key.code == Keyboard::G && state == State::PLAYING)
+				if (event.key.code == Keyboard::G && state == State::PLAYING && debugMode)
 				{
 					for (int i = 0; i < (rand() % 10); i++) {
 						items.emplace_back("Gold", Vector2f(player.getPosition().x, player.getPosition().y));
 					}
 				}
 
-				if (event.key.code == Keyboard::C && state == State::PLAYING)
+				if (event.key.code == Keyboard::C && state == State::PLAYING && debugMode)
 				{
 					player.setInCell();
 				}
@@ -1421,6 +1461,13 @@ void Engine::run()
 			}
 			else {
 				vSyncButton.setFillColor(Color::Red);
+			}
+
+			if (debugMode) {
+				debugModeButton.setFillColor(Color::Green);
+			}
+			else {
+				debugModeButton.setFillColor(Color::Red);
 			}
 
 			// Change colour of difficultyButton based on selected difficulty

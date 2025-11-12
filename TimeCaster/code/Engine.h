@@ -79,6 +79,8 @@ private:
 
 	bool vSync = false;
 
+	bool debugMode = true;	
+
 	// Anything using multiple threads should use atomic variables
 	std::atomic<bool> worldLoaded;
 
@@ -241,6 +243,10 @@ private:
 	RectangleShape difficultyButton;
 
 	Text difficultyButtonText; // Create the Text object
+
+	RectangleShape debugModeButton;
+
+	Text debugModeButtonText; // Create the Text object
 
 	Text storyIntroText;
 	string fullText;
