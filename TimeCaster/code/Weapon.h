@@ -8,6 +8,7 @@ class Weapon : public Item
 {
 private:
 	string m_AnimationType;
+	int m_WeaponSize = 1;
 
 public:
 
@@ -15,6 +16,7 @@ public:
 	int getDamage();
 	string getName();
 	string getAnimType();
+	int getWeaponSize();
 };
 
 
