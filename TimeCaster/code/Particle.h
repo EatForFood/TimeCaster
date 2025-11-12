@@ -57,5 +57,7 @@ public:
 	void setSpriteFromSheet(IntRect textureBox, int tileSize);
 	void moveTextureRect(float elapsedTime);
 
+	void setPosition(float x, float y);
+
 	Sprite getSprite();
 };

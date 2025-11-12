@@ -193,6 +193,12 @@ void Engine::update()
 			}
 		}
 
+		//make the player's particles follow them
+		if (particles[100].isPlaying())
+		{
+			particles[100].setPosition(player.getCenter().x - 30, player.getCenter().y - 30);
+		}
+
 		swordIcon.setTextureRect(player.getEquippedSword()->getTextureRect());
 		swordIcon.setOrigin(swordIcon.getSize() / 2.f);
 

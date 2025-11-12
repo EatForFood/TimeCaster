@@ -15,7 +15,7 @@ Particle::Particle()
 
 }
 
-// TODO: Further polish particle effects
+// TODO: Further polish particle effects, particularly healing particle
 void Particle::play(float startX, float startY, int particleID)
 {
 	// Manually reset the animation if the particle is not active
@@ -61,13 +61,13 @@ void Particle::play(float startX, float startY, int particleID)
 	if (particleID == 0)
 	{
 		setSpriteFromSheet(IntRect(0, 0, 384, 64), 64); // Heal particle is larger and has more frames
-		m_TimePerFrame = 0.166666666667f;
+		m_TimePerFrame = 0.25f;
 		m_TimeToPlay = 1.0f;
 	}
 	else
 	{
 		setSpriteFromSheet(IntRect(0, 0, 256, 64), 64);
-		m_TimePerFrame = 0.0416666666666f;
+		m_TimePerFrame = 0.06f;
 		m_TimeToPlay = 0.25f;
 	}
 
@@ -84,6 +84,13 @@ void Particle::play(float startX, float startY, int particleID)
 //{
 //	return m_InFlight;
 //}
+
+void Particle::setPosition(float x, float y)
+{
+	m_Position.x = x;
+	m_Position.y = y;
+	m_Sprite.setPosition(m_Position);
+}
 
 FloatRect Particle::getPosition()
 {
@@ -178,27 +185,7 @@ Sprite Particle::getSprite()
 {
 	return m_Sprite;
 }
-//
-//// This returns false if Particle does 0 damage (non-damaging Particle)
-//float Particle::getParticleDamage()
-//{
-//	return m_ParticleDamage;
-//}
-//
-//bool Particle::piercesEnemy()
-//{
-//	return m_PierceEnemy;
-//}
-//
-//bool Particle::piercesObject()
-//{
-//	return m_PierceObject;
-//}
-//
-//FloatRect Particle::getHitbox()
-//{
-//	return m_Hitbox;
-//}
+
 
 bool Particle::isPlaying()
 { 
