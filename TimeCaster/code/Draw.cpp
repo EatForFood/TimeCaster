@@ -347,6 +347,7 @@ void Engine::draw()
 	if (state == State::STORY_INTRO)
 	{
 		window.clear();
+		window.draw(spriteStoryIntro);
 		window.draw(storyIntroText);
 		window.draw(skipIntroText);
 	}

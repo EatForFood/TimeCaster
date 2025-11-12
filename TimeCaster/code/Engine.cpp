@@ -100,6 +100,10 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	spriteMainMenu.setTexture(textureMainMenu);
 	spriteMainMenu.setPosition(0, 0);
 
+	textureStoryIntro = TextureHolder::GetTexture("graphics/UI/ForestFire.jpg");
+	spriteStoryIntro.setTexture(textureStoryIntro);
+	spriteStoryIntro.setPosition(0, 0);
+
 	// Create a view for the HUD
 	FloatRect hudRect(0, 0, resolution.x, resolution.y);
 	hudView.reset(hudRect);
@@ -459,7 +463,7 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	storyIntroText.setFont(font);
 	storyIntroText.setCharacterSize(fontSize + 10);
 	storyIntroText.setFillColor(Color::White);
-	storyIntroText.setPosition(150, 150);
+	storyIntroText.setPosition(150, 200);
 
 	fullText = "I was not always a man consumed by vengeance. Once, I had a family-warm laughter by the fire, \n"
 		"the gentle touch of my children's hands, the steady love of my wife. \n"
@@ -472,13 +476,9 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 		"You desire retribution dear player, but what will it cost you?";
 
 	// Skip intro text
-	skipIntroText.setString("--- Press space to skip ---"); // Set the text content
-	skipIntroText.setFont(font);                    // Assign the font
-	skipIntroText.setCharacterSize(fontSize - 5);   // Slightly smaller text size
+	skipIntroText.setFont(font); // Assign the font
+	skipIntroText.setCharacterSize(fontSize - 5); // Slightly smaller text size
 	skipIntroText.setFillColor(Color::White);
-	textBounds = skipIntroText.getLocalBounds();
-	viewCentre = mainView.getCenter();
-	skipIntroText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 1000);
 
 	/***********
 	Inventory UI
@@ -966,6 +966,14 @@ void Engine::run()
 					windowedMode = player.getWindowedMode();
 					displayFps = player.getDisplayFps();
 					Listener::setGlobalVolume(player.getVolume());
+
+					mainView.setCenter(resolution.x / 2.f, resolution.y / 2.f);
+					
+					// Skip intro text
+					skipIntroText.setString("--- Press space to skip ---"); // Set the text content
+					textBounds = skipIntroText.getLocalBounds();
+					viewCentre = mainView.getCenter();
+					skipIntroText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 1030);
 				
 					worldLoaded = false;
 					thread worldThread(&Engine::generateWorld, this);
@@ -1571,7 +1579,7 @@ void Engine::generateWorld()
 	skipIntroText.setString("World is loading...");
 	textBounds = skipIntroText.getLocalBounds();
 	viewCentre = mainView.getCenter();
-	skipIntroText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 1000);
+	skipIntroText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 1030);
 	world.newWorld();
 	populateChunkVector();
 	spawnEnemies();
@@ -1579,7 +1587,7 @@ void Engine::generateWorld()
 	skipIntroText.setString("--- Press space to skip ---");
 	textBounds = skipIntroText.getLocalBounds();
 	viewCentre = mainView.getCenter();
-	skipIntroText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 1000);
+	skipIntroText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 1030);
 }
 
 // Sets the player's difficulty multiplier
