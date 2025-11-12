@@ -47,7 +47,6 @@ bool Engine::addItemToInventory(String itemType)
 	{
 		for (int i = 0; i < storedItems.size(); i++)
 		{
-
 			if (storedItems[i].isNull())
 			{
 				storedItems[i] = Item(itemType, Vector2f(0, 0));
@@ -97,7 +96,6 @@ bool Engine::addItemToInventory(String itemType)
 	return false;
 }
 
-
 // TODO: Move Inventory functions to a new Inventory cpp file
 
 bool Engine::sellItem(int itemIndex)
@@ -118,7 +116,6 @@ bool Engine::sellItem(int itemIndex)
 		initializeInventory();
 		return true;
 	}
-
 }
 
 // 0 = item does not exist, 1 = success, 2 = no space in inventory, 3 = not enough gold

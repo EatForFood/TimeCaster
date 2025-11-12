@@ -196,7 +196,6 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	storedItems[10] = Weapon("Reaper's_Scythe", Vector2f(0, 0));
 	storedItems[11] = Equipment("Family_Locket", Vector2f(0, 0));
 	storedItems[12] = Weapon("Armoured_Boots", Vector2f(0, 0));
-	storedItems[13] = Item("Health_Potion", Vector2f(0, 0));
 	storedItems[14] = Item("Mana_Potion", Vector2f(0, 0));
 	storedItems[15] = Item("Stamina_Potion", Vector2f(0, 0));
 
@@ -620,9 +619,6 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	textBounds = levelsText.getLocalBounds();
 	levelsText.setPosition((viewCentre.x - (textBounds.width / 2.f) - textBounds.left) - 40, 410);
 
-
-
-
 	invHealthBar.setFillColor(Color::Red);
 	invHealthBar.setPosition(viewCentre.x - 360, 775);
 
@@ -786,8 +782,6 @@ Engine::Difficulty Engine::stringToDifficulty(string str)
 	else if (str == "Hard") { return Difficulty::Hard; }
 	else return Difficulty::Medium;
 }
-
-
 
 void Engine::populateChunkVector()
 {
@@ -953,6 +947,10 @@ void Engine::run()
 					worldThread.detach();
 
 					setDifficulty();
+
+					tutorialStage = 0;
+
+					addItemToInventory("Health_Potion");
 				}
 
 				// Player hit the load game button in the main menu

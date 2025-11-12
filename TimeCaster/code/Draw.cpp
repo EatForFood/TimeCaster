@@ -185,7 +185,6 @@ void Engine::draw()
 
 		// Switch to the HUD view
 		window.setView(hudView);
-
 		
 		if (drawShop)
 		{
@@ -197,7 +196,6 @@ void Engine::draw()
 			for (int i = 0; i < 8; i++) {
 				window.draw(emptyFrames[i]);
 			}
-
 
 			// Draw shop item icons
 			for (auto& icons : shopItems) {
@@ -260,7 +258,6 @@ void Engine::draw()
 			window.setView(hudView);
 
 			displayInventoryTooltips();
-			
 		}
 		else {
 			// Draw all the HUD elements
