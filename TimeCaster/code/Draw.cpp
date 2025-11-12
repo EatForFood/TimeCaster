@@ -165,11 +165,15 @@ void Engine::draw()
 		for (auto& txt : chunks[0].getDebugText()) { // draw debug text showing tile location
 			window.draw(txt);
 		}
+		*/
 
-		for (auto& nav : world.getNavBoxes(0)) { // draw debug text showing tile location
+		/*
+		for (auto& nav : world.getNavBoxes(player.getChunk())) { // draw debug text showing tile location
 			window.draw(nav.getShape());
 		}
+		*/
 
+		/*
 		for (auto& nav : world.getNavBoxes(player.getChunk())) { // draw debug text showing tile location
 			window.draw(nav.getShape());
 			window.draw(world.getChunkArea(player.getChunk()).getShape());

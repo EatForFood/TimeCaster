@@ -464,8 +464,10 @@ Chunk::Chunk(String type, Vector2f chunk, bool load)
 				}
 			}
 
-
-			NavBox navbox(10, 10, 30, 30);
+			// collision box to stop player leaving world
+			int sx = 0 + offset.x;
+			int sy = 0 + offset.y;
+			NavBox navbox(sx, sy, 50, 50);
 			navBoxes.push_back(navbox);
 
 		}
