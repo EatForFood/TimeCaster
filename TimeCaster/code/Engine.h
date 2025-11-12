@@ -152,9 +152,13 @@ private:
 	// Integer used to set all text font sizes
 	int fontSize = 35;
 
-	// For the home/game over screen
+	// For the main menu screen
 	Sprite spriteMainMenu;
 	Texture textureMainMenu;
+
+	// For the story intro screen
+	Texture textureStoryIntro;
+	Sprite spriteStoryIntro;
 
 	View hudView;
 
