@@ -303,8 +303,6 @@ void Engine::draw()
 		window.draw(levelUpText);
 	}
 
-
-
 	if (state == State::MAIN_MENU)
 	{
 		window.clear();

@@ -238,6 +238,13 @@ void Engine::update()
 		// Drag items the player clicks on
 		else if (drawInventory)
 		{
+			// If tutorial hasn't been started and player opens inventory, start tutorial
+			if (tutorialStage == 0) {
+				tutorialStage = 1;
+				tutorialText.setString("Welcome to your inventory! Here you can manage your items and equipment. Drag the health potion onto the player and release to heal.");
+				textBounds = tutorialText.getLocalBounds();
+				tutorialText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 900);
+			}
 
 			player.setSpritePosition(Vector2f(player.getPosition().x, player.getPosition().y));
 

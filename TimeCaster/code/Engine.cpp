@@ -29,7 +29,7 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 
 	// Set a high framerate limit (TODO: allow player to configure FPS limit)
 	window.setFramerateLimit(144);
-//	difficulty = Difficulty::Medium;
+	// difficulty = Difficulty::Medium;
 	difficulty = stringToDifficulty(player.getdifficultyString());
 	windowedMode = player.getWindowedMode();
 	vSync = player.getVSync();
@@ -352,7 +352,6 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	y = displayFPSButton.getPosition().y + (displayFPSButton.getSize().y / 2.f) - (textBounds.height / 2.f);
 	displayFPSButtonText.setPosition(x - textBounds.left, y - textBounds.top);
 
-
 	// Windowed mode button
 	if (windowedMode)
 	{
@@ -367,8 +366,6 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	viewCentre = mainView.getCenter();
 	windowedModeButton.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 500);
 	windowedModeButton.setTexture(&textureMainMenuButton2);
-
-
 
 	// Windowed mode button text
 	windowedModeButtonText.setString("Windowed Mode"); // Set the display text
@@ -394,8 +391,6 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	viewCentre = mainView.getCenter();
 	vSyncButton.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 600);
 	vSyncButton.setTexture(&textureMainMenuButton2);
-
-	
 
 	vSyncButtonText.setString("Vsync"); // Set the display text
 	vSyncButtonText.setFont(font); // Assign the font
@@ -679,7 +674,7 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	levelUpText.setFillColor(Color::Green);
 	levelUpText.setString("Level up! Click on the bar you wish to upgrade.");
 	textBounds = levelUpText.getLocalBounds();
-	levelUpText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 900);
+	levelUpText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 950);
 
 	inventoryBackground.setTexture(&inventoryBackgroundTexture);
 	inventoryBackground.setSize(Vector2f(1000, 800));
@@ -1175,6 +1170,7 @@ void Engine::run()
 					sound.playButtonClickSound();
 				}
 
+				// Player pressed space bar in the intro scene
 				if (event.key.code == Keyboard::Space)
 				{
 					if (state == State::STORY_INTRO && !skipAnimation) {
@@ -1190,21 +1186,15 @@ void Engine::run()
 					}
 				}
 
-				if (state == State::PLAYING && event.key.code == Keyboard::Tab && tutorialStage != 1 && !levelUp) {
+				// Player hit tab while playing
+				if (state == State::PLAYING && event.key.code == Keyboard::Tab && tutorialStage != 1) 
+				{
 					if (drawInventory) {
 						drawInventory = false;
 					}
 					else {
 						drawInventory = true;
 					}
-
-					if (tutorialStage == 0) {
-						tutorialStage = 1;
-						tutorialText.setString("Welcome to your inventory! Here you can manage your items and equipment. Drag the health potion onto the player and release to heal.");
-						textBounds = tutorialText.getLocalBounds();
-						tutorialText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 900);
-					}
-					
 				}
 			}
 
@@ -1277,7 +1267,6 @@ void Engine::run()
 						levelUp = true;
 					}
 				}
-
 
 				if (event.key.code == Keyboard::Num8 && state == State::PLAYING)
 				{
