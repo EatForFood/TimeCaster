@@ -12,12 +12,6 @@ private:
 	// What each Particle looks like
 	RectangleShape m_ParticleShape;
 
-	// Is this Particle currently whizzing through the air
-	bool m_InFlight = false;
-
-	// How much mana does the Particle cost?
-	float m_ManaCost;
-
 	// Particle animation stuff
 	Sprite m_Sprite;
 	Texture m_Texture;
@@ -38,12 +32,9 @@ public:
 	// Stop the Particle
 	void stop();
 
-	// Returns the value of m_InFlight
-	bool isInFlight();
+	
 
-	// Launch a new Particle
-	void shoot(float startX, float startY,
-		float xTarget, float yTarget, float damage);
+
 
 	// Tell the calling code where the Particle is in the world
 	FloatRect getPosition();
@@ -52,7 +43,7 @@ public:
 	RectangleShape getShape();
 
 	// Update the Particle each frame
-	void update(float elapsedTime, const std::vector<NavBox>& navBox);
+	void update(float elapsedTime);
 
 	float bGetX();
 	float bGetY();
@@ -63,9 +54,4 @@ public:
 	FloatRect getHitbox();
 
 	Sprite getSprite();
-
-	// Combat related functions
-	float getParticleDamage();
-	bool piercesEnemy();
-	bool piercesObject();
 };
