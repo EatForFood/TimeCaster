@@ -1,4 +1,5 @@
 #include "Engine.h"
+#include "Player.h"
 
 
 void Engine::initializeInventory()
@@ -39,7 +40,7 @@ void Engine::moveDraggedIcon(Sprite& draggedIcon, Vector2f mousePos)
 	draggedIcon.setPosition(x - 30, y - 30);
 }
 
-bool Engine::addItemToInventory(String itemType)
+bool Player::addItemToInventory(String itemType)
 {
 	//Check if item is a regular item
 	Item item(itemType, Vector2f(0, 0));
@@ -50,7 +51,6 @@ bool Engine::addItemToInventory(String itemType)
 			if (m_StoredItems[i].isNull())
 			{
 				m_StoredItems[i] = Item(itemType, Vector2f(0, 0));
-				initializeInventory();
 				return true;
 			}
 		}
@@ -67,7 +67,6 @@ bool Engine::addItemToInventory(String itemType)
 			if (m_StoredItems[i].isNull())
 			{
 				m_StoredItems[i] = Equipment(itemType, Vector2f(0, 0));
-				initializeInventory();
 				return true;
 			}
 		}
@@ -84,7 +83,6 @@ bool Engine::addItemToInventory(String itemType)
 			if (m_StoredItems[i].isNull())
 			{
 				m_StoredItems[i] = Weapon(itemType, Vector2f(0, 0));
-				initializeInventory();
 				return true;
 			}
 		}
@@ -130,8 +128,9 @@ int Engine::buyItem(int itemIndex)
 		int itemCost = shopItems[itemIndex].getValue();
 		if (player.getGold() >= itemCost)
 		{
-			if (addItemToInventory(shopItems[itemIndex].getName()))
+			if (player.addItemToInventory(shopItems[itemIndex].getName()))
 			{
+				initializeInventory();
 				player.addGold(-itemCost);
 				return 1; // 1 means success
 			}
