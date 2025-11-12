@@ -162,6 +162,15 @@ void Engine::update()
 			}
 		}
 
+		//update any particles that are active
+		for (int i = 0; i < 100; i++)
+		{
+			if (particles[i].isPlaying())
+			{
+				particles[i].update(dtAsSeconds);
+			}
+		}
+
 		swordIcon.setTextureRect(player.getEquippedSword()->getTextureRect());
 		swordIcon.setOrigin(swordIcon.getSize() / 2.f);
 

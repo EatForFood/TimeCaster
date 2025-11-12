@@ -1387,6 +1387,7 @@ void Engine::run()
 					{
 						sound.playHealSound();
 						player.healHealth(0.25f);
+						particles[0].play(player.getCenter().x -30, player.getCenter().y -30, 0);
 					}		
 				}
 			}

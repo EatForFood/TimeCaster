@@ -386,6 +386,7 @@ private:
 	Spell spells[100];
 	Particle particles[100];
 	int currentSpell = 0;
+	int currentParticle = 0;
 
 	int tutorialStage = 0;
 

@@ -24,6 +24,8 @@ void Particle::play(float startX, float startY, int particleID)
 	m_Position.y = startY;
 	m_ParticleID = particleID;
 
+	m_TimeElapsed = 0.0f;
+
 	// Set the sprite based on particleID
 	switch (m_ParticleID)
 	{
@@ -51,10 +53,12 @@ void Particle::play(float startX, float startY, int particleID)
 	if (particleID == 0)
 	{
 		setSpriteFromSheet(IntRect(0, 0, 384, 64), 64); // Heal particle is larger and has more frames
+		m_TimePerFrame = 0.166666666667f;
 	}
 	else
 	{
 		setSpriteFromSheet(IntRect(0, 0, 256, 64), 64);
+		m_TimePerFrame = 0.25f;
 	}
 
 	m_Sprite.setPosition(m_Position);
@@ -83,9 +87,18 @@ RectangleShape Particle::getShape()
 
 void Particle::update(float elapsedTime)
 {
-	m_TimeElapsed = elapsedTime;
+	m_TimeElapsed += elapsedTime;
 
-	moveTextureRect();
+	if (m_TimeElapsed >= 1)
+	{
+		m_IsPlaying = false;
+	}
+	else {
+		moveTextureRect(elapsedTime);
+	}
+
+
+
 
 }
 
@@ -124,7 +137,7 @@ void Particle::setSpriteFromSheet(sf::IntRect textureBox, int tileSize) // set s
 	m_Sprite.setTextureRect(sf::IntRect{ sheetCoordinate, spriteSize });
 }
 
-void Particle::moveTextureRect() // animate sprite by moving texRect location
+void Particle::moveTextureRect(float elapsedTime) // animate sprite by moving texRect location
 {
 	//	cout << " Move Texture Rect m_Ani_Counter " << m_Ani_Counter << "\n";
 	// if the animation counter is greater than the animation limit reset to 1;
@@ -142,10 +155,9 @@ void Particle::moveTextureRect() // animate sprite by moving texRect location
 	}
 
 	//increment animation counter to point to the next frame
-	double timePerFrame;
-	timePerFrame = 1.0 / 6.0;
-	m_AnimationTimer = m_AnimationTimer + m_TimeElapsed;
-	if (m_AnimationTimer > timePerFrame)
+
+	m_AnimationTimer += elapsedTime;
+	if (m_AnimationTimer > m_TimePerFrame)
 	{
 		m_Ani_Counter++;
 		m_AnimationTimer = 0;

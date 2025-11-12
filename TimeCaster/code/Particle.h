@@ -23,7 +23,9 @@ private:
 	int m_Counter{};
 	float m_TimeElapsed;
 	float m_AnimationTimer = 0;
+	float m_TimePerFrame;
 	bool m_IsPlaying = false;
+	float m_TotalTime = 0.0f;
 
 	int m_ParticleID = -1;
 
@@ -52,7 +54,7 @@ public:
 	float bGetY();
 
 	void setSpriteFromSheet(IntRect textureBox, int tileSize);
-	void moveTextureRect();
+	void moveTextureRect(float elapsedTime);
 
 	Sprite getSprite();
 };
