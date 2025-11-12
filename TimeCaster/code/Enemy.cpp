@@ -157,11 +157,9 @@ void Enemy::update(float elapsedTime, const Vector2f& playerPos, Chunk* chunk, i
 			revertPosition();
 			m_Path.clear();
 
-			std::cout << "[DEBUG] Collision detected! Recalculating path..." << std::endl;
-
-			pathfindToPlayer(m_ChunkPtr);  // <--- force a new path calculation
-			m_UpdatePathTimer = 0.0f;      // reset timer to avoid double recalculation
-			break;                         // optional: avoid multiple collisions this frame
+			pathfindToPlayer(m_ChunkPtr);  
+			m_UpdatePathTimer = 0.0f;      
+			break;                         
 		}
 	}
 	*/

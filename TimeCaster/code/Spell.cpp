@@ -1,6 +1,7 @@
 #include "Spell.h"
 #include "Decal.h"
 #include "TextureHolder.h"
+using namespace std;
 
 // The constructor
 Spell::Spell()
@@ -107,7 +108,7 @@ RectangleShape Spell::getShape()
 	return m_SpellShape;
 }
 
-void Spell::update(float elapsedTime)
+void Spell::update(float elapsedTime, const vector<NavBox>& navBox)
 {
 	m_TimeElapsed = elapsedTime;
 
@@ -128,6 +129,20 @@ void Spell::update(float elapsedTime)
 		m_Position.y < m_MinY || m_Position.y > m_MaxY)
 	{
 		m_InFlight = false;
+	}
+
+	m_CollisionBox.left = m_Position.x - 100;
+	m_CollisionBox.top = m_Position.y - 100;
+	m_CollisionBox.width = 200;
+	m_CollisionBox.height = 200;
+
+	for (auto& nav : navBox) { // if player walks into navBox 
+		if (m_CollisionBox.intersects(nav.getShape().getGlobalBounds()))
+		{
+			if (collision.pointInShape(m_Position, nav.getShape())) {
+				m_InFlight = false;
+			}
+		}
 	}
 
 	moveTextureRect();

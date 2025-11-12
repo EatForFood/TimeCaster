@@ -1,5 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include "NavBox.h"
+#include "CollisionDetection.h"
 
 
 using namespace sf;
@@ -62,6 +64,10 @@ private:
 	int m_HitboxWidth;
 	int m_HitboxHeight;
 
+	// spell collision box for checking for collisions with stuctures / trees
+	FloatRect m_CollisionBox;
+	CollisionDetection collision;
+
 // Public function prototypes go here
 public:
 	// The constructor
@@ -84,7 +90,7 @@ public:
 	RectangleShape getShape();
 
 	// Update the spell each frame
-	void update(float elapsedTime);
+	void update(float elapsedTime, const std::vector<NavBox>& navBox);
 
 	float bGetX();
 	float bGetY();

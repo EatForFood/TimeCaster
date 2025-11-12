@@ -33,7 +33,6 @@ public:
 
 	void moveDraggedIcon(Sprite& draggedIcon, Vector2f mousePos);
 
-	bool addItemToInventory(String itemType);
 
 	void draw();
 
@@ -302,7 +301,7 @@ private:
 	//RectangleShape emptyFrames[16];
 	int draggedIndex = -1;
 	int maxItems = 16; // max amount of item slots
-	vector<Item> storedItems;
+	vector<Item>& m_StoredItems;
 	vector<Item> shopItems;
 	vector<RectangleShape> emptyFrames;
 	vector<Item> allItems;     // all possible item

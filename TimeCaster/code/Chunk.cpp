@@ -957,11 +957,9 @@ vector<Entity> Chunk::getEntities() {
 	return entities;
 }
 
-vector<NavBox> Chunk::getNavBoxes() {
-
+const vector<NavBox>& Chunk::getNavBoxes() const {
 	return navBoxes;
 }
-
 vector<Cell> Chunk::getCells() {
 
 	return cells;

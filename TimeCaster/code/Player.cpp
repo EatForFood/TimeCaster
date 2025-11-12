@@ -153,9 +153,9 @@ void Player::stopDown()
 	m_DownPressed = false;
 }
 
-void Player::update(float elapsedTime, Vector2i mousePosition, vector<NavBox> navBox)
+void Player::update(float elapsedTime, Vector2i mousePosition, const vector<NavBox>& navBox)
 {
-	navBoxes = navBox;
+	//navBoxes = navBox;
 
 	m_TimeElapsed = elapsedTime; 
 
@@ -263,7 +263,7 @@ void Player::update(float elapsedTime, Vector2i mousePosition, vector<NavBox> na
 		direction = Vector2f(0, 1);
 	}
 
-	for (auto& nav : navBoxes) { // if player walks into navBox 
+	for (auto& nav : navBox) { // if player walks into navBox 
 		if (m_CollisionBox.intersects(nav.getShape().getGlobalBounds()))
 		{
 			if (collision.pointInShape(m_Position, nav.getShape())) {
@@ -279,7 +279,7 @@ void Player::update(float elapsedTime, Vector2i mousePosition, vector<NavBox> na
 		direction = Vector2f(0, -1);
 	}
 
-	for (auto& nav : navBoxes) { // if player walks into navBox 
+	for (auto& nav : navBox) { // if player walks into navBox 
 		if (m_CollisionBox.intersects(nav.getShape().getGlobalBounds()))
 		{
 			if (collision.pointInShape(m_Position, nav.getShape())) {
@@ -295,7 +295,7 @@ void Player::update(float elapsedTime, Vector2i mousePosition, vector<NavBox> na
 		direction = Vector2f(1, 0);
 	}
 
-	for (auto& nav : navBoxes) { // if player walks into navBox 
+	for (auto& nav : navBox) { // if player walks into navBox 
 		if (m_CollisionBox.intersects(nav.getShape().getGlobalBounds()))
 		{
 			if (collision.pointInShape(m_Position, nav.getShape())) {
@@ -311,7 +311,7 @@ void Player::update(float elapsedTime, Vector2i mousePosition, vector<NavBox> na
 		direction = Vector2f(-1, 0);
 	}
 
-	for (auto& nav : navBoxes) { // if player walks into navBox 
+	for (auto& nav : navBox) { // if player walks into navBox 
 		if (m_CollisionBox.intersects(nav.getShape().getGlobalBounds()))
 		{
 			if (collision.pointInShape(m_Position, nav.getShape())) {
@@ -539,6 +539,14 @@ void Player::createNewSave()
 		<< START_TROUSER_ARMOUR << " " 
 		<< START_SHOE_ARMOUR << " " 
 		<< START_NECK_ARMOUR << " " 
+		<< START_SWORD << " "
+		<< START_WAND << " "
+		<< START_HEAD_ARMOUR << " "
+		<< START_CHEST_ARMOUR << " "
+		<< START_TROUSER_ARMOUR << " "
+		<< START_SHOE_ARMOUR << " "
+		<< START_NECK_ARMOUR << " "
+		<< "Health_Potion null null null null null null null null "
 		<< 64 << " " 
 		<< 64	
 		<< endl;
@@ -608,6 +616,22 @@ void Player::updateSaveFile()
 		<< m_EquippedArmour[2].getName() << " " 
 		<< m_EquippedArmour[3].getName() << " " 
 		<< m_EquippedArmour[4].getName()  << " "
+		<< m_StoredItems[0].getName() << " "
+		<< m_StoredItems[1].getName() << " "
+		<< m_StoredItems[2].getName() << " "
+		<< m_StoredItems[3].getName() << " "
+		<< m_StoredItems[4].getName() << " "
+		<< m_StoredItems[5].getName() << " "
+		<< m_StoredItems[6].getName() << " "
+		<< m_StoredItems[7].getName() << " "
+		<< m_StoredItems[8].getName() << " "
+		<< m_StoredItems[9].getName() << " "
+		<< m_StoredItems[10].getName() << " "
+		<< m_StoredItems[11].getName() << " "
+		<< m_StoredItems[12].getName() << " "
+		<< m_StoredItems[13].getName() << " "
+		<< m_StoredItems[14].getName() << " "
+		<< m_StoredItems[15].getName() << " "
 		<< m_Position.x << " " 
 		<< m_Position.y
 		<< std::endl; 
@@ -617,7 +641,13 @@ void Player::updateSaveFile()
 
 bool Player::loadSaveFile()
 {
+	for (int i = 0; i < m_StoredItems.size(); i++)
+	{
+		m_StoredItems[i] = Item("null", Vector2f(0, 0));
+	}
+
 	std::ifstream loadFile("gamedata/TCSave.txt");
+	string itemsToStore[16];
 
 	if (loadFile.is_open())
 	{
@@ -646,6 +676,11 @@ bool Player::loadSaveFile()
 		loadFile >> m_EquippedShoeArmourName;
 		loadFile >> m_EquippedNeckArmourName;
 
+		for (int i = 0; i < 16; i++)
+		{
+			loadFile >> itemsToStore[i];
+		}
+
 		loadFile >> m_Position.x;
 		loadFile >> m_Position.y;
 		// equip saved weapons and armour
@@ -656,6 +691,11 @@ bool Player::loadSaveFile()
 		equipArmour(m_EquippedNeckArmourName);
 		equipWeapon(m_EquippedWandName);
 		equipWeapon(m_EquippedSwordName); // equip sword last so that melee is the default combat type
+		for (int i = 0; i < 16; i++)
+		{
+			addItemToInventory(itemsToStore[i]);
+		}
+
 		return true;
 	}
 	else
@@ -920,6 +960,11 @@ Player::SpellType Player::getSpellType() {
 vector<Equipment>& Player::getEquippedArmour()
 {
 	return m_EquippedArmour;
+}
+
+vector<Item>& Player::getStoredItems()
+{
+	return m_StoredItems;
 }
 
 Weapon* Player::getEquippedSword()

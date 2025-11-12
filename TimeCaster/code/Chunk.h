@@ -92,7 +92,7 @@ public:
 
 	vector<Entity> getEntities();
 
-	vector<NavBox> getNavBoxes();
+	const vector<NavBox>& getNavBoxes() const;
 
 	vector<Cell> getCells();
 

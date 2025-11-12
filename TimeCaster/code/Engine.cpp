@@ -23,7 +23,7 @@
 using namespace std;
 using namespace sf;
 
-Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArmour(player.getEquippedArmour())	
+Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArmour(player.getEquippedArmour()), m_StoredItems(player.getStoredItems())
 {
 	player.loadConfigFile();
 
@@ -163,7 +163,7 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	manaBarContainer.setTexture(&barContainer);
 	manaBarContainer.setPosition(10, 110);
 
-	storedItems.resize(16, Item("null", Vector2f(300, 650)));
+	m_StoredItems.resize(16, Item("null", Vector2f(300, 650)));
 	shopItems.resize(8, Item("null", Vector2f(0, 0)));
 	// Debug shop item initialization
 	shopItems[0] = Weapon("Silver_Wand", Vector2f(300, 650));
@@ -183,22 +183,23 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	m_EquippedArmour.resize(5, Equipment("null", Vector2f(0, 0)));
 	
 	// Debug inventory initalization
-	storedItems[0] = Weapon("Wooden_Wand", Vector2f(300, 650));
-	storedItems[1] = Weapon("Pirate's_Scimitar", Vector2f(450, 650));
-	storedItems[2] = Weapon("Iron_Sword", Vector2f(600, 650));
-	storedItems[3] = Weapon("Silver_Wand", Vector2f(750, 650));
-	storedItems[4] = Equipment("Family_Robe", Vector2f(900, 650));
-	storedItems[5] = Equipment("Family_Hood", Vector2f(0, 0));
-	storedItems[6] = Equipment("Leather_Cap", Vector2f(0, 0));
-	storedItems[7] = Equipment("Leather_Chestplate", Vector2f(0, 0));
-	storedItems[8] = Equipment("Basic_Shoes", Vector2f(0, 0));
-	storedItems[9] = Equipment("Robe_Leggings", Vector2f(0, 0));
-	storedItems[10] = Weapon("Reaper's_Scythe", Vector2f(0, 0));
-	storedItems[11] = Equipment("Family_Locket", Vector2f(0, 0));
-	storedItems[12] = Weapon("Armoured_Boots", Vector2f(0, 0));
-	storedItems[14] = Item("Mana_Potion", Vector2f(0, 0));
-	storedItems[15] = Item("Stamina_Potion", Vector2f(0, 0));
-
+	/*
+	m_StoredItems[0] = Weapon("Wooden_Wand", Vector2f(300, 650));
+	m_StoredItems[1] = Weapon("Pirate's_Scimitar", Vector2f(450, 650));
+	m_StoredItems[2] = Weapon("Iron_Sword", Vector2f(600, 650));
+	m_StoredItems[3] = Weapon("Silver_Wand", Vector2f(750, 650));
+	m_StoredItems[4] = Equipment("Family_Robe", Vector2f(900, 650));
+	m_StoredItems[5] = Equipment("Family_Hood", Vector2f(0, 0));
+	m_StoredItems[6] = Equipment("Leather_Cap", Vector2f(0, 0));
+	m_StoredItems[7] = Equipment("Leather_Chestplate", Vector2f(0, 0));
+	m_StoredItems[8] = Equipment("Basic_Shoes", Vector2f(0, 0));
+	m_StoredItems[9] = Equipment("Robe_Leggings", Vector2f(0, 0));
+	m_StoredItems[10] = Weapon("Reaper's_Scythe", Vector2f(0, 0));
+	m_StoredItems[11] = Equipment("Family_Locket", Vector2f(0, 0));
+	m_StoredItems[12] = Weapon("Armoured_Boots", Vector2f(0, 0));
+	m_StoredItems[14] = Item("Mana_Potion", Vector2f(0, 0));
+	m_StoredItems[15] = Item("Stamina_Potion", Vector2f(0, 0));
+	*/
 	/***********
 	Main Menu UI
 	************/
@@ -907,6 +908,7 @@ void Engine::run()
 					player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume(), vSync);
 					player.loadSaveFile();
 
+
 					equippedSwordIcon.setTextureRect(player.getEquippedSword()->getTextureRect());
 					equippedWandIcon.setTextureRect(player.getEquippedWand()->getTextureRect());
 					equippedHeadArmourIcon.setTextureRect(player.getEquippedHeadArmour()->getTextureRect());
@@ -945,12 +947,16 @@ void Engine::run()
 
 					tutorialStage = 0;
 
-					addItemToInventory("Health_Potion");
+			//		addItemToInventory("Health_Potion");
+					initializeInventory();
+
 				}
 
 				// Player hit the load game button in the main menu
 				else if (loadGameButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU && event.mouseButton.button == Mouse::Left)
 				{
+		
+					
 					state = State::PLAYING;
 
 					skipAnimation = false;
@@ -965,6 +971,7 @@ void Engine::run()
 					// Loads player stats from text file
 					if (player.loadSaveFile() == true) 
 					{
+
 						// Player loaded successfully
 						world.loadWorld();
 
@@ -1008,12 +1015,14 @@ void Engine::run()
 						populateChunkVector();
 						setDifficulty();
 						spawnEnemies();
+						initializeInventory();
 					}
 					else {
 						// No save file so create a new one with default values and load it	
 						player.createNewSave();
 						player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume(), vSync);
 						player.loadSaveFile();
+
 
 						equippedSwordIcon.setTextureRect(player.getEquippedSword()->getTextureRect());
 						equippedWandIcon.setTextureRect(player.getEquippedWand()->getTextureRect());
@@ -1057,6 +1066,7 @@ void Engine::run()
 						populateChunkVector();
 						setDifficulty();
 						spawnEnemies();
+						initializeInventory();
 					}
 				}
 
@@ -1240,9 +1250,9 @@ void Engine::run()
 
 				if (event.key.code == Keyboard::Num4 && state == State::PLAYING)
 				{
-					if (addItemToInventory("Iron_Sword"))
+					if (player.addItemToInventory("Iron_Sword"))
 					{
-						
+						initializeInventory();
 						cout << "Item added to inventory" << endl;
 				
 					}

@@ -24,7 +24,7 @@ public:
 
 	Chunk* getChunk(int i);
 
-	vector<NavBox> getNavBoxes(int i);
+	const vector<NavBox>& getNavBoxes(int i) const;
 
 	vector<Entity> getEntities(int i);
 

@@ -43,7 +43,7 @@ public:
 	SpellType getSpellType();
 
 	// We will call this function once every frame
-	void update(float elapsedTime, Vector2i mousePosition, vector<NavBox> navBox);
+	void update(float elapsedTime, Vector2i mousePosition, const vector<NavBox>& navBox);
 
 	// Give player a speed boost
 	void upgradeSpeed();
@@ -131,6 +131,10 @@ public:
 	Equipment* getEquippedTrouserArmour();
 	Equipment* getEquippedShoeArmour();
 	Equipment* getEquippedNeckArmour();
+
+	vector<Item>& getStoredItems();
+
+	bool addItemToInventory(String itemType);
 		
 	void setInCell();
 	bool getInCell();
@@ -244,6 +248,8 @@ private:
 	// store helmet at index 0, torso at index 1, pants at index 2, shoes at index 3, amulet/neck slot at index 4
 	vector<Equipment> m_EquippedArmour;
 	
+	vector<Item> m_StoredItems;
+
 	int m_Chunk; // player's current chunk
 
 	FloatRect m_RenderArea;
