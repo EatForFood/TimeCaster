@@ -12,11 +12,12 @@ using namespace sf;
 
 World::World()
 {
-	
+    WORLD_SIZE = 9;
 }
 
 void World::newWorld()
 {
+    GRID_SIZE = WORLD_SIZE;
     int half = GRID_SIZE / 2;
 
     ofstream out("gamedata/TCWorld.txt");
@@ -133,4 +134,9 @@ VertexArray World::getForground(int i) {
 Vector2f World::getChunkCenter(int i)
 {
 	return chunks[i].getChunkCenter();
+}
+
+void World::setWorldSize(int size) 
+{
+    WORLD_SIZE = size;
 }

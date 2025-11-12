@@ -418,4 +418,11 @@ private:
 
 	bool timeFrozen;
 	Clock timeFrozenTimer;
+
+	// Textbox logic
+	sf::RectangleShape textBox;
+	sf::Text feedback;
+	sf::Text userInputText;
+	std::string userInputString;
+	bool textBoxActive;
 };

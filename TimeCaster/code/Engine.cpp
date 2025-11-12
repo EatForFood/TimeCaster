@@ -783,6 +783,32 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	darkInventoryBackground.setPosition(0, 0);
 
 	timeFrozen = false;
+
+	// Text box setup
+	textBox.setSize({ 300, 50 });
+	textBounds = textBox.getLocalBounds();
+	viewCentre = mainView.getCenter();
+	textBox.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 800);
+	textBox.setFillColor(sf::Color(40, 40, 40));
+	textBox.setOutlineThickness(2.f);
+	textBox.setOutlineColor(Color::White);
+
+	// Text that shows the typed number
+	userInputText.setFont(font); // use your existing font
+	userInputText.setCharacterSize(fontSize - 11);
+	userInputText.setFillColor(Color::White);
+	userInputText.setPosition(textBox.getPosition().x + 10, textBox.getPosition().y + 10);
+
+	// Feedback message
+	feedback.setFont(font);
+	feedback.setCharacterSize(fontSize - 15);
+	feedback.setFillColor(Color::Yellow);
+	feedback.setString("Enter a number whose square is odd (e.g. 5 or 7)");
+	textBounds = feedback.getLocalBounds();
+	viewCentre = mainView.getCenter();
+	feedback.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 870);
+
+	textBoxActive = false;
 }
 
 // Function to convert difficulty state to string
@@ -895,6 +921,48 @@ void Engine::run()
 				}
 			}
 
+			// Activate textbox when clicked
+			if (event.type == sf::Event::MouseButtonPressed && state == State::OPTIONS_MENU)
+			{
+				if (event.mouseButton.button == Mouse::Left)
+				{
+					sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+					textBoxActive = textBox.getGlobalBounds().contains(mousePos);
+					textBox.setOutlineColor(textBoxActive ? Color::Green : Color::White);
+				}
+			}
+
+			// Handle typing if active
+			if (textBoxActive && event.type == sf::Event::TextEntered && state == State::OPTIONS_MENU)
+			{
+				if (event.text.unicode >= '0' && event.text.unicode <= '9')
+				{
+					userInputString += static_cast<char>(event.text.unicode);
+				}
+				else if (event.text.unicode == 8 && !userInputString.empty()) // Backspace
+				{
+					userInputString.pop_back();
+				}
+				else if (event.text.unicode == 13) // Enter key
+				{
+					if (!userInputString.empty())
+					{
+						int num = stoi(userInputString);
+						if (num > 0 && (num * num) % 2 == 1)
+						{
+							feedback.setString(to_string(num) + " is valid!");
+							world.setWorldSize(num);
+						}
+						else
+						{
+							feedback.setString("Invalid! Try another positive number.");
+						}
+					}
+				}
+
+				userInputText.setString(userInputString);
+			}
+
 			// Stop dragging
 			if (event.type == Event::MouseButtonReleased && event.mouseButton.button == Mouse::Left)
 			{
@@ -1004,7 +1072,6 @@ void Engine::run()
 					// Loads player stats from text file
 					if (player.loadSaveFile() == true) 
 					{
-
 						// Player loaded successfully
 						world.loadWorld();
 
