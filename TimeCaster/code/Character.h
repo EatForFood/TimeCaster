@@ -112,6 +112,8 @@ protected:
 	bool m_CastingSpell = false;
 	float m_DifficultyMult = 1.0f;
 
+	int m_WeaponSize = 1;
+
 public:
 
 	//void virtual update(float elapsedTime);

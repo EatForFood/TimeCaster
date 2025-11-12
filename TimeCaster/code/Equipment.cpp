@@ -37,7 +37,7 @@ Equipment::Equipment(String type, sf::Vector2f position) : Item(type, position) 
 		m_Armour = 0;
 		m_ItemType = ChestArmour;
 
-		
+
 
 		m_Sprite.setOrigin(25, 25);
 	}
@@ -78,7 +78,7 @@ Equipment::Equipment(String type, sf::Vector2f position) : Item(type, position) 
 		m_Icon.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
 		m_Icon.setTextureRect(IntRect(1058, 1408, 32, 32));
 		FloatRect bounds = m_Icon.getLocalBounds();
-		m_Icon.setOrigin(bounds.width / 2.f, bounds.height / 2.f);	
+		m_Icon.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
 
 		m_Icon.setScale(2.3125, 2.3125);
 		m_Value = 5;
@@ -133,8 +133,8 @@ Equipment::Equipment(String type, sf::Vector2f position) : Item(type, position) 
 		m_ItemType = ShoeArmour;
 
 		m_Sprite.setOrigin(25, 25);
-		}
-	else if (m_Name == "Armoured_Helmmet")
+	}
+	else if (m_Name == "Steel_Plate_Helmet")
 	{
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
 		m_Sprite.setTextureRect(IntRect(1312, 702, 32, 32));
@@ -143,7 +143,7 @@ Equipment::Equipment(String type, sf::Vector2f position) : Item(type, position) 
 		FloatRect bounds = m_Icon.getLocalBounds();
 		m_Icon.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
 		m_Icon.setScale(2.3125, 2.3125);
-		m_Value = 20; 
+		m_Value = 20;
 		m_Armour = 15;
 
 		m_ItemType = HeadArmour;
@@ -151,7 +151,55 @@ Equipment::Equipment(String type, sf::Vector2f position) : Item(type, position) 
 		m_Sprite.setOrigin(25, 25);
 
 	}
-	else if (m_Name == "Chainmail_Armour")
+	else if (m_Name == "Steel_Plate_Chestplate")
+	{
+		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
+		m_Sprite.setTextureRect(IntRect(322, 674, 32, 32));
+		m_Icon.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
+		m_Icon.setTextureRect(IntRect(322, 674, 32, 32));
+		FloatRect bounds = m_Icon.getLocalBounds();
+		m_Icon.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
+		m_Icon.setScale(2.3125, 2.3125);
+		m_Value = 35;
+		m_Armour = 40;
+
+		m_ItemType = ChestArmour;
+
+		m_Sprite.setOrigin(25, 25);
+	}
+	else if (m_Name == "Steel_Plate_Pants")
+	{
+		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
+		m_Sprite.setTextureRect(IntRect(414, 708, 32, 32));
+		m_Icon.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
+		m_Icon.setTextureRect(IntRect(414, 708, 32, 32));
+		FloatRect bounds = m_Icon.getLocalBounds();
+		m_Icon.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
+		m_Icon.setScale(2.3125, 2.3125);
+		m_Value = 20;
+		m_Armour = 25;
+
+		m_ItemType = TrouserArmour;
+
+		m_Sprite.setOrigin(25, 25);
+	}
+	else if (m_Name == "Steel_Plate_Boots")
+	{
+		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
+		m_Sprite.setTextureRect(IntRect(1024, 1408, 32, 32));
+		m_Icon.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
+		m_Icon.setTextureRect(IntRect(1024, 1408, 32, 32));
+		FloatRect bounds = m_Icon.getLocalBounds();
+		m_Icon.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
+		m_Icon.setScale(2.3125, 2.3125);
+		m_Value = 10;
+		m_Armour = 20;
+
+		m_ItemType = ShoeArmour;
+
+		m_Sprite.setOrigin(25, 25);
+	}
+	else if (m_Name == "Chain_Mail")
 	{
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
 		m_Sprite.setTextureRect(IntRect(322, 674, 32, 32));
@@ -166,8 +214,8 @@ Equipment::Equipment(String type, sf::Vector2f position) : Item(type, position) 
 		m_ItemType = ChestArmour;
 
 		m_Sprite.setOrigin(25, 25);
-		}
-	else if (m_Name == "Armoured_Leggings")
+	}
+	else if (m_Name == "Chain_Hood")
 	{
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
 		m_Sprite.setTextureRect(IntRect(414, 708, 32, 32));
@@ -176,14 +224,14 @@ Equipment::Equipment(String type, sf::Vector2f position) : Item(type, position) 
 		FloatRect bounds = m_Icon.getLocalBounds();
 		m_Icon.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
 		m_Icon.setScale(2.3125, 2.3125);
-		m_Value = 20; 
+		m_Value = 20;
 		m_Armour = 10;
 
-		m_ItemType = TrouserArmour;
+		m_ItemType = HeadArmour;
 
 		m_Sprite.setOrigin(25, 25);
 	}
-	else if (m_Name == "Armoured_Boots")
+	else if (m_Name == "Soldiers_Helmet")
 	{
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
 		m_Sprite.setTextureRect(IntRect(1024, 1408, 32, 32));
@@ -192,10 +240,10 @@ Equipment::Equipment(String type, sf::Vector2f position) : Item(type, position) 
 		FloatRect bounds = m_Icon.getLocalBounds();
 		m_Icon.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
 		m_Icon.setScale(2.3125, 2.3125);
-		m_Value = 10; 
+		m_Value = 10;
 		m_Armour = 10;
 
-		m_ItemType = ShoeArmour;
+		m_ItemType = HeadArmour;
 
 		m_Sprite.setOrigin(25, 25);
 	}
@@ -213,7 +261,7 @@ Equipment::Equipment(String type, sf::Vector2f position) : Item(type, position) 
 
 		m_ItemType = NeckArmour;
 		m_Sprite.setOrigin(25, 25);
-		}
+	}
 	else if (m_Name == "Family_Locket")
 	{
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
@@ -223,13 +271,13 @@ Equipment::Equipment(String type, sf::Vector2f position) : Item(type, position) 
 		FloatRect bounds = m_Icon.getLocalBounds();
 		m_Icon.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
 		m_Icon.setScale(2.3125, 2.3125);
-		m_Value = 15; 
+		m_Value = 15;
 		m_Armour = 0;
 		m_Sentimental = true;
 		m_ItemType = NeckArmour;
 
 		m_Sprite.setOrigin(25, 25);
-		}
+	}
 	else
 	{
 		m_Value = 0;

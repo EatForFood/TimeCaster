@@ -96,7 +96,7 @@ void Character::setSpriteFromSheet(sf::IntRect textureBox, int tileSize) // set 
 	m_SpritePants.setTextureRect(sf::IntRect{ sheetCoordinate, spriteSize });
 	m_SpriteShoes.setTextureRect(sf::IntRect{ sheetCoordinate, spriteSize });
 
-	m_SpriteWeapon.setTextureRect(sf::IntRect{ sheetCoordinate, spriteSize });
+	m_SpriteWeapon.setTextureRect(sf::IntRect{ Vector2i(sheetCoordinate.x, sheetCoordinate.y * m_WeaponSize), spriteSize * m_WeaponSize});
 }
 
 void Character::moveTextureRect() // animate sprite by moving texRect location
@@ -116,11 +116,6 @@ void Character::moveTextureRect() // animate sprite by moving texRect location
 		m_SpriteTorso.setTextureRect(sf::IntRect(sheetCoordinate + sf::Vector2i(spriteSize.x * m_Ani_Counter, 0), spriteSize));
 		m_SpritePants.setTextureRect(sf::IntRect(sheetCoordinate + sf::Vector2i(spriteSize.x * m_Ani_Counter, 0), spriteSize));
 		m_SpriteShoes.setTextureRect(sf::IntRect(sheetCoordinate + sf::Vector2i(spriteSize.x * m_Ani_Counter, 0), spriteSize));
-
-		if (m_IsAttacking)
-		{
-			m_SpriteWeapon.setTextureRect(sf::IntRect(sheetCoordinate + sf::Vector2i(spriteSize.x * m_Ani_Counter, 0), spriteSize));
-		}
 	}
 	else {
 		m_Sprite.setTextureRect(sf::IntRect(sheetCoordinate + sf::Vector2i(0, spriteSize.y * m_Ani_Counter), spriteSize));
@@ -129,10 +124,17 @@ void Character::moveTextureRect() // animate sprite by moving texRect location
 		m_SpriteTorso.setTextureRect(sf::IntRect(sheetCoordinate + sf::Vector2i(0, spriteSize.y * m_Ani_Counter), spriteSize));
 		m_SpritePants.setTextureRect(sf::IntRect(sheetCoordinate + sf::Vector2i(0, spriteSize.y * m_Ani_Counter), spriteSize));
 		m_SpriteShoes.setTextureRect(sf::IntRect(sheetCoordinate + sf::Vector2i(0, spriteSize.y * m_Ani_Counter), spriteSize));
+	}
 
-		if (m_IsAttacking)
+	if (m_IsAttacking)
+	{
+		if (m_Horizontal)
 		{
-			m_SpriteWeapon.setTextureRect(sf::IntRect(sheetCoordinate + sf::Vector2i(0, spriteSize.y * m_Ani_Counter), spriteSize));
+			m_SpriteWeapon.setTextureRect(sf::IntRect(Vector2i(sheetCoordinate.x, sheetCoordinate.y * m_WeaponSize) + sf::Vector2i(spriteSize.y * m_WeaponSize * m_Ani_Counter, 0), spriteSize * m_WeaponSize));
+		}
+		else
+		{
+			m_SpriteWeapon.setTextureRect(sf::IntRect(Vector2i(sheetCoordinate.x, sheetCoordinate.y * m_WeaponSize) + sf::Vector2i(0, spriteSize.y * m_WeaponSize * m_Ani_Counter), spriteSize * m_WeaponSize));
 		}
 	}
 
