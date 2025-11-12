@@ -1317,7 +1317,7 @@ void Engine::run()
 				}
 
 				// Player hit tab while playing
-				if (state == State::PLAYING && event.key.code == Keyboard::Tab && tutorialStage != 1) 
+				if (state == State::PLAYING && event.key.code == Keyboard::Tab && tutorialStage != 1 && !drawShop)
 				{
 					if (drawInventory) {
 						drawInventory = false;
