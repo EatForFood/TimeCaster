@@ -153,9 +153,9 @@ void Player::stopDown()
 	m_DownPressed = false;
 }
 
-void Player::update(float elapsedTime, Vector2i mousePosition, vector<NavBox> navBox)
+void Player::update(float elapsedTime, Vector2i mousePosition, const vector<NavBox>& navBox)
 {
-	navBoxes = navBox;
+	//navBoxes = navBox;
 
 	m_TimeElapsed = elapsedTime; 
 
@@ -263,7 +263,7 @@ void Player::update(float elapsedTime, Vector2i mousePosition, vector<NavBox> na
 		direction = Vector2f(0, 1);
 	}
 
-	for (auto& nav : navBoxes) { // if player walks into navBox 
+	for (auto& nav : navBox) { // if player walks into navBox 
 		if (m_CollisionBox.intersects(nav.getShape().getGlobalBounds()))
 		{
 			if (collision.pointInShape(m_Position, nav.getShape())) {
@@ -279,7 +279,7 @@ void Player::update(float elapsedTime, Vector2i mousePosition, vector<NavBox> na
 		direction = Vector2f(0, -1);
 	}
 
-	for (auto& nav : navBoxes) { // if player walks into navBox 
+	for (auto& nav : navBox) { // if player walks into navBox 
 		if (m_CollisionBox.intersects(nav.getShape().getGlobalBounds()))
 		{
 			if (collision.pointInShape(m_Position, nav.getShape())) {
@@ -295,7 +295,7 @@ void Player::update(float elapsedTime, Vector2i mousePosition, vector<NavBox> na
 		direction = Vector2f(1, 0);
 	}
 
-	for (auto& nav : navBoxes) { // if player walks into navBox 
+	for (auto& nav : navBox) { // if player walks into navBox 
 		if (m_CollisionBox.intersects(nav.getShape().getGlobalBounds()))
 		{
 			if (collision.pointInShape(m_Position, nav.getShape())) {
@@ -311,7 +311,7 @@ void Player::update(float elapsedTime, Vector2i mousePosition, vector<NavBox> na
 		direction = Vector2f(-1, 0);
 	}
 
-	for (auto& nav : navBoxes) { // if player walks into navBox 
+	for (auto& nav : navBox) { // if player walks into navBox 
 		if (m_CollisionBox.intersects(nav.getShape().getGlobalBounds()))
 		{
 			if (collision.pointInShape(m_Position, nav.getShape())) {

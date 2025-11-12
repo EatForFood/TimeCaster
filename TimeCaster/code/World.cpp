@@ -84,9 +84,9 @@ Chunk* World::getChunk(int i)
 	return &chunks[i];
 }
 
-vector<NavBox> World::getNavBoxes(int i)
+const vector<NavBox>& World::getNavBoxes(int i) const
 {
-	return chunks[i].getNavBoxes();
+    return chunks[i].getNavBoxes();
 }
 
 NavBox World::getChunkArea(int i)

@@ -129,7 +129,7 @@ void Engine::update()
 			{
 				if (spells[i].isInFlight())
 				{
-					spells[i].update(dtAsSeconds);
+					spells[i].update(dtAsSeconds, world.getNavBoxes(player.getChunk()));
 
 					FloatRect spellBounds = spells[i].getSprite().getGlobalBounds();
 

@@ -43,7 +43,7 @@ public:
 	SpellType getSpellType();
 
 	// We will call this function once every frame
-	void update(float elapsedTime, Vector2i mousePosition, vector<NavBox> navBox);
+	void update(float elapsedTime, Vector2i mousePosition, const vector<NavBox>& navBox);
 
 	// Give player a speed boost
 	void upgradeSpeed();
