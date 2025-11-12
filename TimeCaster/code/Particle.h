@@ -25,6 +25,7 @@ private:
 	float m_AnimationTimer = 0;
 	bool m_IsPlaying = false;
 
+	int m_ParticleID = -1;
 
 public:
 	// The constructor
@@ -35,6 +36,7 @@ public:
 
 	bool isPlaying();
 
+	void play(float startX, float startY, int particleID);
 
 
 	// Tell the calling code where the Particle is in the world
@@ -51,8 +53,6 @@ public:
 
 	void setSpriteFromSheet(IntRect textureBox, int tileSize);
 	void moveTextureRect();
-
-	FloatRect getHitbox();
 
 	Sprite getSprite();
 };

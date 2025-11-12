@@ -14,75 +14,52 @@ Particle::Particle()
 
 
 }
-//
-//void Particle::shoot(float startX, float startY, float targetX, float targetY, float ParticleDamage)
-//{
-//	// Take damage based off of wand
-//	m_ParticleDamage = ParticleDamage;
-//
-//	// Keep track of the Particle
-//	m_InFlight = true;
-//	m_Position.x = startX;
-//	m_Position.y = startY;
-//
-//	// Calculate the gradient of the flight path
-//	float gradient = (startX - targetX) / (startY - targetY);
-//
-//	// Any gradient less than zero needs to be negative
-//	if (gradient < 0)
-//	{
-//		gradient *= -1;
-//	}
-//
-//	// Calculate the ratio between x and t
-//	float ratioXY = m_ParticleSpeed / (1 + gradient);
-//
-//	// Set the "speed" horizontally and vertically
-//	m_ParticleDistanceY = ratioXY;
-//	m_ParticleDistanceX = ratioXY * gradient;
-//
-//	// Point the bullet in the right direction
-//	if (targetX < startX)
-//	{
-//		m_ParticleDistanceX *= -1;
-//	}
-//
-//	if (targetY < startY)
-//	{
-//		m_ParticleDistanceY *= -1;
-//	}
-//
-//	// Finally, assign the results to the
-//	// member variables
-//	m_XTarget = targetX;
-//	m_YTarget = targetY;
-//
-//	// Set a max range of 1000 pixels
-//	float range = 1000;
-//	m_MinX = startX - range;
-//	m_MaxX = startX + range;
-//	m_MinY = startY - range;
-//	m_MaxY = startY + range;
-//
-//	// angle Particle towards target
-//	float dx = targetX - startX;
-//	float dy = targetY - startY;
-//
-//	// Compute the angle of travel in degrees
-//	float angle = std::atan2(dy, dx) * 180.f / 3.14159265f;
-//
-//	// Rotate the sprite
-//	m_Sprite.setRotation(angle);
-//
-//	m_Hitbox.left = m_Position.x - m_HitboxWidth / 2;
-//	m_Hitbox.width = m_HitboxWidth;
-//	m_Hitbox.top = m_Position.y - m_HitboxHeight / 2;
-//	m_Hitbox.height = m_HitboxHeight;
-//
-//	// Position the Particle ready to be drawn
-//	setSpriteFromSheet(IntRect(0, 0, 512, 64), 64);
-//	m_Sprite.setPosition(m_Position);
-//}
+
+void Particle::play(float startX, float startY, int particleID)
+{
+
+	// Keep track of the Particle
+	m_IsPlaying = true;
+	m_Position.x = startX;
+	m_Position.y = startY;
+	m_ParticleID = particleID;
+
+	// Set the sprite based on particleID
+	switch (m_ParticleID)
+	{
+	case 0: // Heal Particle
+		m_Sprite = Sprite(TextureHolder::GetTexture("graphics/particles/healParticle.png"));
+		break;
+	case 1: // Blood Particle
+		m_Sprite = Sprite(TextureHolder::GetTexture("graphics/particles/bloodParticle.png"));
+		break;
+	case 2: // Spark Particle
+		m_Sprite = Sprite(TextureHolder::GetTexture("graphics/particles/sparkParticle.png"));
+		break;
+	default:
+		m_Sprite = Sprite(TextureHolder::GetTexture("graphics/particles/healParticle.png")); // Most noticeable default
+		break;
+	}
+
+
+
+
+
+
+
+	// Position the Particle ready to be drawn
+	if (particleID == 0)
+	{
+		setSpriteFromSheet(IntRect(0, 0, 384, 64), 64); // Heal particle is larger and has more frames
+	}
+	else
+	{
+		setSpriteFromSheet(IntRect(0, 0, 256, 64), 64);
+	}
+
+	m_Sprite.setPosition(m_Position);
+}
+
 //
 //void Particle::stop()
 //{
@@ -202,6 +179,6 @@ Sprite Particle::getSprite()
 //}
 
 bool Particle::isPlaying()
-{
+{ 
 	return m_IsPlaying;
 }
