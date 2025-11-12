@@ -100,6 +100,10 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	spriteMainMenu.setTexture(textureMainMenu);
 	spriteMainMenu.setPosition(0, 0);
 
+	textureStoryIntro = TextureHolder::GetTexture("graphics/UI/ForestFire.jpg");
+	spriteStoryIntro.setTexture(textureStoryIntro);
+	spriteStoryIntro.setPosition(0, 0);
+
 	// Create a view for the HUD
 	FloatRect hudRect(0, 0, resolution.x, resolution.y);
 	hudView.reset(hudRect);
@@ -459,7 +463,7 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	storyIntroText.setFont(font);
 	storyIntroText.setCharacterSize(fontSize + 10);
 	storyIntroText.setFillColor(Color::White);
-	storyIntroText.setPosition(150, 150);
+	storyIntroText.setPosition(150, 200);
 
 	fullText = "I was not always a man consumed by vengeance. Once, I had a family-warm laughter by the fire, \n"
 		"the gentle touch of my children's hands, the steady love of my wife. \n"
@@ -472,13 +476,9 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 		"You desire retribution dear player, but what will it cost you?";
 
 	// Skip intro text
-	skipIntroText.setString("--- Press space to skip ---"); // Set the text content
-	skipIntroText.setFont(font);                    // Assign the font
-	skipIntroText.setCharacterSize(fontSize - 5);   // Slightly smaller text size
+	skipIntroText.setFont(font); // Assign the font
+	skipIntroText.setCharacterSize(fontSize - 5); // Slightly smaller text size
 	skipIntroText.setFillColor(Color::White);
-	textBounds = skipIntroText.getLocalBounds();
-	viewCentre = mainView.getCenter();
-	skipIntroText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 1000);
 
 	/***********
 	Inventory UI
@@ -706,6 +706,9 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	textBounds = inventoryBackground.getLocalBounds();
 	inventoryBackground.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y - (textBounds.height / 2.f) - textBounds.top);
 
+	/*****************
+	Hotbar UI elements
+	*****************/
 	swordBox.setTexture(&textureEmptyFrame);
 	swordBox.setSize(Vector2f(75, 75));
 	swordBox.setPosition(viewCentre.x - 288, 1000);
@@ -782,7 +785,35 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	darkInventoryBackground.setSize(resolution);
 	darkInventoryBackground.setPosition(0, 0);
 
+	// Is the time currently frozen by a spell?
 	timeFrozen = false;
+
+	// Text box setup
+	textBox.setSize({ 300, 50 });
+	textBounds = textBox.getLocalBounds();
+	viewCentre = mainView.getCenter();
+	textBox.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 800);
+	textBox.setFillColor(sf::Color(40, 40, 40));
+	textBox.setOutlineThickness(2.f);
+	textBox.setOutlineColor(Color::White);
+
+	// Text that shows the number the user types
+	userInputText.setFont(font);
+	userInputText.setCharacterSize(fontSize - 11);
+	userInputText.setFillColor(Color::White);
+	userInputText.setPosition(textBox.getPosition().x + 10, textBox.getPosition().y + 10);
+
+	// Feedback message
+	feedback.setFont(font);
+	feedback.setCharacterSize(fontSize - 15);
+	feedback.setFillColor(Color::Yellow);
+	feedback.setString("Enter a number whose square is odd (e.g. 5 or 7)\nHit enter key when done");
+	textBounds = feedback.getLocalBounds();
+	viewCentre = mainView.getCenter();
+	feedback.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 870);
+
+	// Is the player currently typing in the text box?
+	textBoxActive = false;
 }
 
 // Function to convert difficulty state to string
@@ -881,18 +912,62 @@ void Engine::run()
 				}
 			}
 
+			// Switch between sword and wand when middle mouse / f key pressed
 			if ((event.type == Event::MouseButtonPressed && event.key.code == Mouse::Middle && state == State::PLAYING) ||
 				(event.type == Event::KeyPressed && event.key.code == Keyboard::F && state == State::PLAYING))
 			{
 				player.switchWeapon();
 			}
 
+			// Handles dragging of the volume slider
 			if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left && state == State::OPTIONS_MENU)
 			{
 				if (handle.getGlobalBounds().contains(sf::Vector2f(event.mouseButton.x, event.mouseButton.y)))
 				{
 					dragging = true;
 				}
+			}
+
+			// Activate textbox when clicked
+			if (event.type == sf::Event::MouseButtonPressed && state == State::OPTIONS_MENU)
+			{
+				if (event.mouseButton.button == Mouse::Left)
+				{
+					sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+					textBoxActive = textBox.getGlobalBounds().contains(mousePos);
+					textBox.setOutlineColor(textBoxActive ? Color::Green : Color::White);
+				}
+			}
+
+			// Handle typing if text box active
+			if (textBoxActive && event.type == sf::Event::TextEntered && state == State::OPTIONS_MENU)
+			{
+				if (event.text.unicode >= '0' && event.text.unicode <= '9')
+				{
+					userInputString += static_cast<char>(event.text.unicode);
+				}
+				else if (event.text.unicode == 8 && !userInputString.empty()) // User hits backspace
+				{
+					userInputString.pop_back();
+				}
+				else if (event.text.unicode == 13) // User hits enter key
+				{
+					if (!userInputString.empty())
+					{
+						int num = stoi(userInputString);
+						if (num > 0 && (num * num) % 2 == 1)
+						{
+							feedback.setString(to_string(num) + " is valid!");
+							world.setWorldSize(num);
+						}
+						else
+						{
+							feedback.setString("Invalid! Try another positive number.");
+						}
+					}
+				}
+
+				userInputText.setString(userInputString);
 			}
 
 			// Stop dragging
@@ -903,13 +978,13 @@ void Engine::run()
 
 			if (event.type == Event::KeyPressed || Mouse::isButtonPressed(Mouse::Left))
 			{
-				// Pause a game while playing
+				// Pause the game if escape key pressed
 				if (event.key.code == Keyboard::Escape && state == State::PLAYING && !drawInventory)
 				{
 					state = State::PAUSED;
 				}
 
-				// Restart while paused
+				// Unpause game if escape key pressed and game is paused
 				else if (event.key.code == Keyboard::Escape && state == State::PAUSED)
 				{
 					state = State::PLAYING;
@@ -966,7 +1041,16 @@ void Engine::run()
 					windowedMode = player.getWindowedMode();
 					displayFps = player.getDisplayFps();
 					Listener::setGlobalVolume(player.getVolume());
+
+					mainView.setCenter(resolution.x / 2.f, resolution.y / 2.f);
+					
+					// Skip intro text
+					skipIntroText.setString("--- Press space to skip ---"); // Set the text content
+					textBounds = skipIntroText.getLocalBounds();
+					viewCentre = mainView.getCenter();
+					skipIntroText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 1030);
 				
+					// Loads world using multi-threading
 					worldLoaded = false;
 					thread worldThread(&Engine::generateWorld, this);
 					worldThread.detach();
@@ -996,7 +1080,6 @@ void Engine::run()
 					// Loads player stats from text file
 					if (player.loadSaveFile() == true) 
 					{
-
 						// Player loaded successfully
 						world.loadWorld();
 
@@ -1179,7 +1262,6 @@ void Engine::run()
 					}
 				}
 
-
 				// Player hit the debug mode button
 				if (debugModeButton.getGlobalBounds().contains(worldPos) && state == State::OPTIONS_MENU && event.mouseButton.button == Mouse::Left)
 				{
@@ -1192,7 +1274,6 @@ void Engine::run()
 						debugMode = true;
 					}
 				}
-
 
 				// Player hit the difficulty button
 				if (difficultyButton.getGlobalBounds().contains(worldPos) && state == State::OPTIONS_MENU && event.mouseButton.button == Mouse::Left)
@@ -1236,7 +1317,7 @@ void Engine::run()
 				}
 
 				// Player hit tab while playing
-				if (state == State::PLAYING && event.key.code == Keyboard::Tab && tutorialStage != 1) 
+				if (state == State::PLAYING && event.key.code == Keyboard::Tab && tutorialStage != 1 && !drawShop)
 				{
 					if (drawInventory) {
 						drawInventory = false;
@@ -1249,7 +1330,7 @@ void Engine::run()
 
 			if (event.type == Event::KeyPressed)
 			{
-				/* below are debug functions, comment them out in full build / when needed */
+				// below are debug functions, comment them out in full build / when needed
 				
 				// Debug shop toggle
 				// Shop is still very much WIP
@@ -1300,7 +1381,6 @@ void Engine::run()
 					}
 					player.switchSpell(4);
 				}
-
 
 				if (event.key.code == Keyboard::Num5 && state == State::PLAYING && debugMode)
 				{
@@ -1392,7 +1472,7 @@ void Engine::run()
 				}
 			}
 
-			// Handle the pressing and releasing of the WASD keys
+			// Handle the pressing and releasing the WASD keys
 			if (Keyboard::isKeyPressed(Keyboard::W))
 			{
 				player.moveUp();
@@ -1480,20 +1560,23 @@ void Engine::run()
 			{
 				difficultyButton.setFillColor(Color::Yellow);
 			}
-			else
+			else // Hard
 			{
 				difficultyButton.setFillColor(Color::Red);
 			}
 		}
 
+		// Sets health to 0 if it goes below 0
 		if (player.getHealth() < 0) {
 			player.setHealthValue(0);
 		}
 
+		// Sets stamina to 0 if it goes below 0
 		if (player.getStamina() < 0) {
 			player.setStaminaValue(0);
 		}
 
+		// Sets mana to 0 if it goes below 0
 		if (player.getMana() < 0) {
 			player.setManaValue(0);
 		}
@@ -1505,6 +1588,7 @@ void Engine::run()
 			startSoundPlayed = FALSE;
 		}
 
+		// Displays intro text in a typewriter style
 		if (state == State::STORY_INTRO && !skipAnimation) {
 			if (currentChar < (int)fullText.size())
 			{
@@ -1518,6 +1602,7 @@ void Engine::run()
 			}
 		}
 
+		// Stops sound track in options and main menus
 		if (state == State::MAIN_MENU || state == State::OPTIONS_MENU)
 		{
 			if (sound.isSoundtrackPlaying()) {
@@ -1536,6 +1621,7 @@ void Engine::run()
 			window.setMouseCursorGrabbed(false);
 		}
 
+		// Handles dragging the volume slider in the options menu
 		if (state == State::OPTIONS_MENU) {
 			if (dragging)
 			{
@@ -1572,7 +1658,7 @@ void Engine::generateWorld()
 	skipIntroText.setString("World is loading...");
 	textBounds = skipIntroText.getLocalBounds();
 	viewCentre = mainView.getCenter();
-	skipIntroText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 1000);
+	skipIntroText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 1030);
 	world.newWorld();
 	populateChunkVector();
 	spawnEnemies();
@@ -1580,7 +1666,7 @@ void Engine::generateWorld()
 	skipIntroText.setString("--- Press space to skip ---");
 	textBounds = skipIntroText.getLocalBounds();
 	viewCentre = mainView.getCenter();
-	skipIntroText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 1000);
+	skipIntroText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 1030);
 }
 
 // Sets the player's difficulty multiplier

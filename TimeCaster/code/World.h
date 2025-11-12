@@ -6,8 +6,8 @@ class World
 {
 private:
 
-	const int WORLD_SIZE = 9;
-	int GRID_SIZE = sqrt(WORLD_SIZE);
+	int WORLD_SIZE;
+	int GRID_SIZE;
 	vector<Chunk> chunks;
 
 	Vector2i m_TileTypeF[50][50];
@@ -40,4 +40,5 @@ public:
 
 	VertexArray getForground(int i);
 
+	void setWorldSize(int size);
 };

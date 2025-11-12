@@ -826,10 +826,14 @@ void Player::switchWeapon()
 	if (m_CombatType == Melee)
 	{
 		m_CombatType = Magic;
+		m_WeaponSize = m_EquippedWeapons[1].getWeaponSize();
+		m_SpriteWeapon.setOrigin((64 * m_WeaponSize) / 2, (64 * m_WeaponSize) / 2);		m_SpriteWeapon.setScale(0.75, 0.75);
 	}
 	else
 	{
 		m_CombatType = Melee;
+		m_WeaponSize = m_EquippedWeapons[0].getWeaponSize();
+		m_SpriteWeapon.setOrigin((64 * m_WeaponSize) / 2, (64 * m_WeaponSize) / 2);		m_SpriteWeapon.setScale(0.75, 0.75);
 	}
 }
 
@@ -861,8 +865,9 @@ bool Player::equipWeapon(string weaponNameToEquip)
 	{
 		m_EquippedSwordName = weaponToEquip.getName();
 		m_EquippedWeapons[0] = weaponToEquip;
-		m_SpriteWeapon = Sprite(TextureHolder::GetTexture("graphics/player/weapon/" + weaponToEquip.getAnimType() + "/" + weaponToEquip.getName() + ".png"));;
-		m_SpriteWeapon.setOrigin(32, 32);		m_SpriteWeapon.setScale(0.75, 0.75);
+		m_SpriteWeapon = Sprite(TextureHolder::GetTexture("graphics/player/weapon/" + weaponToEquip.getAnimType() + "/" + weaponToEquip.getName() + ".png"));
+		m_WeaponSize = weaponToEquip.getWeaponSize();
+		m_SpriteWeapon.setOrigin((64 * m_WeaponSize) / 2, (64 * m_WeaponSize) / 2);		m_SpriteWeapon.setScale(0.75, 0.75);
 		m_CombatType = Melee;
 		updateTextRect();
 		return true;
@@ -871,8 +876,9 @@ bool Player::equipWeapon(string weaponNameToEquip)
 	{
 		m_EquippedWandName = weaponToEquip.getName();
 		m_EquippedWeapons[1] = weaponToEquip;
-		m_SpriteWeapon = Sprite(TextureHolder::GetTexture("graphics/player/weapon/" + weaponToEquip.getAnimType() + "/" + weaponToEquip.getName() + ".png"));;
-		m_SpriteWeapon.setOrigin(32, 32);		m_SpriteWeapon.setScale(0.75, 0.75);
+		m_SpriteWeapon = Sprite(TextureHolder::GetTexture("graphics/player/weapon/" + weaponToEquip.getAnimType() + "/" + weaponToEquip.getName() + ".png"));
+		m_WeaponSize = weaponToEquip.getWeaponSize();
+		m_SpriteWeapon.setOrigin((64 * m_WeaponSize) / 2, (64 * m_WeaponSize) / 2);		m_SpriteWeapon.setScale(0.75, 0.75);
 		m_CombatType = Magic;
 		updateTextRect();
 		return true;
@@ -1083,9 +1089,9 @@ void Player::Attack()
 
 	// Associate a texture with the body sprite
 	m_SpriteWeapon = Sprite(TextureHolder::GetTexture("graphics/player/weapon/" + attackType + "/" + equippedWeapon + ".png"));
-	m_SpriteWeapon.setOrigin(32, 32);
+	m_SpriteWeapon.setOrigin((64 * m_WeaponSize) / 2, (64 * m_WeaponSize) / 2);
 	m_SpriteWeapon.setScale(0.75, 0.75);
-
+	
 	m_Sprite = Sprite(TextureHolder::GetTexture("graphics/player/" + attackType + "/playerAttack.png"));
 	m_Sprite.setOrigin(32, 32);
 	m_Sprite.setScale(0.75, 0.75);

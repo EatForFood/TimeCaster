@@ -17,7 +17,6 @@ void Engine::update()
 			sound.stopTimeStopActiveSound();
 			timeFrozen = false;
 		}
-
 	}
 
 	if (state == State::PLAYING)
@@ -53,7 +52,6 @@ void Engine::update()
 			player.update(dtAsSeconds, Mouse::getPosition(), world.getNavBoxes(player.getChunk()));
 		}
 
-
 		if (state == State::PLAYING && !drawInventory && !timeFrozen) {
 
 			// Update the vector of enemies if within player's render area
@@ -85,6 +83,8 @@ void Engine::update()
 								{
 									sound.playHitSound();
 									particles[100].play(player.getCenter().x - 30, player.getCenter().y - 30, 1); 
+									decal[currentDecal].spawn("bloodImpact", player.getPosition().x, player.getPosition().y);
+									currentDecal++;
 								}
 							}
 							if (player.getWeapon().getGlobalBounds().intersects(enemies.getHitBox()) && player.isAttacking() && !enemies.wasHit())
@@ -103,6 +103,8 @@ void Engine::update()
 
 								// Play enemy hit sound
 								sound.playHitSound();
+								decal[currentDecal].spawn("bloodImpact", enemies.getPosition().x, enemies.getPosition().y);
+								currentDecal++;
 							}
 							else if (!player.isAttacking())
 							{
@@ -151,6 +153,8 @@ void Engine::update()
 						{
 							if (spells[i].getSprite().getGlobalBounds().intersects(enemies.getHitBox()))
 							{
+								decal[currentDecal].spawn("bloodImpact", enemies.getPosition().x, enemies.getPosition().y);
+								currentDecal++;
 								// Apply damage from spell to enemy
 								enemies.setHealth(-spells[i].getSpellDamage());
 								//cout << "Enemy hit for " << spells[i].getSpellDamage() << " damage. Enemy health now " << enemies.getCurrentHP() << endl;
@@ -469,9 +473,6 @@ void Engine::update()
 		framesSinceLastHUDUpdate++;
 		// Calculate FPS every fpsMeasurementFrameInterval frames
 
-
-
-
 		if (drawInventory) {
 			// Update the kills text
 			stringstream ssKillCount;
@@ -492,8 +493,6 @@ void Engine::update()
 			stringstream ssExp;
 			ssExp << "EXP: " << player.getExp() << " / " << "100";
 			expText.setString(ssExp.str());
-
-
 
 			stringstream ssHealthBar;
 			ssHealthBar << int(player.getHealth()) << " / " << int(player.getMaxHealth());
@@ -569,4 +568,15 @@ void Engine::update()
 		}
 
 	} // End updating the scene
+
+	if (state == MAIN_MENU) {
+		
+		if (currentDecal > 0) {
+			for (int i = 0; i < sizeof(decal) / sizeof(decal[0]); i++) {
+				decal[i] = Decal();
+			}
+		}
+		
+		currentDecal = 0;
+	}
 }

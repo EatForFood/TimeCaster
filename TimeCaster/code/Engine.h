@@ -155,9 +155,13 @@ private:
 	// Integer used to set all text font sizes
 	int fontSize = 35;
 
-	// For the home/game over screen
+	// For the main menu screen
 	Sprite spriteMainMenu;
 	Texture textureMainMenu;
+
+	// For the story intro screen
+	Texture textureStoryIntro;
+	Sprite spriteStoryIntro;
 
 	View hudView;
 
@@ -417,4 +421,11 @@ private:
 
 	bool timeFrozen;
 	Clock timeFrozenTimer;
+
+	// Textbox logic
+	sf::RectangleShape textBox;
+	sf::Text feedback;
+	sf::Text userInputText;
+	std::string userInputString;
+	bool textBoxActive;
 };
