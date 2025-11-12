@@ -18,11 +18,12 @@ private:
 	Vector2i sheetCoordinate;
 	Vector2i spriteSize;
 	int m_Animation_It_Limit; //Max animation iterations
-	bool m_Horizontal{ true };
 	int m_Ani_Counter{};
+	bool m_Horizontal{ true };
 	int m_Counter{};
 	float m_TimeElapsed;
 	float m_AnimationTimer = 0;
+	bool m_IsPlaying = false;
 
 
 public:
@@ -32,7 +33,7 @@ public:
 	// Stop the Particle
 	void stop();
 
-	
+	bool isPlaying();
 
 
 

@@ -6,9 +6,10 @@ using namespace std;
 // The constructor
 Particle::Particle()
 {
-	m_Sprite = Sprite(TextureHolder::GetTexture("graphics/Particles/fireball.png"));
+	// Temporary sprite setup, heal particle being tested first
+	m_Sprite = Sprite(TextureHolder::GetTexture("graphics/particles/healParticle.png"));
 	m_Sprite.setOrigin(32, 32);
-	m_Sprite.setScale(0.75, 0.75);
+	m_Sprite.setScale(1, 1);
 
 
 
@@ -135,7 +136,7 @@ void Particle::setSpriteFromSheet(sf::IntRect textureBox, int tileSize) // set s
 	else if (textureBox.height > tile_size)
 	{
 		m_Animation_It_Limit = textureBox.height / tile_size;
-		m_Horizontal = false;
+
 	}
 	else
 		throw std::logic_error("Animation bounding box must contain multiply sprites, setSprite(sf::IntRect )\n");
@@ -199,3 +200,8 @@ Sprite Particle::getSprite()
 //{
 //	return m_Hitbox;
 //}
+
+bool Particle::isPlaying()
+{
+	return m_IsPlaying;
+}

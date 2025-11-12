@@ -14,6 +14,7 @@
 #include "Enemy.h"
 #include <string>
 #include <atomic>
+#include "Particle.h"
 
 class Engine
 {
@@ -383,6 +384,7 @@ private:
 	bool skipAnimation;
 
 	Spell spells[100];
+	Particle particles[100];
 	int currentSpell = 0;
 
 	int tutorialStage = 0;

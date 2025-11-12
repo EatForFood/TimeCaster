@@ -119,6 +119,14 @@ void Engine::draw()
 				drawables.emplace_back(spell.getSprite().getGlobalBounds().top + spell.getSprite().getGlobalBounds().height, spell.getSprite());
 			}
 		}
+
+		for (auto& particle : particles)
+		{
+			if (particle.isPlaying())
+			{
+				drawables.emplace_back(particle.getSprite().getGlobalBounds().top + particle.getSprite().getGlobalBounds().height, particle.getSprite());
+			}
+		}
 		
 		// Sort by y position (smaller y values come first)
 		sort(drawables.begin(), drawables.end(), [](const DrawableItem& a, const DrawableItem& b)
