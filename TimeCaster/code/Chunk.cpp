@@ -73,9 +73,9 @@ Chunk::Chunk(String type, Vector2f chunk, bool load)
 	}
 	else
 	{
-		for (int i = 0; i < CHUNK_SIZE - 2; i++)
+		for (int i = 0; i < CHUNK_SIZE; i++) // initialise entity array
 		{
-			for (int j = 0; j < CHUNK_SIZE - 2; j++)
+			for (int j = 0; j < CHUNK_SIZE; j++)
 			{
 				m_TileEntity[i][j] = 0;
 			}
@@ -449,6 +449,25 @@ Chunk::Chunk(String type, Vector2f chunk, bool load)
 			placeCastle(10, 35);
 
 			createBurntForest();
+		}
+
+		if (m_Type == "worldBorder") {
+
+			// Grass 
+			for (int x = 0; x < 50; x++)
+			{
+				for (int y = 0; y < 50; y++)
+				{
+
+					placeTile(x, y, 4, 3, false, true);
+
+				}
+			}
+
+
+			NavBox navbox(10, 10, 30, 30);
+			navBoxes.push_back(navbox);
+
 		}
 
 		saveChunk();

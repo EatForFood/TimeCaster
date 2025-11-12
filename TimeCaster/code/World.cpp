@@ -31,24 +31,31 @@ void World::newWorld()
     mt19937 rng(static_cast<unsigned int>(time(nullptr)));
     uniform_int_distribution<int> dist(0, static_cast<int>(chunkTypes.size()) - 1);
 
-    for (int y = -half; y <= half; ++y)
+    // Loop over extended bounds: add 1 layer for worldBorder
+    for (int y = -half - 1; y <= half + 1; ++y)
     {
-        for (int x = -half; x <= half; ++x)
+        for (int x = -half - 1; x <= half + 1; ++x)
         {
+            string type;
+
+            // Center chunk is always spawn
             if (x == 0 && y == 0)
             {
-                // Center chunk is always spawn
-                string type = "spawn";
-                out << type << " " << x << " " << y << "\n";
-                chunks.emplace_back(type, Vector2f(x, y), false);
+                type = "spawn";
             }
+            // Border layer
+            else if (x == -half - 1 || x == half + 1 || y == -half - 1 || y == half + 1)
+            {
+                type = "worldBorder";
+            }
+            // Inner world chunks
             else
             {
-                // Choose a random type for other chunks
-                string type = chunkTypes[dist(rng)];
-                out << type << " " << x << " " << y << "\n";
-                chunks.emplace_back(type, Vector2f(x, y), false);
+                type = chunkTypes[dist(rng)];
             }
+
+            out << type << " " << x << " " << y << "\n";
+            chunks.emplace_back(type, Vector2f(x, y), false);
         }
     }
 

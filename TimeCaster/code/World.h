@@ -6,7 +6,7 @@ class World
 {
 private:
 
-	const int WORLD_SIZE = 25;
+	const int WORLD_SIZE = 9;
 	int GRID_SIZE = sqrt(WORLD_SIZE);
 	vector<Chunk> chunks;
 
