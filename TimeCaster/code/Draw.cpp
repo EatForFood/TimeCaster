@@ -67,11 +67,11 @@ void Engine::draw()
 			window.draw(decal[i].getSprite());
 		}
 
-		for (int i = 0; i < 100; i++)
+		for (Enemy& enemies : enemyArr)
 		{
-			if (spells[i].isInFlight())
+			if (enemies.isDead())
 			{
-				window.draw(spells[i].getShape());
+				window.draw(enemies.getSprite());
 			}
 		}
 
@@ -95,7 +95,7 @@ void Engine::draw()
 
 		for (Enemy& enemies : enemyArr)
 		{
-			if (player.getRenderArea().intersects(enemies.getSprite().getGlobalBounds())) 
+			if (player.getRenderArea().intersects(enemies.getSprite().getGlobalBounds()) && !enemies.isDead()) 
 			{
 				drawables.emplace_back(enemies.getSprite().getGlobalBounds().top + enemies.getSprite().getGlobalBounds().height, enemies.getSpriteFromSheet()); // place enemy into drawables if in RenderArea
 			}
