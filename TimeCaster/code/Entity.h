@@ -18,7 +18,7 @@ protected:
 public:
 	Entity();
 
-	void spawn(String type, float x, float y);
+	void spawn(int type, float x, float y);
 
 	// Check the position of the entity
 	Vector2f getPosition();
