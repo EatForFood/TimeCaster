@@ -83,6 +83,8 @@ void Engine::update()
 								if (player.hit(gameTimeTotal, enemies.getAttackDamage(), 1000))
 								{
 									sound.playHitSound();
+									decal[currentDecal].spawn("bloodImpact", player.getPosition().x, player.getPosition().y);
+									currentDecal++;
 								}
 							}
 							if (player.getWeapon().getGlobalBounds().intersects(enemies.getHitBox()) && player.isAttacking() && !enemies.wasHit())
@@ -91,6 +93,8 @@ void Engine::update()
 								enemies.setWasHit(true);
 								// Play enemy hit sound
 								sound.playHitSound();
+								decal[currentDecal].spawn("bloodImpact", enemies.getPosition().x, enemies.getPosition().y);
+								currentDecal++;
 							}
 							else if (!player.isAttacking())
 							{
@@ -139,6 +143,8 @@ void Engine::update()
 						{
 							if (spells[i].getSprite().getGlobalBounds().intersects(enemies.getHitBox()))
 							{
+								decal[currentDecal].spawn("bloodImpact", enemies.getPosition().x, enemies.getPosition().y);
+								currentDecal++;
 								// Apply damage from spell to enemy
 								enemies.setHealth(-spells[i].getSpellDamage());
 								//cout << "Enemy hit for " << spells[i].getSpellDamage() << " damage. Enemy health now " << enemies.getCurrentHP() << endl;
