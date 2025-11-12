@@ -38,7 +38,7 @@ protected:
 	bool m_LoadChunk = false;
 	
 	Vector2i m_TileType[50][50];
-	String m_TileEntity[50][50];
+	int m_TileEntity[50][50];
 	Vector2i m_TileTypeFGround[50][50];
 
 	bool m_Walkable[50][50];
@@ -57,18 +57,11 @@ protected:
 
 	struct Structure
 	{
-		string type;
-		Vector2i position;
-	};
-
-	struct EnemySpawn
-	{
-		string type;
+		int type;
 		Vector2i position;
 	};
 
 	vector<Structure> structures;
-	vector<EnemySpawn> enemySpawns;
 
 	vector<Vector2i> enemyLocations;
 	vector<string> enemyTypes;
@@ -88,7 +81,7 @@ public:
 
 	vector<Text> getDebugText();
 
-	void CreateEntity(String type, int x, int y);
+	void CreateEntity(int type, int x, int y);
 
 	vector<Entity> getEntities();
 
@@ -103,7 +96,7 @@ public:
 
 	void clearChunk();
 
-	void placeStructure(String type, Vector2i position);
+	void placeStructure(int type, Vector2i position);
 
 	void placeHouse1(int x, int y);
 	void placeHouse2(int x, int y);

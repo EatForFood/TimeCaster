@@ -73,6 +73,14 @@ Chunk::Chunk(String type, Vector2f chunk, bool load)
 	}
 	else
 	{
+		for (int i = 0; i < CHUNK_SIZE - 2; i++)
+		{
+			for (int j = 0; j < CHUNK_SIZE - 2; j++)
+			{
+				m_TileEntity[i][j] = 0;
+			}
+		}
+
 		if (m_Type == "spawn") { // create spawn chunk
 
 			// Grass 
@@ -569,7 +577,7 @@ void Chunk::placeHouse1(int sx, int sy) { // sx 15, sy 18
 
 	Structure structure;
 	structure.position = Vector2i(sx, sy);
-	structure.type = "house1";
+	structure.type = 1;
 	structures.push_back(structure);
 
 	sx += offset.x;
@@ -611,7 +619,7 @@ void Chunk::placeHouse2(int sx, int sy) { // sx 15, sy 18
 
 	Structure structure;
 	structure.position = Vector2i(sx, sy);
-	structure.type = "house2";
+	structure.type = 2;
 	structures.push_back(structure);
 
 	sx += offset.x;
@@ -655,7 +663,7 @@ void Chunk::placeHouse3(int sx, int sy) { // sx 15, sy 18
 
 	Structure structure;
 	structure.position = Vector2i(sx, sy);
-	structure.type = "house3";
+	structure.type = 3;
 	structures.push_back(structure);
 
 	sx += offset.x;
@@ -729,7 +737,7 @@ void Chunk::placeHouse4(int sx, int sy) { // sx 15, sy 18
 
 	Structure structure;
 	structure.position = Vector2i(sx, sy);
-	structure.type = "house4";
+	structure.type = 4;
 	structures.push_back(structure);
 
 	sx += offset.x;
@@ -873,7 +881,7 @@ void Chunk::placeCastle(int sx, int sy) { // sx 15, sy 18
 
 	Structure structure;
 	structure.position = Vector2i(sx, sy);
-	structure.type = "castle";
+	structure.type = 5;
 	structures.push_back(structure);
 
 	sx += offset.x;
@@ -899,7 +907,7 @@ void Chunk::placeCastle(int sx, int sy) { // sx 15, sy 18
 	navBoxes.push_back(navboxS);
 }
 
-void Chunk::CreateEntity(String type, int x, int y) {
+void Chunk::CreateEntity(int type, int x, int y) {
 
 	if (!m_LoadChunk)
 	{
@@ -913,13 +921,13 @@ void Chunk::CreateEntity(String type, int x, int y) {
 	float iy = (x + y) * (TILE_SIZE / 4);
 	entity.spawn(type, ix, iy);
 
-	if (type == "tree1" || type == "tree2" || type == "tree3" || type == "tree4" || type == "tree6" || type == "tree7") // if entity requires a navBox for isometric collisions
+	if (type == 1 || type == 2 || type == 3 || type == 4 || type == 5 || type == 6) // if entity requires a navBox for isometric collisions
 	{
 		NavBox nav(x, y, 1, 1);
 		nav.NavTree();
 		navBoxes.push_back(nav);
 	}
-	else if (type == "tree5" || type == "tree8")
+	else if (type == 5 || type == 8)
 	{
 		NavBox nav(x, y, 1, 1);
 		nav.NavTreeLarge();
@@ -997,24 +1005,21 @@ void Chunk::createForest() // create a forest from random tree entities
 				if (chance <= 200) // 10% chance to spawn tree
 				{
 					int type = 1 + (gen() % 2);
-					string entity = "tree" + to_string(type);
-					CreateEntity(entity, i, j);
+					CreateEntity(type, i, j);
 				}
 				else if (chance <= 400) // 10% chance to spawn bush
 				{
-					int type = 1 + (gen() % 5);
-					string entity = "bush" + to_string(type);
-					CreateEntity(entity, i, j);
+					int type = 11 + (gen() % 5);
+					CreateEntity(type, i, j);
 				}
 				else if (chance <= 410) // 10% chance to spawn log
 				{
-					int type = 1 + (gen() % 2);
-					string entity = "log" + to_string(type);
-					CreateEntity(entity, i, j);
+					int type = 21 + (gen() % 2);
+					CreateEntity(type, i, j);
 				}
 				else if (chance == 500) // 10% chance to spawn big tree
 				{
-					CreateEntity("tree5", i, j);
+					CreateEntity(5, i, j);
 				}
 			}
 		}
@@ -1034,24 +1039,21 @@ void Chunk::createBurntForest() // create a forest from random tree entities
 				if (chance <= 200) // 10% chance to spawn tree
 				{
 					int type = 6 + (gen() % 2);
-					string entity = "tree" + to_string(type);
-					CreateEntity(entity, i, j);
+					CreateEntity(type, i, j);
 				}
 				else if (chance <= 400) // 10% chance to spawn bush
 				{
-					int type = 6;
-					string entity = "bush" + to_string(type);
-					CreateEntity(entity, i, j);
+					int type = 16;
+					CreateEntity(type, i, j);
 				}
 				else if (chance <= 410) // 10% chance to spawn log
 				{
-					int type = 1 + (gen() % 2);
-					string entity = "log" + to_string(type);
-					CreateEntity(entity, i, j);
+					int type = 21 + (gen() % 2);
+					CreateEntity(type, i, j);
 				}
 				else if (chance == 500) // 10% chance to spawn big tree
 				{
-					CreateEntity("tree8", i, j);
+					CreateEntity(8, i, j);
 				}
 			}
 		}
@@ -1076,7 +1078,7 @@ void Chunk::saveChunk()
 		for (int x = 0; x < 50; x++) {
 			outFile << m_TileType[x][y].x << "," << m_TileType[x][y].y << "  "
 				<< m_TileTypeFGround[x][y].x << "," << m_TileTypeFGround[x][y].y << "  "
-				<< (m_TileEntity[x][y].isEmpty() ? "none" : m_TileEntity[x][y].toAnsiString()) << "\n";
+				<< m_TileEntity[x][y] << "\n"; // now an integer
 		}
 	}
 
@@ -1114,8 +1116,9 @@ void Chunk::loadChunk()
 	// --- Load tiles ---
 	for (int y = 0; y < 50; y++) {
 		for (int x = 0; x < 50; x++) {
-			string bgPair, fgPair, entityName;
-			inFile >> bgPair >> fgPair >> entityName;
+			string bgPair, fgPair;
+			int entityID;
+			inFile >> bgPair >> fgPair >> entityID;
 
 			int bgx, bgy, fgx, fgy;
 			sscanf_s(bgPair.c_str(), "%d,%d", &bgx, &bgy);
@@ -1123,13 +1126,10 @@ void Chunk::loadChunk()
 
 			m_TileType[x][y] = { bgx, bgy };
 			m_TileTypeFGround[x][y] = { fgx, fgy };
+			m_TileEntity[x][y] = entityID;
 
-			if (entityName != "none") {
-				m_TileEntity[x][y] = entityName;
-				CreateEntity(entityName, x, y);
-			}
-			else {
-				m_TileEntity[x][y] = "";
+			if (entityID != 0) { // 0 means "none"
+				CreateEntity(entityID, x, y);
 			}
 
 			placeTile(x, y, bgx, bgy, false, true);
@@ -1188,29 +1188,29 @@ String Chunk::getChunkType()
 	return m_Type;
 }
 
-void Chunk::placeStructure(String type, Vector2i position)
+void Chunk::placeStructure(int type, Vector2i position)
 {
-	if (type == "house1")
+	if (type == 1)
 	{
 		placeHouse1(position.x, position.y);
 	}
 
-	if (type == "house2")
+	if (type == 2)
 	{
 		placeHouse2(position.x, position.y);
 	}
 
-	if (type == "house3")
+	if (type == 3)
 	{
 		placeHouse3(position.x, position.y);
 	}
 
-	if (type == "house4")
+	if (type == 4)
 	{
 		placeHouse4(position.x, position.y);
 	}
 
-	if (type == "castle")
+	if (type == 5)
 	{
 		placeCastle(position.x, position.y);
 	}
