@@ -17,7 +17,6 @@ void Engine::update()
 			sound.stopTimeStopActiveSound();
 			timeFrozen = false;
 		}
-
 	}
 
 	if (state == State::PLAYING)
@@ -52,7 +51,6 @@ void Engine::update()
 		if (state == State::PLAYING && !drawInventory) {
 			player.update(dtAsSeconds, Mouse::getPosition(), world.getNavBoxes(player.getChunk()));
 		}
-
 
 		if (state == State::PLAYING && !drawInventory && !timeFrozen) {
 
@@ -438,9 +436,6 @@ void Engine::update()
 		framesSinceLastHUDUpdate++;
 		// Calculate FPS every fpsMeasurementFrameInterval frames
 
-
-
-
 		if (drawInventory) {
 			// Update the kills text
 			stringstream ssKillCount;
@@ -461,8 +456,6 @@ void Engine::update()
 			stringstream ssExp;
 			ssExp << "EXP: " << player.getExp() << " / " << "100";
 			expText.setString(ssExp.str());
-
-
 
 			stringstream ssHealthBar;
 			ssHealthBar << int(player.getHealth()) << " / " << int(player.getMaxHealth());
@@ -538,4 +531,15 @@ void Engine::update()
 		}
 
 	} // End updating the scene
+
+	if (state == MAIN_MENU) {
+		
+		if (currentDecal > 0) {
+			for (int i = 0; i < sizeof(decal) / sizeof(decal[0]); i++) {
+				decal[i] = Decal();
+			}
+		}
+		
+		currentDecal = 0;
+	}
 }
