@@ -41,7 +41,8 @@ public:
 	VertexArray getForground(int i);
 
 	int getGridSize();
-	void setGridSize(int size);
+	void increaseGridSize();
+	void decreaseGridSize();
 	int getWorldSize();
 
 };

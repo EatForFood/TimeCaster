@@ -140,10 +140,16 @@ int World::getGridSize()
     return m_GridSize;
 }
 
-void World::setGridSize(int size)
+void World::increaseGridSize()
 {
-    m_GridSize = size;
-    m_WorldSize = size * size;
+    m_GridSize += 2;
+    m_WorldSize = m_GridSize * m_GridSize;
+}
+
+void World::decreaseGridSize()
+{
+    m_GridSize -= 2;
+    m_WorldSize = m_GridSize * m_GridSize;
 }
 
 int World::getWorldSize()
