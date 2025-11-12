@@ -241,7 +241,7 @@ void Engine::draw()
 			window.draw(invManaBarText);
 
 			// Drawing icons
-			for (auto& icons : storedItems) {
+			for (auto& icons : m_StoredItems) {
 				window.draw(icons.getIcon());
 			}
 			window.draw(equippedSwordIcon);
@@ -374,21 +374,21 @@ void Engine::displayInventoryTooltips()
 	// Map mouse pixel coordinates to HUD view coordinates so bounds checks match HUD elements
 	Vector2f hudPos = window.mapPixelToCoords(Mouse::getPosition(window), hudView);
 
-	for (int i = 0; i < storedItems.size(); i++)
+	for (int i = 0; i < m_StoredItems.size(); i++)
 	{
-		if (storedItems[i].getIcon().getGlobalBounds().contains(hudPos) && !Mouse::isButtonPressed(Mouse::Left) && !draggingItem)
+		if (m_StoredItems[i].getIcon().getGlobalBounds().contains(hudPos) && !Mouse::isButtonPressed(Mouse::Left) && !draggingItem)
 		{
-			Item::ItemType type = storedItems[i].getType();
+			Item::ItemType type = m_StoredItems[i].getType();
 
-			string itemName = storedItems[i].getName();
+			string itemName = m_StoredItems[i].getName();
 
 			// Remove all underscores from the name for display purposes
 
 			window.setView(hudView);
-			itemTooltipBackground.setPosition(storedItems[i].getIcon().getPosition().x + 35, storedItems[i].getIcon().getPosition().y - 40);
+			itemTooltipBackground.setPosition(m_StoredItems[i].getIcon().getPosition().x + 35, m_StoredItems[i].getIcon().getPosition().y - 40);
 			window.draw(itemTooltipBackground);
 
-			valueTooltipText.setString("Value: " + to_string(storedItems[i].getValue()) + " Gold");
+			valueTooltipText.setString("Value: " + to_string(m_StoredItems[i].getValue()) + " Gold");
 			valueTooltipText.setPosition(itemTooltipBackground.getPosition().x + 25, itemTooltipBackground.getPosition().y + 55);
 			window.draw(valueTooltipText);
 
@@ -396,7 +396,7 @@ void Engine::displayInventoryTooltips()
 
 			if (type == Item::ItemType::MeleeWeapon || type == Item::ItemType::MagicWeapon) {
 
-				statTooltipText.setString("Damage: " + to_string(storedItems[i].getDamage()));
+				statTooltipText.setString("Damage: " + to_string(m_StoredItems[i].getDamage()));
 
 				if (itemTooltipName.getLocalBounds().width > statTooltipText.getLocalBounds().width && itemTooltipName.getLocalBounds().width > valueTooltipText.getLocalBounds().width)
 				{
@@ -420,7 +420,7 @@ void Engine::displayInventoryTooltips()
 			else if (type == Item::ItemType::HeadArmour || type == Item::ItemType::ChestArmour || type == Item::ItemType::TrouserArmour ||
 				type == Item::ItemType::ShoeArmour || type == Item::ItemType::NeckArmour) {
 
-				statTooltipText.setString("Armour: " + to_string(storedItems[i].getArmour()));
+				statTooltipText.setString("Armour: " + to_string(m_StoredItems[i].getArmour()));
 
 				if (itemTooltipName.getLocalBounds().width > statTooltipText.getLocalBounds().width && itemTooltipName.getLocalBounds().width > valueTooltipText.getLocalBounds().width)
 				{

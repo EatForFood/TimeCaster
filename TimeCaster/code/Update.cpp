@@ -245,18 +245,18 @@ void Engine::update()
 			//int draggedIndex = -1;
 
 			// Check clicks on inventory items
-			for (int i = 0; i < storedItems.size(); i++)
+			for (int i = 0; i < m_StoredItems.size(); i++)
 			{
-				if (!storedItems[i].isNull() && storedItems[i].getIcon().getGlobalBounds().contains(worldPos.x - 25, worldPos.y - 25) &&
+				if (!m_StoredItems[i].isNull() && m_StoredItems[i].getIcon().getGlobalBounds().contains(worldPos.x - 25, worldPos.y - 25) &&
 					Mouse::isButtonPressed(Mouse::Left) && !draggingItem)
 				{
-					clickedItem = storedItems[i]; // copy to clickedItem
+					clickedItem = m_StoredItems[i]; // copy to clickedItem
 
 					itemLastIndex = i; // save original slot
-					itemLastX = storedItems[i].getIcon().getPosition().x;
-					itemLastY = storedItems[i].getIcon().getPosition().y;
+					itemLastX = m_StoredItems[i].getIcon().getPosition().x;
+					itemLastY = m_StoredItems[i].getIcon().getPosition().y;
 
-					storedItems[i] = Item("null", Vector2f(0, 0)); // empty original slot
+					m_StoredItems[i] = Item("null", Vector2f(0, 0)); // empty original slot
 					draggingItem = true;
 					itemPlaced = false;
 					draggingFromInventory = true;
@@ -295,13 +295,13 @@ void Engine::update()
 				bool placed = false;
 
 				// Try to drop in the first empty slot
-				for (int i = 0; i < storedItems.size(); i++)
+				for (int i = 0; i < m_StoredItems.size(); i++)
 				{
-					if (storedItems[i].isNull() &&
+					if (m_StoredItems[i].isNull() &&
 						clickedItem.getIcon().getGlobalBounds().intersects(emptyFrames[i].getGlobalBounds()))
 					{
-						storedItems[i] = clickedItem;  // copy item into slot
-						storedItems[i].getIcon().setPosition(emptyFrames[i].getPosition().x, emptyFrames[i].getPosition().y); //set icon position to slot position
+						m_StoredItems[i] = clickedItem;  // copy item into slot
+						m_StoredItems[i].getIcon().setPosition(emptyFrames[i].getPosition().x, emptyFrames[i].getPosition().y); //set icon position to slot position
 						clickedItem = Item("null", Vector2f(0, 0)); // empty clickedItem
 						placed = true;
 						break;
@@ -389,8 +389,8 @@ void Engine::update()
 				if (!placed)
 				{
 					clickedItem.getIcon().setPosition(itemLastX, itemLastY);
-					if (draggingItem && draggedIndex >= 0 && draggedIndex < storedItems.size())
-						storedItems[draggedIndex] = clickedItem; // restore in original slot
+					if (draggingItem && draggedIndex >= 0 && draggedIndex < m_StoredItems.size())
+						m_StoredItems[draggedIndex] = clickedItem; // restore in original slot
 					placed = true;
 
 				}
@@ -499,12 +499,12 @@ void Engine::update()
 				else
 				{
 					bool placed = false;
-					for (size_t j = 0; j < storedItems.size(); j++)
+					for (size_t j = 0; j < m_StoredItems.size(); j++)
 					{
-						if (storedItems[j].isNull())
+						if (m_StoredItems[j].isNull())
 						{
-							storedItems[j] = move(items[i]);
-							storedItems[j].getIcon().setPosition(emptyFrames[j].getPosition());
+							m_StoredItems[j] = move(items[i]);
+							m_StoredItems[j].getIcon().setPosition(emptyFrames[j].getPosition());
 							currentItems++;
 							items.erase(items.begin() + i);
 							placed = true;

@@ -922,6 +922,11 @@ vector<Equipment>& Player::getEquippedArmour()
 	return m_EquippedArmour;
 }
 
+vector<Item>& Player::getStoredItems()
+{
+	return m_StoredItems;
+}
+
 Weapon* Player::getEquippedSword()
 {
 	return &m_EquippedWeapons[0];
