@@ -26,6 +26,7 @@ private:
 	float m_TimePerFrame;
 	bool m_IsPlaying = false;
 	float m_TotalTime = 0.0f;
+	float m_TimeToPlay = 1.0f;
 
 	int m_ParticleID = -1;
 

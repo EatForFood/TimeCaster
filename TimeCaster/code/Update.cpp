@@ -80,15 +80,27 @@ void Engine::update()
 							// TODO: Add weapon to enemy hands and use that instead
 							if (player.getHitBox().intersects(enemies.getHitBox()) && enemies.isAttacking())
 							{
+								// Play the blood particle effect
 								if (player.hit(gameTimeTotal, enemies.getAttackDamage(), 1000))
 								{
 									sound.playHitSound();
+									particles[100].play(player.getCenter().x - 30, player.getCenter().y - 30, 1); 
 								}
 							}
 							if (player.getWeapon().getGlobalBounds().intersects(enemies.getHitBox()) && player.isAttacking() && !enemies.wasHit())
 							{
 								enemies.setHealth(-player.getAttackDamage());
 								enemies.setWasHit(true);
+								// Play the blood particle effect
+								for (int i = 0; i < 100; i++)
+								{
+									if (!particles[i].isPlaying())
+									{
+										particles[i].play(enemies.getCenter().x - 30, enemies.getCenter().y - 30, 1);
+										break;
+									}
+								}
+
 								// Play enemy hit sound
 								sound.playHitSound();
 							}
@@ -149,6 +161,16 @@ void Engine::update()
 								// Stop the spell; Add check for piercing spells later
 								spells[i].stop();
 
+								// Play the sparks particle effect
+								for (int i = 0; i < 100; i++)
+								{
+									if (!particles[i].isPlaying())
+									{
+										particles[i].play(enemies.getCenter().x - 30, enemies.getCenter().y - 30, 2);
+										break;
+									}
+								}
+
 								// Play hit sound
 								sound.playHitSound();
 
@@ -163,7 +185,7 @@ void Engine::update()
 		}
 
 		//update any particles that are active
-		for (int i = 0; i < 100; i++)
+		for (int i = 0; i < 101; i++)
 		{
 			if (particles[i].isPlaying())
 			{

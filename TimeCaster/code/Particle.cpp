@@ -15,8 +15,16 @@ Particle::Particle()
 
 }
 
+// TODO: Further polish particle effects
 void Particle::play(float startX, float startY, int particleID)
 {
+	// Manually reset the animation if the particle is not active
+
+	if (!m_IsPlaying)
+	{
+		m_Ani_Counter = 0;
+		m_AnimationTimer = 0.0f;
+	}
 
 	// Keep track of the Particle
 	m_IsPlaying = true;
@@ -35,8 +43,8 @@ void Particle::play(float startX, float startY, int particleID)
 	case 1: // Blood Particle
 		m_Sprite = Sprite(TextureHolder::GetTexture("graphics/particles/bloodParticle.png"));
 		break;
-	case 2: // Spark Particle
-		m_Sprite = Sprite(TextureHolder::GetTexture("graphics/particles/sparkParticle.png"));
+	case 2: // Fire Particle
+		m_Sprite = Sprite(TextureHolder::GetTexture("graphics/particles/fireParticle.png"));
 		break;
 	default:
 		m_Sprite = Sprite(TextureHolder::GetTexture("graphics/particles/healParticle.png")); // Most noticeable default
@@ -54,11 +62,13 @@ void Particle::play(float startX, float startY, int particleID)
 	{
 		setSpriteFromSheet(IntRect(0, 0, 384, 64), 64); // Heal particle is larger and has more frames
 		m_TimePerFrame = 0.166666666667f;
+		m_TimeToPlay = 1.0f;
 	}
 	else
 	{
 		setSpriteFromSheet(IntRect(0, 0, 256, 64), 64);
-		m_TimePerFrame = 0.25f;
+		m_TimePerFrame = 0.0416666666666f;
+		m_TimeToPlay = 0.25f;
 	}
 
 	m_Sprite.setPosition(m_Position);
@@ -89,7 +99,7 @@ void Particle::update(float elapsedTime)
 {
 	m_TimeElapsed += elapsedTime;
 
-	if (m_TimeElapsed >= 1)
+	if (m_TimeElapsed >= m_TimeToPlay)
 	{
 		m_IsPlaying = false;
 	}

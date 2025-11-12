@@ -384,7 +384,7 @@ private:
 	bool skipAnimation;
 
 	Spell spells[100];
-	Particle particles[100];
+	Particle particles[101];
 	int currentSpell = 0;
 	int currentParticle = 0;
 
