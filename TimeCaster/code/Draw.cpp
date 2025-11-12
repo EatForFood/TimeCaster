@@ -336,6 +336,8 @@ void Engine::draw()
 		window.draw(windowedModeButtonText);
 		window.draw(vSyncButton);
 		window.draw(vSyncButtonText);
+		window.draw(debugModeButton);
+		window.draw(debugModeButtonText);
 	}
 
 	if (state == State::STORY_INTRO)
