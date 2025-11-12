@@ -209,6 +209,8 @@ private:
 	string m_EquippedShoeArmourName;
 	string m_EquippedNeckArmourName;
 
+	Texture m_HealParticleTexture;
+
 	// Config variables
 	bool m_WindowedMode;
 	string m_DifficultyString;

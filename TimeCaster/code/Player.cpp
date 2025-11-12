@@ -26,6 +26,9 @@ Player::Player()
 	m_Kills = START_KILLS;
 	m_Level = START_LEVEL;
 
+	m_HealParticleTexture = TextureHolder::GetTexture("graphics/particles/healParticle.png");
+	m_HealParticleTexture.
+
 	// Associate a texture with the body sprite
 	m_Sprite = Sprite(TextureHolder::GetTexture("graphics/player/playerWalk.png")); 
 	m_Sprite.setOrigin(32, 32);
