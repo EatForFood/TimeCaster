@@ -449,6 +449,7 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	difficultyButton.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 400);
 	difficultyButton.setTexture(&textureMainMenuButton2);
 
+
 	// Display difficulty button text
 	difficultyButtonText.setString("Difficulty: " + difficultyToString(difficulty)); // Set the label text
 	difficultyButtonText.setFont(font); // Assign the font
@@ -458,6 +459,10 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	x = difficultyButton.getPosition().x + (difficultyButton.getSize().x / 2.f) - (textBounds.width / 2.f);
 	y = difficultyButton.getPosition().y + (difficultyButton.getSize().y / 2.f) - (textBounds.height / 2.f);
 	difficultyButtonText.setPosition(x - textBounds.left, y - textBounds.top);
+
+
+	difficultyButton.setSize(Vector2f(textBounds.width + 100, 100));
+	difficultyButton.setPosition(viewCentre.x - (difficultyButton.getSize().x / 2.f), 400);
 
 	// Story into text
 	storyIntroText.setFont(font);
@@ -1297,6 +1302,9 @@ void Engine::run()
 					x = difficultyButton.getPosition().x + (difficultyButton.getSize().x / 2.f) - (textBounds.width / 2.f);
 					y = difficultyButton.getPosition().y + (difficultyButton.getSize().y / 2.f) - (textBounds.height / 2.f);
 					difficultyButtonText.setPosition(x - textBounds.left, y - textBounds.top);
+					difficultyButton.setSize(Vector2f(textBounds.width + 100, 100));
+					difficultyButton.setPosition(viewCentre.x - (difficultyButton.getSize().x /2.f), 400);
+
 					sound.playButtonClickSound();
 				}
 
