@@ -523,7 +523,7 @@ void Player::createNewSave()
 	saveFile << fixed << setprecision(5) 
 		<< START_SPEED << " " 
 		<< START_HEALTH << " " 
-		<< m_MaxHealth << " " 
+		<< (START_HEALTH * 2) << " "
 		<< START_STAMINA << " "
 		<< START_STAMINA << " " 
 		<< START_STAMINA_RECHARGE << " " 
