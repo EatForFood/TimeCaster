@@ -5,7 +5,7 @@ using namespace sf;
 using namespace std;
 
 
-Item::Item(String type, Vector2f position)
+Item::Item(string type, Vector2f position)
 {
 	// Store the type of this pickup
 	m_Name = type;

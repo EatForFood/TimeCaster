@@ -120,9 +120,29 @@ void Engine::update()
 							levelUp = true;
 						}
 
+						// spawn some gold
 						for (int i = 0; i < (rand() % 10); i++) {
-							items.emplace_back("Gold", Vector2f(enemies.getPosition().x, enemies.getPosition().y));
+							items.emplace_back("Gold", enemies.getPosition());
 						}
+
+						// potentially spawn random item
+						string item = loot.getLoot(4);
+						if (item != "nothing")
+						{
+							if (isEquipment(item))
+							{
+								items.emplace_back(Equipment(item, enemies.getPosition()));
+							}
+							else if (isWeapon(item))
+							{
+								items.emplace_back(Weapon(item, enemies.getPosition()));
+							}
+							else
+							{
+								items.emplace_back(item, enemies.getPosition());
+							}
+						}
+
 					}
 				}
 			}
@@ -537,6 +557,7 @@ void Engine::update()
 				if (items[i].getName() == "Gold")
 				{
 					player.addGold(1);
+					sound.playGoldSound();
 					items.erase(items.begin() + i);
 				}
 				else

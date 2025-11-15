@@ -76,6 +76,9 @@ private:
 
 	SoundBuffer swordSwingBuffer;
 	Sound swordSwing;
+
+	SoundBuffer goldBuffer;
+	Sound gold;
 public:
 	// SoundManager constructor
 	SoundManager();
@@ -129,4 +132,6 @@ public:
 	void playBossIntroSound();
 
 	void playSwordSwing();
+
+	void playGoldSound();
 };

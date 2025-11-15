@@ -3,23 +3,12 @@
 using namespace sf;
 using namespace std;
 
-Weapon::Weapon(String type, Vector2f position)
+Weapon::Weapon(string type, Vector2f position)
 	: Item(type, position) // call base constructor
 {
 	m_Name = type;
 
-	// Associate the texture with the sprite
-	if (m_Name == "staff")
-	{
-		m_Sprite = Sprite(TextureHolder::GetTexture(
-			"graphics/health_pickup.png"));
-
-		m_Value = 10;
-		m_Damage = 5;
-
-		m_Sprite.setOrigin(25, 25);
-	}
-	else if (m_Name == "Iron_Sword")
+	if (m_Name == "Iron_Sword")
 	{
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
 		m_Sprite.setTextureRect(IntRect(960, 896, 32, 32));
@@ -42,7 +31,29 @@ Weapon::Weapon(String type, Vector2f position)
 
 
 	}
-	else if (m_Name == "Wooden_Wand")
+	else if (m_Name == "Wooden_Staff")
+	{
+		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
+		m_Sprite.setTextureRect(IntRect(194, 864, 32, 32));
+		m_Icon.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
+		m_Icon.setTextureRect(IntRect(194, 864, 32, 32));
+		FloatRect bounds = m_Icon.getLocalBounds();
+		m_Icon.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
+		//m_Sprite.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
+
+		// How much is item worth
+		m_Value = 5;
+
+		m_Icon.setScale(2.34, 2.34);
+		//m_NullItem = false;
+
+		m_Damage = 5;
+
+		m_ItemType = MagicWeapon;
+		m_AnimationType = "thrust";
+		m_WeaponSize = 1;
+	}
+	else if (m_Name == "Short_Spear")
 	{
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
 		m_Sprite.setTextureRect(IntRect(194, 864, 32, 32));
@@ -58,12 +69,78 @@ Weapon::Weapon(String type, Vector2f position)
 		m_Icon.setScale(2.34, 2.34);
 		//m_NullItem = false;
 
-		m_Damage = 5;
+		m_Damage = 8;
 
 		m_ItemType = MagicWeapon;
 		m_AnimationType = "thrust";
 		m_WeaponSize = 1;
 	}
+	else if (m_Name == "Long_Spear")
+	{
+		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
+		m_Sprite.setTextureRect(IntRect(194, 864, 32, 32));
+		m_Icon.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
+		m_Icon.setTextureRect(IntRect(194, 864, 32, 32));
+		FloatRect bounds = m_Icon.getLocalBounds();
+		m_Icon.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
+		//	m_Sprite.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
+
+		// How much is item worth
+		m_Value = 5;
+
+		m_Icon.setScale(2.34, 2.34);
+		//m_NullItem = false;
+
+		m_Damage = 15;
+
+		m_ItemType = MagicWeapon;
+		m_AnimationType = "thrust";
+		m_WeaponSize = 3;
+	}
+	else if (m_Name == "Trident")
+	{
+		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
+		m_Sprite.setTextureRect(IntRect(194, 864, 32, 32));
+		m_Icon.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
+		m_Icon.setTextureRect(IntRect(194, 864, 32, 32));
+		FloatRect bounds = m_Icon.getLocalBounds();
+		m_Icon.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
+		//	m_Sprite.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
+
+		// How much is item worth
+		m_Value = 5;
+
+		m_Icon.setScale(2.34, 2.34);
+		//m_NullItem = false;
+
+		m_Damage = 20;
+
+		m_ItemType = MagicWeapon;
+		m_AnimationType = "thrust";
+		m_WeaponSize = 3;
+	}
+	else if (m_Name == "Dragon_Spear")
+	{
+		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
+		m_Sprite.setTextureRect(IntRect(194, 864, 32, 32));
+		m_Icon.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
+		m_Icon.setTextureRect(IntRect(194, 864, 32, 32));
+		FloatRect bounds = m_Icon.getLocalBounds();
+		m_Icon.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
+		//	m_Sprite.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
+
+		// How much is item worth
+		m_Value = 5;
+
+		m_Icon.setScale(2.34, 2.34);
+		//m_NullItem = false;
+
+		m_Damage = 30;
+
+		m_ItemType = MagicWeapon;
+		m_AnimationType = "thrust";
+		m_WeaponSize = 3;
+		}
 	else if (m_Name == "Pirate's_Scimitar")
 	{
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
@@ -83,6 +160,25 @@ Weapon::Weapon(String type, Vector2f position)
 		m_AnimationType = "slash";
 		m_WeaponSize = 3;
 	}
+	else if (m_Name == "Steel_Mace")
+	{
+		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
+		m_Sprite.setTextureRect(IntRect(1184, 898, 32, 32));
+		m_Icon.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
+		m_Icon.setTextureRect(IntRect(1184, 898, 32, 32));
+		FloatRect bounds = m_Icon.getLocalBounds();
+		m_Icon.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
+		// How much is item worth
+		m_Value = 10;
+		m_Damage = 20;
+
+		m_Sprite.setOrigin(5, 5);
+		m_Icon.setScale(2.34, 2.34);
+
+		m_ItemType = MeleeWeapon;
+		m_AnimationType = "slash";
+		m_WeaponSize = 2;
+		}
 	else if (m_Name == "Silver_Wand")
 	{
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
@@ -140,6 +236,22 @@ Weapon::Weapon(String type, Vector2f position)
 		m_Sprite.setOrigin(5, 5);
 		m_ItemType = null;
 	}
+
+	m_SecondsSinceSpawn = 0;
+	m_Spawned = true;
+	m_SecondsToLive = SECONDS_TO_DESPAWN;
+
+	m_Sprite.setPosition(m_Position);
+
+	m_MovementElapsed = 0;
+	m_MovementDuration = 0.5 + (rand() % 50) / 100;
+
+	// Random direction and speed
+	float angle = (rand() % 360) * 3.14159 / 180;
+	float speed = 20 + (rand() % 50);
+
+	m_Velocity.x = cos(angle) * speed;
+	m_Velocity.y = sin(angle) * speed;
 }
 
 int Weapon::getDamage()

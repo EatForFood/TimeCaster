@@ -177,7 +177,7 @@ private:
 	const int START_LEVEL = 1;
 	const int START_EXP = 0;
 	const string START_SWORD = "Iron_Sword";
-	const string START_WAND = "Wooden_Wand";
+	const string START_WAND = "Wooden_Staff";
 	const string START_HEAD_ARMOUR = "Family_Hood";
 	const string START_CHEST_ARMOUR = "Family_Robe";
 	const string START_TROUSER_ARMOUR = "Robe_Leggings";	

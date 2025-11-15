@@ -75,6 +75,12 @@
     <ClInclude Include="code\Pathfinder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="code\Particle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\Loot.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="code\Spell.cpp">
@@ -147,6 +153,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="code\Inventory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\Particle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\Loot.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -15,7 +15,7 @@ public:
 		HeadArmour, ChestArmour, TrouserArmour, ShoeArmour, NeckArmour, 
 		null };
 
-	Item(String type, Vector2f position);
+	Item(string type, Vector2f position);
 
 	ItemType getType();
 

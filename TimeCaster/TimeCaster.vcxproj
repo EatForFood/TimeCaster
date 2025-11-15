@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="code\Loot.h" />
     <ClInclude Include="code\Particle.h" />
     <ClInclude Include="code\Pathfinder.h" />
     <ClInclude Include="code\Spell.h" />
@@ -43,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="code\Inventory.cpp" />
+    <ClCompile Include="code\Loot.cpp" />
     <ClCompile Include="code\Particle.cpp" />
     <ClCompile Include="code\Pathfinder.cpp" />
     <ClCompile Include="code\Spell.cpp" />

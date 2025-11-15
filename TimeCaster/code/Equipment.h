@@ -8,7 +8,7 @@ class Equipment : public Item
 {
 public:
 
-	Equipment(String type, sf::Vector2f position);
+	Equipment(string type, sf::Vector2f position);
 	int getArmour();
 	string getName();
 };

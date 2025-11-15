@@ -75,6 +75,9 @@ SoundManager::SoundManager() {
 
 	swordSwingBuffer.loadFromFile("sound/swordSwing.wav");
 	swordSwing.setBuffer(swordSwingBuffer);
+
+	goldBuffer.loadFromFile("sound/coin.mp3");
+	gold.setBuffer(goldBuffer);
 } // End of SoundManager constructor
 
 // Function for placing songs within the soundtrack list
@@ -176,4 +179,8 @@ void SoundManager::playTimeStopEndSound() {
 void SoundManager::playHealSound() {
 	if (heal.getStatus() != SoundSource::Status::Playing)
 		heal.play();
+}
+
+void SoundManager::playGoldSound() {
+	gold.play();
 }

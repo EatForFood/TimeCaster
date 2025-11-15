@@ -1713,3 +1713,22 @@ void Engine::spawnEnemies()
 		enemyArr.push_back(e);
 	}
 }
+
+bool Engine::isEquipment(const string& name)
+{
+	static const vector<string> equipmentList = {
+		"Steel_Plate_Helmet", "Steel_Plate_Chestplate", "Steel_Plate_Pants",
+		"Steel_Plate_Boots", "Chain_Mail", "Chain_Hood", "Soldiers_Helmet",
+		"Leather_Cap", "Leather_Chestplate", "Leather_Leggings", "Leather_Boots",
+		"Family_Hood", "Family_Robe", "Robe_Leggings", "Basic_Shoes"
+	};
+	return find(equipmentList.begin(), equipmentList.end(), name) != equipmentList.end();
+}
+
+bool Engine::isWeapon(const string& name)
+{
+	static const vector<string> weaponList = {
+		"Iron_Sword", "Rapier"
+	};
+	return find(weaponList.begin(), weaponList.end(), name) != weaponList.end();
+}

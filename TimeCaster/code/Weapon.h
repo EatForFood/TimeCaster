@@ -12,7 +12,7 @@ private:
 
 public:
 
-	Weapon(String type, sf::Vector2f position);
+	Weapon(string type, sf::Vector2f position);
 	int getDamage();
 	string getName();
 	string getAnimType();

@@ -15,6 +15,7 @@
 #include <string>
 #include <atomic>
 #include "Particle.h"
+#include "Loot.h"
 
 class Engine
 {
@@ -56,6 +57,9 @@ public:
 	void displayInventoryTooltips();
 
 	void displayShopTooltips();
+	
+	bool isEquipment(const string& name);
+	bool isWeapon(const string& name);
 
 protected: 
 	string cleanItemName(string itemName);
@@ -428,4 +432,6 @@ private:
 	sf::Text userInputText;
 	std::string userInputString;
 	bool textBoxActive;
+
+	Loot loot;
 };
