@@ -204,9 +204,9 @@ void Engine::draw()
 			window.draw(darkInventoryBackground);
 			window.draw(inventoryBackground);
 
-			// Draw 8 empty frames for item 
-			for (int i = 0; i < 8; i++) {
-				window.draw(emptyFrames[i]);
+			// Draw the shop frames
+			for (int i = 0; i < shopFrames.size(); i++) {
+				window.draw(shopFrames[i]);
 			}
 
 			// Draw shop item icons

@@ -27,6 +27,8 @@ public:
 
 	void initializeInventory();
 
+	void initializeShop();
+
 	enum Difficulty { Easy, Medium, Hard };
 
 	Difficulty stringToDifficulty(std::string str);
@@ -318,6 +320,7 @@ private:
 	int maxItems = 16; // max amount of item slots
 	vector<Item>& m_StoredItems;
 	vector<Item> shopItems;
+	vector<RectangleShape> shopFrames;
 	vector<RectangleShape> emptyFrames;
 	vector<Item> allItems;     // all possible item
 	vector<Weapon>& m_EquippedWeapons;

@@ -864,12 +864,21 @@ Chunk* Engine::getCurrentChunk(float x, float y) {
 void Engine::run()
 {
 	initializeInventory();
+	initializeShop();
 	// Posistion shop items
 	for (int i = 0; i < shopItems.size(); i++) {
 		if (!shopItems[i].isNull()) {
 			shopItems[i].getIcon().setPosition(emptyFrames[i].getPosition());
 		}
 	}
+
+	for (int i = 0; i < shopItems.size(); i++) {
+		if (!shopItems[i].isNull()) {
+			shopItems[i].getIcon().setPosition(shopFrames[i].getPosition());
+		}
+	}
+
+
 
 	// The main game loop
 	while (window.isOpen())

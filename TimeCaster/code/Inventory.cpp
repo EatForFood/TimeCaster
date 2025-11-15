@@ -33,6 +33,7 @@ void Engine::initializeInventory()
 	}
 }
 
+
 void Engine::moveDraggedIcon(Sprite& draggedIcon, Vector2f mousePos)
 {
 	float x = static_cast<float>(mousePos.x);
@@ -94,8 +95,9 @@ bool Player::addItemToInventory(String itemType)
 	return false;
 }
 
-// TODO: Move Inventory functions to a new Inventory cpp file
 
+
+// TODO: Move shop items to their own shop file
 bool Engine::sellItem(int itemIndex)
 {
 	if (m_StoredItems[itemIndex].isNull())
@@ -142,6 +144,37 @@ int Engine::buyItem(int itemIndex)
 		else
 		{
 			return false; // 3 means not enough gold
+		}
+	}
+}
+
+void Engine::initializeShop()
+{
+	int startX = viewCentre.x - 350;
+	int startY = 200;
+
+	// create empty item r
+	shopFrames.resize(12);
+	for (int i = 0; i < shopFrames.size(); i++) {
+		shopFrames[i].setTexture(&textureEmptyFrame);
+		shopFrames[i].setSize(Vector2f(75, 75));
+		shopFrames[i].setOrigin(shopFrames[i].getSize() / 2.f);
+
+		if (i != 0 && i % 6 == 0) {
+			startY += 100;
+			startX = viewCentre.x - 350;
+		}
+
+		shopFrames[i].setPosition(startX, startY);
+		startX += 100;
+	}
+	startX = viewCentre.x - 350;
+	startY = 600;
+
+	// Position icons for items that actually exist
+	for (int i = 0; i < shopItems.size(); i++) {
+		if (!shopItems[i].isNull()) {
+			shopItems[i].getIcon().setPosition(shopFrames[i].getPosition());
 		}
 	}
 }

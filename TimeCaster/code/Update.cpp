@@ -376,6 +376,8 @@ void Engine::update()
 					}
 				}
 
+
+
 				// Try to equip as sword if dropped on sword slot
 				if (clickedItem.getIcon().getGlobalBounds().intersects(weaponFrame.getGlobalBounds())
 					&& clickedItem.getType() == Item::MeleeWeapon)
