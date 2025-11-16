@@ -95,3 +95,83 @@ bool Player::addItemToInventory(String itemType)
 	return false;
 }
 
+void Engine::equipAllItems()
+{
+
+	// Equip melee weapon
+	string meleeWeaponName = player.getEquippedSword()->getName();
+	for (int i = 0; i < player.getStoredItems().size(); i++)
+	{
+		if (player.getStoredItems()[i].getName() == meleeWeaponName)
+		{
+			player.getStoredItems()[i].setEquipped(true);
+			break;
+		}
+	}
+
+	// Equip magic weapon
+	string magicWeaponName = player.getEquippedWand()->getName();
+	for (int i = 0; i < player.getStoredItems().size(); i++)
+	{
+		if (player.getStoredItems()[i].getName() == magicWeaponName)
+		{
+			player.getStoredItems()[i].setEquipped(true);
+			break;
+		}
+	}
+
+	// Equip head armour
+	string headArmourName = player.getEquippedHeadArmour()->getName();
+	for (int i = 0; i < player.getStoredItems().size(); i++)
+	{
+		if (player.getStoredItems()[i].getName() == headArmourName)
+		{
+			player.getStoredItems()[i].setEquipped(true);
+			break;
+		}
+	}
+
+	// Equip chest armour
+	string chestArmourName = player.getEquippedChestArmour()->getName();
+	for (int i = 0; i < player.getStoredItems().size(); i++)
+	{
+		if (player.getStoredItems()[i].getName() == chestArmourName)
+		{
+			player.getStoredItems()[i].setEquipped(true);
+			break;
+		}
+	}
+
+	// Equip trouser armour
+	string trouserArmourName = player.getEquippedTrouserArmour()->getName();
+	for (int i = 0; i < player.getStoredItems().size(); i++)
+	{
+		if (player.getStoredItems()[i].getName() == trouserArmourName)
+		{
+			player.getStoredItems()[i].setEquipped(true);
+			break;
+		}
+	}
+	// Equip shoe armour
+	string shoeArmourName = player.getEquippedShoeArmour()->getName();
+	for (int i = 0; i < player.getStoredItems().size(); i++)
+	{
+		if (player.getStoredItems()[i].getName() == shoeArmourName)
+		{
+			player.getStoredItems()[i].setEquipped(true);
+			break;
+		}
+	}
+
+	// Equip neck armour
+	string neckArmourName = player.getEquippedNeckArmour()->getName();
+	for (int i = 0; i < player.getStoredItems().size(); i++)
+	{
+		if (player.getStoredItems()[i].getName() == neckArmourName)
+		{
+			player.getStoredItems()[i].setEquipped(true);
+			break;
+		}
+	}
+
+}

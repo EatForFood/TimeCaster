@@ -65,6 +65,8 @@ public:
 
 	void restockShop(int level);
 
+	void equipAllItems();
+
 protected: 
 	string cleanItemName(string itemName);
 

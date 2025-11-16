@@ -1041,6 +1041,7 @@ void Engine::run()
 					equippedTrousersArmourIcon.setTextureRect(player.getEquippedTrouserArmour()->getTextureRect());
 					equippedShoeArmourIcon.setTextureRect(player.getEquippedShoeArmour()->getTextureRect());
 					equippedNeckArmourIcon.setTextureRect(player.getEquippedNeckArmour()->getTextureRect());
+					equipAllItems();
 
 					// We will modify the next two lines later
 					arena.width = 1900;
@@ -1113,6 +1114,7 @@ void Engine::run()
 						equippedTrousersArmourIcon.setTextureRect(player.getEquippedTrouserArmour()->getTextureRect());
 						equippedShoeArmourIcon.setTextureRect(player.getEquippedShoeArmour()->getTextureRect());
 						equippedNeckArmourIcon.setTextureRect(player.getEquippedNeckArmour()->getTextureRect());
+						equipAllItems();
 
 						// We will modify the next two lines later
 						arena.width = 1900;
@@ -1160,6 +1162,7 @@ void Engine::run()
 						equippedTrousersArmourIcon.setTextureRect(player.getEquippedTrouserArmour()->getTextureRect());
 						equippedShoeArmourIcon.setTextureRect(player.getEquippedShoeArmour()->getTextureRect());
 						equippedNeckArmourIcon.setTextureRect(player.getEquippedNeckArmour()->getTextureRect());
+						equipAllItems();
 
 						// We will modify the next two lines later
 						arena.width = 1900;
