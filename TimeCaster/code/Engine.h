@@ -181,6 +181,9 @@ private:
 	Text levelUpText;
 	stringstream levelUpStream;
 
+	Text shopText;
+	stringstream shopStream;
+
 	Text goldCountText;
 
 	Text expText;

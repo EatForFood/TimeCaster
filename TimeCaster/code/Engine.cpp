@@ -706,6 +706,13 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	textBounds = levelUpText.getLocalBounds();
 	levelUpText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 950);
 
+	shopText.setFont(font);
+	shopText.setCharacterSize(fontSize);
+	shopText.setFillColor(Color::Green);
+	shopText.setString("Welcome to the shop! \nClick on an item to buy it. ");
+	textBounds = shopText.getLocalBounds();
+	shopText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 50);
+
 	inventoryBackground.setTexture(&inventoryBackgroundTexture);
 	inventoryBackground.setSize(Vector2f(1000, 800));
 	textBounds = inventoryBackground.getLocalBounds();
