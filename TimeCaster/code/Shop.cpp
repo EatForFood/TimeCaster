@@ -111,13 +111,33 @@ void Engine::initializeShop()
 void Engine::restockShop(int level)
 {
 	
-	
-	shopItems[0] = Weapon("Silver_Wand", Vector2f(300, 650));
-	shopItems[1] = Weapon("Pirate's_Scimitar", Vector2f(450, 650));
-	shopItems[2] = Equipment("Leather_Cap", Vector2f(600, 650));
-	shopItems[3] = Equipment("Leather_Chestplate", Vector2f(750, 950));
-	shopItems[4] = Equipment("Leather_Leggings", Vector2f(900, 650));
-	shopItems[5] = Equipment("Leather_Boots", Vector2f(1050, 650));
+	switch (level)
+	{
+	case 3:
+		shopItems[0] = Weapon("Silver_Wand", Vector2f(300, 650));
+		shopItems[1] = Weapon("Pirate's_Scimitar", Vector2f(450, 650));
+		shopItems[2] = Equipment("Leather_Cap", Vector2f(600, 650));
+		shopItems[3] = Equipment("Leather_Chestplate", Vector2f(750, 950));
+		shopItems[4] = Equipment("Leather_Leggings", Vector2f(900, 650));
+		shopItems[5] = Equipment("Leather_Boots", Vector2f(1050, 650));
+		shopItems[6] = Equipment("Amulet_of_Shielding", Vector2f(1200, 650));
+		break;
+	case 6:
+		shopItems[0] = Weapon("Reaper's_Scythe", Vector2f(300, 650));
+		shopItems[1] = Weapon("Golden_Wand", Vector2f(450, 650));
+		shopItems[2] = Equipment("Steel_Plate_Helmet", Vector2f(600, 650));
+		shopItems[3] = Equipment("Steel_Plate_Chestplate", Vector2f(750, 950));
+		shopItems[4] = Equipment("Steel_Plate_Pants", Vector2f(1050, 650));
+		shopItems[5] = Equipment("Steel_Plate_Boots", Vector2f(1200, 650));
+	}
+
+	// Additional potions as placeholders for shop iems 7 and 8
+	shopItems[7] = Item("Stamina_Potion", Vector2f(1200, 650));
+	shopItems[8] = Item("Health_Potion", Vector2f(1200, 650));
+	//TODO: Add more unique items for shop slots 7 and 8 (sold items, random items, etc.)
+
+
+	// Always have potions in stock
 	shopItems[9] = Item("Stamina_Potion", Vector2f(1200, 650));
 	shopItems[10] = Item("Health_Potion", Vector2f(1200, 650));
 	shopItems[11] = Item("Mana_Potion", Vector2f(1350, 650));
