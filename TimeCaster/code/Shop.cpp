@@ -3,13 +3,19 @@
 
 
 
-// TODO Make player unable to sell items that are equipped
 bool Engine::sellItem(int itemIndex)
 {
 	if (m_StoredItems[itemIndex].isNull())
 	{
 		stringstream shopStream;
-		shopStream << "You can't sell nothing. I already have enough of that.";
+		shopStream << "You can't sell nothing.\n I already have enough of that.";
+		shopText.setString(shopStream.str());
+		return false;
+	}
+	else if (m_StoredItems[itemIndex].isEquipped())
+	{
+		stringstream shopStream;
+		shopStream << "I can't buy equipped items.\n You'll have to equip something else.";
 		shopText.setString(shopStream.str());
 		return false;
 	}
