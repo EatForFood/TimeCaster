@@ -48,6 +48,12 @@ public:
 	// Get the goodness from the pickup
 	int gotIt();
 
+	bool isSentimental();
+
+	bool isEquipped();
+
+	void setEquipped(bool equipped);
+
 protected:
 
 	int m_Value;
@@ -70,6 +76,8 @@ protected:
 	float m_SecondsSinceDeSpawn;
 	float m_SecondsToLive;
 	float m_SecondsToWait;
+
+	bool m_Equipped = false;
 
 	float m_MovementElapsed = 0;
 	float m_MovementDuration = 2;

@@ -221,3 +221,18 @@ int Item::getRestoreValue()
 {
 	return m_RestoreValue;
 }
+
+bool Item::isSentimental()
+{
+	return m_Sentimental;
+}
+
+bool Item::isEquipped()
+{
+	return m_Equipped;
+}
+
+void Item::setEquipped(bool equipped)
+{
+	m_Equipped = equipped;
+}
