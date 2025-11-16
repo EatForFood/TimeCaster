@@ -260,7 +260,7 @@ void Engine::update()
 		{
 			for (int i = 0; i < shopItems.size(); i++)
 			{
-				if (!shopItems[i].isNull() && shopItems[i].getIcon().getGlobalBounds().contains(worldPos.x - 25, worldPos.y - 25) &&
+				if (shopItems[i].getIcon().getGlobalBounds().contains(worldPos.x - 25, worldPos.y - 25) &&
 					Mouse::isButtonPressed(Mouse::Left))
 				{
 					if (buyItem(i) == 1)
@@ -270,6 +270,20 @@ void Engine::update()
 					else
 					{
 						// Handle other failed purchase cases here
+					}
+					break;
+				}
+			}
+
+			// Check clicks on inventory items
+			for (int i = 0; i < m_StoredItems.size(); i++)
+			{
+				if (m_StoredItems[i].getIcon().getGlobalBounds().contains(worldPos.x - 25, worldPos.y - 25) &&
+					Mouse::isButtonPressed(Mouse::Left))
+				{
+					if (sellItem(i))
+					{
+						m_StoredItems[i] = Item("null", Vector2f(0, 0)); // empty original slot
 					}
 					break;
 				}

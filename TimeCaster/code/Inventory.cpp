@@ -97,7 +97,7 @@ bool Player::addItemToInventory(String itemType)
 
 
 
-// TODO: Move shop items to their own shop file
+// TODO for sunday: Move shop items to their own shop file, reload shop item on level up, etc.
 bool Engine::sellItem(int itemIndex)
 {
 	if (m_StoredItems[itemIndex].isNull())
@@ -118,7 +118,7 @@ bool Engine::sellItem(int itemIndex)
 		m_StoredItems[itemIndex] = Item("null", Vector2f(0, 0));
 		initializeInventory();
 		stringstream shopStream;
-		shopStream << "I'll take it!\n Here's " << goldToAdd << " gold for it.";
+		shopStream << "I'll take it!\nHere's " << goldToAdd << " gold for it.";
 		shopText.setString(shopStream.str());
 		return true;
 	}
@@ -169,6 +169,7 @@ int Engine::buyItem(int itemIndex)
 		}
 	}
 }
+
 
 void Engine::initializeShop()
 {

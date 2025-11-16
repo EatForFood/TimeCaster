@@ -215,6 +215,14 @@ void Engine::draw()
 				window.draw(icons.getIcon());
 			}
 
+			for (auto& frame : emptyFrames) {
+				window.draw(frame);
+			}
+
+			for (auto& icons : m_StoredItems) {
+				window.draw(icons.getIcon());
+			}
+
 			window.setView(mainView);
 			window.draw(spriteCursor);
 			window.setView(hudView);
