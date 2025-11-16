@@ -70,7 +70,7 @@ Item::Item(string type, Vector2f position)
 		FloatRect bounds = m_Icon.getLocalBounds();
 		m_Icon.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
 		m_Icon.setScale(2.3125, 2.3125);
-		m_Value = 15;
+		m_Value = 10;
 		m_RestoreValue = 50;
 		m_ItemType = Consumable;
 		m_Sprite.setOrigin(25, 25);
@@ -84,7 +84,7 @@ Item::Item(string type, Vector2f position)
 		FloatRect bounds = m_Icon.getLocalBounds();
 		m_Icon.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
 		m_Icon.setScale(2.3125, 2.3125);
-		m_Value = 15;
+		m_Value = 5;
 		m_RestoreValue = 50;
 		m_ItemType = Consumable;
 		m_Sprite.setOrigin(25, 25);

@@ -3,7 +3,7 @@
 
 
 
-// TODO for sunday: Move shop items to their own shop file, reload shop item on level up, etc.
+// TODO Make player unable to sell items that are equipped
 bool Engine::sellItem(int itemIndex)
 {
 	if (m_StoredItems[itemIndex].isNull())
@@ -106,4 +106,22 @@ void Engine::initializeShop()
 			shopItems[i].getIcon().setPosition(shopFrames[i].getPosition());
 		}
 	}
+}
+
+void Engine::restockShop(int level)
+{
+	
+	
+	shopItems[0] = Weapon("Silver_Wand", Vector2f(300, 650));
+	shopItems[1] = Weapon("Pirate's_Scimitar", Vector2f(450, 650));
+	shopItems[2] = Equipment("Leather_Cap", Vector2f(600, 650));
+	shopItems[3] = Equipment("Leather_Chestplate", Vector2f(750, 950));
+	shopItems[4] = Equipment("Leather_Leggings", Vector2f(900, 650));
+	shopItems[5] = Equipment("Leather_Boots", Vector2f(1050, 650));
+	shopItems[9] = Item("Stamina_Potion", Vector2f(1200, 650));
+	shopItems[10] = Item("Health_Potion", Vector2f(1200, 650));
+	shopItems[11] = Item("Mana_Potion", Vector2f(1350, 650));
+
+
+	initializeShop();
 }

@@ -118,6 +118,7 @@ void Engine::update()
 						{
 							drawInventory = true;
 							levelUp = true;
+							restockShop(player.getPlayerLevel());
 						}
 
 						// spawn some gold

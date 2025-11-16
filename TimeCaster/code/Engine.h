@@ -63,6 +63,8 @@ public:
 	bool isEquipment(const string& name);
 	bool isWeapon(const string& name);
 
+	void restockShop(int level);
+
 protected: 
 	string cleanItemName(string itemName);
 

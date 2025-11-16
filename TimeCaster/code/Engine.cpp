@@ -168,7 +168,7 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	manaBarContainer.setPosition(10, 110);
 
 	m_StoredItems.resize(16, Item("null", Vector2f(300, 650)));
-	shopItems.resize(8, Item("null", Vector2f(0, 0)));
+	shopItems.resize(12, Item("null", Vector2f(0, 0)));
 	// Debug shop item initialization
 	shopItems[0] = Weapon("Silver_Wand", Vector2f(300, 650));
 	shopItems[1] = Weapon("Pirate's_Scimitar", Vector2f(450, 650));
@@ -176,8 +176,9 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	shopItems[3] = Equipment("Leather_Chestplate", Vector2f(750, 950));
 	shopItems[4] = Equipment("Leather_Leggings", Vector2f(900, 650));
 	shopItems[5] = Equipment("Leather_Boots", Vector2f(1050, 650));
-	shopItems[6] = Item("Health_Potion", Vector2f(1200, 650));
-	shopItems[7] = Item("Mana_Potion", Vector2f(1350, 650));
+	shopItems[9] = Item("Stamina_Potion", Vector2f(1200, 650));
+	shopItems[10] = Item("Health_Potion", Vector2f(1200, 650));
+	shopItems[11] = Item("Mana_Potion", Vector2f(1350, 650));
 
 
 	//Item 0 is sword (melee combat), item 1 is wand (magic combat)
@@ -1417,6 +1418,7 @@ void Engine::run()
 					{
 						drawInventory = true;
 						levelUp = true;
+						restockShop(player.getPlayerLevel());
 					}
 				}
 
