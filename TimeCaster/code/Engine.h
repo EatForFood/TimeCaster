@@ -179,10 +179,8 @@ private:
 	Vector2f viewCentre;
 
 	Text levelUpText;
-	stringstream levelUpStream;
 
 	Text shopText;
-	stringstream shopStream;
 
 	Text goldCountText;
 

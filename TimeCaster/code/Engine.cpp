@@ -709,7 +709,7 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	shopText.setFont(font);
 	shopText.setCharacterSize(fontSize);
 	shopText.setFillColor(Color::Green);
-	shopText.setString("Welcome to the shop! \nClick on an item to buy it. ");
+	shopText.setString("Welcome to the shop! \nClick on one of my an items up top to buy it.\nClick on one of your own items down below to sell it! (TODO: IMPLEMENT SELLING ITEMS)");
 	textBounds = shopText.getLocalBounds();
 	shopText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 50);
 

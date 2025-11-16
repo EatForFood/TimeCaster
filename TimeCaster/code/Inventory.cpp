@@ -102,6 +102,9 @@ bool Engine::sellItem(int itemIndex)
 {
 	if (m_StoredItems[itemIndex].isNull())
 	{
+		stringstream shopStream;
+		shopStream << "You can't sell nothing. I already have enough of that.";
+		shopText.setString(shopStream.str());
 		return false;
 	}
 	else
@@ -114,6 +117,9 @@ bool Engine::sellItem(int itemIndex)
 		player.addGold(goldToAdd);
 		m_StoredItems[itemIndex] = Item("null", Vector2f(0, 0));
 		initializeInventory();
+		stringstream shopStream;
+		shopStream << "I'll take it!\n Here's " << goldToAdd << " gold for it.";
+		shopText.setString(shopStream.str());
 		return true;
 	}
 }
@@ -123,27 +129,43 @@ int Engine::buyItem(int itemIndex)
 {
 	if (shopItems[itemIndex].isNull())
 	{
+		stringstream shopStream;
+		shopStream << "I don't have that item.";
+		shopText.setString(shopStream.str());
 		return 0; // 0 means item does not exist
 	}
 	else
 	{
 		int itemCost = shopItems[itemIndex].getValue();
-		if (player.getGold() >= itemCost)
+		int playerGold = player.getGold();
+		string itemName = shopItems[itemIndex].getName();
+		if (playerGold >= itemCost)
 		{
-			if (player.addItemToInventory(shopItems[itemIndex].getName()))
+			
+			if (player.addItemToInventory(itemName))
 			{
 				initializeInventory();
 				player.addGold(-itemCost);
+				stringstream shopStream;
+				shopStream << "Thanks for the " << itemCost << " Gold!\nI hope you make good use of that " << cleanItemName(itemName) << "!";
+				shopText.setString(shopStream.str());
 				return 1; // 1 means success
 			}
 			else
 			{
+				stringstream shopStream;
+				shopStream << "I'd love to sell that to you, but your inventory is full.";
+				shopText.setString(shopStream.str());
 				return 2; // 2 means no space in inventory
 			}
 		}
 		else
 		{
-			return false; // 3 means not enough gold
+			int difference = itemCost - playerGold;
+			stringstream shopStream;
+			shopStream << "Sorry, you're about " << difference << " Gold short of affording that " << cleanItemName(itemName) << ".";
+			shopText.setString(shopStream.str());
+			return 3; // 3 means not enough gold
 		}
 	}
 }
