@@ -38,6 +38,7 @@ void Engine::draw()
 					if (currentChunk && currentChunk->getChunkType() == "goblinVillage")
 					{
 						window.draw(world.getBackground(i), &textureBackground2);
+						
 					}
 					else if (currentChunk && currentChunk->getChunkType() == "skeletonRuins")
 					{
@@ -51,14 +52,20 @@ void Engine::draw()
 			}
 		}
 
+		// Ekey prompt in here temporarily
+		// TODO: make ekey prompt draw when near / inside shop instead
 		if (player.getInCell())
 		{
 			Chunk* currentChunk = world.getChunk(player.getChunk());
 			if (currentChunk) {
 				for (auto& cells : currentChunk->getCells()) {
 					window.draw(cells.getBackground(), &textureBackground);
+					drawEKey = true;
 				}
 			}
+		}
+		else {
+			drawEKey = false;
 		}
 
 		// DRAW EFFECTS

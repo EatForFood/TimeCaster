@@ -1005,6 +1005,18 @@ void Engine::run()
 				dragging = false;
 			}
 
+			if (event.type == Event::KeyPressed && event.key.code == Keyboard::E && drawEKey)
+			{
+				if (drawShop)
+					{
+					drawShop = false;
+				}
+				else
+				{
+					drawShop = true;
+				}
+			}
+
 			if (event.type == Event::KeyPressed || Mouse::isButtonPressed(Mouse::Left))
 			{
 				// Pause the game if escape key pressed
@@ -1432,17 +1444,6 @@ void Engine::run()
 					}
 				}
 
-				if (event.key.code == Keyboard::Num7 && state == State::PLAYING && debugMode)
-				{
-					if (drawEKey)
-					{
-						drawEKey = false;
-					}
-					else
-					{
-						drawEKey = true;
-					}
-				}
 
 				if (event.key.code == Keyboard::Num8 && state == State::PLAYING && debugMode)
 				{
@@ -1559,7 +1560,7 @@ void Engine::run()
 			}
 
 		} // End WASD while playing
-		else if (drawInventory)
+		else if (drawInventory || drawShop)
 		{
 			player.stopRight();
 			player.stopLeft();

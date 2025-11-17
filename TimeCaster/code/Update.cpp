@@ -257,6 +257,8 @@ void Engine::update()
 			break;
 		}
 
+
+
 		if (drawShop)
 		{
 			for (int i = 0; i < shopItems.size(); i++)
