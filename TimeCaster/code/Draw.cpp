@@ -202,7 +202,7 @@ void Engine::draw()
 		{
 			window.draw(filter);
 			window.draw(darkInventoryBackground);
-			window.draw(inventoryBackground);
+			window.draw(shopBackground);
 			window.draw(shopText);
 
 			// Draw the shop frames

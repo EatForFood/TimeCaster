@@ -719,6 +719,12 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	textBounds = inventoryBackground.getLocalBounds();
 	inventoryBackground.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y - (textBounds.height / 2.f) - textBounds.top);
 
+	// Shop inventory background placeholder
+	shopBackground.setTexture(&inventoryBackgroundTexture);
+	shopBackground.setSize(Vector2f(1100, 880));
+	textBounds = shopBackground.getLocalBounds();
+	shopBackground.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y - (textBounds.height / 1.6f) - textBounds.top);
+
 	/*****************
 	Hotbar UI elements
 	*****************/
