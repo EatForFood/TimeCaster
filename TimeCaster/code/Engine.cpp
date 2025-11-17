@@ -692,6 +692,7 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 
 	eKey.setTexture(&eKeyTexture);
 	eKey.setSize(Vector2f(50, 50));
+	eKey.setPosition(viewCentre.x - 25, viewCentre.y - 100);
 
 	tutorialText.setFont(font);
 	tutorialText.setCharacterSize(fontSize);
@@ -1428,6 +1429,18 @@ void Engine::run()
 						drawInventory = true;
 						levelUp = true;
 						restockShop(player.getPlayerLevel());
+					}
+				}
+
+				if (event.key.code == Keyboard::Num7 && state == State::PLAYING && debugMode)
+				{
+					if (drawEKey)
+					{
+						drawEKey = false;
+					}
+					else
+					{
+						drawEKey = true;
 					}
 				}
 

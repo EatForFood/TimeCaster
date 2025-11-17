@@ -197,7 +197,11 @@ void Engine::draw()
 
 		// Switch to the HUD view
 		window.setView(hudView);
-		
+		if (drawEKey)
+		{
+			window.draw(eKey);
+		}
+
 		if (drawShop)
 		{
 			window.draw(filter);
