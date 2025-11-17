@@ -8,6 +8,9 @@
 
 class Enemy : public Character
 {
+protected:
+	float m_Damage = 4; // Change this later to be set dynamically
+
 private:
 	float START_SPEED = 25;
 	float START_HEALTH = 100;
@@ -28,8 +31,6 @@ private:
 	float m_KillValue; // How much gold / Exp the enemy gives when killed
 
 	int m_Chunk; // Enemy's current chunk
-
-	float m_Damage = 4; // Change this later to be set dynamically
 
 	Chunk* m_ChunkPtr = nullptr;
 	Vector2i m_ChunkOffset;
@@ -59,7 +60,7 @@ public:
 
 	void spawn(string type, Vector2i position, int level);
 
-	void update(float elapsedTime, const Vector2f& playerPos, Chunk* chunk, int playerChunk, vector<NavBox> navBox);
+	virtual void update(float elapsedTime, const Vector2f& playerPos, Chunk* chunk, int playerChunk, vector<NavBox> navBox);
 
 	float getCurrentHP();
 

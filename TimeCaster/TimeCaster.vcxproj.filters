@@ -81,6 +81,9 @@
     <ClInclude Include="code\Loot.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="code\DragonBoss.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="code\Spell.cpp">
@@ -162,6 +165,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="code\Shop.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\DragonBoss.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

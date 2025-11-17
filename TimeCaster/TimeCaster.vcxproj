@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="code\DragonBoss.h" />
     <ClInclude Include="code\Loot.h" />
     <ClInclude Include="code\Particle.h" />
     <ClInclude Include="code\Pathfinder.h" />
@@ -43,6 +44,7 @@
     <ClInclude Include="code\World.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="code\DragonBoss.cpp" />
     <ClCompile Include="code\Inventory.cpp" />
     <ClCompile Include="code\Loot.cpp" />
     <ClCompile Include="code\Particle.cpp" />
