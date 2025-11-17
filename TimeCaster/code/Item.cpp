@@ -60,6 +60,7 @@ Item::Item(string type, Vector2f position)
 		m_RestoreValue = 50;
 		m_ItemType = Consumable;
 		m_Sprite.setOrigin(25, 25);
+		m_That = true;
 	}
 	else if (m_Name == "Mana_Potion")
 	{
@@ -74,6 +75,7 @@ Item::Item(string type, Vector2f position)
 		m_RestoreValue = 50;
 		m_ItemType = Consumable;
 		m_Sprite.setOrigin(25, 25);
+		m_That = true;
 	}
 	else if (m_Name == "Stamina_Potion")
 	{
@@ -88,6 +90,7 @@ Item::Item(string type, Vector2f position)
 		m_RestoreValue = 50;
 		m_ItemType = Consumable;
 		m_Sprite.setOrigin(25, 25);
+		m_That = true;
 	}
 	else
 	{
@@ -235,4 +238,9 @@ bool Item::isEquipped()
 void Item::setEquipped(bool equipped)
 {
 	m_Equipped = equipped;
+}
+
+bool Item::useThat()
+{
+	return m_That;
 }

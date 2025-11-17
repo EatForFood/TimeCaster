@@ -54,6 +54,8 @@ public:
 
 	void setEquipped(bool equipped);
 
+	bool useThat();
+
 protected:
 
 	int m_Value;
@@ -78,6 +80,7 @@ protected:
 	float m_SecondsToWait;
 
 	bool m_Equipped = false;
+	bool m_That = false;
 
 	float m_MovementElapsed = 0;
 	float m_MovementDuration = 2;

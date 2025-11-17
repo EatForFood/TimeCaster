@@ -59,7 +59,16 @@ int Engine::buyItem(int itemIndex)
 				initializeInventory();
 				player.addGold(-itemCost);
 				stringstream shopStream;
-				shopStream << "Thanks for the " << itemCost << " Gold!\nI hope you make good use of that " << cleanItemName(itemName) << "!";
+				string thatThose = "";
+				if (shopItems[itemIndex].useThat())
+									{
+					thatThose = "that ";
+				}
+				else
+				{
+					thatThose = "those ";
+				}
+				shopStream << "Thanks for the " << itemCost << " Gold!\nI hope you make good use of " << thatThose << cleanItemName(itemName) << "!";
 				shopText.setString(shopStream.str());
 				return 1; // 1 means success
 			}

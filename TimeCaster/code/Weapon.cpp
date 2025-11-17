@@ -28,7 +28,7 @@ Weapon::Weapon(string type, Vector2f position)
 		m_AnimationType = "slash";
 
 		m_WeaponSize = 3;
-
+		m_That = true;
 
 	}
 	else if (m_Name == "Wooden_Staff")
@@ -52,6 +52,7 @@ Weapon::Weapon(string type, Vector2f position)
 		m_ItemType = MagicWeapon;
 		m_AnimationType = "thrust";
 		m_WeaponSize = 1;
+		m_That = true;
 	}
 	else if (m_Name == "Short_Spear")
 	{
@@ -74,6 +75,7 @@ Weapon::Weapon(string type, Vector2f position)
 		m_ItemType = MagicWeapon;
 		m_AnimationType = "thrust";
 		m_WeaponSize = 1;
+		m_That = true;
 	}
 	else if (m_Name == "Long_Spear")
 	{
@@ -96,6 +98,7 @@ Weapon::Weapon(string type, Vector2f position)
 		m_ItemType = MagicWeapon;
 		m_AnimationType = "thrust";
 		m_WeaponSize = 3;
+		m_That = true;
 	}
 	else if (m_Name == "Trident")
 	{
@@ -118,6 +121,7 @@ Weapon::Weapon(string type, Vector2f position)
 		m_ItemType = MagicWeapon;
 		m_AnimationType = "thrust";
 		m_WeaponSize = 3;
+		m_That = true;
 	}
 	else if (m_Name == "Dragon_Spear")
 	{
@@ -140,6 +144,7 @@ Weapon::Weapon(string type, Vector2f position)
 		m_ItemType = MagicWeapon;
 		m_AnimationType = "thrust";
 		m_WeaponSize = 3;
+		m_That = true;
 		}
 	else if (m_Name == "Pirate's_Scimitar")
 	{
@@ -159,6 +164,7 @@ Weapon::Weapon(string type, Vector2f position)
 		m_ItemType = MeleeWeapon;
 		m_AnimationType = "slash";
 		m_WeaponSize = 3;
+		m_That = true;
 	}
 	else if (m_Name == "Steel_Mace")
 	{
@@ -178,6 +184,7 @@ Weapon::Weapon(string type, Vector2f position)
 		m_ItemType = MeleeWeapon;
 		m_AnimationType = "slash";
 		m_WeaponSize = 2;
+		m_That = true;
 		}
 	else if (m_Name == "Silver_Wand")
 	{
@@ -196,6 +203,7 @@ Weapon::Weapon(string type, Vector2f position)
 
 		m_ItemType = MagicWeapon;
 		m_AnimationType = "thrust";
+		m_That = true;
 	}
 	else if (m_Name == "Golden_Wand")
 	{
@@ -213,6 +221,7 @@ Weapon::Weapon(string type, Vector2f position)
 		m_Icon.setScale(2.34, 2.34);
 
 		m_ItemType = MagicWeapon;
+		m_That = true;
 	}
 	else if (m_Name == "Reaper's_Scythe")
 	{
@@ -229,6 +238,7 @@ Weapon::Weapon(string type, Vector2f position)
 		m_Icon.setScale(2.34, 2.34);
 
 		m_ItemType = MeleeWeapon;
+		m_That = true;
 	}
 	else // empty item for inventory if none of the above match
 	{

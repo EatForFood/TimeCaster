@@ -21,6 +21,7 @@ Equipment::Equipment(string type, sf::Vector2f position) : Item(type, position) 
 		m_ItemType = HeadArmour;
 
 		m_Sprite.setOrigin(25, 25);
+		m_That = true;
 
 	}
 	else if (m_Name == "Family_Robe")
@@ -36,7 +37,7 @@ Equipment::Equipment(string type, sf::Vector2f position) : Item(type, position) 
 		m_Value = 4;
 		m_Armour = 0;
 		m_ItemType = ChestArmour;
-
+		m_That = true;
 
 
 		m_Sprite.setOrigin(25, 25);
@@ -54,6 +55,7 @@ Equipment::Equipment(string type, sf::Vector2f position) : Item(type, position) 
 		m_Armour = 0;
 		m_ItemType = TrouserArmour;
 		m_Sprite.setOrigin(25, 25);
+		m_That = false;
 	}
 	else if (m_Name == "Basic_Shoes")
 	{
@@ -70,6 +72,7 @@ Equipment::Equipment(string type, sf::Vector2f position) : Item(type, position) 
 		m_ItemType = ShoeArmour;
 
 		m_Sprite.setOrigin(25, 25);
+		m_That = false;
 	}
 	else if (m_Name == "Leather_Cap")
 	{
@@ -86,6 +89,7 @@ Equipment::Equipment(string type, sf::Vector2f position) : Item(type, position) 
 		m_ItemType = HeadArmour;
 
 		m_Sprite.setOrigin(25, 25);
+		m_That = true;
 	}
 	else if (m_Name == "Leather_Chestplate")
 	{
@@ -102,6 +106,7 @@ Equipment::Equipment(string type, sf::Vector2f position) : Item(type, position) 
 		m_ItemType = ChestArmour;
 
 		m_Sprite.setOrigin(25, 25);
+		m_That = true;
 	}
 	else if (m_Name == "Leather_Leggings")
 	{
@@ -117,6 +122,7 @@ Equipment::Equipment(string type, sf::Vector2f position) : Item(type, position) 
 		m_Armour = 5;
 		m_ItemType = TrouserArmour;
 		m_Sprite.setOrigin(25, 25);
+		m_That = false;
 	}
 	else if (m_Name == "Leather_Boots")
 	{
@@ -133,6 +139,7 @@ Equipment::Equipment(string type, sf::Vector2f position) : Item(type, position) 
 		m_ItemType = ShoeArmour;
 
 		m_Sprite.setOrigin(25, 25);
+		m_That = false;
 	}
 	else if (m_Name == "Steel_Plate_Helmet")
 	{
@@ -147,7 +154,7 @@ Equipment::Equipment(string type, sf::Vector2f position) : Item(type, position) 
 		m_ItemType = HeadArmour;
 
 		m_Sprite.setOrigin(25, 25);
-
+		m_That = true;
 	}
 	else if (m_Name == "Steel_Plate_Chestplate")
 	{
@@ -162,6 +169,7 @@ Equipment::Equipment(string type, sf::Vector2f position) : Item(type, position) 
 		m_ItemType = ChestArmour;
 
 		m_Sprite.setOrigin(25, 25);
+		m_That = true;
 	}
 	else if (m_Name == "Steel_Plate_Pants")
 	{
@@ -176,6 +184,7 @@ Equipment::Equipment(string type, sf::Vector2f position) : Item(type, position) 
 		m_ItemType = TrouserArmour;
 
 		m_Sprite.setOrigin(25, 25);
+		m_That = false;
 	}
 	else if (m_Name == "Steel_Plate_Boots")
 	{
@@ -190,6 +199,7 @@ Equipment::Equipment(string type, sf::Vector2f position) : Item(type, position) 
 		m_ItemType = ShoeArmour;
 
 		m_Sprite.setOrigin(25, 25);
+		m_That = true;
 	}
 	else if (m_Name == "Chain_Mail")
 	{
@@ -204,6 +214,7 @@ Equipment::Equipment(string type, sf::Vector2f position) : Item(type, position) 
 		m_ItemType = ChestArmour;
 
 		m_Sprite.setOrigin(25, 25);
+		m_That = true;
 	}
 	else if (m_Name == "Chain_Hood")
 	{
@@ -218,6 +229,7 @@ Equipment::Equipment(string type, sf::Vector2f position) : Item(type, position) 
 		m_ItemType = HeadArmour;
 
 		m_Sprite.setOrigin(25, 25);
+		m_That = true;
 	}
 	else if (m_Name == "Soldiers_Helmet")
 	{
@@ -232,6 +244,7 @@ Equipment::Equipment(string type, sf::Vector2f position) : Item(type, position) 
 		m_ItemType = HeadArmour;
 
 		m_Sprite.setOrigin(25, 25);
+		m_That = true;
 	}
 	else if (m_Name == "Amulet_of_Shielding")
 	{
@@ -247,6 +260,7 @@ Equipment::Equipment(string type, sf::Vector2f position) : Item(type, position) 
 
 		m_ItemType = NeckArmour;
 		m_Sprite.setOrigin(25, 25);
+		m_That = true;
 	}
 	else if (m_Name == "Family_Locket")
 	{
@@ -263,6 +277,7 @@ Equipment::Equipment(string type, sf::Vector2f position) : Item(type, position) 
 		m_ItemType = NeckArmour;
 
 		m_Sprite.setOrigin(25, 25);
+		m_That = true;
 	}
 	else
 	{
