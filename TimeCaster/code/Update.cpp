@@ -324,7 +324,24 @@ void Engine::update()
 				tutorialText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 900);
 			}
 
-			player.setSpritePosition(Vector2f(player.getPosition().x, player.getPosition().y));
+
+			playerInFrame = player.getSprite();
+			playerInFrameHead = player.getHead();
+			playerInFrameTorso = player.getTorso();
+			playerInFramePants = player.getPants();
+			playerInFrameShoes = player.getShoes();
+			Vector2f framePos = Vector2f(viewCentre.x - 250, 340);
+			playerInFrame.setPosition(framePos);
+			playerInFrameHead.setPosition(framePos);
+			playerInFrameTorso.setPosition(framePos);
+			playerInFramePants.setPosition(framePos);
+			playerInFrameShoes.setPosition(framePos);
+			playerInFrame.setScale(Vector2f(2.25f, 2.25f));
+			playerInFrameHead.setScale(Vector2f(2.25f, 2.25f));
+			playerInFrameTorso.setScale(Vector2f(2.25f, 2.25f));
+			playerInFramePants.setScale(Vector2f(2.25f, 2.25f));
+			playerInFrameShoes.setScale(Vector2f(2.25f, 2.25f));
+
 
 			bool draggingFromInventory = false;
 			//int draggedIndex = -1;
