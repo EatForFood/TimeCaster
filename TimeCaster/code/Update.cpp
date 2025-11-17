@@ -324,7 +324,9 @@ void Engine::update()
 				tutorialText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 900);
 			}
 
-			player.setSpritePosition(Vector2f(player.getPosition().x, player.getPosition().y));
+		//	player.setSpritePosition(Vector2f(player.getPosition().x, player.getPosition().y));
+			player.setSpritePosition(Vector2f(viewCentre.x - 250, 360));
+			
 
 			bool draggingFromInventory = false;
 			//int draggedIndex = -1;
