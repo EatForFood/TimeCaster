@@ -244,12 +244,11 @@ void Engine::draw()
 			window.draw(darkInventoryBackground);
 			window.draw(inventoryBackground);
 			window.draw(playerFrame);
-		//	window.draw(playerInFrame);
-			window.draw(player.getSpriteFromSheet()); // base player sprite
-			window.draw(player.getHead());
-			window.draw(player.getTorso());
-			window.draw(player.getPants());
-			window.draw(player.getShoes());
+			window.draw(playerInFrame); 
+			window.draw(playerInFrameHead);
+			window.draw(playerInFrameTorso);
+			window.draw(playerInFramePants);
+			window.draw(playerInFrameShoes);
 			window.draw(headArmourFrame);
 			window.draw(chestArmourFrame);
 			window.draw(trousersArmourFrame);
