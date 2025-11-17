@@ -63,6 +63,10 @@ public:
 	bool isEquipment(const string& name);
 	bool isWeapon(const string& name);
 
+	void restockShop(int level);
+
+	void equipAllItems();
+
 protected: 
 	string cleanItemName(string itemName);
 
@@ -87,6 +91,8 @@ private:
 	bool vSync = false;
 
 	bool debugMode = true;	
+
+	bool drawEKey = false;
 
 	// Anything using multiple threads should use atomic variables
 	std::atomic<bool> worldLoaded;
@@ -306,6 +312,7 @@ private:
 	RectangleShape weaponFrame;
 	RectangleShape wandFrame;
 	RectangleShape inventoryBackground;
+	RectangleShape shopBackground;
 	RectangleShape darkInventoryBackground;
 
 	// Item tooltip elements

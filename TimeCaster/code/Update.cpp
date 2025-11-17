@@ -118,6 +118,7 @@ void Engine::update()
 						{
 							drawInventory = true;
 							levelUp = true;
+							restockShop(player.getPlayerLevel());
 						}
 
 						// spawn some gold
@@ -255,6 +256,8 @@ void Engine::update()
 			spellIndicator.setPosition(spell4Icon.getPosition().x, spell4Icon.getPosition().y - 62.5);
 			break;
 		}
+
+
 
 		if (drawShop)
 		{
@@ -396,7 +399,18 @@ void Engine::update()
 				if (clickedItem.getIcon().getGlobalBounds().intersects(weaponFrame.getGlobalBounds())
 					&& clickedItem.getType() == Item::MeleeWeapon)
 				{
+					//unequip current melee weapon first
+					for (int i = 0; i < m_StoredItems.size(); i++)
+					{
+						if (m_StoredItems[i].isEquipped() && m_StoredItems[i].getType() == Item::MeleeWeapon)
+						{
+							m_StoredItems[i].setEquipped(false);
+							break;
+						}
+					}
+					// equip new melee weapon
 					if (player.equipWeapon(clickedItem.getName())) equippedSwordIcon.setTextureRect(clickedItem.getTextureRect());
+					m_StoredItems[itemLastIndex].setEquipped(true); 
 				}
 
 				// placed is not being made true on purpose, the player will still need to carry the items they equip
@@ -406,42 +420,108 @@ void Engine::update()
 				if (clickedItem.getIcon().getGlobalBounds().intersects(wandFrame.getGlobalBounds())
 					&& clickedItem.getType() == Item::MagicWeapon)
 				{
+					//unequip current magic weapon first
+					for (int i = 0; i < m_StoredItems.size(); i++)
+					{
+						if (m_StoredItems[i].isEquipped() && m_StoredItems[i].getType() == Item::MagicWeapon)
+						{
+							m_StoredItems[i].setEquipped(false);
+							break;
+						}
+					}
+					// equip new magic weapon
 					if (player.equipWeapon(clickedItem.getName())) equippedWandIcon.setTextureRect(clickedItem.getTextureRect());
+					m_StoredItems[itemLastIndex].setEquipped(true);
 				}
 
 				// Try to equip as head armour if dropped on head armour slot
 				if (clickedItem.getIcon().getGlobalBounds().intersects(headArmourFrame.getGlobalBounds())
 					&& clickedItem.getType() == Item::HeadArmour)
 				{
+					// unequip current head armour first
+					for (int i = 0; i < m_StoredItems.size(); i++)
+					{
+						if (m_StoredItems[i].isEquipped() && m_StoredItems[i].getType() == Item::HeadArmour)
+						{
+							m_StoredItems[i].setEquipped(false);
+							break;
+						}
+					}
+					// equip new head armour
 					if (player.equipArmour(clickedItem.getName())) equippedHeadArmourIcon.setTextureRect(clickedItem.getTextureRect());
+					m_StoredItems[itemLastIndex].setEquipped(true);
 				}
 
 				// Try to equip as chest armour if dropped on chest armour slot
 				if (clickedItem.getIcon().getGlobalBounds().intersects(chestArmourFrame.getGlobalBounds())
 					&& clickedItem.getType() == Item::ChestArmour)
 				{
+					// unequip current chest armour first
+					for (int i = 0; i < m_StoredItems.size(); i++)
+					{
+						if (m_StoredItems[i].isEquipped() && m_StoredItems[i].getType() == Item::ChestArmour)
+						{
+							m_StoredItems[i].setEquipped(false);
+							break;
+						}
+					}
+					// equip new chest armour
 					if (player.equipArmour(clickedItem.getName())) equippedChestArmourIcon.setTextureRect(clickedItem.getTextureRect());
+					m_StoredItems[itemLastIndex].setEquipped(true);
 				}
 
 				// Try to equip as trouser armour if dropped on trouser armour slot
 				if (clickedItem.getIcon().getGlobalBounds().intersects(trousersArmourFrame.getGlobalBounds())
 					&& clickedItem.getType() == Item::TrouserArmour)
 				{
+					// unequip current trouser armour first
+					for (int i = 0; i < m_StoredItems.size(); i++)
+					{
+						if (m_StoredItems[i].isEquipped() && m_StoredItems[i].getType() == Item::TrouserArmour)
+						{
+							m_StoredItems[i].setEquipped(false);
+							break;
+						}
+					}
+					// equip new trouser armour
 					if (player.equipArmour(clickedItem.getName())) equippedTrousersArmourIcon.setTextureRect(clickedItem.getTextureRect());
+					m_StoredItems[itemLastIndex].setEquipped(true);
 				}
 
 				// Try to equip as shoe armour if dropped on shoe armour slot
 				if (clickedItem.getIcon().getGlobalBounds().intersects(bootsArmourFrame.getGlobalBounds())
 					&& clickedItem.getType() == Item::ShoeArmour)
 				{
+					// unequip current shoe armour first
+					for (int i = 0; i < m_StoredItems.size(); i++)
+					{
+						if (m_StoredItems[i].isEquipped() && m_StoredItems[i].getType() == Item::ShoeArmour)
+						{
+							m_StoredItems[i].setEquipped(false);
+							break;
+						}
+					}
+					// equip new shoe armour
 					if (player.equipArmour(clickedItem.getName())) equippedShoeArmourIcon.setTextureRect(clickedItem.getTextureRect());
+					m_StoredItems[itemLastIndex].setEquipped(true);
 				}
 
 				// Try to equip as neck armour if dropped on neck armour slot
 				if (clickedItem.getIcon().getGlobalBounds().intersects(neckFrame.getGlobalBounds())
 					&& clickedItem.getType() == Item::NeckArmour)
 				{
+					// unequip current neck armour first
+					for (int i = 0; i < m_StoredItems.size(); i++)
+					{
+						if (m_StoredItems[i].isEquipped() && m_StoredItems[i].getType() == Item::NeckArmour)
+						{
+							m_StoredItems[i].setEquipped(false);
+							break;
+						}
+					}
+					// equip new neck armour
 					if (player.equipArmour(clickedItem.getName())) equippedNeckArmourIcon.setTextureRect(clickedItem.getTextureRect());
+					m_StoredItems[itemLastIndex].setEquipped(true);
 				}
 
 				if (clickedItem.getIcon().getGlobalBounds().intersects(playerInFrame.getGlobalBounds()) && clickedItem.getType() == Item::Consumable)

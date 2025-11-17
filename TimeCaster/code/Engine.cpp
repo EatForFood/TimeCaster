@@ -168,7 +168,7 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	manaBarContainer.setPosition(10, 110);
 
 	m_StoredItems.resize(16, Item("null", Vector2f(300, 650)));
-	shopItems.resize(8, Item("null", Vector2f(0, 0)));
+	shopItems.resize(12, Item("null", Vector2f(0, 0)));
 	// Debug shop item initialization
 	shopItems[0] = Weapon("Silver_Wand", Vector2f(300, 650));
 	shopItems[1] = Weapon("Pirate's_Scimitar", Vector2f(450, 650));
@@ -176,8 +176,9 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	shopItems[3] = Equipment("Leather_Chestplate", Vector2f(750, 950));
 	shopItems[4] = Equipment("Leather_Leggings", Vector2f(900, 650));
 	shopItems[5] = Equipment("Leather_Boots", Vector2f(1050, 650));
-	shopItems[6] = Item("Health_Potion", Vector2f(1200, 650));
-	shopItems[7] = Item("Mana_Potion", Vector2f(1350, 650));
+	shopItems[9] = Item("Stamina_Potion", Vector2f(1200, 650));
+	shopItems[10] = Item("Health_Potion", Vector2f(1200, 650));
+	shopItems[11] = Item("Mana_Potion", Vector2f(1350, 650));
 
 
 	//Item 0 is sword (melee combat), item 1 is wand (magic combat)
@@ -691,6 +692,7 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 
 	eKey.setTexture(&eKeyTexture);
 	eKey.setSize(Vector2f(50, 50));
+	eKey.setPosition(viewCentre.x - 25, viewCentre.y - 100);
 
 	tutorialText.setFont(font);
 	tutorialText.setCharacterSize(fontSize);
@@ -717,6 +719,12 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	inventoryBackground.setSize(Vector2f(1000, 800));
 	textBounds = inventoryBackground.getLocalBounds();
 	inventoryBackground.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y - (textBounds.height / 2.f) - textBounds.top);
+
+	// Shop inventory background placeholder
+	shopBackground.setTexture(&inventoryBackgroundTexture);
+	shopBackground.setSize(Vector2f(1100, 880));
+	textBounds = shopBackground.getLocalBounds();
+	shopBackground.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y - (textBounds.height / 1.6f) - textBounds.top);
 
 	/*****************
 	Hotbar UI elements
@@ -997,6 +1005,18 @@ void Engine::run()
 				dragging = false;
 			}
 
+			if (event.type == Event::KeyPressed && event.key.code == Keyboard::E && drawEKey)
+			{
+				if (drawShop)
+					{
+					drawShop = false;
+				}
+				else
+				{
+					drawShop = true;
+				}
+			}
+
 			if (event.type == Event::KeyPressed || Mouse::isButtonPressed(Mouse::Left))
 			{
 				// Pause the game if escape key pressed
@@ -1040,6 +1060,7 @@ void Engine::run()
 					equippedTrousersArmourIcon.setTextureRect(player.getEquippedTrouserArmour()->getTextureRect());
 					equippedShoeArmourIcon.setTextureRect(player.getEquippedShoeArmour()->getTextureRect());
 					equippedNeckArmourIcon.setTextureRect(player.getEquippedNeckArmour()->getTextureRect());
+					equipAllItems();
 
 					// We will modify the next two lines later
 					arena.width = 1900;
@@ -1112,6 +1133,7 @@ void Engine::run()
 						equippedTrousersArmourIcon.setTextureRect(player.getEquippedTrouserArmour()->getTextureRect());
 						equippedShoeArmourIcon.setTextureRect(player.getEquippedShoeArmour()->getTextureRect());
 						equippedNeckArmourIcon.setTextureRect(player.getEquippedNeckArmour()->getTextureRect());
+						equipAllItems();
 
 						// We will modify the next two lines later
 						arena.width = 1900;
@@ -1159,6 +1181,7 @@ void Engine::run()
 						equippedTrousersArmourIcon.setTextureRect(player.getEquippedTrouserArmour()->getTextureRect());
 						equippedShoeArmourIcon.setTextureRect(player.getEquippedShoeArmour()->getTextureRect());
 						equippedNeckArmourIcon.setTextureRect(player.getEquippedNeckArmour()->getTextureRect());
+						equipAllItems();
 
 						// We will modify the next two lines later
 						arena.width = 1900;
@@ -1417,8 +1440,10 @@ void Engine::run()
 					{
 						drawInventory = true;
 						levelUp = true;
+						restockShop(player.getPlayerLevel());
 					}
 				}
+
 
 				if (event.key.code == Keyboard::Num8 && state == State::PLAYING && debugMode)
 				{
@@ -1535,7 +1560,7 @@ void Engine::run()
 			}
 
 		} // End WASD while playing
-		else if (drawInventory)
+		else if (drawInventory || drawShop)
 		{
 			player.stopRight();
 			player.stopLeft();

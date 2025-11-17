@@ -47,6 +47,7 @@
     <ClCompile Include="code\Loot.cpp" />
     <ClCompile Include="code\Particle.cpp" />
     <ClCompile Include="code\Pathfinder.cpp" />
+    <ClCompile Include="code\Shop.cpp" />
     <ClCompile Include="code\Spell.cpp" />
     <ClCompile Include="code\Cell.cpp" />
     <ClCompile Include="code\Character.cpp" />
