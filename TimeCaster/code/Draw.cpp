@@ -56,17 +56,15 @@ void Engine::draw()
 		// TODO: make ekey prompt draw when near / inside shop instead
 		if (player.getInCell())
 		{
+			drawEKey = true;
 			Chunk* currentChunk = world.getChunk(player.getChunk());
 			if (currentChunk) {
 				for (auto& cells : currentChunk->getCells()) {
 					window.draw(cells.getBackground(), &textureBackground);
-					drawEKey = true;
 				}
 			}
 		}
-		else {
-			drawEKey = false;
-		}
+
 
 		// DRAW EFFECTS
 		for (int i = 0; i < 249; i++) // draw decals
@@ -88,6 +86,7 @@ void Engine::draw()
 
 		if (!player.getInCell())
 		{
+			drawEKey = false;
 			for (int i = 0; i < world.getWorldSize(); i++)
 			{
 				if (collision.distance(player.getCenter(), world.getChunkCenter(i)) < 2000) {
