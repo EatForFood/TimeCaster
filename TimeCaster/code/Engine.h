@@ -175,6 +175,12 @@ private:
 	Texture textureStoryIntro;
 	Sprite spriteStoryIntro;
 
+	Sprite playerInFrame;
+	Sprite playerInFrameHead;
+	Sprite playerInFrameTorso;
+	Sprite playerInFramePants;
+	Sprite playerInFrameShoes;
+
 	View hudView;
 
 	Font font;
@@ -286,7 +292,6 @@ private:
 	Texture textureWeaponFrame;
 	Texture textureEmptyFrame;
 	Texture texturePlayerFrame;
-	Texture texturePlayerInFrame;
 	Texture textureNeckFrame;
 	Texture textureWandFrame;
 	Texture textureItems;
@@ -303,7 +308,6 @@ private:
 	RectangleShape equippedTrousersArmourIcon;
 	RectangleShape equippedShoeArmourIcon;
 	RectangleShape equippedNeckArmourIcon;
-	RectangleShape playerInFrame;
 	RectangleShape headArmourFrame;
 	RectangleShape chestArmourFrame;
 	RectangleShape trousersArmourFrame;

@@ -495,9 +495,8 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	textureBootsArmourFrame = TextureHolder::GetTexture("graphics/UI/bootsFrame.png");
 	textureWeaponFrame = TextureHolder::GetTexture("graphics/UI/weaponFrame.png");
 	textureEmptyFrame = TextureHolder::GetTexture("graphics/UI/emptyFrame.png");
-	texturePlayerFrame = TextureHolder::GetTexture("graphics/UI/playerFrame.png");
-	texturePlayerInFrame = TextureHolder::GetTexture("graphics/UI/player.png");
 	textureNeckFrame = TextureHolder::GetTexture("graphics/UI/neckFrame.png");
+	texturePlayerFrame = TextureHolder::GetTexture("graphics/UI/playerFrame.png");
 	textureWandFrame = TextureHolder::GetTexture("graphics/UI/ringFrame.png");
 	textureItems = TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png");
 	tooltipBackground = TextureHolder::GetTexture("graphics/UI/tooltipBackground.png");
@@ -554,11 +553,10 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	playerFrame.setOrigin(playerFrame.getSize() / 2.f);
 	playerFrame.setPosition(viewCentre.x - 250, 350);
 
-	// Player sprite for frame
-	playerInFrame.setSize(sf::Vector2f(60.f, 100.f));
-	playerInFrame.setTexture(&texturePlayerInFrame);
-	playerInFrame.setOrigin(playerInFrame.getSize() / 2.f);
-	playerInFrame.setPosition(viewCentre.x - 250, 360);
+
+
+
+	
 
 	neckFrame.setTexture(&textureNeckFrame);
 	neckFrame.setSize(Vector2f(75, 75));
