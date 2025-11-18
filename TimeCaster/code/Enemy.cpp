@@ -14,6 +14,7 @@ using namespace sf;
 
 Enemy::Enemy() {
 	m_Speed = START_SPEED;
+	m_WeaponSize = 3;
 }
 
 void Enemy::spawn(string type, Vector2i position, int level) {
@@ -62,6 +63,8 @@ void Enemy::spawn(string type, Vector2i position, int level) {
 	m_Position.x = position.x;
 	m_Position.y = position.y;
 	m_Sprite.setPosition(m_Position);
+	m_SpriteWeapon = Sprite(TextureHolder::GetTexture("graphics/player/weapon/slash/Iron_Sword.png"));
+	m_SpriteWeapon.setOrigin((64 * m_WeaponSize) / 2, (64 * m_WeaponSize) / 2);		m_SpriteWeapon.setScale(0.75, 0.75);
 }
 
 void Enemy::update(float elapsedTime, const Vector2f& playerPos, Chunk* chunk, int playerChunk, vector<NavBox> navBox) {
@@ -191,7 +194,10 @@ void Enemy::Attack()
 		return;
 	}
 
-	resetAniCounter();
+	if (!m_IsAttacking)
+	{
+		resetAniCounter();
+	}
 	m_IsAttacking = true;
 
 	if (m_Type == "Skeleton")
@@ -207,12 +213,15 @@ void Enemy::Attack()
 		m_Sprite.setScale(0.75f, 0.75f);
 	}
 
-	
-	setSpriteFromSheet(IntRect(0, 0, 385, 64), 64);
-
-	m_SpriteWeapon = Sprite(TextureHolder::GetTexture("graphics/player/weapon/Pirate's_Scimtar.png"));
-	m_SpriteWeapon.setOrigin(32, 32);
+	// Associate a texture with the body sprite
+	// TODO: Change weapon based on enemy type
+	m_SpriteWeapon = Sprite(TextureHolder::GetTexture("graphics/player/weapon/slash/Iron_Sword.png"));
+	m_SpriteWeapon.setOrigin((64 * m_WeaponSize) / 2, (64 * m_WeaponSize) / 2);
 	m_SpriteWeapon.setScale(0.75, 0.75);
+
+	setSpriteFromSheet(IntRect(0, 0, 384, 64), 64);
+
+
 
 	updateTextRect();
 }
@@ -340,24 +349,25 @@ void Enemy::updateTextRect()
 	{
 		if (direction == Vector2f(0, 1)) // up
 		{
-			setSpriteFromSheet(IntRect(0, 0, 385, 64), 64);
+			setSpriteFromSheet(IntRect(0, 0, 384, 64), 64);
 		}
 
 		if (direction == Vector2f(0, -1)) // down
 		{
-			setSpriteFromSheet(IntRect(0, 128, 385, 64), 64);
+			setSpriteFromSheet(IntRect(0, 128, 384, 64), 64);
 		}
 
 		if (direction == Vector2f(1, 0)) // right
 		{
-			setSpriteFromSheet(IntRect(0, 192, 385, 64), 64);
+			setSpriteFromSheet(IntRect(0, 192, 384, 64), 64);
 		}
 
 		if (direction == Vector2f(-1, 0)) // left
 		{
-			setSpriteFromSheet(IntRect(0, 64, 385, 64), 64);
+			setSpriteFromSheet(IntRect(0, 64, 384, 64), 64);
 		}
 	}
+	m_SpriteWeapon.setPosition(m_Position);
 }
 
 void Enemy::followPlayer()
