@@ -92,7 +92,7 @@ public:
 
 	// make a new save file with default values
 	void createNewSave();
-	void createConfigFile(string difficultyString, bool windowedMode, bool displayFPS, float volume, bool vSync);
+	void createConfigFile(string difficultyString, bool windowedMode, bool displayFPS, float volume, bool vSync, int fpsLimit);
 	//save and load player stats/position/etc.
 	void updateSaveFile();
 	//load player stats/position/etc. from save file
@@ -214,6 +214,7 @@ private:
 	string m_DifficultyString;
 	bool m_DisplayFPS;
 	float m_Volume;
+	int m_FpsLimit;
 	bool m_VSync;
 
 	// Dodge variables

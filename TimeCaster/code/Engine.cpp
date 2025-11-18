@@ -27,8 +27,8 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 {
 	player.loadConfigFile();
 
-	// Set a high framerate limit (TODO: allow player to configure FPS limit)
-	window.setFramerateLimit(144);
+	// Set a high framerate limit 
+	window.setFramerateLimit(fpsLimit);
 	// difficulty = Difficulty::Medium;
 	difficulty = stringToDifficulty(player.getdifficultyString());
 	windowedMode = player.getWindowedMode();
@@ -1048,7 +1048,7 @@ void Engine::run()
 					startSoundPlayed = true;
 
 					player.createNewSave();
-					player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume(), vSync);
+					player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume(), vSync, fpsLimit);
 					player.loadSaveFile();
 
 					equippedSwordIcon.setTextureRect(player.getEquippedSword()->getTextureRect());
@@ -1169,7 +1169,7 @@ void Engine::run()
 					else {
 						// No save file so create a new one with default values and load it	
 						player.createNewSave();
-						player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume(), vSync);
+						player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume(), vSync, fpsLimit);
 						player.loadSaveFile();
 
 						equippedSwordIcon.setTextureRect(player.getEquippedSword()->getTextureRect());
@@ -1248,7 +1248,7 @@ void Engine::run()
 				{
 					sound.playButtonClickSound();
 					world.clearWorld();
-					player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume(), vSync);
+					player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume(), vSync, fpsLimit);
 					state = State::MAIN_MENU;
 				}
 
@@ -1691,7 +1691,7 @@ void Engine::run()
 			}
 			if (!dragging && isDragging) {
 				// Save volume to config file
-				player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume(), vSync);
+				player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume(), vSync, fpsLimit);
 				isDragging = false;
 			}
 		}

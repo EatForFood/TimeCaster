@@ -90,6 +90,8 @@ private:
 
 	bool vSync = false;
 
+	int fpsLimit = 144;
+
 	bool debugMode = true;	
 
 	bool drawEKey = false;
