@@ -450,5 +450,13 @@ private:
 	std::string userInputString;
 	bool textBoxActive;
 
+
+	// Textbox logic
+	sf::RectangleShape textBoxFps;
+	sf::Text feedbackFps;
+	sf::Text userInputTextFps;
+	std::string userInputStringFps;
+	bool textBoxActiveFps;
+
 	Loot loot;
 };

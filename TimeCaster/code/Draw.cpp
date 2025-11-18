@@ -375,6 +375,9 @@ void Engine::draw()
 		window.draw(textBox);
 		window.draw(userInputText);
 		window.draw(feedback);
+		window.draw(textBoxFps);
+		window.draw(userInputTextFps);
+		window.draw(feedbackFps);
 	}
 
 	if (state == State::STORY_INTRO)
