@@ -14,7 +14,6 @@ using namespace sf;
 
 Enemy::Enemy() {
 	m_Speed = START_SPEED;
-	m_WeaponSize = 3;
 }
 
 void Enemy::spawn(string type, Vector2i position, int level) {
@@ -42,6 +41,8 @@ void Enemy::spawn(string type, Vector2i position, int level) {
 		m_Health = 50;
 		m_AttackDmg = 20;
 		m_KillValue = 10;
+		m_SpriteWeapon = Sprite(TextureHolder::GetTexture("graphics/player/weapon/slash/Iron_Sword.png"));
+		m_WeaponSize = 3;
 	}
 	else if (type == "Skeleton") {
 		m_Sprite = Sprite(TextureHolder::GetTexture("graphics/enemies/skeleton.png"));
@@ -49,6 +50,8 @@ void Enemy::spawn(string type, Vector2i position, int level) {
 		m_Health = 80;
 		m_AttackDmg = 30;
 		m_KillValue = 20;
+		m_SpriteWeapon = Sprite(TextureHolder::GetTexture("graphics/player/weapon/slash/Pirate's_Scimitar.png"));
+		m_WeaponSize = 3;
 	}
 	else if (type == "Dragon") {
 		m_Sprite = Sprite(TextureHolder::GetTexture("graphics/enemies/dragon.png"));
@@ -63,7 +66,6 @@ void Enemy::spawn(string type, Vector2i position, int level) {
 	m_Position.x = position.x;
 	m_Position.y = position.y;
 	m_Sprite.setPosition(m_Position);
-	m_SpriteWeapon = Sprite(TextureHolder::GetTexture("graphics/player/weapon/slash/Iron_Sword.png"));
 	m_SpriteWeapon.setOrigin((64 * m_WeaponSize) / 2, (64 * m_WeaponSize) / 2);		m_SpriteWeapon.setScale(0.75, 0.75);
 }
 
@@ -215,7 +217,7 @@ void Enemy::Attack()
 
 	// Associate a texture with the body sprite
 	// TODO: Change weapon based on enemy type
-	m_SpriteWeapon = Sprite(TextureHolder::GetTexture("graphics/player/weapon/slash/Iron_Sword.png"));
+
 	m_SpriteWeapon.setOrigin((64 * m_WeaponSize) / 2, (64 * m_WeaponSize) / 2);
 	m_SpriteWeapon.setScale(0.75, 0.75);
 
