@@ -1204,3 +1204,8 @@ bool Player::getVSync()
 {
 	return m_VSync;
 }
+
+int Player::getFpsLimit()
+{
+	return m_FpsLimit;
+}

@@ -28,13 +28,15 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	player.loadConfigFile();
 
 	// Set a high framerate limit 
-	window.setFramerateLimit(fpsLimit);
+
 	// difficulty = Difficulty::Medium;
 	difficulty = stringToDifficulty(player.getdifficultyString());
 	windowedMode = player.getWindowedMode();
 	vSync = player.getVSync();
 	displayFps = player.getDisplayFps();
 	Listener::setGlobalVolume(player.getVolume());
+	fpsLimit = player.getFpsLimit();
+
 
 	// Get the screen resolution and create an SFML window
 	resolution.x = VideoMode::getDesktopMode().width;
@@ -47,9 +49,11 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	if (windowedMode == true)
 	{
 		window.create(VideoMode(resolution.x, resolution.y), "TimeCaster", Style::Default);
+		window.setFramerateLimit(fpsLimit);
 	}
 	else {
 		window.create(VideoMode(resolution.x, resolution.y), "TimeCaster", Style::Fullscreen);
+		window.setFramerateLimit(fpsLimit);
 	}
 
 	if (vSync == true)
@@ -59,6 +63,9 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	else {
 		window.setVerticalSyncEnabled(false);
 	}
+
+
+	window.setFramerateLimit(fpsLimit);
 
 	filter.setSize(resolution);
 	
@@ -1052,14 +1059,16 @@ void Engine::run()
 					if (!userInputStringFps.empty())
 					{
 						int num = stoi(userInputStringFps);
-						if (num > 0 && (num * num) % 2 == 1)
+						if (num > 0)
 						{
-							feedbackFps.setString(to_string(num) + " is valid!");
-							world.setWorldSize(num);
+							fpsLimit = num;
+							feedbackFps.setString("FPS set to " + to_string(fpsLimit));
+							player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume(), vSync, fpsLimit);
+							window.setFramerateLimit(fpsLimit);
 						}
 						else
 						{
-							feedbackFps.setString("Invalid! Try another positive number.");
+							feedbackFps.setString("Invalid! You must set your FPS to a number higher than 0.");
 						}
 					}
 				}
@@ -1351,11 +1360,13 @@ void Engine::run()
 						sound.playButtonClickSound();
 						windowedMode = false;
 						window.create(VideoMode(resolution.x, resolution.y), "TimeCaster", Style::Fullscreen);
+						window.setFramerateLimit(fpsLimit);
 					}
 					else {
 						sound.playButtonClickSound();
 						windowedMode = true;
 						window.create(VideoMode(resolution.x, resolution.y), "TimeCaster", Style::Default);
+						window.setFramerateLimit(fpsLimit);
 					}
 				}
 				//Player hit the vSync button

@@ -103,6 +103,7 @@ public:
 	bool getDisplayFps();
 	float getVolume();
 	bool getVSync();
+	int getFpsLimit();
 
 	void setChunk(int chunk);
 	int getChunk();
