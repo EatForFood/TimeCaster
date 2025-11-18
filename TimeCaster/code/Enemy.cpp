@@ -14,6 +14,7 @@ using namespace sf;
 
 Enemy::Enemy() {
 	m_Speed = START_SPEED;
+	m_WeaponSize = 3;
 }
 
 void Enemy::spawn(string type, Vector2i position, int level) {
@@ -193,7 +194,10 @@ void Enemy::Attack()
 		return;
 	}
 
-	resetAniCounter();
+	if (!m_IsAttacking)
+	{
+		resetAniCounter();
+	}
 	m_IsAttacking = true;
 
 	if (m_Type == "Skeleton")
@@ -209,9 +213,11 @@ void Enemy::Attack()
 		m_Sprite.setScale(0.75f, 0.75f);
 	}
 
+	// Associate a texture with the body sprite
+	m_SpriteWeapon = Sprite(TextureHolder::GetTexture("graphics/player/weapon/slash/Iron_Sword.png"));
+	m_SpriteWeapon.setOrigin((64 * m_WeaponSize) / 2, (64 * m_WeaponSize) / 2);
+	m_SpriteWeapon.setScale(0.75, 0.75);
 
-
-	
 	setSpriteFromSheet(IntRect(0, 0, 385, 64), 64);
 
 
