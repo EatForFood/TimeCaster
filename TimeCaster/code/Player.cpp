@@ -563,7 +563,7 @@ void Player::createNewSave()
 	saveFile.close();
 }
 
-void Player::createConfigFile(string difficultyString, bool windowedMode, bool displayFPS, float volume, bool vSync)
+void Player::createConfigFile(string difficultyString, bool windowedMode, bool displayFPS, float volume, bool vSync, int fpsLimit)
 {
 	std::ofstream configFile("gamedata/TCConfig.txt");
 	
@@ -571,7 +571,8 @@ void Player::createConfigFile(string difficultyString, bool windowedMode, bool d
 		<< windowedMode << " " 
 		<< displayFPS << " " 
 		<< volume << " "
-		<< vSync
+		<< vSync << " "
+		<< fpsLimit
 		<< std::endl;
 	
 	configFile.close();
@@ -587,6 +588,7 @@ bool Player::loadConfigFile()
 		loadFile >> m_DisplayFPS;
 		loadFile >> m_Volume;
 		loadFile >> m_VSync;
+		loadFile >> m_FpsLimit;
 		return true;
 	}
 	return false;
@@ -1201,4 +1203,9 @@ int Player::getExp()
 bool Player::getVSync()
 {
 	return m_VSync;
+}
+
+int Player::getFpsLimit()
+{
+	return m_FpsLimit;
 }

@@ -27,14 +27,16 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 {
 	player.loadConfigFile();
 
-	// Set a high framerate limit (TODO: allow player to configure FPS limit)
-	window.setFramerateLimit(144);
+	// Set a high framerate limit 
+
 	// difficulty = Difficulty::Medium;
 	difficulty = stringToDifficulty(player.getdifficultyString());
 	windowedMode = player.getWindowedMode();
 	vSync = player.getVSync();
 	displayFps = player.getDisplayFps();
 	Listener::setGlobalVolume(player.getVolume());
+	fpsLimit = player.getFpsLimit();
+
 
 	// Get the screen resolution and create an SFML window
 	resolution.x = VideoMode::getDesktopMode().width;
@@ -47,9 +49,11 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	if (windowedMode == true)
 	{
 		window.create(VideoMode(resolution.x, resolution.y), "TimeCaster", Style::Default);
+		window.setFramerateLimit(fpsLimit);
 	}
 	else {
 		window.create(VideoMode(resolution.x, resolution.y), "TimeCaster", Style::Fullscreen);
+		window.setFramerateLimit(fpsLimit);
 	}
 
 	if (vSync == true)
@@ -59,6 +63,9 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	else {
 		window.setVerticalSyncEnabled(false);
 	}
+
+
+	window.setFramerateLimit(fpsLimit);
 
 	filter.setSize(resolution);
 	
@@ -419,7 +426,7 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	debugModeButton.setSize(Vector2f(200, 80));
 	textBounds = debugModeButton.getLocalBounds();
 	viewCentre = mainView.getCenter();
-	debugModeButton.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 700);
+	debugModeButton.setPosition(viewCentre.x * 1.9 - (textBounds.width / 2.f) - textBounds.left, viewCentre.y * 1.8);
 	debugModeButton.setTexture(&textureMainMenuButton2);
 
 	debugModeButtonText.setString("Debug Mode"); // Set the display text
@@ -821,6 +828,8 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	userInputText.setFillColor(Color::White);
 	userInputText.setPosition(textBox.getPosition().x + 10, textBox.getPosition().y + 10);
 
+
+
 	// Feedback message
 	feedback.setFont(font);
 	feedback.setCharacterSize(fontSize - 15);
@@ -830,8 +839,34 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	viewCentre = mainView.getCenter();
 	feedback.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 870);
 
+	// Feedback message
+	feedbackFps.setFont(font);
+	feedbackFps.setCharacterSize(fontSize - 15);
+	feedbackFps.setFillColor(Color::Yellow);
+	feedbackFps.setString("Enter what you'd like to limit the FPS to.");
+	textBounds = feedbackFps.getLocalBounds();
+	viewCentre = mainView.getCenter();
+	feedbackFps.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 670);
+
+	// Text box setup
+	textBoxFps.setSize({ 300, 50 });
+	textBounds = textBoxFps.getLocalBounds();
+	viewCentre = mainView.getCenter();
+	textBoxFps.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 700);
+	textBoxFps.setFillColor(sf::Color(40, 40, 40));
+	textBoxFps.setOutlineThickness(2.f);
+	textBoxFps.setOutlineColor(Color::White);
+
+	// Text that shows the number the user types
+	userInputTextFps.setFont(font);
+	userInputTextFps.setCharacterSize(fontSize - 11);
+	userInputTextFps.setFillColor(Color::White);
+	userInputTextFps.setPosition(textBoxFps.getPosition().x + 10, textBoxFps.getPosition().y + 10);
+
 	// Is the player currently typing in the text box?
 	textBoxActive = false;
+
+	textBoxActiveFps = false;
 }
 
 // Function to convert difficulty state to string
@@ -966,6 +1001,17 @@ void Engine::run()
 				}
 			}
 
+			// Activate Fps textbox when clicked
+			if (event.type == sf::Event::MouseButtonPressed && state == State::OPTIONS_MENU)
+			{
+				if (event.mouseButton.button == Mouse::Left)
+				{
+					sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+					textBoxActiveFps = textBoxFps.getGlobalBounds().contains(mousePos);
+					textBoxFps.setOutlineColor(textBoxActiveFps ? Color::Green : Color::White);
+				}
+			}
+
 			// Handle typing if text box active
 			if (textBoxActive && event.type == sf::Event::TextEntered && state == State::OPTIONS_MENU)
 			{
@@ -995,6 +1041,38 @@ void Engine::run()
 				}
 
 				userInputText.setString(userInputString);
+			}
+
+			// Handle typing if text box active
+			if (textBoxActiveFps && event.type == sf::Event::TextEntered && state == State::OPTIONS_MENU)
+			{
+				if (event.text.unicode >= '0' && event.text.unicode <= '9')
+				{
+					userInputStringFps += static_cast<char>(event.text.unicode);
+				}
+				else if (event.text.unicode == 8 && !userInputStringFps.empty()) // User hits backspace
+				{
+					userInputStringFps.pop_back();
+				}
+				else if (event.text.unicode == 13) // User hits enter key
+				{
+					if (!userInputStringFps.empty())
+					{
+						int num = stoi(userInputStringFps);
+						if (num > 0)
+						{
+							fpsLimit = num;
+							feedbackFps.setString("FPS set to " + to_string(fpsLimit));
+							player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume(), vSync, fpsLimit);
+							window.setFramerateLimit(fpsLimit);
+						}
+						else
+						{
+							feedbackFps.setString("Invalid! You must set your FPS to a number higher than 0.");
+						}
+					}
+				}
+				userInputTextFps.setString(userInputStringFps);
 			}
 
 			// Stop dragging
@@ -1048,7 +1126,7 @@ void Engine::run()
 					startSoundPlayed = true;
 
 					player.createNewSave();
-					player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume(), vSync);
+					player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume(), vSync, fpsLimit);
 					player.loadSaveFile();
 
 					equippedSwordIcon.setTextureRect(player.getEquippedSword()->getTextureRect());
@@ -1169,7 +1247,7 @@ void Engine::run()
 					else {
 						// No save file so create a new one with default values and load it	
 						player.createNewSave();
-						player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume(), vSync);
+						player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume(), vSync, fpsLimit);
 						player.loadSaveFile();
 
 						equippedSwordIcon.setTextureRect(player.getEquippedSword()->getTextureRect());
@@ -1248,7 +1326,7 @@ void Engine::run()
 				{
 					sound.playButtonClickSound();
 					world.clearWorld();
-					player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume(), vSync);
+					player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume(), vSync, fpsLimit);
 					state = State::MAIN_MENU;
 				}
 
@@ -1282,11 +1360,13 @@ void Engine::run()
 						sound.playButtonClickSound();
 						windowedMode = false;
 						window.create(VideoMode(resolution.x, resolution.y), "TimeCaster", Style::Fullscreen);
+						window.setFramerateLimit(fpsLimit);
 					}
 					else {
 						sound.playButtonClickSound();
 						windowedMode = true;
 						window.create(VideoMode(resolution.x, resolution.y), "TimeCaster", Style::Default);
+						window.setFramerateLimit(fpsLimit);
 					}
 				}
 				//Player hit the vSync button
@@ -1691,7 +1771,7 @@ void Engine::run()
 			}
 			if (!dragging && isDragging) {
 				// Save volume to config file
-				player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume(), vSync);
+				player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume(), vSync, fpsLimit);
 				isDragging = false;
 			}
 		}
