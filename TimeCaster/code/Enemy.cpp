@@ -218,7 +218,7 @@ void Enemy::Attack()
 	m_SpriteWeapon.setOrigin((64 * m_WeaponSize) / 2, (64 * m_WeaponSize) / 2);
 	m_SpriteWeapon.setScale(0.75, 0.75);
 
-	setSpriteFromSheet(IntRect(0, 0, 385, 64), 64);
+	setSpriteFromSheet(IntRect(0, 0, 384, 64), 64);
 
 
 
@@ -348,22 +348,22 @@ void Enemy::updateTextRect()
 	{
 		if (direction == Vector2f(0, 1)) // up
 		{
-			setSpriteFromSheet(IntRect(0, 0, 385, 64), 64);
+			setSpriteFromSheet(IntRect(0, 0, 384, 64), 64);
 		}
 
 		if (direction == Vector2f(0, -1)) // down
 		{
-			setSpriteFromSheet(IntRect(0, 128, 385, 64), 64);
+			setSpriteFromSheet(IntRect(0, 128, 384, 64), 64);
 		}
 
 		if (direction == Vector2f(1, 0)) // right
 		{
-			setSpriteFromSheet(IntRect(0, 192, 385, 64), 64);
+			setSpriteFromSheet(IntRect(0, 192, 384, 64), 64);
 		}
 
 		if (direction == Vector2f(-1, 0)) // left
 		{
-			setSpriteFromSheet(IntRect(0, 64, 385, 64), 64);
+			setSpriteFromSheet(IntRect(0, 64, 384, 64), 64);
 		}
 	}
 	m_SpriteWeapon.setPosition(m_Position);
