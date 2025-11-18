@@ -72,13 +72,6 @@ void Engine::draw()
 			window.draw(decal[i].getSprite());
 		}
 
-		for (Enemy& enemies : enemyArr)
-		{
-			if (enemies.isDead())
-			{
-				window.draw(enemies.getSprite());
-			}
-		}
 
 		for (auto& item : items) {
 			window.draw(item.getSprite());
@@ -103,7 +96,13 @@ void Engine::draw()
 		{
 			if (player.getRenderArea().intersects(enemies.getSprite().getGlobalBounds()) && !enemies.isDead()) 
 			{
+	
 				drawables.emplace_back(enemies.getSprite().getGlobalBounds().top + enemies.getSprite().getGlobalBounds().height, enemies.getSpriteFromSheet()); // place enemy into drawables if in RenderArea
+				if (enemies.isAttacking())
+				{
+					drawables.emplace_back(enemies.getSprite().getGlobalBounds().top + enemies.getSprite().getGlobalBounds().height + 0.05f, enemies.getWeapon());
+				}
+		
 			}
 		}
 

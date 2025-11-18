@@ -130,7 +130,7 @@ void Character::moveTextureRect() // animate sprite by moving texRect location
 	{
 		if (m_Horizontal)
 		{
-			m_SpriteWeapon.setTextureRect(sf::IntRect(Vector2i(sheetCoordinate.x, sheetCoordinate.y * m_WeaponSize) + sf::Vector2i(spriteSize.y * m_WeaponSize * m_Ani_Counter, 0), spriteSize * m_WeaponSize));
+			m_SpriteWeapon.setTextureRect(sf::IntRect(Vector2i(sheetCoordinate.x, sheetCoordinate.y * m_WeaponSize) + sf::Vector2i(spriteSize.x * m_WeaponSize * m_Ani_Counter, 0), spriteSize * m_WeaponSize));
 		}
 		else
 		{

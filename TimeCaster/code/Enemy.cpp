@@ -62,6 +62,8 @@ void Enemy::spawn(string type, Vector2i position, int level) {
 	m_Position.x = position.x;
 	m_Position.y = position.y;
 	m_Sprite.setPosition(m_Position);
+	m_SpriteWeapon = Sprite(TextureHolder::GetTexture("graphics/player/weapon/slash/Iron_Sword.png"));
+	m_SpriteWeapon.setOrigin((64 * m_WeaponSize) / 2, (64 * m_WeaponSize) / 2);		m_SpriteWeapon.setScale(0.75, 0.75);
 }
 
 void Enemy::update(float elapsedTime, const Vector2f& playerPos, Chunk* chunk, int playerChunk, vector<NavBox> navBox) {
@@ -207,12 +209,12 @@ void Enemy::Attack()
 		m_Sprite.setScale(0.75f, 0.75f);
 	}
 
+
+
 	
 	setSpriteFromSheet(IntRect(0, 0, 385, 64), 64);
 
-	m_SpriteWeapon = Sprite(TextureHolder::GetTexture("graphics/player/weapon/Pirate's_Scimtar.png"));
-	m_SpriteWeapon.setOrigin(32, 32);
-	m_SpriteWeapon.setScale(0.75, 0.75);
+
 
 	updateTextRect();
 }
@@ -358,6 +360,7 @@ void Enemy::updateTextRect()
 			setSpriteFromSheet(IntRect(0, 64, 385, 64), 64);
 		}
 	}
+	m_SpriteWeapon.setPosition(m_Position);
 }
 
 void Enemy::followPlayer()
