@@ -75,8 +75,7 @@ void Engine::update()
 						{
 							enemies.Attack();
 							// Handle player getting hit by enemy
-							// TODO: Add weapon to enemy hands and use that instead
-							if (player.getHitBox().intersects(enemies.getHitBox()) && enemies.isAttacking())
+							if (enemies.getWeapon().getGlobalBounds().intersects(player.getHitBox()) && enemies.isAttacking())
 							{
 								// Play the blood particle effect
 								if (player.hit(gameTimeTotal, enemies.getAttackDamage(), 1000))

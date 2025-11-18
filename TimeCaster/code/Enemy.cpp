@@ -214,6 +214,7 @@ void Enemy::Attack()
 	}
 
 	// Associate a texture with the body sprite
+	// TODO: Change weapon based on enemy type
 	m_SpriteWeapon = Sprite(TextureHolder::GetTexture("graphics/player/weapon/slash/Iron_Sword.png"));
 	m_SpriteWeapon.setOrigin((64 * m_WeaponSize) / 2, (64 * m_WeaponSize) / 2);
 	m_SpriteWeapon.setScale(0.75, 0.75);
