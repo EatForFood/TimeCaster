@@ -19,6 +19,7 @@
 #include "Enemy.h"
 #include <string>
 #include <thread>
+#include "DragonBoss.h"
 
 using namespace std;
 using namespace sf;
@@ -1829,9 +1830,16 @@ void Engine::spawnEnemies()
 
 	for (int i = 0; i < worldEnemyTypes.size(); i++)
 	{
-		Enemy e;
-		e.spawn(worldEnemyTypes[i], worldEnemyLocations[i], player.getPlayerLevel());
-		enemyArr.push_back(e);
+		if (worldEnemyTypes[i] != "Dragon") {
+			auto e = std::make_unique<Enemy>();
+			e->spawn(worldEnemyTypes[i], worldEnemyLocations[i], player.getPlayerLevel());
+			enemyArr.push_back(std::move(e));
+		}
+		else {
+			auto db = std::make_unique<DragonBoss>();
+			db->spawn(worldEnemyTypes[i], worldEnemyLocations[i], player.getPlayerLevel());
+			enemyArr.push_back(std::move(db));
+		}
 	}
 }
 

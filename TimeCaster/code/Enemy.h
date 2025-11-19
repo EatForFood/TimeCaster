@@ -10,16 +10,15 @@ class Enemy : public Character
 {
 protected:
 	float m_Damage = 4; // Change this later to be set dynamically
+	string m_Type;
+	FloatRect m_RenderArea;
 
 private:
 	float START_SPEED = 25;
 	float START_HEALTH = 100;
-	string m_Type;
 
 	CollisionDetection collision;
 	vector<NavBox> navBoxes;
-
-	FloatRect m_RenderArea;
 
 	bool m_MoveLeft = false;
 	bool m_MoveRight = false;
@@ -64,7 +63,7 @@ private:
 public:
 	Enemy();
 
-	void spawn(string type, Vector2i position, int level);
+	virtual void spawn(string type, Vector2i position, int level);
 
 	virtual void update(float elapsedTime, const Vector2f& playerPos, Chunk* chunk, int playerChunk, vector<NavBox> navBox);
 
@@ -96,7 +95,7 @@ public:
 
 	float getDamage();
 
-	void updateTextRect();
+	virtual void updateTextRect();
 
 	void followPlayer();
 	void pathfindToPlayer(Chunk* chunk);

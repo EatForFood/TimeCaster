@@ -96,15 +96,15 @@ void Engine::draw()
 			}
 		}
 
-		for (Enemy& enemies : enemyArr)
+		for (auto& enemyPtr : enemyArr)
 		{
-			if (player.getRenderArea().intersects(enemies.getSprite().getGlobalBounds()) && !enemies.isDead()) 
+			if (player.getRenderArea().intersects(enemyPtr->getSprite().getGlobalBounds()) && !enemyPtr->isDead())
 			{
 	
-				drawables.emplace_back(enemies.getSprite().getGlobalBounds().top + enemies.getSprite().getGlobalBounds().height, enemies.getSpriteFromSheet()); // place enemy into drawables if in RenderArea
-				if (enemies.isAttacking())
+				drawables.emplace_back(enemyPtr->getSprite().getGlobalBounds().top + enemyPtr->getSprite().getGlobalBounds().height, enemyPtr->getSpriteFromSheet()); // place enemy into drawables if in RenderArea
+				if (enemyPtr->isAttacking())
 				{
-					drawables.emplace_back(enemies.getSprite().getGlobalBounds().top + enemies.getSprite().getGlobalBounds().height + 0.05f, enemies.getWeapon());
+					drawables.emplace_back(enemyPtr->getSprite().getGlobalBounds().top + enemyPtr->getSprite().getGlobalBounds().height + 0.05f, enemyPtr->getWeapon());
 				}
 		
 			}

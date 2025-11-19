@@ -127,7 +127,7 @@ public:
 	Sprite getWeapon();
 
 	//move the rectangle to the next cell in the animation
-	void moveTextureRect();
+	virtual void moveTextureRect();
 
 	// Send a copy of the sprite to main
 	Sprite getSprite();

@@ -55,30 +55,30 @@ void Engine::update()
 		if (state == State::PLAYING && !drawInventory && !timeFrozen) {
 
 			// Update the vector of enemies if within player's render area
-			for (Enemy& enemies : enemyArr)
+			for (auto& enemyPtr : enemyArr)
 			{
-				if (player.getRenderArea().intersects(enemies.getSprite().getGlobalBounds()))
+				if (player.getRenderArea().intersects(enemyPtr->getSprite().getGlobalBounds()))
 				{
-					if (!enemies.isDead())
+					if (!enemyPtr->isDead())
 					{
-						enemies.update(dtAsSeconds, player.getPosition(), getCurrentChunk(enemies.getPosition().x, enemies.getPosition().y), player.getChunk(), world.getNavBoxes(enemies.getChunk()));
+						enemyPtr->update(dtAsSeconds, player.getPosition(), getCurrentChunk(enemyPtr->getPosition().x, enemyPtr->getPosition().y), player.getChunk(), world.getNavBoxes(enemyPtr->getChunk()));
 
 						for (int i = 0; i < world.getWorldSize(); i++)
 						{
-							if (collision.pointInShape(enemies.getPosition(), world.getChunkArea(i).getShape())) // find enemies current chunk
+							if (collision.pointInShape(enemyPtr->getPosition(), world.getChunkArea(i).getShape())) // find enemies current chunk
 							{
-								enemies.setChunk(i);
+								enemyPtr->setChunk(i);
 							}
 						}
 
-						if (player.getWeapon().getGlobalBounds().intersects(enemies.getSprite().getGlobalBounds()))
+						if (player.getSprite().getGlobalBounds().intersects(enemyPtr->getSprite().getGlobalBounds()))
 						{
-							enemies.Attack();
+							enemyPtr->Attack();
 							// Handle player getting hit by enemy
-							if (enemies.getSprite().getGlobalBounds().intersects(player.getHitBox()) && enemies.isAttacking())
+							if (enemyPtr->getWeapon().getGlobalBounds().intersects(player.getHitBox()) && enemyPtr->isAttacking())
 							{
 								// Play the blood particle effect
-								if (player.hit(gameTimeTotal, enemies.getAttackDamage(), 1000))
+								if (player.hit(gameTimeTotal, enemyPtr->getAttackDamage(), 1000))
 								{
 									sound.playHitSound();
 									particles[100].play(player.getCenter().x - 30, player.getCenter().y - 30, 1); 
@@ -86,34 +86,34 @@ void Engine::update()
 									currentDecal++;
 								}
 							}
-							if (player.getWeapon().getGlobalBounds().intersects(enemies.getHitBox()) && player.isAttacking() && !enemies.wasHit())
+							if (player.getWeapon().getGlobalBounds().intersects(enemyPtr->getHitBox()) && player.isAttacking() && !enemyPtr->wasHit())
 							{
-								enemies.setHealth(-player.getAttackDamage());
-								enemies.setWasHit(true);
+								enemyPtr->setHealth(-player.getAttackDamage());
+								enemyPtr->setWasHit(true);
 								// Play the blood particle effect
 								for (int i = 0; i < 100; i++)
 								{
 									if (!particles[i].isPlaying())
 									{
-										particles[i].play(enemies.getCenter().x - 30, enemies.getCenter().y - 30, 1);
+										particles[i].play(enemyPtr->getCenter().x - 30, enemyPtr->getCenter().y - 30, 1);
 										break;
 									}
 								}
 
 								// Play enemy hit sound
 								sound.playHitSound();
-								decal[currentDecal].spawn("bloodImpact", enemies.getPosition().x, enemies.getPosition().y);
+								decal[currentDecal].spawn("bloodImpact", enemyPtr->getPosition().x, enemyPtr->getPosition().y);
 								currentDecal++;
 							}
 							else if (!player.isAttacking())
 							{
-								enemies.setWasHit(false);
+								enemyPtr->setWasHit(false);
 							}
 						}
 					}
-					if (enemies.isDead() && !enemies.isLooted())
+					if (enemyPtr->isDead() && !enemyPtr->isLooted())
 					{
-						if (player.reward(enemies.loot()))
+						if (player.reward(enemyPtr->loot()))
 						{
 							drawInventory = true;
 							levelUp = true;
@@ -122,7 +122,7 @@ void Engine::update()
 
 						// spawn some gold
 						for (int i = 0; i < (rand() % 10); i++) {
-							items.emplace_back("Gold", enemies.getPosition());
+							items.emplace_back("Gold", enemyPtr->getPosition());
 						}
 
 						// potentially spawn random item
@@ -131,15 +131,15 @@ void Engine::update()
 						{
 							if (isEquipment(item))
 							{
-								items.emplace_back(Equipment(item, enemies.getPosition()));
+								items.emplace_back(Equipment(item, enemyPtr->getPosition()));
 							}
 							else if (isWeapon(item))
 							{
-								items.emplace_back(Weapon(item, enemies.getPosition()));
+								items.emplace_back(Weapon(item, enemyPtr->getPosition()));
 							}
 							else
 							{
-								items.emplace_back(item, enemies.getPosition());
+								items.emplace_back(item, enemyPtr->getPosition());
 							}
 						}
 
@@ -167,20 +167,20 @@ void Engine::update()
 
 					FloatRect spellBounds = spells[i].getSprite().getGlobalBounds();
 
-					for (Enemy& enemies : enemyArr)
+					for (auto& enemyPtr : enemyArr)
 					{
-						if (!enemies.isDead())
+						if (!enemyPtr->isDead())
 						{
-							if (spells[i].getSprite().getGlobalBounds().intersects(enemies.getHitBox()))
+							if (spells[i].getSprite().getGlobalBounds().intersects(enemyPtr->getHitBox()))
 							{
-								decal[currentDecal].spawn("bloodImpact", enemies.getPosition().x, enemies.getPosition().y);
+								decal[currentDecal].spawn("bloodImpact", enemyPtr->getPosition().x, enemyPtr->getPosition().y);
 								currentDecal++;
 								// Apply damage from spell to enemy
-								enemies.setHealth(-spells[i].getSpellDamage());
+								enemyPtr->setHealth(-spells[i].getSpellDamage());
 								//cout << "Enemy hit for " << spells[i].getSpellDamage() << " damage. Enemy health now " << enemies.getCurrentHP() << endl;
 
 								// Mark enemy as hit
-								enemies.setWasHit(true);
+								enemyPtr->setWasHit(true);
 
 								// Stop the spell; Add check for piercing spells later
 								spells[i].stop();
@@ -190,7 +190,7 @@ void Engine::update()
 								{
 									if (!particles[i].isPlaying())
 									{
-										particles[i].play(enemies.getCenter().x - 30, enemies.getCenter().y - 30, 2);
+										particles[i].play(enemyPtr->getCenter().x - 30, enemyPtr->getCenter().y - 30, 2);
 										break;
 									}
 								}

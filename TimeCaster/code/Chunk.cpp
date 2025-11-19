@@ -294,16 +294,19 @@ Chunk::Chunk(String type, Vector2f chunk, bool load)
 					{
 						placeHouse2(x, y);
 						CreateEnemySpawn("Orc", Vector2i(x - 1, y + 1));
+						CreateEnemySpawn("Dragon", Vector2i(x - 1, y + 1));
 					}
 					else if (chance == 1)
 					{
 						placeHouse3(x, y);
 						CreateEnemySpawn("Orc", Vector2i(x - 1, y + 1));
+						CreateEnemySpawn("Dragon", Vector2i(x - 1, y + 1));
 					}
 					else if (chance == 2)
 					{
 						placeHouse4(x, y);
 						CreateEnemySpawn("Orc", Vector2i(x - 1, y + 1));
+						CreateEnemySpawn("Dragon", Vector2i(x - 1, y + 1));
 					}
 				}
 			}
