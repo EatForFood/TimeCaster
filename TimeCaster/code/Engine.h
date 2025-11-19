@@ -398,7 +398,7 @@ private:
 	int x;
 	int y;
 
-	vector<Enemy> enemyArr;
+	vector<unique_ptr<Enemy>> enemyArr;
 
 	vector<Chunk> chunks;
 

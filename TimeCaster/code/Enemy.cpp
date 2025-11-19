@@ -24,9 +24,8 @@ void Enemy::spawn(string type, Vector2i position, int level) {
 	m_Hitbox.height = 40;
 	m_Level = level;
 	m_Type = type;
-	m_MaxHealth = START_HEALTH * (1 + (m_Level - 1) * 0.1f); // Increase health by 10% per level
+	m_Health = START_HEALTH * (1 + (m_Level - 1) * 0.1f); // Increase health by 10% per level
 	m_MaxHealth = START_HEALTH * (1 + (m_Level - 1) * 0.1f); // Increase max health by 10% per level
-
 
 	// Associate a texture with the sprite
 	if (type == "Knight") {
@@ -52,9 +51,6 @@ void Enemy::spawn(string type, Vector2i position, int level) {
 		m_KillValue = 20;
 		m_SpriteWeapon = Sprite(TextureHolder::GetTexture("graphics/player/weapon/slash/Pirate's_Scimitar.png"));
 		m_WeaponSize = 3;
-	}
-	else if (type == "Dragon") {
-		m_Sprite = Sprite(TextureHolder::GetTexture("graphics/enemies/dragon.png"));
 	}
 
 	// Set the origin of the sprite to the centre, 
