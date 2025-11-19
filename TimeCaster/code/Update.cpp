@@ -71,11 +71,11 @@ void Engine::update()
 							}
 						}
 
-						if (player.getSprite().getGlobalBounds().intersects(enemies.getSprite().getGlobalBounds()))
+						if (player.getWeapon().getGlobalBounds().intersects(enemies.getSprite().getGlobalBounds()))
 						{
 							enemies.Attack();
 							// Handle player getting hit by enemy
-							if (enemies.getWeapon().getGlobalBounds().intersects(player.getHitBox()) && enemies.isAttacking())
+							if (enemies.getSprite().getGlobalBounds().intersects(player.getHitBox()) && enemies.isAttacking())
 							{
 								// Play the blood particle effect
 								if (player.hit(gameTimeTotal, enemies.getAttackDamage(), 1000))
