@@ -27,8 +27,10 @@ bool Engine::sellItem(int itemIndex)
 			goldToAdd = 1;
 		}
 		player.addGold(goldToAdd);
+		shopItems[7] = m_StoredItems[itemIndex];
 		m_StoredItems[itemIndex] = Item("null", Vector2f(0, 0));
 		initializeInventory();
+		initializeShop();
 		stringstream shopStream;
 		shopStream << "I'll take it!\nHere's " << goldToAdd << " gold for it.";
 		shopText.setString(shopStream.str());
@@ -147,10 +149,37 @@ void Engine::restockShop(int level)
 	}
 
 	// Additional potions as placeholders for shop iems 7 and 8
-	shopItems[7] = Item("Stamina_Potion", Vector2f(1200, 650));
-	shopItems[8] = Item("Health_Potion", Vector2f(1200, 650));
-	//TODO: Add more unique items for shop slots 7 and 8 (sold items, random items, etc.)
 
+	//TODO: Add more unique items for shop slots 7 and 8 (sold items, more random items, etc), add more random items
+	// Items 7 and 8 are random potions for now
+	// TODO: Make last slot the sold item slot instead
+	switch (rand() % 3)
+	{
+	case 0:
+		shopItems[7] = Item("Health_Potion", Vector2f(1350, 650));
+		break;
+	case 1:
+		shopItems[7] = Item("Mana_Potion", Vector2f(1350, 650));
+		break;
+	case 2:
+		shopItems[7] = Item("Stamina_Potion", Vector2f(1350, 650));
+		break;
+	}
+	// TODO: Change shop item 8 to something other than just potions
+	switch (rand() % 3)
+	{
+	case 0:
+		shopItems[8] = Item("Health_Potion", Vector2f(1350, 650));
+		break;
+	case 1:
+		shopItems[8] = Item("Mana_Potion", Vector2f(1350, 650));
+		break;
+	case 2:
+		shopItems[8] = Item("Stamina_Potion", Vector2f(1350, 650));
+		break;
+	}
+
+	
 
 	// Always have potions in stock
 	shopItems[9] = Item("Stamina_Potion", Vector2f(1200, 650));

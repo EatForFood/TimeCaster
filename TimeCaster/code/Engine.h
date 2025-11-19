@@ -458,5 +458,7 @@ private:
 	std::string userInputStringFps;
 	bool textBoxActiveFps;
 
+	string lastSoldItemName = "";
+
 	Loot loot;
 };
