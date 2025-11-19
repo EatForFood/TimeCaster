@@ -27,7 +27,7 @@ bool Engine::sellItem(int itemIndex)
 			goldToAdd = 1;
 		}
 		player.addGold(goldToAdd);
-		shopItems[7] = m_StoredItems[itemIndex];
+		shopItems[11] = m_StoredItems[itemIndex];
 		m_StoredItems[itemIndex] = Item("null", Vector2f(0, 0));
 		initializeInventory();
 		initializeShop();
@@ -184,7 +184,9 @@ void Engine::restockShop(int level)
 	// Always have potions in stock
 	shopItems[9] = Item("Stamina_Potion", Vector2f(1200, 650));
 	shopItems[10] = Item("Health_Potion", Vector2f(1200, 650));
-	shopItems[11] = Item("Mana_Potion", Vector2f(1350, 650));
+	//shopItems[11] = Item("Mana_Potion", Vector2f(1350, 650));
+
+	
 
 
 	initializeShop();
