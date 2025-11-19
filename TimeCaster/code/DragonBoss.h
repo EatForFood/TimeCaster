@@ -59,7 +59,7 @@ public:
 
 	int getRangedDamage();
 
-	void moveTextureRect();
+	void moveTextureRect(float elapsedTime);
 
 	void spawn(const std::string& type, Vector2i position, int level);
 
