@@ -103,6 +103,7 @@ public:
 	void placeHouse3(int x, int y);
 	void placeHouse4(int x, int y);
 	void placeCastle(int x, int y);
+	void placeBossArena(int x, int y);
 
 	void createForest();
 	void createBurntForest();

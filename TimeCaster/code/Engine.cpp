@@ -92,6 +92,8 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	textureBackground = TextureHolder::GetTexture("graphics/landscape.png");
 	textureBackground2 = TextureHolder::GetTexture("graphics/landscape2.png");
 	textureBackground3 = TextureHolder::GetTexture("graphics/landscape3.png");
+	textureBackground4 = TextureHolder::GetTexture("graphics/landscape4.png");
+
 
 	// Boolean for whether to display the fps
 //	bool displayFps = false;

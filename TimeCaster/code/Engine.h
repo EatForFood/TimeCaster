@@ -141,6 +141,7 @@ private:
 	Texture textureBackground;
 	Texture textureBackground2;
 	Texture textureBackground3;
+	Texture textureBackground4;
 
 	World world; // world object to manage chunks
 

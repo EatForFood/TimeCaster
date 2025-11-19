@@ -44,6 +44,10 @@ void World::newWorld()
             {
                 type = "spawn";
             }
+            else if (x == 0 && y == -1)
+            {
+                type = "bossArena";
+            }
             // Border layer
             else if (x == -half - 1 || x == half + 1 || y == -half - 1 || y == half + 1)
             {

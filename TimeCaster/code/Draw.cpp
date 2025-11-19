@@ -44,6 +44,10 @@ void Engine::draw()
 					{
 						window.draw(world.getBackground(i), &textureBackground3);
 					}
+					else if (currentChunk && currentChunk->getChunkType() == "bossArena")
+					{
+						window.draw(world.getBackground(i), &textureBackground4);
+					}
 					else
 					{
 						window.draw(world.getBackground(i), &textureBackground);
@@ -165,6 +169,10 @@ void Engine::draw()
 					else if (currentChunk && currentChunk->getChunkType() == "skeletonRuins")
 					{
 						window.draw(world.getForground(i), &textureBackground3);
+					}
+					else if (currentChunk && currentChunk->getChunkType() == "bossArena")
+					{
+						window.draw(world.getForground(i), &textureBackground4);
 					}
 					else
 					{
