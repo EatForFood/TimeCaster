@@ -1,6 +1,7 @@
 #include "TextureHolder.h"
 #include "DragonBoss.h"
 #include <random>
+#include <iostream>
 
 DragonBoss::DragonBoss() 
 {
@@ -33,11 +34,12 @@ void DragonBoss::spawn(const std::string& type, Vector2i position, int level) {
     m_Sprite.setPosition(m_Position);
 
     m_Animation_It_Limit = 3;
+    m_Ani_Counter = 0;
 }
 
 void DragonBoss::update(float elapsedTime, const Vector2f& playerPos, Chunk* chunk, int playerChunk, vector<NavBox> navBox) 
 {
-    moveTextureRect();
+    moveTextureRect(elapsedTime);
     updateTextRect();
     
     if (!m_IsAttacking) {
@@ -214,7 +216,7 @@ void DragonBoss::updateTextRect()
     }
 }
 
-void DragonBoss::moveTextureRect() // animate sprite by moving texRect location
+void DragonBoss::moveTextureRect(float elapsedTime) // animate sprite by moving texRect location
 {
     // if the animation counter is greater than the animation limit go back in animation steps until reaching 1;
     if (!animatingBackwards && m_Ani_Counter >= m_Animation_It_Limit)
@@ -249,7 +251,9 @@ void DragonBoss::moveTextureRect() // animate sprite by moving texRect location
         else {
             m_Ani_Counter--;
         }
-        
+
         m_AnimationTimer = 0;
     }
+
+    cout << animatingBackwards << m_Ani_Counter << endl;
 }
