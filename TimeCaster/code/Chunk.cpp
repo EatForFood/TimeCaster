@@ -50,26 +50,6 @@ Chunk::Chunk(String type, Vector2f chunk, bool load)
 	if (m_LoadChunk)
 	{
 		loadChunk();
-
-		if (m_Type == "spawn")
-		{
-			for (int x = 10; x < 35; x++) // create road with pavestones
-			{
-				for (int y = 15; y < 18; y++)
-				{
-					int chance = rand() % 5;
-
-					if (chance <= 2)
-					{
-						placeTile(x, y, 8, 1, false, false);
-					}
-					else
-					{
-						placeTile(x, y, 9, 1, false, false);
-					}
-				}
-			}
-		}
 	}
 	else
 	{
@@ -472,8 +452,143 @@ Chunk::Chunk(String type, Vector2f chunk, bool load)
 
 		}
 
+		if (m_Type == "bossArena") { // create spawn chunk
+
+			// Grass 
+			for (int x = 0; x < 50; x++)
+			{
+				for (int y = 0; y < 50; y++)
+				{
+					if (x > 5 && x < 45 && y > 5 && y < 45) // create stone inside castle
+					{
+						int chance = rand() % 20;
+
+						if (x == 25 && y == 25)
+						{
+							CreateEntity(32, x, y);
+
+						}
+
+						if (x >= 24 && y >= 25 && x <= 25 && y <= 26)
+						{
+							placeTile(x, y, 0, 14, false, true);
+							int sx = x + offset.x;
+							int sy = y + offset.y;
+							NavBox navbox(sx + 1, sy, 1, 1);
+							navBoxes.push_back(navbox);
+						}
+						else if (chance >= 19 && (x < 20 || x > 30) && (y < 20 || y > 30))
+						{
+							placeTile(x, y, 0, 12, false, true);
+							placeTile(x - 1, y - 1, 0, 12, true, true);
+							int sx = x + offset.x;
+							int sy = y + offset.y;
+							NavBox navbox(sx + 1, sy, 1, 1);
+							navBoxes.push_back(navbox);
+						}
+						else
+						{
+							if (x % 2 == 0)
+							{
+								placeTile(x, y, 3, 12, false, true);
+							}
+							else
+							{
+								placeTile(x, y, 4, 12, false, true);
+							}
+						}
+					}
+					else if (x > 7 && x < 38 && y > 2 && y < 37) // create grass that trees cant spawn on 
+					{
+
+						int chance = rand() % 5;
+
+						if (chance <= 2)
+						{
+							placeTile(x, y, 4, 2, false, true);
+						}
+						else
+						{
+							placeTile(x, y, 5, 2, false, true);
+						}
+					}
+					else
+					{
+						int chance = rand() % 2500; // use random grass tiles to give ground some texture
+
+						if (chance <= 1200)
+						{
+							placeTile(x, y, 0, 0, false, true);
+						}
+						else if (chance <= 2400)
+						{
+							placeTile(x, y, 1, 0, false, true);
+						}
+						else if (chance <= 2500)
+						{
+							placeTile(x, y, 6, 0, false, true);
+						}
+					}
+				}
+			}
+
+			// Forground empty
+			for (int x = 0; x < 50; x++)
+			{
+				for (int y = 0; y < 50; y++)
+				{
+
+					placeTile(x, y, 6, 2, true, true);
+
+				}
+			}
+
+			//placeBossArena(10, 35);
+
+			createBurntForest(); // create a burnt forest for boss arena
+		}
+
 		saveChunk();
 	}
+
+	if (m_Type == "spawn")
+	{
+		for (int x = 10; x < 35; x++) // create road with pavestones
+		{
+			for (int y = 15; y < 18; y++)
+			{
+				int chance = rand() % 5;
+
+				if (chance <= 2)
+				{
+					placeTile(x, y, 8, 1, false, false);
+				}
+				else
+				{
+					placeTile(x, y, 9, 1, false, false);
+				}
+			}
+		}
+	}
+
+	/*
+	if (m_Type == "bossArena")
+	{
+		for (int x = 5; x < 45; x++) // create road with pavestones
+		{
+			for (int y = 5; y < 45; y++)
+			{
+				int chance = rand() % 7;
+
+				if (chance <= 1)
+				{
+					CreateEntity(31, x, y);
+				}
+			}
+		}
+	}
+	*/
+
 
 }
 
@@ -942,7 +1057,7 @@ void Chunk::CreateEntity(int type, int x, int y) {
 	float iy = (x + y) * (TILE_SIZE / 4);
 	entity.spawn(type, ix, iy);
 
-	if (type == 1 || type == 2 || type == 3 || type == 4 || type == 5 || type == 6) // if entity requires a navBox for isometric collisions
+	if (type == 1 || type == 2 || type == 3 || type == 4 || type == 5 || type == 6 || type == 31) // if entity requires a navBox for isometric collisions
 	{
 		NavBox nav(x, y, 1, 1);
 		nav.NavTree();
@@ -1283,4 +1398,162 @@ vector<Vector2i> Chunk::getEnemyLocations()
 vector<string> Chunk::getEnemyTypes()
 {
 	return enemyTypes;
+}
+
+void Chunk::placeBossArena(int sx, int sy) { 
+
+	// FIRST LEVEL
+
+   // Castle west wall 
+	for (int y = sy - 30; y < sy; y++)
+	{
+		if (y != 15 && y != 16 && y != 17)
+		{
+			placeTile(sx, y, 0, 12, false, false);
+			m_Walkable[sx][y] = false; // mark as unwalkable
+		}
+	}
+
+	// Castle north wall
+	for (int x = sx + 1; x < sx + 25; x++)
+	{
+		placeTile(x, sy - 30, 0, 12, false, false);
+		m_Walkable[x][sy - 30] = false;
+	}
+
+	// Castle east wall 
+	for (int y = sy - 30; y < sy; y++)
+	{
+		if (y != 15 && y != 16 && y != 17)
+		{
+			placeTile(sx + 24, y, 0, 12, false, false);
+			m_Walkable[sx + 24][y] = false;
+		}
+	}
+
+	// Castle south wall
+	for (int x = sx; x < sx + 25; x++)
+	{
+		placeTile(x, sy, 0, 12, false, false);
+		m_Walkable[x][sy] = false;
+	}
+
+	// SECOND LEVEL
+
+	// Castle west wall 
+	for (int y = sy - 31; y < sy; y++)
+	{
+		if (y != 14 && y != 15 && y != 16)
+		{
+			placeTile(sx - 1, y, 0, 12, true, false);
+		}
+	}
+
+	// Castle north wall
+	for (int x = sx; x < sx + 24; x++)
+	{
+		placeTile(x, sy - 31, 0, 12, true, false);
+	}
+
+	// Castle east wall 
+	for (int y = sy - 31; y < sy; y++)
+	{
+		if (y != 14 && y != 15 && y != 16)
+		{
+			placeTile(sx + 23, y, 0, 12, true, false);
+		}
+	}
+
+	// Castle south wall
+	for (int x = sx - 1; x < sx + 24; x++)
+	{
+		placeTile(x, sy - 1, 0, 12, true, false);
+	}
+
+	// THIRD LEVEL
+
+	// Castle west wall 
+	for (int y = sy - 32; y < sy - 1; y++)
+	{
+		placeTile(sx - 2, y, 0, 12, true, false);
+	}
+
+	// Castle north wall
+	for (int x = sx - 1; x < sx + 23; x++)
+	{
+		placeTile(x, sy - 32, 0, 12, true, false);
+	}
+
+	// Castle east wall 
+	for (int y = sy - 32; y < sy - 1; y++)
+	{
+		placeTile(sx + 22, y, 0, 12, true, false);
+	}
+
+	// Castle south wall
+	for (int x = sx - 2; x < sx + 23; x++)
+	{
+		placeTile(x, sy - 2, 0, 12, true, false);
+	}
+
+	// FOURTH LEVEL
+
+	// Castle west wall 
+	for (int y = sy - 33; y < sy - 1; y++)
+	{
+		if (y % 2 == 0) {
+			placeTile(sx - 3, y, 0, 13, true, false); // 832 → 13
+		}
+	}
+
+	// Castle north wall
+	for (int x = sx - 1; x < sx + 22; x++)
+	{
+		if (x % 2 == 1) {
+			placeTile(x, sy - 33, 0, 13, true, false);
+		}
+	}
+
+	// Castle east wall 
+	for (int y = sy - 32; y < sy - 1; y++)
+	{
+		if (y % 2 == 0) {
+			placeTile(sx + 21, y, 0, 13, true, false);
+		}
+	}
+
+	// Castle south wall
+	for (int x = sx - 2; x < sx + 23; x++)
+	{
+		if (x % 2 == 1) {
+			placeTile(x, sy - 3, 0, 13, true, false);
+		}
+	}
+
+	Structure structure;
+	structure.position = Vector2i(sx, sy);
+	structure.type = 5;
+	structures.push_back(structure);
+
+	sx += offset.x;
+	sy += offset.y;
+
+	// create navBoxes for castle walls
+	NavBox navboxW1(sx + 1, sy, 1, -17);
+	navBoxes.push_back(navboxW1);
+
+	NavBox navboxW2(sx + 1, sy - 20, 1, -10);
+	navBoxes.push_back(navboxW2);
+
+	NavBox navboxN(sx + 1, sy - 30, 25, 1);
+	navBoxes.push_back(navboxN);
+
+	NavBox navboxE1(sx + 25, sy, 1, -17);
+	navBoxes.push_back(navboxE1);
+
+	NavBox navboxE2(sx + 25, sy - 20, 1, -10);
+	navBoxes.push_back(navboxE2);
+
+	NavBox navboxS(sx + 1, sy, 25, 1);
+	navBoxes.push_back(navboxS);
 }
