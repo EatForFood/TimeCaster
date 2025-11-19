@@ -1793,7 +1793,7 @@ void Engine::generateWorld()
 	spawnEnemies();
 	worldLoaded = true;
 	skipIntroText.setString("--- Press space to skip ---");
-	textBounds = skipIntroText.getLocalBounds();
+	textBounds = skipIntroText.getLocalBounds(); 
 	viewCentre = mainView.getCenter();
 	skipIntroText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 1030);
 }

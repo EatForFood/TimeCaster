@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="code\DragonBoss.cpp" />
+    <ClCompile Include="code\EnemyAI.cpp" />
     <ClCompile Include="code\Inventory.cpp" />
     <ClCompile Include="code\Loot.cpp" />
     <ClCompile Include="code\Particle.cpp" />

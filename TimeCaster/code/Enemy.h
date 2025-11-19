@@ -40,6 +40,7 @@ private:
 	Vector2i m_LastPlayerTile;
 	vector<Vector2i> m_CachedPath;
 
+	int m_PlayerChunk;
 	Vector2f m_PlayerPosition;
 
 	// Pathfinding
@@ -50,6 +51,11 @@ private:
 	float m_UpdatePathTimer = 0.0f;
 	const float NODE_REACH_THRESHOLD = 32.0f; // pixels
 	const int FOLLOW_DISTANCE = 492;
+
+	// Wander behaviour
+	float m_WanderTimer = 0.0f;
+	float m_WanderDuration = 0.0f;
+	Vector2f m_WanderDirection = { 0.f, 0.f };
 
 	// enemy hit-box size
 	int m_Hitbox_Height = 24;
@@ -111,4 +117,9 @@ public:
 	int tileDistance(const Vector2i& a, const Vector2i& b);
 
 	void drawDebugPath(sf::RenderWindow& window);
+
+	void pickNewWanderDirection();
+	void wander();
+
+	void updateAI();
 };

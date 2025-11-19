@@ -12,7 +12,7 @@ using namespace sf;
 
 World::World()
 {
-    WORLD_SIZE = 9;
+    WORLD_SIZE = 3;
 }
 
 void World::newWorld()
