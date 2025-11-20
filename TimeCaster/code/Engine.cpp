@@ -38,10 +38,7 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	Listener::setGlobalVolume(player.getVolume());
 	fpsLimit = player.getFpsLimit();
 
-
-	// Get the screen resolution and create an SFML window
-	resolution.x = VideoMode::getDesktopMode().width;
-	resolution.y = VideoMode::getDesktopMode().height;
+	// set resolution
 	resolution.x = 1920;
 	resolution.y = 1080;
 
@@ -1152,7 +1149,7 @@ void Engine::run()
 					int tileSize = 64;
 
 					// Spawn the player in the middle of the arena
-					player.spawn(arena, resolution, tileSize, player.getPlayerLevel());
+					player.spawn(resolution, tileSize, player.getPlayerLevel());
 				
 					// Reset the clock so there isn't a frame jump
 					clock.restart();
@@ -1224,14 +1221,7 @@ void Engine::run()
 						int tileSize = 64;
 
 						// Spawn the player in the middle of the arena
-						player.spawn(arena, resolution, tileSize, player.getPlayerLevel());
-
-						/*
-						for (int i = 0; i < 1; ++i)
-						{
-							enemies.spawn(arena, resolution, tileSize, "Skeleton", player.getPlayerLevel());
-						}
-						*/
+						player.spawn(resolution, tileSize, player.getPlayerLevel());
 
 						// Reset the clock so there isn't a frame jump
 						clock.restart();
@@ -1273,16 +1263,9 @@ void Engine::run()
 						int tileSize = 64;
 
 						// Spawn the player in the middle of the arena
-						player.spawn(arena, resolution, tileSize, player.getPlayerLevel());
+						player.spawn(resolution, tileSize, player.getPlayerLevel());
 
-						/*
-						for (int i = 0; i < 1; ++i)
-						{
-							Enemy e;
-							e.spawn(arena, resolution, tileSize, "Goblin", player.getPlayerLevel());
-							enemyArr.push_back(e);
-						}
-						*/
+
 
 						// Reset the clock so there isn't a frame jump
 						clock.restart();

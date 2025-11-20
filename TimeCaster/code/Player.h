@@ -17,7 +17,7 @@ public:
 
 	Player();
 
-	void spawn(IntRect arena, Vector2f resolution, int tileSize, int level);
+	void spawn(Vector2f resolution, int tileSize, int level);
 
 	enum CombatType { Melee, Magic };
 	enum SpellType { Heal, Fireball, FreezeTime, Phase};
