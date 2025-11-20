@@ -48,7 +48,7 @@ public:
 
 	void generateWorld();
 
-	void loadWorld();
+	void loadGameWorld();
 
 	void spawnEnemies();
 

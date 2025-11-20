@@ -1255,8 +1255,17 @@ void Engine::run()
 						loadWorldText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y - loadWorldText.getCharacterSize());
 
 						initializeInventory();
-						thread worldThread(&Engine::loadWorld, this);
-						worldThread.detach();
+						if (world.worldFileExists())
+						{
+							thread worldThread(&Engine::loadGameWorld, this);
+							worldThread.detach();
+						}
+						else
+						{
+							thread worldThread(&Engine::generateWorld, this);
+							worldThread.detach();
+						}
+
 					}
 					else {
 						// No save file so create a new one with default values and load it	
@@ -1304,10 +1313,24 @@ void Engine::run()
 						vSync = player.getVSync();
 						displayFps = player.getDisplayFps();
 						Listener::setGlobalVolume(player.getVolume());
-						populateChunkVector();
 						setDifficulty();
-						spawnEnemies();
+
+						loadWorldText.setString("Loading game...");
+						textBounds = loadWorldText.getLocalBounds();
+						viewCentre = mainView.getCenter();
+						loadWorldText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y - loadWorldText.getCharacterSize());
+
 						initializeInventory();
+						if (world.worldFileExists())
+						{
+							thread worldThread(&Engine::loadGameWorld, this);
+							worldThread.detach();
+						}
+						else
+						{
+							thread worldThread(&Engine::generateWorld, this);
+							worldThread.detach();
+						}
 					}
 				}
 
@@ -1807,6 +1830,10 @@ void Engine::generateWorld()
 	world.newWorld();
 	populateChunkVector();
 	spawnEnemies();
+	if (state == State::LOADING) {
+		state = State::PLAYING;
+	}
+
 	worldLoaded = true;
 	skipIntroText.setString("--- Press space to skip ---");
 	textBounds = skipIntroText.getLocalBounds(); 
@@ -1814,13 +1841,13 @@ void Engine::generateWorld()
 	skipIntroText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 1030);
 }
 
-void Engine::loadWorld()
+void Engine::loadGameWorld()
 {
-	
 	world.loadWorld();
 	populateChunkVector();
 	spawnEnemies();
 	state = State::PLAYING;
+
 	
 }
 // Sets the player's difficulty multiplier
