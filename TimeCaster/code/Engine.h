@@ -48,6 +48,8 @@ public:
 
 	void generateWorld();
 
+	void loadGameWorld();
+
 	void spawnEnemies();
 
 	void setDifficulty();
@@ -74,7 +76,7 @@ private:
 	// The games difficulty will always be in one of these states
 
 	// The game will always be in one of these states
-	enum State { MAIN_MENU, OPTIONS_MENU, STORY_INTRO, PLAYING, PAUSED, GAME_OVER };
+	enum State { MAIN_MENU, OPTIONS_MENU, STORY_INTRO, PLAYING, PAUSED, GAME_OVER, LOADING };
 
 	CollisionDetection collision;
 
