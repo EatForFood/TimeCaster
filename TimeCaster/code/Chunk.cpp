@@ -200,6 +200,11 @@ Chunk::Chunk(String type, Vector2f chunk, bool load)
 				{
 					int chance = rand() % 2500;
 
+					if (chance <= 5)
+					{
+						CreateEnemySpawn("Lizard", Vector2i(x - 1, y + 1));
+					}
+
 					if (chance <= 1200)
 					{
 						placeTile(x, y, 0, 0, false, true);
@@ -305,10 +310,11 @@ Chunk::Chunk(String type, Vector2f chunk, bool load)
 						placeHouse4(x, y);
 						CreateEnemySpawn("Orc", Vector2i(x - 1, y + 1));
 					}
+					/*
 					else if (chance == 3)
 					{
 						CreateEnemySpawn("Lizard", Vector2i(x - 1, y + 1));
-					}
+					}*/
 				}
 			}
 
@@ -327,6 +333,7 @@ Chunk::Chunk(String type, Vector2f chunk, bool load)
 
 				}
 			}
+
 
 			// Forground empty
 			for (int x = 0; x < 50; x++)
@@ -365,7 +372,6 @@ Chunk::Chunk(String type, Vector2f chunk, bool load)
 					{
 
 						int chance = rand() % 5;
-
 						if (chance <= 2)
 						{
 							placeTile(x, y, 4, 2, false, true);
@@ -382,6 +388,7 @@ Chunk::Chunk(String type, Vector2f chunk, bool load)
 						if (chance <= 1200)
 						{
 							placeTile(x, y, 0, 0, false, true);
+							
 						}
 						else if (chance <= 2400)
 						{
@@ -416,10 +423,11 @@ Chunk::Chunk(String type, Vector2f chunk, bool load)
 						placeHouse4(x, y);
 						CreateEnemySpawn("Skeleton", Vector2i(x - 1, y + 1));
 					}
+					/*
 					else if (chance == 3)
 					{
 						CreateEnemySpawn("Lizard", Vector2i(x - 1, y + 1));
-					}
+					}*/
 				}
 			}
 
