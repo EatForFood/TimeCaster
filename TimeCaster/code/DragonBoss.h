@@ -38,7 +38,6 @@ private:
 	// Charging related variables & functions
 	bool m_IsCharging = false;
 	bool m_CanCharge = true;
-	bool animatingBackwards = false;
 	
 	float m_ChargeDuration = 0.5f;
 	float m_ChargeCooldown = 5.0f;
@@ -59,7 +58,7 @@ public:
 
 	int getRangedDamage();
 
-	void moveTextureRect(float elapsedTime);
+	void moveTextureRect();
 
 	void spawn(const std::string& type, Vector2i position, int level);
 

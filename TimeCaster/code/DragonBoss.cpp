@@ -12,7 +12,7 @@ void DragonBoss::spawn(const std::string& type, Vector2i position, int level) {
     m_IsAttacking = false;
     m_Speed = START_SPEED;
     m_Damage = 20;
-    m_Sprite = Sprite(TextureHolder::GetTexture("graphics/enemies/flying_dragon-red.png"));
+    m_Sprite = Sprite(TextureHolder::GetTexture("graphics/enemies/flyingdragonedited.png"));
 
     m_Hitbox.left = m_Position.x - 20;
     m_Hitbox.width = 40;
@@ -39,8 +39,7 @@ void DragonBoss::spawn(const std::string& type, Vector2i position, int level) {
 
 void DragonBoss::update(float elapsedTime, const Vector2f& playerPos, Chunk* chunk, int playerChunk, vector<NavBox> navBox) 
 {
-    moveTextureRect(elapsedTime);
-    updateTextRect();
+    m_AnimationTimer = m_AnimationTimer + m_TimeElapsed;
     
     if (!m_IsAttacking) {
         m_AttackChoice = rand() % 3;
@@ -69,6 +68,14 @@ void DragonBoss::update(float elapsedTime, const Vector2f& playerPos, Chunk* chu
             break;
         }
     }
+    else {
+        moveTextureRect();
+    }
+
+    updateTextRect();
+
+    m_TimeElapsed = elapsedTime;
+    m_PositionLast = m_Position;
 
     if (m_Health < m_MaxHealth / 2 && !rageActivated) {
         state = attackState::Rage;
@@ -216,19 +223,12 @@ void DragonBoss::updateTextRect()
     }
 }
 
-void DragonBoss::moveTextureRect(float elapsedTime) // animate sprite by moving texRect location
+void DragonBoss::moveTextureRect() // animate sprite by moving texRect location
 {
     // if the animation counter is greater than the animation limit go back in animation steps until reaching 1;
-    if (!animatingBackwards && m_Ani_Counter >= m_Animation_It_Limit)
+    if (m_Ani_Counter == m_Animation_It_Limit)
     {
-        animatingBackwards = true;
-        m_Ani_Counter = m_Animation_It_Limit - 1;
-    }
-
-    if (animatingBackwards && m_Ani_Counter <= 0)
-    {
-        animatingBackwards = false;
-        m_Ani_Counter = 1;
+        m_Ani_Counter = 0;
     }
 
     if (m_Horizontal) {
@@ -245,15 +245,7 @@ void DragonBoss::moveTextureRect(float elapsedTime) // animate sprite by moving 
     m_AnimationTimer = m_AnimationTimer + m_TimeElapsed;
     if (m_AnimationTimer > timePerFrame)
     {
-        if (!animatingBackwards) {
-            m_Ani_Counter++;
-        }
-        else {
-            m_Ani_Counter--;
-        }
-
+        m_Ani_Counter++;
         m_AnimationTimer = 0;
     }
-
-    cout << animatingBackwards << m_Ani_Counter << endl;
 }
