@@ -305,6 +305,10 @@ Chunk::Chunk(String type, Vector2f chunk, bool load)
 						placeHouse4(x, y);
 						CreateEnemySpawn("Orc", Vector2i(x - 1, y + 1));
 					}
+					else if (chance == 3)
+					{
+						CreateEnemySpawn("Lizard", Vector2i(x - 1, y + 1));
+					}
 				}
 			}
 
@@ -411,6 +415,10 @@ Chunk::Chunk(String type, Vector2f chunk, bool load)
 					{
 						placeHouse4(x, y);
 						CreateEnemySpawn("Skeleton", Vector2i(x - 1, y + 1));
+					}
+					else if (chance == 3)
+					{
+						CreateEnemySpawn("Lizard", Vector2i(x - 1, y + 1));
 					}
 				}
 			}

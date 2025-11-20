@@ -52,6 +52,15 @@ void Enemy::spawn(string type, Vector2i position, int level) {
 		m_SpriteWeapon = Sprite(TextureHolder::GetTexture("graphics/player/weapon/slash/Pirate's_Scimitar.png"));
 		m_WeaponSize = 3;
 	}
+	else if (type == "Lizard") {
+		m_Sprite = Sprite(TextureHolder::GetTexture("graphics/enemies/lizard.png"));
+		m_Speed = 75; 
+		m_Health = 40;
+		m_AttackDmg = 30;
+		m_KillValue = 25;
+		m_SpriteWeapon = Sprite(TextureHolder::GetTexture("graphics/player/weapon/thrust/Short_Spear.png"));
+		m_WeaponSize = 1;
+	}
 
 	// Set the origin of the sprite to the centre, 
 	m_Sprite.setOrigin(32, 32);
@@ -85,6 +94,12 @@ void Enemy::update(float elapsedTime, const Vector2f& playerPos, Chunk* chunk, i
 			else if (m_Type == "Orc")
 			{
 				m_Sprite.setTexture(TextureHolder::GetTexture("graphics/enemies/orc.png"));
+				m_Sprite.setOrigin(32, 32);
+				m_Sprite.setScale(0.75, 0.75);
+			}
+			else if (m_Type == "Lizard")
+			{
+				m_Sprite.setTexture(TextureHolder::GetTexture("graphics/enemies/lizard.png"));
 				m_Sprite.setOrigin(32, 32);
 				m_Sprite.setScale(0.75, 0.75);
 			}
@@ -144,6 +159,12 @@ void Enemy::Attack()
 	else if (m_Type == "Orc")
 	{
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/enemies/orcAttack.png"));
+		m_Sprite.setOrigin(32, 32);
+		m_Sprite.setScale(0.75f, 0.75f);
+	}
+	else if (m_Type == "Lizard")
+	{
+		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/enemies/lizardAttack.png"));
 		m_Sprite.setOrigin(32, 32);
 		m_Sprite.setScale(0.75f, 0.75f);
 	}
@@ -302,7 +323,25 @@ void Enemy::updateTextRect()
 			setSpriteFromSheet(IntRect(0, 64, 384, 64), 64);
 		}
 	}
-	m_SpriteWeapon.setPosition(m_Position);
+	if (m_Type == "Lizard")
+	{
+		// Spear wasn't in the Lizard's hands, manually adjusted position based on direction
+		// Still doesn't look perfect, but anything else would require changing the sprite itself
+		if (direction == Vector2f(0, -1)) { // down
+			m_SpriteWeapon.setPosition(m_Position.x, m_Position.y - 6);
+		}
+		else 
+		{
+
+			m_SpriteWeapon.setPosition(m_Position.x, m_Position.y - 10);
+		}
+	
+	}
+	else 
+	{
+		m_SpriteWeapon.setPosition(m_Position);
+	}
+
 }
 
 int Enemy::loot()
