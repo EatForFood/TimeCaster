@@ -5,7 +5,7 @@
 
 DragonBoss::DragonBoss() 
 {
-   
+    
 }
 
 void DragonBoss::spawn(const std::string& type, Vector2i position, int level) {
@@ -42,7 +42,6 @@ void DragonBoss::update(float elapsedTime, const Vector2f& playerPos, Chunk* chu
     m_TimeElapsed = elapsedTime;
     
     if (!m_IsAttacking) {
-        cout << "I am not attacking" << endl;
         m_AttackChoice = rand() % 3;
 
         while (m_AttackChoice == 0 && m_CooldownClock.getElapsedTime().asSeconds() < m_ChargeCooldown) {
@@ -51,22 +50,32 @@ void DragonBoss::update(float elapsedTime, const Vector2f& playerPos, Chunk* chu
 
         switch (m_AttackChoice) {
         case 0:
-            state = attackState::Charge;
-            combatType = combatType::Melee;
+            state = AttackState::Charge;
+            combatType = CombatType::Melee;
             m_TargetPosition = playerPos;
             charge(elapsedTime);
             break;
 
         case 1:
-            state = attackState::Bite;
-            combatType = combatType::Melee;
+            state = AttackState::Bite;
+            combatType = CombatType::Melee;
             bite();
             break;
 
         case 2:
-            state = attackState::Shoot;
-            combatType = combatType::Magic;
+            state = AttackState::Shoot;
+            combatType = CombatType::Magic;
             break;
+        }
+    }
+    else {
+        Vector2f delta = playerPos - m_Position;
+
+        if (std::abs(delta.x) > std::abs(delta.y)) {
+            direction = (delta.x > 0) ? Vector2f(1, 0) : Vector2f(-1, 0);
+        }
+        else {
+            direction = (delta.y > 0) ? Vector2f(0, -1) : Vector2f(0, 1);
         }
     }
 
@@ -76,11 +85,11 @@ void DragonBoss::update(float elapsedTime, const Vector2f& playerPos, Chunk* chu
     m_PositionLast = m_Position;
 
     if (m_Health < m_MaxHealth / 2 && !rageActivated) {
-        state = attackState::Rage;
+        state = AttackState::Rage;
         rage();
     }
 
-    if (state == attackState::Bite)
+    if (state == AttackState::Bite)
     {
         Vector2f delta = playerPos - m_Position;
         float distance = std::sqrt(delta.x * delta.x + delta.y * delta.y);
@@ -246,4 +255,14 @@ void DragonBoss::moveTextureRect() // animate sprite by moving texRect location
         m_Ani_Counter++;
         m_AnimationTimer = 0;
     }
+}
+
+DragonBoss::AttackState DragonBoss::getAttackState()
+{
+    return state;
+}
+
+DragonBoss::CombatType DragonBoss::getCombatType()
+{
+    return combatType;
 }

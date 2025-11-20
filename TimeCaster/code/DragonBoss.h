@@ -4,8 +4,22 @@
 
 class DragonBoss : public Enemy
 {
-private:
-	enum attackState {
+public:
+	DragonBoss();
+
+	void update(float elapsedTime, const Vector2f& playerPos, Chunk* chunk, int playerChunk, vector<NavBox> navBox) override;
+
+	int getRangedDamage();
+
+	void moveTextureRect();
+
+	void spawn(const std::string& type, Vector2i position, int level);
+
+	void updateTextRect();
+
+	void setSpriteFromSheet(sf::IntRect textureBox);
+
+	enum AttackState {
 		Idle,
 		Charge,
 		Bite,
@@ -13,19 +27,20 @@ private:
 		Rage
 	};
 
-	enum combatType {
+	enum CombatType {
 		Magic,
 		Melee
 	};
 
+	AttackState getAttackState();
+	CombatType getCombatType();
+
+private:
 	float START_HEALTH = 200;
 	float START_SPEED = 25;
 	
 	int m_AttackChoice;
 	int m_RangedDamage = 10;
-	
-	attackState state = attackState::Idle;
-	combatType combatType = combatType::Melee;
 
 	bool m_RequiresAiming = false;
 	bool rageActivated = false;
@@ -51,18 +66,6 @@ private:
 
 	Vector2f m_ChargeDirection;
 
-public:
-	DragonBoss();
-
-	void update(float elapsedTime, const Vector2f& playerPos, Chunk* chunk, int playerChunk, vector<NavBox> navBox) override;
-
-	int getRangedDamage();
-
-	void moveTextureRect();
-
-	void spawn(const std::string& type, Vector2i position, int level);
-
-	void updateTextRect();
-
-	void setSpriteFromSheet(sf::IntRect textureBox);
+	AttackState state = AttackState::Idle;
+	CombatType combatType = CombatType::Melee;
 };
