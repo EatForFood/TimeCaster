@@ -22,6 +22,8 @@ public:
 
 	void loadWorld();
 
+	bool worldFileExists();
+
 	Chunk* getChunk(int i);
 
 	const vector<NavBox>& getNavBoxes(int i) const;

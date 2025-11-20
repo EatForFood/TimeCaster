@@ -496,6 +496,11 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	skipIntroText.setCharacterSize(fontSize - 5); // Slightly smaller text size
 	skipIntroText.setFillColor(Color::White);
 
+	// Skip intro text
+	loadWorldText.setFont(font); // Assign the font
+	loadWorldText.setCharacterSize(fontSize + 100); // Large text size
+	loadWorldText.setFillColor(Color::White);
+
 	/***********
 	Inventory UI
 	************/
@@ -1187,8 +1192,8 @@ void Engine::run()
 				// Player hit the load game button in the main menu
 				else if (loadGameButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU && event.mouseButton.button == Mouse::Left)
 				{
-					state = State::PLAYING;
 
+					state = State::LOADING;
 					skipAnimation = false;
 
 					// Play the start game sound
@@ -1202,7 +1207,6 @@ void Engine::run()
 					if (player.loadSaveFile() == true) 
 					{
 						// Player loaded successfully
-						world.loadWorld();
 
 						// Update equipped item icons
 						equippedSwordIcon.setTextureRect(player.getEquippedSword()->getTextureRect());
@@ -1242,10 +1246,26 @@ void Engine::run()
 						vSync = player.getVSync();
 						displayFps = player.getDisplayFps();
 						Listener::setGlobalVolume(player.getVolume());
-						populateChunkVector();
+
 						setDifficulty();
-						spawnEnemies();
+
+						loadWorldText.setString("Loading game..."); 
+						textBounds = loadWorldText.getLocalBounds();
+						viewCentre = mainView.getCenter();
+						loadWorldText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y - loadWorldText.getCharacterSize());
+
 						initializeInventory();
+						if (world.worldFileExists())
+						{
+							thread worldThread(&Engine::loadGameWorld, this);
+							worldThread.detach();
+						}
+						else
+						{
+							thread worldThread(&Engine::generateWorld, this);
+							worldThread.detach();
+						}
+
 					}
 					else {
 						// No save file so create a new one with default values and load it	
@@ -1293,10 +1313,24 @@ void Engine::run()
 						vSync = player.getVSync();
 						displayFps = player.getDisplayFps();
 						Listener::setGlobalVolume(player.getVolume());
-						populateChunkVector();
 						setDifficulty();
-						spawnEnemies();
+
+						loadWorldText.setString("Loading game...");
+						textBounds = loadWorldText.getLocalBounds();
+						viewCentre = mainView.getCenter();
+						loadWorldText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y - loadWorldText.getCharacterSize());
+
 						initializeInventory();
+						if (world.worldFileExists())
+						{
+							thread worldThread(&Engine::loadGameWorld, this);
+							worldThread.detach();
+						}
+						else
+						{
+							thread worldThread(&Engine::generateWorld, this);
+							worldThread.detach();
+						}
 					}
 				}
 
@@ -1441,6 +1475,10 @@ void Engine::run()
 						displayedText = "";
 						storyIntroText.setString(displayedText);
 						currentChar = 0;
+					}
+					else if (state == State::LOADING && worldLoaded)
+					{
+						state = State::PLAYING;
 					}
 				}
 
@@ -1792,6 +1830,10 @@ void Engine::generateWorld()
 	world.newWorld();
 	populateChunkVector();
 	spawnEnemies();
+	if (state == State::LOADING) {
+		state = State::PLAYING;
+	}
+
 	worldLoaded = true;
 	skipIntroText.setString("--- Press space to skip ---");
 	textBounds = skipIntroText.getLocalBounds(); 
@@ -1799,6 +1841,15 @@ void Engine::generateWorld()
 	skipIntroText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 1030);
 }
 
+void Engine::loadGameWorld()
+{
+	world.loadWorld();
+	populateChunkVector();
+	spawnEnemies();
+	state = State::PLAYING;
+
+	
+}
 // Sets the player's difficulty multiplier
 void Engine::setDifficulty()
 {
