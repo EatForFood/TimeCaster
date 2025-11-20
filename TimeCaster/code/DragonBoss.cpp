@@ -39,9 +39,10 @@ void DragonBoss::spawn(const std::string& type, Vector2i position, int level) {
 
 void DragonBoss::update(float elapsedTime, const Vector2f& playerPos, Chunk* chunk, int playerChunk, vector<NavBox> navBox) 
 {
-    m_AnimationTimer = m_AnimationTimer + m_TimeElapsed;
+    m_TimeElapsed = elapsedTime;
     
     if (!m_IsAttacking) {
+        cout << "I am not attacking" << endl;
         m_AttackChoice = rand() % 3;
 
         while (m_AttackChoice == 0 && m_CooldownClock.getElapsedTime().asSeconds() < m_ChargeCooldown) {
@@ -68,13 +69,10 @@ void DragonBoss::update(float elapsedTime, const Vector2f& playerPos, Chunk* chu
             break;
         }
     }
-    else {
-        moveTextureRect();
-    }
 
     updateTextRect();
+    moveTextureRect();
 
-    m_TimeElapsed = elapsedTime;
     m_PositionLast = m_Position;
 
     if (m_Health < m_MaxHealth / 2 && !rageActivated) {
@@ -132,7 +130,7 @@ void DragonBoss::charge(float elapsedTime)
         m_CanCharge = false;
         m_IsAttacking = true;
 
-        // Compute the charge vector once
+        // Compute the charge vector
         m_ChargeDirection = m_TargetPosition - m_Position;
         float length = std::sqrt(m_ChargeDirection.x * m_ChargeDirection.x + m_ChargeDirection.y * m_ChargeDirection.y);
         
