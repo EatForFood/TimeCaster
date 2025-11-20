@@ -403,6 +403,13 @@ void Engine::draw()
 		window.draw(mainMenuButtonText);
 	}
 
+	if (state == State::LOADING)
+	{
+		window.clear();
+		window.draw(spriteStoryIntro);
+		window.draw(loadWorldText);
+	//	window.draw(skipIntroText);
+	}
 	window.display();
 }
 
