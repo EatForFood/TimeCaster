@@ -44,6 +44,8 @@ public:
 
 	Chunk* getCurrentChunk(float x, float y);
 
+	bool playerNearShop();
+
 	void populateChunkVector();
 
 	void generateWorld();

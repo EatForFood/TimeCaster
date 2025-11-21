@@ -754,7 +754,9 @@ void Chunk::placeHouse2(int sx, int sy) { // sx 15, sy 18
 	{
 		if (y == sy - 1)
 		{
-			placeTile(sx + 1, y, 4, 14, false, false);
+			placeTile(sx + 1, y, 4, 14, false, false); 
+			// Save position of the door
+			saveDoorLocation(Vector2f(sx +1, y));
 		}
 		else
 		{
@@ -1407,6 +1409,24 @@ void Chunk::CreateEnemySpawn(string type, Vector2i position)
 	enemyTypes.emplace_back(type);
 }
 
+void Chunk::saveDoorLocation(Vector2f position)
+{
+	// Compute local → world tile position
+	int worldTileX = position.x + offset.x;
+	int worldTileY = position.y + offset.y;
+
+	// Convert tile coordinates to isometric world pixels
+	float pixelX = (worldTileX - worldTileY) * (TILE_SIZE / 2.0f);
+	float pixelY = (worldTileX + worldTileY) * (TILE_SIZE / 4.0f);
+
+	// Center door in the tile
+	pixelX += TILE_SIZE / 2.0f;
+	pixelY += TILE_SIZE / 4.0f;
+
+	// Save door location offset 20 pixels so the interact is in front of the door and not inside it
+	doorLocations.push_back(Vector2f(pixelX + 20, pixelY + 20));
+}
+
 vector<Vector2i> Chunk::getEnemyLocations()
 {
 	return enemyLocations;
@@ -1573,4 +1593,16 @@ void Chunk::placeBossArena(int sx, int sy) {
 
 	NavBox navboxS(sx + 1, sy, 25, 1);
 	navBoxes.push_back(navboxS);
+}
+
+bool Chunk::playerNearDoor(Vector2f playerPos)
+{
+	for (size_t i = 0; i < doorLocations.size(); ++i) {
+		Vector2f nearDoor = doorLocations[i] - playerPos;
+		// Check if player is within 25 units of the door
+		if (nearDoor.x <= 25.0f && nearDoor.y <= 25.0f && nearDoor.x >= -25.0f && nearDoor.y >= -25.0f) {
+			return true;
+		}
+	}
+	return false;
 }
