@@ -202,6 +202,7 @@ Chunk::Chunk(String type, Vector2f chunk, bool load)
 
 					if (chance <= 5)
 					{
+						// TODO: prevent lizard from spawning too close to player
 						CreateEnemySpawn("Lizard", Vector2i(x - 1, y + 1));
 					}
 

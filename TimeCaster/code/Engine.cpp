@@ -1241,7 +1241,7 @@ void Engine::run()
 
 						loadWorldText.setString("Loading game..."); 
 						textBounds = loadWorldText.getLocalBounds();
-						viewCentre = mainView.getCenter();
+						viewCentre = hudView.getCenter();
 						loadWorldText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y - loadWorldText.getCharacterSize());
 
 						initializeInventory();
@@ -1300,7 +1300,7 @@ void Engine::run()
 
 						loadWorldText.setString("Loading game...");
 						textBounds = loadWorldText.getLocalBounds();
-						viewCentre = mainView.getCenter();
+						viewCentre = hudView.getCenter();
 						loadWorldText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y - loadWorldText.getCharacterSize());
 
 						initializeInventory();
@@ -1458,10 +1458,6 @@ void Engine::run()
 						displayedText = "";
 						storyIntroText.setString(displayedText);
 						currentChar = 0;
-					}
-					else if (state == State::LOADING && worldLoaded)
-					{
-						state = State::PLAYING;
 					}
 				}
 
