@@ -914,6 +914,18 @@ Chunk* Engine::getCurrentChunk(float x, float y) {
 	return nullptr;
 }
 
+bool Engine::playerNearShop()
+{
+	// only check for shops in the chunk the player is in
+	Chunk* currentChunk = getCurrentChunk(player.getPosition().x, player.getPosition().y);
+ 
+	if (currentChunk && currentChunk->playerNearDoor(player.getPosition())) 
+	{
+		return true;
+	}
+	return false;
+}
+
 void Engine::run()
 {
 	initializeInventory();
@@ -1657,7 +1669,7 @@ void Engine::run()
 			}
 
 		} // End WASD while playing
-		else if (drawInventory || drawShop)
+		if (drawInventory || drawShop)
 		{
 			player.stopRight();
 			player.stopLeft();

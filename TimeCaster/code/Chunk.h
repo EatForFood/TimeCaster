@@ -66,6 +66,9 @@ protected:
 	vector<Vector2i> enemyLocations;
 	vector<string> enemyTypes;
 
+	// Door locations for the shop
+	vector<Vector2f> doorLocations;
+
 	bool blockedTiles[50][50];
 public:
 
@@ -75,6 +78,8 @@ public:
 	void loadChunk();
 
 	void placeTile(int x, int y, int texX, int texY, bool forGround, bool save);
+
+	void placeShopSign(int x, int y);
 
 	VertexArray getBackground();
 	VertexArray getForground();
@@ -93,6 +98,11 @@ public:
 
 	NavBox getChunkArea();
 	Vector2f getChunkCenter();
+
+
+	bool playerNearDoor(Vector2f playerPos);
+
+	void saveDoorLocation(Vector2f position);
 
 	void clearChunk();
 
@@ -116,5 +126,6 @@ public:
 
 	vector<Vector2i>getEnemyLocations();
 	vector<string>getEnemyTypes();
+
 
 };

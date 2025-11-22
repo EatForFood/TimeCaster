@@ -39,6 +39,7 @@ void Engine::update()
 		// Set the crosshair to the mouse world location
 		spriteCursor.setPosition(mouseWorldPosition);
 
+
 		for (int i = 0; i < world.getWorldSize(); i++)
 		{
 			if (collision.pointInShape(player.getPosition(), world.getChunkArea(i).getShape())) // find players current chunk
@@ -53,6 +54,14 @@ void Engine::update()
 		}
 
 		if (state == State::PLAYING && !drawInventory && !timeFrozen) {
+
+
+			if (playerNearShop()) {
+				drawEKey = true;
+			}
+			else {
+				drawEKey = false;
+			}
 
 			// Update the vector of enemies if within player's render area
 			for (auto& enemyPtr : enemyArr)
