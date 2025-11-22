@@ -91,6 +91,21 @@ void World::loadWorld() // load world from file
     in.close();
 }
 
+bool World::worldFileExists()
+{
+    ifstream in("gamedata/TCWorld.txt");
+    if (!in.is_open())
+    {
+        return false;
+    }
+    else 
+    {
+		in.close();
+		return true;
+    }
+     
+}
+
 Chunk* World::getChunk(int i)
 {
 	return &chunks[i];

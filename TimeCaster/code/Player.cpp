@@ -60,8 +60,10 @@ Player::Player()
 	m_Clothes.push_back(m_SpriteShoes);
 }
 
-void Player::spawn(IntRect arena, Vector2f resolution, int tileSize, int level)
+void Player::spawn(Vector2f resolution, int tileSize, int level)
 {
+
+	m_Position = Vector2f(50,600);
 	// assign player's hitbox
 	m_Hitbox.left = m_Position.x - HITBOX_WIDTH / 2;
 	m_Hitbox.width = HITBOX_WIDTH;
@@ -70,12 +72,6 @@ void Player::spawn(IntRect arena, Vector2f resolution, int tileSize, int level)
 
 	m_Level = level;
 
-	// Copy the details of the arena to the player's m_Arena
-	m_Arena.left = arena.left;
-	m_Arena.width = arena.width;
-	m_Arena.top = arena.top;
-	m_Arena.height = arena.height;
-
 	// Remember how big the tiles are in this arena
 	m_TileSize = tileSize;
 
@@ -83,9 +79,7 @@ void Player::spawn(IntRect arena, Vector2f resolution, int tileSize, int level)
 	m_Resolution.x = resolution.x;
 	m_Resolution.y = resolution.y;
 
-	//cout << m_Resolution.x << " 1 " << m_Resolution.y << endl
-
-	m_RenderArea = FloatRect(0, 0, 1920, 1080);
+	m_RenderArea = FloatRect(0, 0, m_Resolution.x, m_Resolution.y);
 }
 
 Time Player::getLastHitTime()
