@@ -96,7 +96,7 @@ bool Player::hit(Time timeHit, float damage, int iFrames)
 	
 		return false;
 	}
-	else if (timeHit.asMilliseconds() - m_LastHit.asMilliseconds() > m_IFrames)
+	else if (timeHit.asMilliseconds() - m_LastHit.asMilliseconds() > m_IFrames && !m_Phasing) // you can phase through attacks, but it won't give you any iframes
 	{
 		m_IFrames = iFrames;
 		m_LastHit = timeHit;
