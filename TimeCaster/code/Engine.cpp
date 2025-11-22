@@ -493,10 +493,15 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	skipIntroText.setCharacterSize(fontSize - 5); // Slightly smaller text size
 	skipIntroText.setFillColor(Color::White);
 
-	// Skip intro text
+	// Loading text
 	loadWorldText.setFont(font); // Assign the font
 	loadWorldText.setCharacterSize(fontSize + 100); // Large text size
 	loadWorldText.setFillColor(Color::White);
+
+	// Game over text
+	gameOverText.setFont(font); // Assign the font
+	gameOverText.setCharacterSize(fontSize + 100); // Large text size
+	gameOverText.setFillColor(Color::White);
 
 	/***********
 	Inventory UI
@@ -1315,6 +1320,11 @@ void Engine::run()
 						viewCentre = hudView.getCenter();
 						loadWorldText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y - loadWorldText.getCharacterSize());
 
+						gameOverText.setString("Game Over!");
+						textBounds = gameOverText.getLocalBounds();
+						viewCentre = hudView.getCenter();
+						gameOverText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y - gameOverText.getCharacterSize());
+
 						initializeInventory();
 						if (world.worldFileExists())
 						{
@@ -1740,8 +1750,17 @@ void Engine::run()
 		}
 
 		// Sets health to 0 if it goes below 0
-		if (player.getHealth() < 0) {
+		if (player.getHealth() <= 0) {
 			player.setHealthValue(0);
+
+			if (sound.isSoundtrackPlaying()) {
+				sound.stopSoundtrack();
+			}
+			gameOverText.setString("Game Over!");
+			textBounds = gameOverText.getLocalBounds();
+			viewCentre = hudView.getCenter();
+			gameOverText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y - gameOverText.getCharacterSize());
+			state = State::GAME_OVER;
 		}
 
 		// Sets stamina to 0 if it goes below 0

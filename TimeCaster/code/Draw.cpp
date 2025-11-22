@@ -410,6 +410,14 @@ void Engine::draw()
 		window.draw(loadWorldText);
 	//	window.draw(skipIntroText);
 	}
+
+	if (state == State::GAME_OVER)
+	{
+		window.clear();
+	//	window.draw(spriteStoryIntro);
+		window.draw(gameOverText);
+		//	window.draw(skipIntroText);
+	}
 	window.display();
 }
 

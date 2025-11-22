@@ -292,6 +292,8 @@ private:
 
 	Text loadWorldText;
 
+	Text gameOverText;
+
 	Texture textureHeadArmourFrame;
 	Texture textureChestArmourFrame;
 	Texture textureTrousersArmourFrame;

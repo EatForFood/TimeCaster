@@ -85,6 +85,7 @@ void Engine::update()
 									decal[currentDecal].spawn("bloodImpact", player.getPosition().x, player.getPosition().y);
 									currentDecal++;
 								}
+
 							}
 							if (player.getWeapon().getGlobalBounds().intersects(enemyPtr->getHitBox()) && player.isAttacking() && !enemyPtr->wasHit())
 							{
