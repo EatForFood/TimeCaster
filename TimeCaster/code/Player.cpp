@@ -155,6 +155,8 @@ void Player::update(float elapsedTime, Vector2i mousePosition, const vector<NavB
 
 	m_TimeElapsed = elapsedTime; 
 
+
+
 	if (m_IsAttacking)
 	{
 		if (m_CombatType == Melee)
@@ -397,6 +399,23 @@ void Player::update(float elapsedTime, Vector2i mousePosition, const vector<NavB
 	downDisabled = false;
 	leftDisabled = false;
 	rightDisabled = false;
+
+	if (m_Phasing)
+	{
+		if (useMana(20.0f * elapsedTime)) // use mana while phasing
+		{
+			m_Sprite.setColor(Color(255, 255, 255, 128)); // make player tranluscent while phasing
+			m_SpriteHead.setColor(Color(255, 255, 255, 128));
+			m_SpriteTorso.setColor(Color(255, 255, 255, 128));
+			m_SpritePants.setColor(Color(255, 255, 255, 128));
+			m_SpriteShoes.setColor(Color(255, 255, 255, 128));
+			m_SpriteWeapon.setColor(Color(255, 255, 255, 128));
+		}
+		else
+		{
+			m_Phasing = false;
+		}
+	}
 
 }
 
@@ -1202,4 +1221,19 @@ bool Player::getVSync()
 int Player::getFpsLimit()
 {
 	return m_FpsLimit;
+}
+
+void Player::startPhase()
+{
+	m_Phasing = true;
+}
+
+void Player::stopPhase()
+{
+	m_Phasing = false;
+}
+
+bool Player::isPhasing()
+{
+	return m_Phasing;
 }

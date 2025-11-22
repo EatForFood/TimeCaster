@@ -104,6 +104,9 @@ public:
 	float getVolume();
 	bool getVSync();
 	int getFpsLimit();
+	void startPhase();
+	void stopPhase();
+	bool isPhasing();
 
 	void setChunk(int chunk);
 	int getChunk();
@@ -228,6 +231,8 @@ private:
 
 	CombatType m_CombatType = Melee;
 	SpellType m_SpellType = Fireball;
+
+	bool m_Phasing = false;
 	
 	// When was the player last hit
 	Time m_LastHit;

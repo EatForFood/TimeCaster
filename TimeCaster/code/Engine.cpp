@@ -1079,7 +1079,7 @@ void Engine::run()
 						if (num > 0)
 						{
 							fpsLimit = num;
-							feedbackFps.setString("FPS set to " + to_string(fpsLimit));
+							feedbackFps.setString("FPS limit set to " + to_string(fpsLimit));
 							player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume(), vSync, fpsLimit);
 							window.setFramerateLimit(fpsLimit);
 						}
@@ -1628,6 +1628,22 @@ void Engine::run()
 						particles[100].play(player.getCenter().x - 30, player.getCenter().y - 30, 0); // 100 is the player's particle, 0-99 for the enemies
 					}
 				}
+				else if (player.getCombatType() == Magic && !player.isCastingSpell() && player.getSpellType() == Player::SpellType::Phase && !player.isPhasing() && phaseTimer.getElapsedTime().asSeconds() > 0.5f)
+				{
+					player.startPhase();
+					sound.playTimeStopCastSound();
+					cout << "Phasing started" << endl;
+					phaseTimer.restart();
+				}
+				else if (player.getCombatType() == Magic && !player.isCastingSpell() && player.getSpellType() == Player::SpellType::Phase && player.isPhasing() && phaseTimer.getElapsedTime().asSeconds() > 0.5f)
+				{
+					player.stopPhase();
+					sound.playTimeStopEndSound();
+					sound.stopTimeStopActiveSound();
+					cout << "Phasing ended" << endl;
+					phaseTimer.restart();
+				}
+
 			}
 
 			// Handle the pressing and releasing the WASD keys
