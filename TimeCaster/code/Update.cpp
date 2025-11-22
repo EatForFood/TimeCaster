@@ -8,16 +8,7 @@ void Engine::update()
 	/*********************************************************************
 							   UPDATE THE FRAME
 	**********************************************************************/
-	if (timeFrozen) {
-		if (player.useMana(0.25f))
-			sound.playTimeStopActiveSound();
-		else
-		{
-			sound.playTimeStopEndSound();
-			sound.stopTimeStopActiveSound();
-			timeFrozen = false;
-		}
-	}
+
 
 	if (state == State::PLAYING)
 	{
@@ -180,6 +171,32 @@ void Engine::update()
 			}
 		}
 
+		// update the spells that require mana over time
+		if (timeFrozen) {
+			if (player.useMana(15.0f * dtAsSeconds))
+				sound.playTimeStopActiveSound();
+			else
+			{
+				sound.playTimeStopEndSound();
+				sound.stopTimeStopActiveSound();
+				timeFrozen = false;
+			}
+		}
+
+
+		if (player.isPhasing())
+		{
+			if (player.useMana(20.0f * dtAsSeconds)) // use mana while phasing
+			{
+				// player is phasing
+			}
+			else
+			{
+				player.stopPhase();
+				sound.playPhaseEndSound();
+			}
+		}
+
 		filter.setOrigin(player.getPosition());
 		filter.setPosition(player.getPosition().x, player.getPosition().y);
 
@@ -188,6 +205,8 @@ void Engine::update()
 
 		// Make the view centre around the player				
 		mainView.setCenter(player.getCenter().x, player.getCenter().y - 10);
+
+
 
 		// Update any spells that are in-flight
 		if (!timeFrozen) {

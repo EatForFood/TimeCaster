@@ -57,6 +57,14 @@ SoundManager::SoundManager() {
 	timeStopEndBuffer.loadFromFile("sound/timeStopEnd.wav");
 	timeStopEnd.setBuffer(timeStopEndBuffer);
 
+	// Loads the phase cast sound into buffer
+	phaseCastBuffer.loadFromFile("sound/phaseCast.wav");
+	phaseCast.setBuffer(phaseCastBuffer);
+
+	// Loads the phase end sound into buffer
+	phaseEndBuffer.loadFromFile("sound/phaseEnd.wav");
+	phaseEnd.setBuffer(phaseEndBuffer);
+
 	// Loads heal spell sound into buffer
 	healBuffer.loadFromFile("sound/heal.mp3");
 	heal.setBuffer(healBuffer);
@@ -179,6 +187,14 @@ void SoundManager::playTimeStopEndSound() {
 void SoundManager::playHealSound() {
 	if (heal.getStatus() != SoundSource::Status::Playing)
 		heal.play();
+}
+
+void SoundManager::playPhaseCastSound() {
+	phaseCast.play();
+}
+
+void SoundManager::playPhaseEndSound() {
+	phaseEnd.play();
 }
 
 void SoundManager::playGoldSound() {

@@ -448,6 +448,8 @@ private:
 	bool timeFrozen;
 	Clock timeFrozenTimer;
 
+	Clock phaseTimer;
+
 	// Textbox logic
 	sf::RectangleShape textBox;
 	sf::Text feedback;

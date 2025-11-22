@@ -96,7 +96,7 @@ bool Player::hit(Time timeHit, float damage, int iFrames)
 	
 		return false;
 	}
-	else if (timeHit.asMilliseconds() - m_LastHit.asMilliseconds() > m_IFrames)
+	else if (timeHit.asMilliseconds() - m_LastHit.asMilliseconds() > m_IFrames && !m_Phasing) // you can phase through attacks, but it won't give you any iframes
 	{
 		m_IFrames = iFrames;
 		m_LastHit = timeHit;
@@ -154,6 +154,8 @@ void Player::update(float elapsedTime, Vector2i mousePosition, const vector<NavB
 	//navBoxes = navBox;
 
 	m_TimeElapsed = elapsedTime; 
+
+
 
 	if (m_IsAttacking)
 	{
@@ -251,10 +253,27 @@ void Player::update(float elapsedTime, Vector2i mousePosition, const vector<NavB
 		m_Mana += m_ManaRecharge * elapsedTime * 0.66; // recharge mana slower when using magic
 	}
 	
+	m_InObject = false;
+
+	for (auto& nav : navBox) { // if player walks into navBox 
+		if (m_CollisionBox.intersects(nav.getShape().getGlobalBounds()))
+		{
+			if (collision.pointInShape(m_Position, nav.getShape()) && !m_Phasing) {
+				revertPosition();
+			}
+			else if (m_Phasing)
+			{
+				m_InObject = true;
+			}
+		}
+	}
 
 	if (m_UpPressed && !upDisabled)
 	{
-		m_PositionLast = m_Position;
+		if (!m_InObject)
+		{
+			m_PositionLast = m_Position; // don't save the last position if inside an object
+		}
 		m_Position.y -= m_Speed * elapsedTime;
 		direction = Vector2f(0, 1);
 	}
@@ -262,31 +281,44 @@ void Player::update(float elapsedTime, Vector2i mousePosition, const vector<NavB
 	for (auto& nav : navBox) { // if player walks into navBox 
 		if (m_CollisionBox.intersects(nav.getShape().getGlobalBounds()))
 		{
-			if (collision.pointInShape(m_Position, nav.getShape())) {
+			if (collision.pointInShape(m_Position, nav.getShape()) && !m_Phasing) {
 				revertPosition();
+			}
+			else if (m_Phasing)
+			{
+				m_InObject = true;
 			}
 		}
 	}
 
 	if (m_DownPressed && !downDisabled)
 	{
-		m_PositionLast = m_Position;
+		if (!m_InObject)
+		{
+			m_PositionLast = m_Position; // don't save the last position if inside an object
+		}
 		m_Position.y += m_Speed * elapsedTime;
 		direction = Vector2f(0, -1);
 	}
-
 	for (auto& nav : navBox) { // if player walks into navBox 
 		if (m_CollisionBox.intersects(nav.getShape().getGlobalBounds()))
 		{
-			if (collision.pointInShape(m_Position, nav.getShape())) {
+			if (collision.pointInShape(m_Position, nav.getShape()) && !m_Phasing) {
 				revertPosition();
+			}
+			else if (m_Phasing)
+			{
+				m_InObject = true;
 			}
 		}
 	}
 
 	if (m_RightPressed && !rightDisabled)
 	{
-		m_PositionLast = m_Position;
+		if (!m_InObject)
+		{
+			m_PositionLast = m_Position; // don't save the last position if inside an object
+		}
 		m_Position.x += m_Speed * elapsedTime;
 		direction = Vector2f(1, 0);
 	}
@@ -294,15 +326,22 @@ void Player::update(float elapsedTime, Vector2i mousePosition, const vector<NavB
 	for (auto& nav : navBox) { // if player walks into navBox 
 		if (m_CollisionBox.intersects(nav.getShape().getGlobalBounds()))
 		{
-			if (collision.pointInShape(m_Position, nav.getShape())) {
+			if (collision.pointInShape(m_Position, nav.getShape()) && !m_Phasing) {
 				revertPosition();
+			}
+			else if (m_Phasing)
+			{
+				m_InObject = true;
 			}
 		}
 	}
 
 	if (m_LeftPressed && !leftDisabled)
 	{
-		m_PositionLast = m_Position;
+		if (!m_InObject)
+		{
+			m_PositionLast = m_Position; // don't save the last position if inside an object
+		}
 		m_Position.x -= m_Speed * elapsedTime;
 		direction = Vector2f(-1, 0);
 	}
@@ -310,8 +349,12 @@ void Player::update(float elapsedTime, Vector2i mousePosition, const vector<NavB
 	for (auto& nav : navBox) { // if player walks into navBox 
 		if (m_CollisionBox.intersects(nav.getShape().getGlobalBounds()))
 		{
-			if (collision.pointInShape(m_Position, nav.getShape())) {
+			if (collision.pointInShape(m_Position, nav.getShape()) && !m_Phasing) {
 				revertPosition();
+			}
+			else if (m_Phasing)
+			{
+				m_InObject = true;
 			}
 		}
 	}
@@ -397,6 +440,16 @@ void Player::update(float elapsedTime, Vector2i mousePosition, const vector<NavB
 	downDisabled = false;
 	leftDisabled = false;
 	rightDisabled = false;
+
+	if (m_Phasing)
+	{
+	m_Sprite.setColor(Color(255, 255, 255, 128)); // make player tranluscent while phasing
+	m_SpriteHead.setColor(Color(255, 255, 255, 128));
+	m_SpriteTorso.setColor(Color(255, 255, 255, 128));
+	m_SpritePants.setColor(Color(255, 255, 255, 128));
+	m_SpriteShoes.setColor(Color(255, 255, 255, 128));
+	m_SpriteWeapon.setColor(Color(255, 255, 255, 128));
+	}
 
 }
 
@@ -1202,4 +1255,25 @@ bool Player::getVSync()
 int Player::getFpsLimit()
 {
 	return m_FpsLimit;
+}
+
+void Player::startPhase()
+{
+	m_Phasing = true;
+}
+
+void Player::stopPhase()
+{
+	m_Sprite.setColor(Color(255, 255, 255, 255)); // make player opaque again
+	m_SpriteHead.setColor(Color(255, 255, 255, 255));
+	m_SpriteTorso.setColor(Color(255, 255, 255, 255));
+	m_SpritePants.setColor(Color(255, 255, 255, 255));
+	m_SpriteShoes.setColor(Color(255, 255, 255, 255));
+	m_SpriteWeapon.setColor(Color(255, 255, 255, 255));
+	m_Phasing = false;
+}
+
+bool Player::isPhasing()
+{
+	return m_Phasing;
 }
