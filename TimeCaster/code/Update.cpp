@@ -171,6 +171,7 @@ void Engine::update()
 			}
 		}
 
+		// update the spells that require mana over time
 		if (timeFrozen) {
 			if (player.useMana(15.0f * dtAsSeconds))
 				sound.playTimeStopActiveSound();
@@ -179,6 +180,20 @@ void Engine::update()
 				sound.playTimeStopEndSound();
 				sound.stopTimeStopActiveSound();
 				timeFrozen = false;
+			}
+		}
+
+
+		if (player.isPhasing())
+		{
+			if (player.useMana(20.0f * dtAsSeconds)) // use mana while phasing
+			{
+				// player is phasing
+			}
+			else
+			{
+				player.stopPhase();
+				sound.playPhaseEndSound();
 			}
 		}
 

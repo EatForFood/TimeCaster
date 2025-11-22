@@ -62,6 +62,14 @@ private:
 	SoundBuffer healBuffer;
 	Sound heal;
 
+	// Prepare the phase cast sound
+	SoundBuffer phaseCastBuffer;
+	Sound phaseCast;
+
+	// Prepare the phase end sound
+	SoundBuffer phaseEndBuffer;
+	Sound phaseEnd;
+
 	// Prepare the button click sound
 	SoundBuffer clickBuffer;
 	Sound buttonClick;
@@ -118,6 +126,12 @@ public:
 
 	// Function to play the heal sound
 	void playHealSound();
+
+	// Function to play the phase cast sound
+	void playPhaseCastSound();
+
+	// Function to play the phase end sound
+	void playPhaseEndSound();
 
 	// Function to play the button click sound
 	void playButtonClickSound();

@@ -1631,15 +1631,14 @@ void Engine::run()
 				else if (player.getCombatType() == Magic && !player.isCastingSpell() && player.getSpellType() == Player::SpellType::Phase && !player.isPhasing() && phaseTimer.getElapsedTime().asSeconds() > 0.5f)
 				{
 					player.startPhase();
-					sound.playTimeStopCastSound();
+					sound.playPhaseCastSound();
 					cout << "Phasing started" << endl;
 					phaseTimer.restart();
 				}
 				else if (player.getCombatType() == Magic && !player.isCastingSpell() && player.getSpellType() == Player::SpellType::Phase && player.isPhasing() && phaseTimer.getElapsedTime().asSeconds() > 0.5f)
 				{
 					player.stopPhase();
-					sound.playTimeStopEndSound();
-					sound.stopTimeStopActiveSound();
+					sound.playPhaseEndSound();
 					cout << "Phasing ended" << endl;
 					phaseTimer.restart();
 				}

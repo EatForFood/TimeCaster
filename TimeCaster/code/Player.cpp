@@ -443,19 +443,12 @@ void Player::update(float elapsedTime, Vector2i mousePosition, const vector<NavB
 
 	if (m_Phasing)
 	{
-		if (useMana(20.0f * elapsedTime)) // use mana while phasing
-		{
-			m_Sprite.setColor(Color(255, 255, 255, 128)); // make player tranluscent while phasing
-			m_SpriteHead.setColor(Color(255, 255, 255, 128));
-			m_SpriteTorso.setColor(Color(255, 255, 255, 128));
-			m_SpritePants.setColor(Color(255, 255, 255, 128));
-			m_SpriteShoes.setColor(Color(255, 255, 255, 128));
-			m_SpriteWeapon.setColor(Color(255, 255, 255, 128));
-		}
-		else
-		{
-			stopPhase();
-		}
+	m_Sprite.setColor(Color(255, 255, 255, 128)); // make player tranluscent while phasing
+	m_SpriteHead.setColor(Color(255, 255, 255, 128));
+	m_SpriteTorso.setColor(Color(255, 255, 255, 128));
+	m_SpritePants.setColor(Color(255, 255, 255, 128));
+	m_SpriteShoes.setColor(Color(255, 255, 255, 128));
+	m_SpriteWeapon.setColor(Color(255, 255, 255, 128));
 	}
 
 }
