@@ -117,6 +117,11 @@ void Entity::spawn(int type, float x, float y)
         m_Sprite = Sprite(TextureHolder::GetTexture("graphics/foliage/misc/statue.png"));
         m_Sprite.setOrigin(m_Sprite.getTextureRect().width / 2, m_Sprite.getTextureRect().height / 2);
     }
+    if (type == 33)
+    {
+		m_Sprite = Sprite(TextureHolder::GetTexture("graphics/shopSign.png")); 
+        m_Sprite.setOrigin(m_Sprite.getTextureRect().width / 2, m_Sprite.getTextureRect().height / 2);
+    }
 
     m_Position = Vector2f(x, y);
     m_Sprite.setPosition(m_Position);
@@ -124,7 +129,7 @@ void Entity::spawn(int type, float x, float y)
 
 Vector2f Entity::getPosition()
 {
-    return m_Position;
+    return m_Position; 
 }
 
 const Sprite Entity::getSprite()

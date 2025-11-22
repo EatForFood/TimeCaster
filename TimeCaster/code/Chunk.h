@@ -79,6 +79,8 @@ public:
 
 	void placeTile(int x, int y, int texX, int texY, bool forGround, bool save);
 
+	void placeShopSign(int x, int y);
+
 	VertexArray getBackground();
 	VertexArray getForground();
 
