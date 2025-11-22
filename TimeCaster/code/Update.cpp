@@ -58,7 +58,6 @@ void Engine::update()
 
 			if (playerNearShop()) {
 				drawEKey = true;
-				cout << "draw E key true" << endl;
 			}
 			else {
 				drawEKey = false;

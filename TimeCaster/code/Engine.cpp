@@ -1670,7 +1670,7 @@ void Engine::run()
 			}
 
 		} // End WASD while playing
-		else if (drawInventory || drawShop)
+		if (drawInventory || drawShop)
 		{
 			player.stopRight();
 			player.stopLeft();
