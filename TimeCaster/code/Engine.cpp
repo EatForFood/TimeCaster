@@ -1087,7 +1087,7 @@ void Engine::run()
 			if (event.type == Event::KeyPressed && event.key.code == Keyboard::E && drawEKey)
 			{
 				if (drawShop)
-					{
+				{
 					drawShop = false;
 				}
 				else
@@ -1153,7 +1153,7 @@ void Engine::run()
 
 					// Spawn the player in the middle of the arena
 					player.spawn(arena, resolution, tileSize, player.getPlayerLevel());
-				
+
 					// Reset the clock so there isn't a frame jump
 					clock.restart();
 
@@ -1164,13 +1164,13 @@ void Engine::run()
 					Listener::setGlobalVolume(player.getVolume());
 
 					mainView.setCenter(resolution.x / 2.f, resolution.y / 2.f);
-					
+
 					// Skip intro text
 					skipIntroText.setString("--- Press space to skip ---"); // Set the text content
 					textBounds = skipIntroText.getLocalBounds();
 					viewCentre = mainView.getCenter();
 					skipIntroText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 1030);
-				
+
 					// Loads world using multi-threading
 					worldLoaded = false;
 					thread worldThread(&Engine::generateWorld, this);
@@ -1199,7 +1199,7 @@ void Engine::run()
 					startSoundPlayed = true;
 
 					// Loads player stats from text file
-					if (player.loadSaveFile() == true) 
+					if (player.loadSaveFile() == true)
 					{
 						// Player loaded successfully
 						world.loadWorld();
@@ -1423,7 +1423,7 @@ void Engine::run()
 					y = difficultyButton.getPosition().y + (difficultyButton.getSize().y / 2.f) - (textBounds.height / 2.f);
 					difficultyButtonText.setPosition(x - textBounds.left, y - textBounds.top);
 					difficultyButton.setSize(Vector2f(textBounds.width + 100, 100));
-					difficultyButton.setPosition(viewCentre.x - (difficultyButton.getSize().x /2.f), 400);
+					difficultyButton.setPosition(viewCentre.x - (difficultyButton.getSize().x / 2.f), 400);
 
 					sound.playButtonClickSound();
 				}
@@ -1459,7 +1459,7 @@ void Engine::run()
 			if (event.type == Event::KeyPressed)
 			{
 				// below are debug functions, comment them out in full build / when needed
-				
+
 				// Debug shop toggle
 				// Shop is still very much WIP
 				if (event.key.code == Keyboard::O && state == State::PLAYING && debugMode)
@@ -1479,7 +1479,7 @@ void Engine::run()
 					// Increase health
 					player.upgradeHealth();
 					player.switchSpell(1);
-			
+
 				}
 
 				if (event.key.code == Keyboard::Num2 && state == State::PLAYING && debugMode)
@@ -1525,7 +1525,6 @@ void Engine::run()
 					}
 				}
 
-
 				if (event.key.code == Keyboard::Num8 && state == State::PLAYING && debugMode)
 				{
 					player.hit(gameTimeTotal, 10, 200);
@@ -1560,7 +1559,7 @@ void Engine::run()
 				if (player.getCombatType() == Melee) {
 					sound.playSwordSwing();
 				}
-				
+
 				if (player.getCombatType() == Magic && !player.isCastingSpell() && player.getSpellType() == Player::SpellType::Fireball)
 				{
 					if (player.useMana(5.0f))
@@ -1597,8 +1596,8 @@ void Engine::run()
 					{
 						sound.playHealSound();
 						player.healHealth(0.25f);
-						particles[100].play(player.getCenter().x -30, player.getCenter().y -30, 0); // 100 is the player's particle, 0-99 for the enemies
-					}		
+						particles[100].play(player.getCenter().x - 30, player.getCenter().y - 30, 0); // 100 is the player's particle, 0-99 for the enemies
+					}
 				}
 			}
 
@@ -1648,7 +1647,7 @@ void Engine::run()
 			player.stopUp();
 			player.stopDown();
 		}
-		
+
 		// Handle the display fps button changing colour based on boolean
 		if (state == State::OPTIONS_MENU)
 		{

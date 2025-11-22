@@ -9,8 +9,6 @@ public:
 
 	void update(float elapsedTime, const Vector2f& playerPos, Chunk* chunk, int playerChunk, vector<NavBox> navBox) override;
 
-	int getRangedDamage();
-
 	void moveTextureRect();
 
 	void spawn(const std::string& type, Vector2i position, int level);
@@ -19,28 +17,11 @@ public:
 
 	void setSpriteFromSheet(sf::IntRect textureBox);
 
-	enum AttackState {
-		Idle,
-		Charge,
-		Bite,
-		Shoot,
-		Rage
-	};
-
-	enum CombatType {
-		Magic,
-		Melee
-	};
-
-	AttackState getAttackState();
-	CombatType getCombatType();
-
 private:
 	float START_HEALTH = 200;
 	float START_SPEED = 25;
 	
 	int m_AttackChoice;
-	int m_RangedDamage = 10;
 
 	bool m_RequiresAiming = false;
 	bool rageActivated = false;
@@ -54,7 +35,7 @@ private:
 	bool m_IsCharging = false;
 	bool m_CanCharge = true;
 	
-	float m_ChargeDuration = 0.5f;
+	float m_ChargeDuration = 3.0f;
 	float m_ChargeCooldown = 5.0f;
 
 	Clock m_ChargeClock;
@@ -62,10 +43,7 @@ private:
 
 	void startCharge();
 	void stopCharge();
-	void charge(float elapsedTime);
+	void charge();
 
 	Vector2f m_ChargeDirection;
-
-	AttackState state = AttackState::Idle;
-	CombatType combatType = CombatType::Melee;
 };
