@@ -146,7 +146,7 @@ void Engine::initializeShop()
 		}
 	}
 }
-
+// 0 and 1 are weapons, 2-6 are equipment, 7 and 8 are unique random items, 9-10 are potions, 11 is sold item
 void Engine::restockShop(int level)
 {
 	
