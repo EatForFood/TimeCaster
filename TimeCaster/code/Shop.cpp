@@ -8,14 +8,14 @@ bool Engine::sellItem(int itemIndex)
 	if (m_StoredItems[itemIndex].isNull())
 	{
 		stringstream shopStream;
-		shopStream << "You can't sell nothing.\n I already have enough of that.";
+		shopStream << "You can't sell nothing.\nI already have enough of that.";
 		shopText.setString(shopStream.str());
 		return false;
 	}
 	else if (m_StoredItems[itemIndex].isEquipped())
 	{
 		stringstream shopStream;
-		shopStream << "I can't buy equipped items.\n You'll have to equip something else.";
+		shopStream << "I can't buy equipped items.\nYou'll have to equip something else in that slot.";
 		shopText.setString(shopStream.str());
 		return false;
 	}
