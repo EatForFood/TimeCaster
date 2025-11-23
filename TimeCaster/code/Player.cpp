@@ -252,6 +252,11 @@ void Player::update(float elapsedTime, Vector2i mousePosition, const vector<NavB
 	{
 		m_Mana += m_ManaRecharge * elapsedTime * 0.66; // recharge mana slower when using magic
 	}
+
+	if (m_Health < m_MaxHealth && regenHealth)
+	{
+		m_Health += 2.5f * elapsedTime;
+	}
 	
 	m_InObject = false;
 
@@ -736,7 +741,7 @@ bool Player::loadSaveFile()
 
 		loadFile >> m_SoldSentimentalItem;
 
-		loadFile >> m_Position.x;
+  		loadFile >> m_Position.x;
 		loadFile >> m_Position.y;
 		// equip saved weapons and armour
 		equipArmour(m_EquippedHeadArmourName);
@@ -996,6 +1001,31 @@ bool Player::equipArmour(string armourNameToEquip)
 	{
 		// equip the armour
 		m_EquippedArmour[4] = armourToEquip;
+		if (armourNameToEquip == "Amulet_of_Mana")
+		{
+			m_ManaRecharge = START_MANA_RECHARGE * 1.5f; 
+		}
+		else 
+		{
+			m_ManaRecharge = START_MANA_RECHARGE; 
+		}
+		if (armourNameToEquip == "Amulet_of_Healing")
+		{
+			regenHealth = true;
+		}
+		else
+		{
+			regenHealth = false;
+		}
+		if (armourNameToEquip == "Amulet_of_Stamina")
+		{
+			m_StaminaRecharge = START_STAMINA_RECHARGE * 1.5f;
+		}
+		else
+		{
+			m_StaminaRecharge = START_STAMINA_RECHARGE;
+		}
+		
 		return true;
 	}
 	else
