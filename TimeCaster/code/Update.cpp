@@ -335,10 +335,12 @@ void Engine::update()
 				if (m_StoredItems[i].getIcon().getGlobalBounds().contains(worldPos.x - 25, worldPos.y - 25) &&
 					Mouse::isButtonPressed(Mouse::Left))
 				{
-					if (sellItem(i))
+					if (sellClock.getElapsedTime().asSeconds() > 0.25f && sellItem(i)) // weird solution to prevent multiple sells but it works
 					{
 						m_StoredItems[i] = Item("null", Vector2f(0, 0)); // empty original slot
+						
 					}
+					sellClock.restart();
 					break;
 				}
 			}

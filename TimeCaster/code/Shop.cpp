@@ -19,6 +19,14 @@ bool Engine::sellItem(int itemIndex)
 		shopText.setString(shopStream.str());
 		return false;
 	}
+	else if (m_StoredItems[itemIndex].isSentimental() && !attemptedToSellSentimentalItem)
+	{
+		stringstream shopStream;
+		shopStream << "That looks important to you.\nAre you sure you'd like to sell it?\nI can't guarantee you'll be able to get it back.";
+		shopText.setString(shopStream.str());
+		attemptedToSellSentimentalItem = true;
+		return false;
+	}
 	else
 	{
 		int goldToAdd = m_StoredItems[itemIndex].getValue() * 0.75f; // Sell for 75 percent of the value, But not less than 1 gold
@@ -27,13 +35,26 @@ bool Engine::sellItem(int itemIndex)
 			goldToAdd = 1;
 		}
 		player.addGold(goldToAdd);
+		bool textWasSet = false;
+		if (m_StoredItems[itemIndex].isSentimental())
+		{
+			stringstream shopStream;
+			shopStream << "Alright, if you're sure.\nHere's " << goldToAdd << " gold for it";
+			shopText.setString(shopStream.str());
+			textWasSet = true;
+		}
+
 		shopItems[11] = m_StoredItems[itemIndex];
 		m_StoredItems[itemIndex] = Item("null", Vector2f(0, 0));
 		initializeInventory();
 		initializeShop();
-		stringstream shopStream;
-		shopStream << "I'll take it!\nHere's " << goldToAdd << " gold for it.";
-		shopText.setString(shopStream.str());
+		if (!textWasSet)
+		{
+			stringstream shopStream;
+			shopStream << "I'll take it!\nHere's " << goldToAdd << " gold for it.";
+			shopText.setString(shopStream.str());
+		}
+
 		return true;
 	}
 }

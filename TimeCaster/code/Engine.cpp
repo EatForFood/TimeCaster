@@ -1129,6 +1129,7 @@ void Engine::run()
 				}
 				else
 				{
+					attemptedToSellSentimentalItem = false;
 					drawShop = true;
 				}
 			}

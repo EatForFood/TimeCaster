@@ -121,6 +121,8 @@ private:
 	// Clock used for tracking fps
 	Clock fpsClock;
 
+	Clock sellClock;
+
 	// How long has the PLAYING state been active
 	Time gameTimeTotal;
 
@@ -333,6 +335,9 @@ private:
 	RectangleShape inventoryBackground;
 	RectangleShape shopBackground;
 	RectangleShape darkInventoryBackground;
+
+	bool attemptedToSellSentimentalItem = false;
+	bool soldSentimentalItem = false;
 
 	// Item tooltip elements
 	RectangleShape itemTooltipBackground;
