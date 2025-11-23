@@ -318,11 +318,11 @@ private:
 	RectangleShape playerFrame;
 	RectangleShape equippedSwordIcon;
 	RectangleShape equippedWandIcon;
-	RectangleShape equippedHeadArmourIcon;
-	RectangleShape equippedChestArmourIcon;
-	RectangleShape equippedTrousersArmourIcon;
-	RectangleShape equippedShoeArmourIcon;
-	RectangleShape equippedNeckArmourIcon;
+	Sprite equippedHeadArmourIcon;
+	Sprite equippedChestArmourIcon;
+	Sprite equippedTrousersArmourIcon;
+	Sprite equippedShoeArmourIcon;
+	Sprite equippedNeckArmourIcon;
 	RectangleShape headArmourFrame;
 	RectangleShape chestArmourFrame;
 	RectangleShape trousersArmourFrame;
