@@ -185,7 +185,7 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	shopItems[5] = Equipment("Leather_Boots", Vector2f(1050, 650));
 	shopItems[9] = Item("Mana_Potion", Vector2f(1200, 650));
 	shopItems[10] = Item("Health_Potion", Vector2f(1200, 650));
-	//shopItems[11] = Item("Mana_Potion", Vector2f(1350, 650));
+	shopItems[11] = Item("Stamina_Potion", Vector2f(1350, 650));
 
 
 	//Item 0 is sword (melee combat), item 1 is wand (magic combat)
