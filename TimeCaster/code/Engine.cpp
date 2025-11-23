@@ -1405,6 +1405,7 @@ void Engine::run()
 				// Player hit the main menu button in the game over screen
 				if (gameOverMainMenuButton.getGlobalBounds().contains(worldPos) && state == State::GAME_OVER && event.mouseButton.button == Mouse::Left)
 				{
+					sound.stopGameOverSound();
 					sound.playButtonClickSound();
 					world.clearWorld();
 					state = State::MAIN_MENU;
@@ -1804,23 +1805,24 @@ void Engine::run()
 
 			
 
-			if (sound.isSoundtrackPlaying()) {
-				sound.stopSoundtrack();
-			}
-			gameOverText.setString("Game Over!");
-			textBounds = gameOverText.getLocalBounds();
-			viewCentre = hudView.getCenter();
-			gameOverText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y - gameOverText.getCharacterSize());
+				if (sound.isSoundtrackPlaying()) {
+					sound.stopSoundtrack();
+				}
+				sound.playGameOverSound();	
+				gameOverText.setString("Game Over!");
+				textBounds = gameOverText.getLocalBounds();
+				viewCentre = hudView.getCenter();
+				gameOverText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y - gameOverText.getCharacterSize());
 
-			gameOverText2.setString("Your family is left unavenged.\nIgnis has won...");
-			textBounds = gameOverText2.getLocalBounds();
-			viewCentre = hudView.getCenter();
-			gameOverText2.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y + 100 - gameOverText2.getCharacterSize());
+				gameOverText2.setString("Your family will be left unavenged.\nIgnis has won...");
+				textBounds = gameOverText2.getLocalBounds();
+				viewCentre = hudView.getCenter();
+				gameOverText2.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y + 100 - gameOverText2.getCharacterSize());
 
 			
 			
 
-			state = State::GAME_OVER;
+				state = State::GAME_OVER;
 			}
 		}
 

@@ -69,6 +69,10 @@ SoundManager::SoundManager() {
 	healBuffer.loadFromFile("sound/heal.mp3");
 	heal.setBuffer(healBuffer);
 
+	// Loads game over sound from file into buffer
+	gameOverBuffer.loadFromFile("sound/gameOver.mp3");
+	gameOver.setBuffer(gameOverBuffer);
+
 	// Loads click sound from file into buffer
 	clickBuffer.loadFromFile("sound/buttonClick.wav");
 	buttonClick.setBuffer(clickBuffer);
@@ -199,4 +203,12 @@ void SoundManager::playPhaseEndSound() {
 
 void SoundManager::playGoldSound() {
 	gold.play();
+}
+
+void SoundManager::playGameOverSound() {
+	gameOver.play();
+}
+
+void SoundManager::stopGameOverSound() {
+	gameOver.stop();
 }
