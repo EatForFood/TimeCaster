@@ -71,12 +71,20 @@ public:
 
 	void equipAllItems();
 
+	// 0 for neutral, 1 for happy, 2 for talking, 3 for unsure
+	void shopKeeperSetEmotion(int emotionIndex);
+
 protected: 
 	string cleanItemName(string itemName);
 
 private:
 	// The games difficulty will always be in one of these states
+	Sprite shopKeeperSprite;
 
+	Texture shopKeeperHappy;
+	Texture shopKeeperNeutral;
+	Texture shopKeeperTalking;
+	Texture shopKeeperUnsure;
 	// The game will always be in one of these states
 	enum State { MAIN_MENU, OPTIONS_MENU, STORY_INTRO, PLAYING, PAUSED, GAME_OVER, LOADING };
 
@@ -172,6 +180,7 @@ private:
 	Sprite spriteCursor;
 	Texture textureCursorOpen;
 	Texture textureCursorClosed;
+
 
 	// Integer used to set all text font sizes
 	int fontSize = 35;

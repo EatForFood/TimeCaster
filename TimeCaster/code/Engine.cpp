@@ -748,6 +748,13 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	textBounds = shopText.getLocalBounds();
 	shopText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 900);
 
+	shopKeeperNeutral = TextureHolder::GetTexture("graphics/shopKeeper/Neutral.png");
+	shopKeeperHappy = TextureHolder::GetTexture("graphics/shopKeeper/Happy.png");
+	shopKeeperTalking = TextureHolder::GetTexture("graphics/shopKeeper/Talking.png");
+	shopKeeperUnsure = TextureHolder::GetTexture("graphics/shopKeeper/Unsure.png");
+
+	shopKeeperSprite.setTexture(shopKeeperNeutral);
+
 	inventoryBackground.setTexture(&inventoryBackgroundTexture);
 	inventoryBackground.setSize(Vector2f(1000, 800));
 	textBounds = inventoryBackground.getLocalBounds();

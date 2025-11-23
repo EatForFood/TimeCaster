@@ -206,3 +206,25 @@ void Engine::restockShop(int level)
 
 	initializeShop();
 }
+
+void Engine::shopKeeperSetEmotion(int emotionIndex)
+{
+	switch (emotionIndex)
+	{
+	case 0:
+		shopKeeperSprite.setTexture(shopKeeperNeutral);
+		break;
+	case 1:
+		shopKeeperSprite.setTexture(shopKeeperHappy);
+		break;
+	case 2:
+		shopKeeperSprite.setTexture(shopKeeperTalking);
+		break;
+	case 3:
+		shopKeeperSprite.setTexture(shopKeeperUnsure);
+		break;
+	default:
+		shopKeeperSprite.setTexture(shopKeeperNeutral);
+		break;
+	}
+}
