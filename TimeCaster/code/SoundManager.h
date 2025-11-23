@@ -33,6 +33,9 @@ private:
 	/***********
 	Other sounds
 	************/
+
+	SoundBuffer gameOverBuffer;
+	Sound gameOver;
 	
 	// Prepare the start game sound
 	SoundBuffer startGameBuffer;
@@ -114,6 +117,12 @@ public:
 
 	// Function to play the time stop cast sound
 	void playTimeStopCastSound();
+
+	// Function to play the game over sound
+	void playGameOverSound();
+
+	// Function to stop the game over sound
+	void stopGameOverSound();
 
 	// Function to play the time stop active sound
 	void playTimeStopActiveSound();
