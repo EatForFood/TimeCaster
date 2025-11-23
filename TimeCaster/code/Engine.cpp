@@ -1393,6 +1393,23 @@ void Engine::run()
 					window.close();
 				}
 
+				// Player hit the quit game button
+				if (gameOverQuitButton.getGlobalBounds().contains(worldPos) && state == State::GAME_OVER && event.mouseButton.button == Mouse::Left)
+				{
+					sound.playButtonClickSound();
+					// Save info to file before quitting
+					window.close();
+				}
+
+
+				// Player hit the main menu button in the game over screen
+				if (gameOverMainMenuButton.getGlobalBounds().contains(worldPos) && state == State::GAME_OVER && event.mouseButton.button == Mouse::Left)
+				{
+					sound.playButtonClickSound();
+					world.clearWorld();
+					state = State::MAIN_MENU;
+				}
+
 				// Player hit the main menu button in the options menu
 				if (mainMenuButton.getGlobalBounds().contains(worldPos) && state == State::OPTIONS_MENU && event.mouseButton.button == Mouse::Left)
 				{
@@ -1783,6 +1800,10 @@ void Engine::run()
 		if (player.getHealth() <= 0) {
 			player.setHealthValue(0);
 
+			if (state == State::PLAYING) {
+
+			
+
 			if (sound.isSoundtrackPlaying()) {
 				sound.stopSoundtrack();
 			}
@@ -1800,6 +1821,7 @@ void Engine::run()
 			
 
 			state = State::GAME_OVER;
+			}
 		}
 
 		// Sets stamina to 0 if it goes below 0
