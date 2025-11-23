@@ -81,7 +81,7 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	mainView.setCenter(resolution.x / 2.f, resolution.y / 2.f);
 
 	// Zoom view
-	mainView.zoom(0.5f);
+	mainView.zoom(0.3f);
 
 	// Create the background
 	// VertexArray background;
