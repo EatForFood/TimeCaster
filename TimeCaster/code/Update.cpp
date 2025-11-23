@@ -448,6 +448,7 @@ void Engine::update()
 			if (draggingItem && !Mouse::isButtonPressed(Mouse::Left))
 			{
 				bool placed = false;
+				bool itemWasEquipped = false;
 
 				// Try to drop in the first empty slot
 				for (int i = 0; i < m_StoredItems.size(); i++)
@@ -480,7 +481,7 @@ void Engine::update()
 					}
 					// equip new melee weapon
 					if (player.equipWeapon(clickedItem.getName())) equippedSwordIcon.setTextureRect(clickedItem.getTextureRect());
-					m_StoredItems[itemLastIndex].setEquipped(true); 
+					itemWasEquipped = true;
 				}
 
 				// placed is not being made true on purpose, the player will still need to carry the items they equip
@@ -501,7 +502,7 @@ void Engine::update()
 					}
 					// equip new magic weapon
 					if (player.equipWeapon(clickedItem.getName())) equippedWandIcon.setTextureRect(clickedItem.getTextureRect());
-					m_StoredItems[itemLastIndex].setEquipped(true);
+					itemWasEquipped = true;
 				}
 
 				// Try to equip as head armour if dropped on head armour slot
@@ -523,7 +524,7 @@ void Engine::update()
 						equippedHeadArmourIcon = clickedItem.getIcon();
 						equippedHeadArmourIcon.setPosition(headArmourFrame.getPosition());
 					}
-					m_StoredItems[itemLastIndex].setEquipped(true);
+					itemWasEquipped = true;
 				}
 
 				// Try to equip as chest armour if dropped on chest armour slot
@@ -545,7 +546,7 @@ void Engine::update()
 						equippedChestArmourIcon = clickedItem.getIcon();
 						equippedChestArmourIcon.setPosition(chestArmourFrame.getPosition());
 					}
-					m_StoredItems[itemLastIndex].setEquipped(true);
+					itemWasEquipped = true;
 				}
 
 				// Try to equip as trouser armour if dropped on trouser armour slot
@@ -567,7 +568,7 @@ void Engine::update()
 						equippedTrousersArmourIcon = clickedItem.getIcon();
 						equippedTrousersArmourIcon.setPosition(trousersArmourFrame.getPosition());
 					}
-					m_StoredItems[itemLastIndex].setEquipped(true);
+					itemWasEquipped = true;
 				}
 
 				// Try to equip as shoe armour if dropped on shoe armour slot
@@ -589,7 +590,7 @@ void Engine::update()
 						equippedShoeArmourIcon = clickedItem.getIcon();
 						equippedShoeArmourIcon.setPosition(bootsArmourFrame.getPosition());
 					}
-					m_StoredItems[itemLastIndex].setEquipped(true);
+					itemWasEquipped = true;
 				}
 
 				// Try to equip as neck armour if dropped on neck armour slot
@@ -611,8 +612,7 @@ void Engine::update()
 						equippedNeckArmourIcon = clickedItem.getIcon();
 						equippedNeckArmourIcon.setPosition(neckFrame.getPosition());
 					}
-
-					m_StoredItems[itemLastIndex].setEquipped(true);
+					itemWasEquipped = true;
 				}
 
 				if (clickedItem.getIcon().getGlobalBounds().intersects(playerInFrame.getGlobalBounds()) && clickedItem.getType() == Item::Consumable)
@@ -646,6 +646,7 @@ void Engine::update()
 					clickedItem.getIcon().setPosition(itemLastX, itemLastY);
 					if (draggingItem && draggedIndex >= 0 && draggedIndex < m_StoredItems.size())
 						m_StoredItems[draggedIndex] = clickedItem; // restore in original slot
+					if (itemWasEquipped) m_StoredItems[draggedIndex].setEquipped(true);
 					placed = true;
 
 				}
