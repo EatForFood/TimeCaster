@@ -595,6 +595,7 @@ void Player::createNewSave()
 		<< START_TROUSER_ARMOUR << " "
 		<< START_SHOE_ARMOUR << " "
 		<< START_NECK_ARMOUR << " "
+		<< false << " "
 		<< "Health_Potion null null null null null null null null "
 		<< 64 << " " 
 		<< 64	
@@ -683,6 +684,7 @@ void Player::updateSaveFile()
 		<< m_StoredItems[13].getName() << " "
 		<< m_StoredItems[14].getName() << " "
 		<< m_StoredItems[15].getName() << " "
+		<< m_SoldSentimentalItem << " "
 		<< m_Position.x << " " 
 		<< m_Position.y
 		<< std::endl; 
@@ -731,6 +733,8 @@ bool Player::loadSaveFile()
 		{
 			loadFile >> itemsToStore[i];
 		}
+
+		loadFile >> m_SoldSentimentalItem;
 
 		loadFile >> m_Position.x;
 		loadFile >> m_Position.y;
@@ -1292,4 +1296,14 @@ float Player::getArmourDamageReductionMult()
 	armourMult = 1.0f - (armourMult / 100.0f);
 
 	return armourMult;
+}
+
+bool Player::soldSentimentalItem()
+{
+	return m_SoldSentimentalItem;
+}
+
+void Player::setSoldSentimentalItem(bool sold)
+{
+	m_SoldSentimentalItem = sold;
 }

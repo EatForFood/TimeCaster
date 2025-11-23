@@ -337,7 +337,7 @@ private:
 	RectangleShape darkInventoryBackground;
 
 	bool attemptedToSellSentimentalItem = false;
-	bool soldSentimentalItem = false;
+
 
 	// Item tooltip elements
 	RectangleShape itemTooltipBackground;

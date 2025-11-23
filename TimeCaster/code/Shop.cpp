@@ -42,6 +42,7 @@ bool Engine::sellItem(int itemIndex)
 			shopStream << "Alright, if you're sure.\nHere's " << goldToAdd << " gold for it";
 			shopText.setString(shopStream.str());
 			textWasSet = true;
+			player.setSoldSentimentalItem(true);
 		}
 
 		shopItems[11] = m_StoredItems[itemIndex];

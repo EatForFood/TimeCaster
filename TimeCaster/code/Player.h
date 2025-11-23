@@ -108,6 +108,10 @@ public:
 	void stopPhase();
 	bool isPhasing();
 
+	bool soldSentimentalItem();
+
+	void setSoldSentimentalItem(bool sold);
+
 	void setChunk(int chunk);
 	int getChunk();
 
@@ -190,6 +194,8 @@ private:
 	const string START_SHOE_ARMOUR = "Basic_Shoes";
 	const string START_NECK_ARMOUR = "Family_Locket";
 	void updateTextRect();
+
+	bool m_SoldSentimentalItem = false;
 	
 	// Which directions is the player currently moving in
 	bool m_UpPressed;
