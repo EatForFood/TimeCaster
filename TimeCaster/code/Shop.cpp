@@ -2,7 +2,6 @@
 #include "Player.h"
 
 
-
 bool Engine::sellItem(int itemIndex)
 {
 	if (m_StoredItems[itemIndex].isNull())
@@ -152,16 +151,16 @@ void Engine::restockShop(int level)
 	
 	switch (level)
 	{
-	case 3:
+	case 4:
 		shopItems[0] = Weapon("Silver_Wand", Vector2f(300, 650));
 		shopItems[1] = Weapon("Pirate's_Scimitar", Vector2f(450, 650));
-		shopItems[2] = Equipment("Leather_Cap", Vector2f(600, 650));
+		shopItems[2] = Equipment("Chain_Helmet", Vector2f(600, 650));
 		shopItems[3] = Equipment("Leather_Chestplate", Vector2f(750, 950));
 		shopItems[4] = Equipment("Leather_Leggings", Vector2f(900, 650));
 		shopItems[5] = Equipment("Leather_Boots", Vector2f(1050, 650));
 		shopItems[6] = Equipment("Amulet_of_Shielding", Vector2f(1200, 650));
 		break;
-	case 6:
+	case 8:
 		shopItems[0] = Weapon("Reaper's_Scythe", Vector2f(300, 650));
 		shopItems[1] = Weapon("Golden_Wand", Vector2f(450, 650));
 		shopItems[2] = Equipment("Steel_Plate_Helmet", Vector2f(600, 650));

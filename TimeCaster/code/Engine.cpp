@@ -746,7 +746,7 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	shopText.setFillColor(Color::Green);
 	shopText.setString("Welcome to the shop! \nClick on one of my an items up top to buy it.\nClick on one of your own items down below to sell it!");
 	textBounds = shopText.getLocalBounds();
-	shopText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 50);
+	shopText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 900);
 
 	inventoryBackground.setTexture(&inventoryBackgroundTexture);
 	inventoryBackground.setSize(Vector2f(1000, 800));

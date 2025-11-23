@@ -47,7 +47,7 @@ void Engine::update()
 		if (state == State::PLAYING && !drawInventory && !timeFrozen) {
 
 
-			if (playerNearShop()) {
+			if (playerNearShop() && tutorialStage != 0) {
 				drawEKey = true;
 			}
 			else {
