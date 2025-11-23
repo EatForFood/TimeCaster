@@ -33,7 +33,7 @@ void Engine::draw()
 		{
 			for (int i = 0; i < world.getWorldSize(); i++)
 			{
-				if (collision.distance(player.getCenter(), world.getChunkCenter(i)) < 2000) { // check player distance to chunk
+				if (collision.distance(Vector2f(player.getCenter().x - 50, player.getCenter().y), world.getChunkCenter(i)) < 2200) { // check player distance to chunk
 					Chunk* currentChunk = world.getChunk(i);
 					if (currentChunk && currentChunk->getChunkType() == "goblinVillage")
 					{

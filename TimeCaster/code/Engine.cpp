@@ -81,7 +81,7 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	mainView.setCenter(resolution.x / 2.f, resolution.y / 2.f);
 
 	// Zoom view
-	mainView.zoom(0.3f);
+	mainView.zoom(0.5f);
 
 	// Create the background
 	// VertexArray background;
@@ -912,8 +912,8 @@ string Engine::difficultyToString(Difficulty difficulty)
 // Function to convert difficulty in string form to state
 Engine::Difficulty Engine::stringToDifficulty(string str)
 {
-	if (str == "Easy") {return Difficulty::Easy; }
-	else if (str == "Medium") {return Difficulty::Medium; }
+	if (str == "Easy") { return Difficulty::Easy; }
+	else if (str == "Medium") { return Difficulty::Medium; }
 	else if (str == "Hard") { return Difficulty::Hard; }
 	else return Difficulty::Medium;
 }
@@ -930,7 +930,7 @@ void Engine::populateChunkVector()
 Chunk* Engine::getCurrentChunk(float x, float y) {
 	for (Chunk& chunk : chunks) {
 		FloatRect area = chunk.getChunkArea().getShape().getGlobalBounds();
-		if (collision.pointInShape(Vector2f(x,y), chunk.getChunkArea().getShape())) {
+		if (collision.pointInShape(Vector2f(x, y), chunk.getChunkArea().getShape())) {
 			return &chunk;
 		}
 	}
@@ -941,8 +941,8 @@ bool Engine::playerNearShop()
 {
 	// only check for shops in the chunk the player is in
 	Chunk* currentChunk = getCurrentChunk(player.getPosition().x, player.getPosition().y);
- 
-	if (currentChunk && currentChunk->playerNearDoor(player.getPosition())) 
+
+	if (currentChunk && currentChunk->playerNearDoor(player.getPosition()))
 	{
 		return true;
 	}
@@ -1002,14 +1002,19 @@ void Engine::run()
 				{
 					if (event.mouseWheelScroll.delta > 0)
 					{
-						mainView.zoom(0.9f);
-						spriteCursor.scale(0.9f, 0.9f);
+						if (mainView.getSize().x > 250 && mainView.getSize().y > 150 || debugMode)
+						{
+							mainView.zoom(0.9f);
+							spriteCursor.scale(0.9f, 0.9f);
+						}
 
 					}
 					else if (event.mouseWheelScroll.delta < 0)
 					{
-						mainView.zoom(1.1f);
-						spriteCursor.scale(1.1f, 1.1f);
+						if (mainView.getSize().x < 1000 && mainView.getSize().y < 800 || debugMode) {
+							mainView.zoom(1.1f);
+							spriteCursor.scale(1.1f, 1.1f);
+						}
 					}
 				}
 			}
