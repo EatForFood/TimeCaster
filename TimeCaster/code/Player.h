@@ -221,6 +221,8 @@ private:
 	string m_EquippedShoeArmourName;
 	string m_EquippedNeckArmourName;
 
+	bool regenHealth = false;
+
 	// Config variables
 	bool m_WindowedMode;
 	string m_DifficultyString;

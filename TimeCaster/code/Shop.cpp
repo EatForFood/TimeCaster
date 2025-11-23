@@ -167,6 +167,7 @@ void Engine::restockShop(int level)
 		shopItems[3] = Equipment("Steel_Plate_Chestplate", Vector2f(750, 950));
 		shopItems[4] = Equipment("Steel_Plate_Pants", Vector2f(1050, 650));
 		shopItems[5] = Equipment("Steel_Plate_Boots", Vector2f(1200, 650));
+		break;
 	}
 
 	// Additional potions as placeholders for shop iems 7 and 8
