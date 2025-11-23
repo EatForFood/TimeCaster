@@ -199,7 +199,7 @@ Equipment::Equipment(string type, sf::Vector2f position) : Item(type, position) 
 		m_ItemType = ShoeArmour;
 
 		m_Sprite.setOrigin(25, 25);
-		m_That = true;
+		m_That = false;
 	}
 	else if (m_Name == "Chain_Mail")
 	{
@@ -288,6 +288,22 @@ Equipment::Equipment(string type, sf::Vector2f position) : Item(type, position) 
 		m_Icon.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
 		m_Icon.setScale(2.3125, 2.3125);
 		m_Value = 25;
+		m_Armour = 0;
+
+		m_ItemType = NeckArmour;
+		m_Sprite.setOrigin(25, 25);
+		m_That = true;
+	}
+	else if (m_Name == "Amulet_of_Stamina")
+	{
+		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
+		m_Sprite.setTextureRect(IntRect(1312, 640, 32, 32));
+		m_Icon.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
+		m_Icon.setTextureRect(IntRect(1312, 640, 32, 32));
+		FloatRect bounds = m_Icon.getLocalBounds();
+		m_Icon.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
+		m_Icon.setScale(2.3125, 2.3125);
+		m_Value = 20;
 		m_Armour = 0;
 
 		m_ItemType = NeckArmour;

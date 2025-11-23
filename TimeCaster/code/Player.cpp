@@ -1011,11 +1011,19 @@ bool Player::equipArmour(string armourNameToEquip)
 		}
 		if (armourNameToEquip == "Amulet_of_Healing")
 		{
-				regenHealth = true;
+			regenHealth = true;
 		}
 		else
 		{
 			regenHealth = false;
+		}
+		if (armourNameToEquip == "Amulet_of_Stamina")
+		{
+			m_StaminaRecharge = START_STAMINA_RECHARGE * 1.5f;
+		}
+		else
+		{
+			m_StaminaRecharge = START_STAMINA_RECHARGE;
 		}
 		
 		return true;

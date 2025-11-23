@@ -72,7 +72,7 @@ Weapon::Weapon(string type, Vector2f position)
 
 		m_Damage = 8;
 
-		m_ItemType = MagicWeapon;
+		m_ItemType = MeleeWeapon;
 		m_AnimationType = "thrust";
 		m_WeaponSize = 1;
 		m_That = true;
@@ -95,7 +95,7 @@ Weapon::Weapon(string type, Vector2f position)
 
 		m_Damage = 15;
 
-		m_ItemType = MagicWeapon;
+		m_ItemType = MeleeWeapon;
 		m_AnimationType = "thrust";
 		m_WeaponSize = 3;
 		m_That = true;
@@ -118,7 +118,7 @@ Weapon::Weapon(string type, Vector2f position)
 
 		m_Damage = 20;
 
-		m_ItemType = MagicWeapon;
+		m_ItemType = MeleeWeapon;
 		m_AnimationType = "thrust";
 		m_WeaponSize = 3;
 		m_That = true;
@@ -141,7 +141,7 @@ Weapon::Weapon(string type, Vector2f position)
 
 		m_Damage = 30;
 
-		m_ItemType = MagicWeapon;
+		m_ItemType = MeleeWeapon;
 		m_AnimationType = "thrust";
 		m_WeaponSize = 3;
 		m_That = true;
