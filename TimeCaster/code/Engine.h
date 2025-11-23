@@ -293,6 +293,12 @@ private:
 	Text loadWorldText;
 
 	Text gameOverText;
+	Text gameOverText2;
+
+	RectangleShape gameOverMainMenuButton;
+	Text gameOverMainMenuButtonText;
+	RectangleShape gameOverQuitButton;
+	Text gameOverQuitButtonText;
 
 	Texture textureHeadArmourFrame;
 	Texture textureChestArmourFrame;

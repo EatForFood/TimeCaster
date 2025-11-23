@@ -257,6 +257,36 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	y = loadGameButton.getPosition().y + (loadGameButton.getSize().y / 2.f) - (textBounds.height / 2.f);
 	loadGameButtonText.setPosition(x - textBounds.left, y - textBounds.top);
 
+	// Load game button
+	gameOverMainMenuButton.setPosition(viewCentre.x - 400, 900);
+	gameOverMainMenuButton.setSize(Vector2f(300, 80));
+	gameOverMainMenuButton.setTexture(&textureMainMenuButton2);
+
+	// Load game button text
+	gameOverMainMenuButtonText.setString("Main Menu");  // Set the text
+	gameOverMainMenuButtonText.setFont(font);           // Set the font
+	gameOverMainMenuButtonText.setCharacterSize(fontSize); // Set the font size
+	gameOverMainMenuButtonText.setFillColor(Color::White);
+	textBounds = gameOverMainMenuButtonText.getLocalBounds();
+	x = gameOverMainMenuButton.getPosition().x + (gameOverMainMenuButton.getSize().x / 2.f) - (textBounds.width / 2.f);
+	y = gameOverMainMenuButton.getPosition().y + (gameOverMainMenuButton.getSize().y / 2.f) - (textBounds.height / 2.f);
+	gameOverMainMenuButtonText.setPosition(x - textBounds.left, y - textBounds.top);
+
+	// Load game button
+	gameOverQuitButton.setPosition(viewCentre.x, 900);
+	gameOverQuitButton.setSize(Vector2f(300, 80));
+	gameOverQuitButton.setTexture(&textureMainMenuButton2);
+
+	// Load game button text
+	gameOverQuitButtonText.setString("Quit Game");  // Set the text
+	gameOverQuitButtonText.setFont(font);           // Set the font
+	gameOverQuitButtonText.setCharacterSize(fontSize); // Set the font size
+	gameOverQuitButtonText.setFillColor(Color::White);
+	textBounds = gameOverQuitButtonText.getLocalBounds();
+	x = gameOverQuitButton.getPosition().x + (gameOverQuitButton.getSize().x / 2.f) - (textBounds.width / 2.f);
+	y = gameOverQuitButton.getPosition().y + (gameOverQuitButton.getSize().y / 2.f) - (textBounds.height / 2.f);
+	gameOverQuitButtonText.setPosition(x - textBounds.left, y - textBounds.top);
+
 	// Options button
 	optionsButton.setPosition(200, 430);
 	optionsButton.setSize(Vector2f(300, 80));
@@ -481,7 +511,7 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	fullText = "I was not always a man consumed by vengeance. Once, I had a family-warm laughter by the fire, \n"
 		"the gentle touch of my children's hands, the steady love of my wife. \n"
 		"All of it was torn from me in a single night, \n"
-		"devoured by the fire of (name), a dragon whose name still burns in my mind. \n"
+		"devoured by the fire of Ignis, a dragon whose name still burns in my mind. \n"
 		"Since then, every spell I've mastered, every scar I've earned, has been for one purpose alone: \n"
 		"to bring that beast to its knees. \n"
 		"I do not seek glory, nor the hollow praise of men-I seek redemption. \n"
@@ -501,7 +531,12 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	// Game over text
 	gameOverText.setFont(font); // Assign the font
 	gameOverText.setCharacterSize(fontSize + 100); // Large text size
-	gameOverText.setFillColor(Color::White);
+	gameOverText.setFillColor(Color::Red);
+
+	// Game over text
+	gameOverText2.setFont(font); // Assign the font
+	gameOverText2.setCharacterSize(fontSize + 20);
+	gameOverText2.setFillColor(Color::White);
 
 	/***********
 	Inventory UI
@@ -1320,11 +1355,6 @@ void Engine::run()
 						viewCentre = hudView.getCenter();
 						loadWorldText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y - loadWorldText.getCharacterSize());
 
-						gameOverText.setString("Game Over!");
-						textBounds = gameOverText.getLocalBounds();
-						viewCentre = hudView.getCenter();
-						gameOverText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y - gameOverText.getCharacterSize());
-
 						initializeInventory();
 						if (world.worldFileExists())
 						{
@@ -1760,6 +1790,15 @@ void Engine::run()
 			textBounds = gameOverText.getLocalBounds();
 			viewCentre = hudView.getCenter();
 			gameOverText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y - gameOverText.getCharacterSize());
+
+			gameOverText2.setString("Your family is left unavenged.\nIgnis has won...");
+			textBounds = gameOverText2.getLocalBounds();
+			viewCentre = hudView.getCenter();
+			gameOverText2.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y + 100 - gameOverText2.getCharacterSize());
+
+			
+			
+
 			state = State::GAME_OVER;
 		}
 
@@ -1807,7 +1846,7 @@ void Engine::run()
 			window.setMouseCursorVisible(false);
 			window.setMouseCursorGrabbed(true);
 		}
-		else if (state == State::PAUSED || state == State::MAIN_MENU || state == State::OPTIONS_MENU)
+		else if (state == State::PAUSED || state == State::MAIN_MENU || state == State::OPTIONS_MENU || state == State::GAME_OVER)
 		{
 			window.setMouseCursorVisible(true);
 			window.setMouseCursorGrabbed(false);
