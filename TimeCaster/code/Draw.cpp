@@ -56,8 +56,6 @@ void Engine::draw()
 			}
 		}
 
-		// Ekey prompt in here temporarily
-		// TODO: make ekey prompt draw when near / inside shop instead
 		if (player.getInCell())
 		{
 		//	drawEKey = true;
@@ -231,6 +229,16 @@ void Engine::draw()
 			for (auto& icons : shopItems) {
 				window.draw(icons.getIcon());
 			}
+			
+			for (int i = 0; i < emptyFrames.size(); i++) {
+				if (m_StoredItems[i].isEquipped()) {
+					emptyFrames[i].setFillColor(Color::Green);
+				}
+				else {
+					emptyFrames[i].setFillColor(Color::White);
+				}
+			}
+
 
 			for (auto& frame : emptyFrames) {
 				window.draw(frame);
@@ -247,6 +255,14 @@ void Engine::draw()
 		}
 		else if (drawInventory) 
 		{
+			for (int i = 0; i < emptyFrames.size(); i++) {
+				if (m_StoredItems[i].isEquipped()) {
+					emptyFrames[i].setFillColor(Color::Green);
+				}
+				else {
+					emptyFrames[i].setFillColor(Color::White);
+				}
+			}
 			window.draw(filter);
 			window.draw(darkInventoryBackground);
 			window.draw(inventoryBackground);

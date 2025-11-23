@@ -15,7 +15,7 @@ Particle::Particle()
 
 }
 
-// TODO: Further polish particle effects, particularly healing particle
+
 void Particle::play(float startX, float startY, int particleID)
 {
 	// Manually reset the animation if the particle is not active
