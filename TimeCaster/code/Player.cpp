@@ -100,7 +100,7 @@ bool Player::hit(Time timeHit, float damage, int iFrames)
 	{
 		m_IFrames = iFrames;
 		m_LastHit = timeHit;
-		m_Health -= damage * m_DifficultyMult; 
+		m_Health -= (damage * m_DifficultyMult) * getArmourDamageReductionMult(); 
 		return true;
 	}
 	else
@@ -1276,4 +1276,20 @@ void Player::stopPhase()
 bool Player::isPhasing()
 {
 	return m_Phasing;
+}
+
+float Player::getArmourDamageReductionMult()
+{
+	float armourMult = 0.0f;
+	for (int i = 0 ; i < m_EquippedArmour.size(); i++)
+	{
+		armourMult += m_EquippedArmour[i].getArmour();
+	}
+	if (armourMult > 80.0f)
+	{
+		armourMult = 80.0f; 
+	}
+	armourMult = 1.0f - (armourMult / 100.0f);
+
+	return armourMult;
 }

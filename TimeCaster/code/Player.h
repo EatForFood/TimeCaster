@@ -155,6 +155,8 @@ public:
 	void healMana(float manaToRestore);
 	void healStamina(float staminaToRestore);
 
+	float getArmourDamageReductionMult();
+
 	Vector2f worldPosition;
 	Vector2f inventoryPosition = Vector2f(500,500);
 
