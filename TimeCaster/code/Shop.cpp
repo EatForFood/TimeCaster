@@ -154,10 +154,10 @@ void Engine::restockShop(int level)
 	case 4:
 		shopItems[0] = Weapon("Silver_Wand", Vector2f(300, 650));
 		shopItems[1] = Weapon("Pirate's_Scimitar", Vector2f(450, 650));
-		shopItems[2] = Equipment("Chain_Helmet", Vector2f(600, 650));
-		shopItems[3] = Equipment("Leather_Chestplate", Vector2f(750, 950));
-		shopItems[4] = Equipment("Leather_Leggings", Vector2f(900, 650));
-		shopItems[5] = Equipment("Leather_Boots", Vector2f(1050, 650));
+		shopItems[2] = Equipment("Chain_Hood", Vector2f(600, 650));
+		shopItems[3] = Equipment("Chain_Mail", Vector2f(750, 950));
+		shopItems[4] = Equipment("Amulet_of_Mana", Vector2f(900, 650));
+		shopItems[5] = Equipment("Amulet_of_Healing", Vector2f(1050, 650));
 		shopItems[6] = Equipment("Amulet_of_Shielding", Vector2f(1200, 650));
 		break;
 	case 8:
