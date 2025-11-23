@@ -569,34 +569,17 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	equippedWandIcon.setOrigin(equippedWandIcon.getSize() / 2.f);
 	equippedWandIcon.setPosition(viewCentre.x - 150, 500);
 
-	equippedHeadArmourIcon.setTexture(&textureItems);
-	equippedHeadArmourIcon.setTextureRect(IntRect(0, 0, 0, 0));
-	equippedHeadArmourIcon.setSize(Vector2f(75, 75));
-	equippedHeadArmourIcon.setOrigin(equippedHeadArmourIcon.getSize() / 2.f);
+
 	equippedHeadArmourIcon.setPosition(viewCentre.x - 150, 300);
 
-	equippedChestArmourIcon.setTexture(&textureItems);
-	equippedChestArmourIcon.setTextureRect(IntRect(0, 0, 0, 0));
-	equippedChestArmourIcon.setSize(Vector2f(75, 75));
-	equippedChestArmourIcon.setOrigin(equippedChestArmourIcon.getSize() / 2.f);
 	equippedChestArmourIcon.setPosition(viewCentre.x - 350, 500);
 
-	equippedTrousersArmourIcon.setTexture(&textureItems);
-	equippedTrousersArmourIcon.setTextureRect(IntRect(0, 0, 0, 0));
-	equippedTrousersArmourIcon.setSize(Vector2f(75, 75));
-	equippedTrousersArmourIcon.setOrigin(equippedTrousersArmourIcon.getSize() / 2.f);
+
 	equippedTrousersArmourIcon.setPosition(viewCentre.x - 350, 400);
 
-	equippedShoeArmourIcon.setTexture(&textureItems);
-	equippedShoeArmourIcon.setTextureRect(IntRect(0, 0, 0, 0));
-	equippedShoeArmourIcon.setSize(Vector2f(75, 75));
-	equippedShoeArmourIcon.setOrigin(equippedShoeArmourIcon.getSize() / 2.f);
+
 	equippedShoeArmourIcon.setPosition(viewCentre.x - 150, 400);
 
-	equippedNeckArmourIcon.setTexture(&textureItems);
-	equippedNeckArmourIcon.setTextureRect(IntRect(0, 0, 0, 0));
-	equippedNeckArmourIcon.setSize(Vector2f(75, 75));
-	equippedNeckArmourIcon.setOrigin(equippedNeckArmourIcon.getSize() / 2.f);
 	equippedNeckArmourIcon.setPosition(viewCentre.x - 350, 300);
 
 	// Player frame
@@ -1188,11 +1171,16 @@ void Engine::run()
 
 					equippedSwordIcon.setTextureRect(player.getEquippedSword()->getTextureRect());
 					equippedWandIcon.setTextureRect(player.getEquippedWand()->getTextureRect());
-					equippedHeadArmourIcon.setTextureRect(player.getEquippedHeadArmour()->getTextureRect());
-					equippedChestArmourIcon.setTextureRect(player.getEquippedChestArmour()->getTextureRect());
-					equippedTrousersArmourIcon.setTextureRect(player.getEquippedTrouserArmour()->getTextureRect());
-					equippedShoeArmourIcon.setTextureRect(player.getEquippedShoeArmour()->getTextureRect());
-					equippedNeckArmourIcon.setTextureRect(player.getEquippedNeckArmour()->getTextureRect());
+					equippedHeadArmourIcon = (player.getEquippedHeadArmour()->getIcon());
+					equippedHeadArmourIcon.setPosition(headArmourFrame.getPosition());
+					equippedChestArmourIcon = (player.getEquippedChestArmour()->getIcon());
+					equippedChestArmourIcon.setPosition(chestArmourFrame.getPosition());
+					equippedTrousersArmourIcon = (player.getEquippedTrouserArmour()->getIcon());
+					equippedTrousersArmourIcon.setPosition(trousersArmourFrame.getPosition());
+					equippedShoeArmourIcon = (player.getEquippedShoeArmour()->getIcon());
+					equippedShoeArmourIcon.setPosition(bootsArmourFrame.getPosition());
+					equippedNeckArmourIcon = (player.getEquippedNeckArmour()->getIcon());
+					equippedNeckArmourIcon.setPosition(neckFrame.getPosition());
 					equipAllItems();
 
 					// We will modify the next two lines later
@@ -1260,11 +1248,17 @@ void Engine::run()
 						// Update equipped item icons
 						equippedSwordIcon.setTextureRect(player.getEquippedSword()->getTextureRect());
 						equippedWandIcon.setTextureRect(player.getEquippedWand()->getTextureRect());
-						equippedHeadArmourIcon.setTextureRect(player.getEquippedHeadArmour()->getTextureRect());
-						equippedChestArmourIcon.setTextureRect(player.getEquippedChestArmour()->getTextureRect());
-						equippedTrousersArmourIcon.setTextureRect(player.getEquippedTrouserArmour()->getTextureRect());
-						equippedShoeArmourIcon.setTextureRect(player.getEquippedShoeArmour()->getTextureRect());
-						equippedNeckArmourIcon.setTextureRect(player.getEquippedNeckArmour()->getTextureRect());
+
+						equippedHeadArmourIcon = (player.getEquippedHeadArmour()->getIcon());
+						equippedHeadArmourIcon.setPosition(headArmourFrame.getPosition());
+						equippedChestArmourIcon = (player.getEquippedChestArmour()->getIcon());
+						equippedChestArmourIcon.setPosition(chestArmourFrame.getPosition());
+						equippedTrousersArmourIcon = (player.getEquippedTrouserArmour()->getIcon());
+						equippedTrousersArmourIcon.setPosition(trousersArmourFrame.getPosition());
+						equippedShoeArmourIcon = (player.getEquippedShoeArmour()->getIcon());
+						equippedShoeArmourIcon.setPosition(bootsArmourFrame.getPosition());
+						equippedNeckArmourIcon = (player.getEquippedNeckArmour()->getIcon());
+						equippedNeckArmourIcon.setPosition(neckFrame.getPosition());
 						equipAllItems();
 
 						// We will modify the next two lines later
@@ -1317,11 +1311,16 @@ void Engine::run()
 
 						equippedSwordIcon.setTextureRect(player.getEquippedSword()->getTextureRect());
 						equippedWandIcon.setTextureRect(player.getEquippedWand()->getTextureRect());
-						equippedHeadArmourIcon.setTextureRect(player.getEquippedHeadArmour()->getTextureRect());
-						equippedChestArmourIcon.setTextureRect(player.getEquippedChestArmour()->getTextureRect());
-						equippedTrousersArmourIcon.setTextureRect(player.getEquippedTrouserArmour()->getTextureRect());
-						equippedShoeArmourIcon.setTextureRect(player.getEquippedShoeArmour()->getTextureRect());
-						equippedNeckArmourIcon.setTextureRect(player.getEquippedNeckArmour()->getTextureRect());
+						equippedHeadArmourIcon = (player.getEquippedHeadArmour()->getIcon());
+						equippedHeadArmourIcon.setPosition(headArmourFrame.getPosition());
+						equippedChestArmourIcon = (player.getEquippedChestArmour()->getIcon());
+						equippedChestArmourIcon.setPosition(chestArmourFrame.getPosition());
+						equippedTrousersArmourIcon = (player.getEquippedTrouserArmour()->getIcon());
+						equippedTrousersArmourIcon.setPosition(trousersArmourFrame.getPosition());
+						equippedShoeArmourIcon = (player.getEquippedShoeArmour()->getIcon());
+						equippedShoeArmourIcon.setPosition(bootsArmourFrame.getPosition());
+						equippedNeckArmourIcon = (player.getEquippedNeckArmour()->getIcon());
+						equippedNeckArmourIcon.setPosition(neckFrame.getPosition());
 						equipAllItems();
 
 						// We will modify the next two lines later

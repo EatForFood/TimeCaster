@@ -516,7 +516,11 @@ void Engine::update()
 						}
 					}
 					// equip new head armour
-					if (player.equipArmour(clickedItem.getName())) equippedHeadArmourIcon.setTextureRect(clickedItem.getTextureRect());
+					if (player.equipArmour(clickedItem.getName()))
+					{
+						equippedHeadArmourIcon = clickedItem.getIcon();
+						equippedHeadArmourIcon.setPosition(headArmourFrame.getPosition());
+					}
 					m_StoredItems[itemLastIndex].setEquipped(true);
 				}
 
@@ -534,7 +538,11 @@ void Engine::update()
 						}
 					}
 					// equip new chest armour
-					if (player.equipArmour(clickedItem.getName())) equippedChestArmourIcon.setTextureRect(clickedItem.getTextureRect());
+					if (player.equipArmour(clickedItem.getName()))
+					{
+						equippedChestArmourIcon = clickedItem.getIcon();
+						equippedChestArmourIcon.setPosition(chestArmourFrame.getPosition());
+					}
 					m_StoredItems[itemLastIndex].setEquipped(true);
 				}
 
@@ -552,7 +560,11 @@ void Engine::update()
 						}
 					}
 					// equip new trouser armour
-					if (player.equipArmour(clickedItem.getName())) equippedTrousersArmourIcon.setTextureRect(clickedItem.getTextureRect());
+					if (player.equipArmour(clickedItem.getName()))
+					{
+						equippedTrousersArmourIcon = clickedItem.getIcon();
+						equippedTrousersArmourIcon.setPosition(trousersArmourFrame.getPosition());
+					}
 					m_StoredItems[itemLastIndex].setEquipped(true);
 				}
 
@@ -570,7 +582,11 @@ void Engine::update()
 						}
 					}
 					// equip new shoe armour
-					if (player.equipArmour(clickedItem.getName())) equippedShoeArmourIcon.setTextureRect(clickedItem.getTextureRect());
+					if (player.equipArmour(clickedItem.getName()))
+					{
+						equippedShoeArmourIcon = clickedItem.getIcon();
+						equippedShoeArmourIcon.setPosition(bootsArmourFrame.getPosition());
+					}
 					m_StoredItems[itemLastIndex].setEquipped(true);
 				}
 
@@ -588,7 +604,12 @@ void Engine::update()
 						}
 					}
 					// equip new neck armour
-					if (player.equipArmour(clickedItem.getName())) equippedNeckArmourIcon.setTextureRect(clickedItem.getTextureRect());
+					if (player.equipArmour(clickedItem.getName()))
+					{
+						equippedNeckArmourIcon = clickedItem.getIcon();
+						equippedNeckArmourIcon.setPosition(neckFrame.getPosition());
+					}
+
 					m_StoredItems[itemLastIndex].setEquipped(true);
 				}
 
