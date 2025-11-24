@@ -9,42 +9,46 @@ DragonBoss::DragonBoss()
 }
 
 void DragonBoss::spawn(const std::string& type, Vector2i position, int level) {
-    m_IsAttacking = false;
     m_Speed = START_SPEED;
     m_Damage = 20;
+    m_AttackDmg = 20;
     m_Sprite = Sprite(TextureHolder::GetTexture("graphics/enemies/flyingdragonedited.png"));
 
-    m_Hitbox.left = m_Position.x - 20;
-    m_Hitbox.width = 40;
-    m_Hitbox.top = m_Position.y - 20;
-    m_Hitbox.height = 40;
+    m_Position.x = position.x;
+    m_Position.y = position.y;
+
+    // Set the origin of the sprite to the centre
+    m_Sprite.setOrigin(spriteSize.x / 2.0f, spriteSize.y / 2.0f);
+    m_Sprite.setScale(1, 1);
+
+    // Hitbox centered on sprite
+    m_Hitbox.left = m_Position.x - spriteSize.x / 2.0f;
+    m_Hitbox.top = m_Position.y - spriteSize.y / 2.0f;
+    m_Hitbox.width = spriteSize.x;
+    m_Hitbox.height = spriteSize.y;
+
     m_Level = level;
     m_Type = type;
     m_Health = START_HEALTH * (1 + (m_Level - 1) * 0.1f); // Increase health by 10% per level
     m_MaxHealth = START_HEALTH * (1 + (m_Level - 1) * 0.1f); // Increase max health by 10% per level
 
-    // Set the origin of the sprite to the centre
-    m_Sprite.setOrigin(32, 32);
-    m_Sprite.setScale(1, 1);
-
     m_RenderArea = FloatRect(0, 0, 1920, 1080);
 
-    m_Position.x = position.x;
-    m_Position.y = position.y;
     m_Sprite.setPosition(m_Position);
 
     m_Animation_It_Limit = 3;
     m_Ani_Counter = 0;
 }
 
+
 void DragonBoss::update(float elapsedTime, const Vector2f& playerPos, Chunk* chunk, int playerChunk, vector<NavBox> navBox) 
 {
     m_TimeElapsed = elapsedTime;
     
-    if (!m_IsAttacking) {
+    if (state == AttackState::Idle) {
         m_AttackChoice = rand() % 3;
 
-        while ((m_AttackChoice == 0 && m_CooldownClock.getElapsedTime().asSeconds() < m_ChargeCooldown) || (m_AttackChoice == 2 && getShotsFired() > 4)) {
+        while (m_AttackChoice == 0 && m_CooldownClock.getElapsedTime().asSeconds() < m_ChargeCooldown) {
             m_AttackChoice = rand() % 3;
         }
 
@@ -67,13 +71,15 @@ void DragonBoss::update(float elapsedTime, const Vector2f& playerPos, Chunk* chu
 
         case 1:
             state = AttackState::Bite;
-            bite();
+            m_IsBiting = true;
+            m_BiteClock.restart();
+            m_Speed *= 3;
+            bite(playerPos);
             cout << "Biting" << endl;
             break;
 
         case 2:
             state = AttackState::Shoot;
-            m_IsAttacking = true;
             cout << "Shooting" << endl;
             break;
         }
@@ -98,76 +104,57 @@ void DragonBoss::update(float elapsedTime, const Vector2f& playerPos, Chunk* chu
 
     m_PositionLast = m_Position;
 
+    // Hitbox centered on sprite
+    m_Hitbox.left = m_Position.x - spriteSize.x / 2.0f;
+    m_Hitbox.top = m_Position.y - spriteSize.y / 2.0f;
+    m_Hitbox.width = spriteSize.x;
+    m_Hitbox.height = spriteSize.y;
+
     if (m_Health < m_MaxHealth / 2 && !rageActivated) {
         state = AttackState::Rage;
         rage();
     }
 
-    if (state == AttackState::Bite)
-    {
-        Vector2f delta = playerPos - m_Position;
-        float distance = std::sqrt(delta.x * delta.x + delta.y * delta.y);
+    if (m_IsBiting) {
+        bite(playerPos);
 
-        if (distance <= 2.0f) {
-            stopMoving();
-            bite();
-            return;
-        }
-
-        // Move horizontally
-        if (delta.x > 0) { 
-            moveRight(); 
-            stopLeft(); 
-        }
-        else if (delta.x < 0) { 
-            moveLeft(); 
-            stopRight(); 
-        }
-
-        // Move vertically
-        if (delta.y > 0) { 
-            moveDown(); 
-            stopUp(); 
-        }
-        else if (delta.y < 0) { 
-            moveUp(); 
-            stopDown(); 
+        if (m_BiteClock.getElapsedTime().asSeconds() >= m_BiteDuration) {
+            m_Speed /= 3;
+            m_IsBiting = false;
+            state = AttackState::Idle;
         }
     }
 
     if (m_IsCharging) {
         charge();
     }
+
+    if (!m_IsDead && m_Health <= 0) {
+        m_IsDead = true;
+        m_Sprite.setRotation(90);
+        m_Sprite.setOrigin(spriteSize.x / 2.0f, spriteSize.y / 2.0f);
+    }
 }
 
 void DragonBoss::startCharge() {
     m_Speed *= 6;
-    
 }
 
 void DragonBoss::stopCharge() {
     m_Speed /= 6;
-    m_IsAttacking = false;
+    state = AttackState::Idle;
+    cout << "Set to idle" << endl;
 }
 
 void DragonBoss::charge()
 {
-    if (m_CanCharge && !m_IsCharging)
+    if (state == AttackState::Charge && !m_IsCharging)
     {
         m_IsCharging = true;
-        m_CanCharge = false;
-        m_IsAttacking = true;
-
-        // Compute the charge vector
         m_ChargeDirection = m_TargetPosition - m_Position;
         float length = std::sqrt(m_ChargeDirection.x * m_ChargeDirection.x + m_ChargeDirection.y * m_ChargeDirection.y);
-        
-        if (length != 0) {
-            m_ChargeDirection /= length;
-        }
-
+        if (length != 0) m_ChargeDirection /= length;
         m_ChargeClock.restart();
-        m_CooldownClock.restart();
         startCharge();
     }
 
@@ -176,12 +163,13 @@ void DragonBoss::charge()
     {
         m_Position += m_ChargeDirection * m_Speed * m_TimeElapsed;
         m_Sprite.setPosition(m_Position);
-    }
-    
-    // After 500ms stop charging
-    if (m_IsCharging && m_ChargeClock.getElapsedTime().asSeconds() > m_ChargeDuration) {
-        m_IsCharging = false;
-        stopCharge();
+
+        // After 3 seconds, stop charging
+        if (m_ChargeClock.getElapsedTime().asSeconds() >= m_ChargeDuration)
+        {
+            m_IsCharging = false;
+            stopCharge();
+        }
     }
 
     // Allows the dragon to charge again
@@ -190,14 +178,32 @@ void DragonBoss::charge()
     }
 }
 
-void DragonBoss::bite()
+void DragonBoss::bite(const Vector2f& playerPos)
 {
-    // Play bite animation
-    // Do damage to player
+    // Direction vector from enemy to player
+    Vector2f diff = playerPos - m_Position;
+
+    // Get distance
+    float length = std::sqrt(diff.x * diff.x + diff.y * diff.y);
+
+    // Prevent division by zero
+    if (length == 0)
+        return;
+
+    // Normalise
+    sf::Vector2f dir = diff / length;
+
+    // Move enemy
+    m_Position += dir * m_Speed * m_TimeElapsed;
+
+    // Update sprite
+    m_Sprite.setPosition(m_Position);
 }
+
 
 void DragonBoss::rage() {
     m_Damage *= 2;
+    m_AttackDmg *= 2;
     m_Speed *= 2;
     rageActivated = true;
 }
@@ -221,6 +227,7 @@ void DragonBoss::setSpriteFromSheet(sf::IntRect textureBox) // set sprite
         throw std::logic_error("Animation bounding box must contain multiply sprites, setSprite(sf::IntRect )\n");
 
     m_Sprite.setTextureRect(sf::IntRect{ sheetCoordinate, spriteSize });
+    m_Sprite.setOrigin(spriteSize.x / 2.0f, spriteSize.y / 2.0f);
 }
 
 void DragonBoss::updateTextRect()

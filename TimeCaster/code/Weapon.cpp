@@ -39,13 +39,11 @@ Weapon::Weapon(string type, Vector2f position)
 		m_Icon.setTextureRect(IntRect(194, 864, 32, 32));
 		FloatRect bounds = m_Icon.getLocalBounds();
 		m_Icon.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
-		//m_Sprite.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
 
 		// How much is item worth
 		m_Value = 5;
 
 		m_Icon.setScale(2.34, 2.34);
-		//m_NullItem = false;
 
 		m_Damage = 5;
 
@@ -62,13 +60,11 @@ Weapon::Weapon(string type, Vector2f position)
 		m_Icon.setTextureRect(IntRect(194, 864, 32, 32));
 		FloatRect bounds = m_Icon.getLocalBounds();
 		m_Icon.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
-		//	m_Sprite.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
 
 		// How much is item worth
 		m_Value = 5;
 
 		m_Icon.setScale(2.34, 2.34);
-		//m_NullItem = false;
 
 		m_Damage = 8;
 
@@ -85,13 +81,11 @@ Weapon::Weapon(string type, Vector2f position)
 		m_Icon.setTextureRect(IntRect(194, 864, 32, 32));
 		FloatRect bounds = m_Icon.getLocalBounds();
 		m_Icon.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
-		//	m_Sprite.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
 
 		// How much is item worth
 		m_Value = 5;
 
 		m_Icon.setScale(2.34, 2.34);
-		//m_NullItem = false;
 
 		m_Damage = 15;
 
@@ -108,13 +102,11 @@ Weapon::Weapon(string type, Vector2f position)
 		m_Icon.setTextureRect(IntRect(194, 864, 32, 32));
 		FloatRect bounds = m_Icon.getLocalBounds();
 		m_Icon.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
-		//	m_Sprite.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
 
 		// How much is item worth
 		m_Value = 5;
 
 		m_Icon.setScale(2.34, 2.34);
-		//m_NullItem = false;
 
 		m_Damage = 20;
 
@@ -131,13 +123,11 @@ Weapon::Weapon(string type, Vector2f position)
 		m_Icon.setTextureRect(IntRect(194, 864, 32, 32));
 		FloatRect bounds = m_Icon.getLocalBounds();
 		m_Icon.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
-		//	m_Sprite.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
 
 		// How much is item worth
 		m_Value = 5;
 
 		m_Icon.setScale(2.34, 2.34);
-		//m_NullItem = false;
 
 		m_Damage = 30;
 

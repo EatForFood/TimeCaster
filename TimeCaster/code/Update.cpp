@@ -1,4 +1,5 @@
 #include "Engine.h"
+#include <iomanip>
 
 using namespace sf;
 using namespace std;
@@ -40,11 +41,11 @@ void Engine::update()
 		}
 
 		// Update the player
-		if (state == State::PLAYING && !drawInventory) {
+		if (state == State::PLAYING && !drawInventory && !drawShop) {
 			player.update(dtAsSeconds, Mouse::getPosition(), world.getNavBoxes(player.getChunk()));
 		}
 
-		if (state == State::PLAYING && !drawInventory && !timeFrozen) {
+		if (state == State::PLAYING && !drawInventory && !timeFrozen && !drawShop) {
 
 
 			if (playerNearShop() && tutorialStage != 0) {
@@ -114,17 +115,17 @@ void Engine::update()
 
 						if (enemyPtr->getType() == "Dragon") 
 						{
-							if (enemyPtr->getAttackState() == Enemy::AttackState::Shoot && enemyPtr->getShotsFired() <= 4 && enemyPtr->getShotCooldown() > 0.5)
+							if (enemyPtr->getAttackState() == Enemy::AttackState::Shoot && enemyPtr->getShotsFired() < 5 && enemyPtr->getShotCooldown() > 0.5)
 							{
-								spells[currentSpell].shoot(enemyPtr->getCenter().x, enemyPtr->getCenter().y, player.getPosition().x, player.getPosition().y, enemyPtr->getDamage());
+								dragonSpells[currentSpell].shoot(enemyPtr->getCenter().x, enemyPtr->getCenter().y, player.getPosition().x, player.getPosition().y, enemyPtr->getDamage());
 
 								// Play fireball sound
 								sound.playFireballSound();
 
-								currentSpell++;
-								if (currentSpell > 99)
+								currentDragonSpell++;
+								if (currentDragonSpell > 99)
 								{
-									currentSpell = 0;
+									currentDragonSpell = 0;
 								}
 
 								enemyPtr->shotFired();
@@ -133,10 +134,56 @@ void Engine::update()
 							{
 								enemyPtr->resetShotsFired();
 							}
+
+							if (enemyPtr->getAttackState() == Enemy::AttackState::Charge && !roarPlayed) {
+								sound.playDragonRoar();
+								roarPlayed = true;
+								cout << "Sound played" << endl;
+							}
+							else if (enemyPtr->getAttackState() != Enemy::AttackState::Charge && roarPlayed) {
+								roarPlayed = false;
+							}
+
+							// Player touches the dragon hitbox
+							if (enemyPtr->getGlobalBounds().intersects(player.getHitBox())) {
+								// Play the blood particle effect
+								if (player.hit(gameTimeTotal, enemyPtr->getAttackDamage(), 1000))
+								{
+									sound.playDragonBite();
+									sound.playHitSound();
+									particles[100].play(player.getCenter().x - 30, player.getCenter().y - 30, 1);
+									decal[currentDecal].spawn("bloodImpact", player.getPosition().x, player.getPosition().y);
+									currentDecal++;
+								}
+							}
 						}
 					}
 					if (enemyPtr->isDead() && !enemyPtr->isLooted())
 					{
+						if (enemyPtr->getType() == "Dragon") {
+							sound.playVictorySound();
+							gameOverText.setString("Victory!");
+							gameOverText.setFillColor(Color::Yellow);
+							textBounds = gameOverText.getLocalBounds();
+							viewCentre = hudView.getCenter();
+							gameOverText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y - gameOverText.getCharacterSize());
+
+							gameOverText2.setString("Insert story stuff here (maybe change if if you sold a sentimental item)");
+							textBounds = gameOverText2.getLocalBounds();
+							viewCentre = hudView.getCenter();
+							gameOverText2.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y - 400 - gameOverText2.getCharacterSize());
+
+							stringstream ssStatText;
+							ssStatText << fixed << setprecision(0) << "Level Reached: " << player.getPlayerLevel() << "\nGold Earned: " << player.getGold()
+								<< "\nEnemies Killed: " << player.getKillCount() << "\nTime Taken: " << timeToBeat.getElapsedTime().asSeconds() << " seconds";
+							statText.setString(ssStatText.str());
+							textBounds = statText.getLocalBounds();
+							viewCentre = hudView.getCenter();
+							statText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y + 100 - statText.getCharacterSize());
+
+							state = State::VICTORY;
+						}
+						
 						if (player.reward(enemyPtr->loot()))
 						{
 							drawInventory = true;
@@ -166,7 +213,6 @@ void Engine::update()
 								items.emplace_back(item, enemyPtr->getPosition());
 							}
 						}
-
 					}
 				}
 			}
@@ -183,7 +229,6 @@ void Engine::update()
 				timeFrozen = false;
 			}
 		}
-
 
 		if (player.isPhasing())
 		{
@@ -207,8 +252,6 @@ void Engine::update()
 		// Make the view centre around the player				
 		mainView.setCenter(player.getCenter().x, player.getCenter().y - 10);
 
-
-
 		// Update any spells that are in-flight
 		if (!timeFrozen) {
 			for (int i = 0; i < 100; i++)
@@ -229,7 +272,6 @@ void Engine::update()
 								currentDecal++;
 								// Apply damage from spell to enemy
 								enemyPtr->setHealth(-spells[i].getSpellDamage());
-								//cout << "Enemy hit for " << spells[i].getSpellDamage() << " damage. Enemy health now " << enemies.getCurrentHP() << endl;
 
 								// Mark enemy as hit
 								enemyPtr->setWasHit(true);
@@ -254,6 +296,50 @@ void Engine::update()
 								// Add check for piercing spells later
 								break;
 							}
+						}
+					}
+				}
+			}
+
+			for (int i = 0; i < 100; i++)
+			{
+				if (dragonSpells[i].isInFlight())
+				{
+					dragonSpells[i].update(dtAsSeconds, world.getNavBoxes(player.getChunk()));
+
+					FloatRect spellBounds = dragonSpells[i].getSprite().getGlobalBounds();
+
+					if (!player.isDead())
+					{
+						if (dragonSpells[i].getSprite().getGlobalBounds().intersects(player.getHitBox()))
+						{
+							decal[currentDecal].spawn("bloodImpact", player.getPosition().x, player.getPosition().y);
+							currentDecal++;
+							// Apply damage from spell to enemy
+							player.setHealth(-dragonSpells[i].getSpellDamage());
+
+							// Mark enemy as hit
+							player.setWasHit(true);
+
+							// Stop the spell; Add check for piercing spells later
+							dragonSpells[i].stop();
+
+							// Play the sparks particle effect
+							for (int i = 0; i < 100; i++)
+							{
+								if (!particles[i].isPlaying())
+								{
+									particles[i].play(player.getCenter().x - 30, player.getCenter().y - 30, 2);
+									break;
+								}
+							}
+
+							// Play hit sound
+							sound.playHitSound();
+
+							// This spell hit an enemy; stop checking other enemies
+							// Add check for piercing spells later
+							break;
 						}
 					}
 				}
@@ -350,17 +436,17 @@ void Engine::update()
 		// Level up the player
 		if (drawInventory && levelUp)
 		{
-			if (Mouse::isButtonPressed(Mouse::Left) && invHealthBar.getGlobalBounds().contains(worldPos))
+			if (Mouse::isButtonPressed(Mouse::Left) && invHealthBar.getGlobalBounds().contains(Vector2f(worldPos.x -25, worldPos.y -25)))
 			{
 				player.upgradeHealth();
 				levelUp = false;
 			}
-			else if (Mouse::isButtonPressed(Mouse::Left) && invStamBar.getGlobalBounds().contains(worldPos))
+			else if (Mouse::isButtonPressed(Mouse::Left) && invStamBar.getGlobalBounds().contains(Vector2f(worldPos.x - 25, worldPos.y - 25)))
 			{
 				player.upgradeStamina();
 				levelUp = false;
 			}
-			else if (Mouse::isButtonPressed(Mouse::Left) && invManaBar.getGlobalBounds().contains(worldPos))
+			else if (Mouse::isButtonPressed(Mouse::Left) && invManaBar.getGlobalBounds().contains(Vector2f(worldPos.x - 25, worldPos.y - 25)))
 			{
 				player.upgradeMana();
 				levelUp = false;
@@ -397,7 +483,6 @@ void Engine::update()
 
 
 			bool draggingFromInventory = false;
-			//int draggedIndex = -1;
 
 			// Check clicks on inventory items
 			for (int i = 0; i < m_StoredItems.size(); i++)
@@ -463,8 +548,6 @@ void Engine::update()
 						break;
 					}
 				}
-
-
 
 				// Try to equip as sword if dropped on sword slot
 				if (clickedItem.getIcon().getGlobalBounds().intersects(weaponFrame.getGlobalBounds())

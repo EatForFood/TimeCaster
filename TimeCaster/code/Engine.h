@@ -71,14 +71,22 @@ public:
 
 	void equipAllItems();
 
+	// 0 for neutral, 1 for happy, 2 for talking, 3 for unsure
+	void shopKeeperSetEmotion(int emotionIndex);
+
 protected: 
 	string cleanItemName(string itemName);
 
 private:
 	// The games difficulty will always be in one of these states
+	Sprite shopKeeperSprite;
 
+	Texture shopKeeperHappy;
+	Texture shopKeeperNeutral;
+	Texture shopKeeperTalking;
+	Texture shopKeeperUnsure;
 	// The game will always be in one of these states
-	enum State { MAIN_MENU, OPTIONS_MENU, STORY_INTRO, PLAYING, PAUSED, GAME_OVER, LOADING };
+	enum State { MAIN_MENU, OPTIONS_MENU, STORY_INTRO, PLAYING, PAUSED, GAME_OVER, LOADING, VICTORY };
 
 	CollisionDetection collision;
 
@@ -96,7 +104,7 @@ private:
 
 	int fpsLimit = 144;
 
-	bool debugMode = true;	
+	bool debugMode = false;	
 
 	bool drawEKey = false;
 
@@ -173,6 +181,7 @@ private:
 	Texture textureCursorOpen;
 	Texture textureCursorClosed;
 
+
 	// Integer used to set all text font sizes
 	int fontSize = 35;
 
@@ -190,6 +199,9 @@ private:
 	Sprite playerInFramePants;
 	Sprite playerInFrameShoes;
 
+	Sprite dialogueBoxSprite;
+	Sprite portraitWindowSprite;
+
 	View hudView;
 
 	Font font;
@@ -202,6 +214,8 @@ private:
 	Text levelUpText;
 
 	Text shopText;
+
+	Clock timeToBeat;
 
 	Text goldCountText;
 
@@ -297,6 +311,8 @@ private:
 	Text gameOverText;
 	Text gameOverText2;
 
+	Text statText;
+
 	RectangleShape gameOverMainMenuButton;
 	Text gameOverMainMenuButtonText;
 	RectangleShape gameOverQuitButton;
@@ -338,6 +354,7 @@ private:
 
 	bool attemptedToSellSentimentalItem = false;
 
+	bool firstTimeInShop = true;
 
 	// Item tooltip elements
 	RectangleShape itemTooltipBackground;
@@ -427,8 +444,10 @@ private:
 	bool skipAnimation;
 
 	Spell spells[100];
+	Spell dragonSpells[100];
 	Particle particles[101];
 	int currentSpell = 0;
+	int currentDragonSpell = 0;
 	int currentParticle = 0;
 
 	int tutorialStage = 0;
@@ -481,4 +500,6 @@ private:
 	string lastSoldItemName = "";
 
 	Loot loot;
+
+	bool roarPlayed = false;
 };

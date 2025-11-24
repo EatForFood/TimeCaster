@@ -33,7 +33,6 @@ void Engine::initializeInventory()
 	}
 }
 
-
 void Engine::moveDraggedIcon(Sprite& draggedIcon, Vector2f mousePos)
 {
 	float x = static_cast<float>(mousePos.x);
@@ -97,7 +96,6 @@ bool Player::addItemToInventory(String itemType)
 
 void Engine::equipAllItems()
 {
-
 	// Equip melee weapon
 	string meleeWeaponName = player.getEquippedSword()->getName();
 	for (int i = 0; i < player.getStoredItems().size(); i++)
@@ -173,5 +171,4 @@ void Engine::equipAllItems()
 			break;
 		}
 	}
-
 }

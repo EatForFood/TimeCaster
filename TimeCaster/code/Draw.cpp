@@ -127,6 +127,14 @@ void Engine::draw()
 			}
 		}
 
+		for (auto& dragonSpell : dragonSpells)
+		{
+			if (dragonSpell.isInFlight())
+			{
+				drawables.emplace_back(dragonSpell.getSprite().getGlobalBounds().top + dragonSpell.getSprite().getGlobalBounds().height, dragonSpell.getSprite());
+			}
+		}
+
 		for (auto& particle : particles)
 		{
 			if (particle.isPlaying())
@@ -218,7 +226,6 @@ void Engine::draw()
 			window.draw(filter);
 			window.draw(darkInventoryBackground);
 			window.draw(shopBackground);
-			window.draw(shopText);
 
 			// Draw the shop frames
 			for (int i = 0; i < shopFrames.size(); i++) {
@@ -248,6 +255,10 @@ void Engine::draw()
 				window.draw(icons.getIcon());
 			}
 
+			window.draw(portraitWindowSprite);
+			window.draw(shopKeeperSprite);
+			window.draw(dialogueBoxSprite);
+			window.draw(shopText);
 			window.setView(mainView);
 			window.draw(spriteCursor);
 			window.setView(hudView);
@@ -433,6 +444,20 @@ void Engine::draw()
 	//	window.draw(spriteStoryIntro);
 		window.draw(gameOverText);
 		window.draw(gameOverText2);
+		window.draw(gameOverMainMenuButton);
+		window.draw(gameOverMainMenuButtonText);
+		window.draw(gameOverQuitButton);
+		window.draw(gameOverQuitButtonText);
+		//	window.draw(skipIntroText);
+	}
+
+	if (state == State::VICTORY)
+	{
+		window.clear();
+		//	window.draw(spriteStoryIntro);
+		window.draw(gameOverText);
+		window.draw(gameOverText2);
+		window.draw(statText);
 		window.draw(gameOverMainMenuButton);
 		window.draw(gameOverMainMenuButtonText);
 		window.draw(gameOverQuitButton);

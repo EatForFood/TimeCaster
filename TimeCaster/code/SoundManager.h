@@ -33,9 +33,14 @@ private:
 	/***********
 	Other sounds
 	************/
-
+	
+	// Prepare the game over sound
 	SoundBuffer gameOverBuffer;
 	Sound gameOver;
+
+	// Prepare the victory sound
+	SoundBuffer victoryBuffer;
+	Sound victory;
 	
 	// Prepare the start game sound
 	SoundBuffer startGameBuffer;
@@ -85,11 +90,21 @@ private:
 	SoundBuffer storyIntroBuffer;
 	Sound storyIntro;
 
+	// Prepare the sword swing sound
 	SoundBuffer swordSwingBuffer;
 	Sound swordSwing;
 
+	// Prepare the gold sound
 	SoundBuffer goldBuffer;
 	Sound gold;
+
+	// Prepare the dragon roar sound
+	SoundBuffer dragonRoarBuffer;
+	Sound dragonRoar;
+
+	// Prepare the dragon bite sound
+	SoundBuffer dragonBiteBuffer;
+	Sound dragonBite;
 public:
 	// SoundManager constructor
 	SoundManager();
@@ -124,6 +139,12 @@ public:
 	// Function to stop the game over sound
 	void stopGameOverSound();
 
+	// Function to play the victory sound
+	void playVictorySound();
+
+	// Function to stop the victory sound
+	void stopVictorySound();
+
 	// Function to play the time stop active sound
 	void playTimeStopActiveSound();
 
@@ -157,4 +178,8 @@ public:
 	void playSwordSwing();
 
 	void playGoldSound();
+
+	void playDragonRoar();
+
+	void playDragonBite();
 };

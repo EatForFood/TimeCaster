@@ -13,21 +13,10 @@ Item::Item(string type, Vector2f position)
 
 	if (m_Name == "null") // empty item for inventory
 	{
-		//m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/goldCoin.png"));
-
 		// How much is item worth
-
-		/*
-		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
-		m_Sprite.setTextureRect(IntRect(961, 896, 32, 32));
-		m_Icon.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
-		m_Icon.setTextureRect(IntRect(961, 896, 32, 32));
-		*/
 		m_Value = 0;
 
 		m_Sprite.setOrigin(5, 5);
-
-		//m_NullItem = true;
 
 		m_ItemType = null;
 	}
@@ -35,7 +24,6 @@ Item::Item(string type, Vector2f position)
 	{
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/goldCoin.png"));
 		m_Icon.setTexture(TextureHolder::GetTexture("graphics/items/goldCoinIcon.png"));
-		//m_Icon.setScale(5,5);
 		FloatRect bounds = m_Icon.getLocalBounds();
 		m_Icon.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
 
@@ -44,7 +32,6 @@ Item::Item(string type, Vector2f position)
 
 		m_Sprite.setOrigin(5, 5);
 
-		//m_NullItem = false;
 		m_ItemType = Consumable;
 	}
 	else if (m_Name == "Health_Potion")
@@ -96,7 +83,6 @@ Item::Item(string type, Vector2f position)
 	{
 		m_Value = 0;
 		m_Sprite.setOrigin(5, 5);
-		//m_NullItem = true;
 		m_ItemType = null;
 	}
 

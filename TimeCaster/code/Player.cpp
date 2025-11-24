@@ -26,8 +26,6 @@ Player::Player()
 	m_Kills = START_KILLS;
 	m_Level = START_LEVEL;
 
-
-
 	// Associate a texture with the body sprite
 	m_Sprite = Sprite(TextureHolder::GetTexture("graphics/player/playerWalk.png")); 
 	m_Sprite.setOrigin(32, 32);
@@ -60,10 +58,13 @@ Player::Player()
 	m_Clothes.push_back(m_SpriteShoes);
 }
 
-void Player::spawn(Vector2f resolution, int tileSize, int level)
+void Player::spawn(Vector2f resolution, int tileSize, int level, bool setPos)
 {
 
-	m_Position = Vector2f(50,600);
+	if (setPos)
+	{
+		m_Position = Vector2f(50, 600);
+	}
 	// assign player's hitbox
 	m_Hitbox.left = m_Position.x - HITBOX_WIDTH / 2;
 	m_Hitbox.width = HITBOX_WIDTH;
@@ -154,8 +155,6 @@ void Player::update(float elapsedTime, Vector2i mousePosition, const vector<NavB
 	//navBoxes = navBox;
 
 	m_TimeElapsed = elapsedTime; 
-
-
 
 	if (m_IsAttacking)
 	{
@@ -455,7 +454,6 @@ void Player::update(float elapsedTime, Vector2i mousePosition, const vector<NavB
 	m_SpriteShoes.setColor(Color(255, 255, 255, 128));
 	m_SpriteWeapon.setColor(Color(255, 255, 255, 128));
 	}
-
 }
 
 void Player::upgradeSpeed()
@@ -1256,7 +1254,6 @@ bool Player::useMana(float manaCost)
 	else {
 		return false;
 	}
-
 }
 
 bool Player::reward(int rewardAmount)

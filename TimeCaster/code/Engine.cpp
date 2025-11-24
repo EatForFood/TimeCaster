@@ -1,6 +1,7 @@
 #include <sstream>
 #include <fstream>
 #include <vector>
+#include <iomanip>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include "Engine.h"
@@ -28,9 +29,6 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 {
 	player.loadConfigFile();
 
-	// Set a high framerate limit 
-
-	// difficulty = Difficulty::Medium;
 	difficulty = stringToDifficulty(player.getdifficultyString());
 	windowedMode = player.getWindowedMode();
 	vSync = player.getVSync();
@@ -41,8 +39,6 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	// set resolution
 	resolution.x = 1920;
 	resolution.y = 1080;
-
-	//RenderWindow window(VideoMode(resolution.x, resolution.y), "TimeCaster", Style::Fullscreen);
 	
 	if (windowedMode == true)
 	{
@@ -61,7 +57,6 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	else {
 		window.setVerticalSyncEnabled(false);
 	}
-
 
 	window.setFramerateLimit(fpsLimit);
 
@@ -91,10 +86,6 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	textureBackground3 = TextureHolder::GetTexture("graphics/landscape3.png");
 	textureBackground4 = TextureHolder::GetTexture("graphics/landscape4.png");
 
-
-	// Boolean for whether to display the fps
-//	bool displayFps = false;
-
 	// Hide the mouse pointer and replace it with crosshair
 	window.setMouseCursorVisible(true);
 	textureCursorOpen = TextureHolder::GetTexture("graphics/knightCursorOpen.png");
@@ -114,13 +105,6 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	// Create a view for the HUD
 	FloatRect hudRect(0, 0, resolution.x, resolution.y);
 	hudView.reset(hudRect);
-
-	/*
-	Pickup healthPickup(1);
-	Pickup ammoPickup(2);
-	Pickup staminaPickup(3);
-	Pickup manaPickup(4);
-	*/
 
 	// Main font
 	font.loadFromFile("fonts/Jersey10-Regular.ttf");
@@ -194,24 +178,6 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	// Item 0 is head, item 1 is torso, item 2 is pants, item 3 is shoes, item 4 is neck
 	m_EquippedArmour.resize(5, Equipment("null", Vector2f(0, 0)));
 	
-	// Debug inventory initalization
-	/*
-	m_StoredItems[0] = Weapon("Wooden_Wand", Vector2f(300, 650));
-	m_StoredItems[1] = Weapon("Pirate's_Scimitar", Vector2f(450, 650));
-	m_StoredItems[2] = Weapon("Iron_Sword", Vector2f(600, 650));
-	m_StoredItems[3] = Weapon("Silver_Wand", Vector2f(750, 650));
-	m_StoredItems[4] = Equipment("Family_Robe", Vector2f(900, 650));
-	m_StoredItems[5] = Equipment("Family_Hood", Vector2f(0, 0));
-	m_StoredItems[6] = Equipment("Leather_Cap", Vector2f(0, 0));
-	m_StoredItems[7] = Equipment("Leather_Chestplate", Vector2f(0, 0));
-	m_StoredItems[8] = Equipment("Basic_Shoes", Vector2f(0, 0));
-	m_StoredItems[9] = Equipment("Robe_Leggings", Vector2f(0, 0));
-	m_StoredItems[10] = Weapon("Reaper's_Scythe", Vector2f(0, 0));
-	m_StoredItems[11] = Equipment("Family_Locket", Vector2f(0, 0));
-	m_StoredItems[12] = Weapon("Armoured_Boots", Vector2f(0, 0));
-	m_StoredItems[14] = Item("Mana_Potion", Vector2f(0, 0));
-	m_StoredItems[15] = Item("Stamina_Potion", Vector2f(0, 0));
-	*/
 	/***********
 	Main Menu UI
 	************/
@@ -487,7 +453,6 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	difficultyButton.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 400);
 	difficultyButton.setTexture(&textureMainMenuButton2);
 
-
 	// Display difficulty button text
 	difficultyButtonText.setString("Difficulty: " + difficultyToString(difficulty)); // Set the label text
 	difficultyButtonText.setFont(font); // Assign the font
@@ -497,7 +462,6 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	x = difficultyButton.getPosition().x + (difficultyButton.getSize().x / 2.f) - (textBounds.width / 2.f);
 	y = difficultyButton.getPosition().y + (difficultyButton.getSize().y / 2.f) - (textBounds.height / 2.f);
 	difficultyButtonText.setPosition(x - textBounds.left, y - textBounds.top);
-
 
 	difficultyButton.setSize(Vector2f(textBounds.width + 100, 100));
 	difficultyButton.setPosition(viewCentre.x - (difficultyButton.getSize().x / 2.f), 400);
@@ -538,6 +502,11 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	gameOverText2.setCharacterSize(fontSize + 20);
 	gameOverText2.setFillColor(Color::White);
 
+	// Stat text (for victory screen)
+	statText.setFont(font);
+	statText.setCharacterSize(fontSize + 20);
+	statText.setFillColor(Color::White);
+
 	/***********
 	Inventory UI
 	************/
@@ -569,17 +538,10 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	equippedWandIcon.setOrigin(equippedWandIcon.getSize() / 2.f);
 	equippedWandIcon.setPosition(viewCentre.x - 150, 500);
 
-
 	equippedHeadArmourIcon.setPosition(viewCentre.x - 150, 300);
-
 	equippedChestArmourIcon.setPosition(viewCentre.x - 350, 500);
-
-
 	equippedTrousersArmourIcon.setPosition(viewCentre.x - 350, 400);
-
-
 	equippedShoeArmourIcon.setPosition(viewCentre.x - 150, 400);
-
 	equippedNeckArmourIcon.setPosition(viewCentre.x - 350, 300);
 
 	// Player frame
@@ -587,11 +549,6 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	playerFrame.setTexture(&texturePlayerFrame);
 	playerFrame.setOrigin(playerFrame.getSize() / 2.f);
 	playerFrame.setPosition(viewCentre.x - 250, 350);
-
-
-
-
-	
 
 	neckFrame.setTexture(&textureNeckFrame);
 	neckFrame.setSize(Vector2f(75, 75));
@@ -748,6 +705,24 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	textBounds = shopText.getLocalBounds();
 	shopText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 900);
 
+	shopKeeperNeutral = TextureHolder::GetTexture("graphics/shopKeeper/Neutral.png");
+	shopKeeperHappy = TextureHolder::GetTexture("graphics/shopKeeper/Happy.png");
+	shopKeeperTalking = TextureHolder::GetTexture("graphics/shopKeeper/Talking.png");
+	shopKeeperUnsure = TextureHolder::GetTexture("graphics/shopKeeper/Unsure.png");
+
+	shopKeeperSprite.setTexture(shopKeeperNeutral);
+	shopKeeperSprite.setScale(3.0f, 3.0f);
+	shopKeeperSprite.setPosition(viewCentre.x + 500, 825);
+
+	dialogueBoxSprite.setTexture(TextureHolder::GetTexture("graphics/UI/dialogueBox.png"));
+	//dialogueBoxSprite.setTexture(shopKeeperHappy);
+	dialogueBoxSprite.setScale(2.25f, 2.25f);
+	dialogueBoxSprite.setPosition(shopText.getPosition().x - 50, shopText.getPosition().y);
+
+	portraitWindowSprite.setTexture(TextureHolder::GetTexture("graphics/UI/portraitWindow.png"));
+	portraitWindowSprite.setScale(1.1f, 1.1f);
+	portraitWindowSprite.setPosition(Vector2f(shopKeeperSprite.getPosition().x + 25, shopKeeperSprite.getPosition().y + 25));
+
 	inventoryBackground.setTexture(&inventoryBackgroundTexture);
 	inventoryBackground.setSize(Vector2f(1000, 800));
 	textBounds = inventoryBackground.getLocalBounds();
@@ -855,8 +830,6 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	userInputText.setCharacterSize(fontSize - 11);
 	userInputText.setFillColor(Color::White);
 	userInputText.setPosition(textBox.getPosition().x + 10, textBox.getPosition().y + 10);
-
-
 
 	// Feedback message
 	feedback.setFont(font);
@@ -966,8 +939,6 @@ void Engine::run()
 		}
 	}
 
-
-
 	// The main game loop
 	while (window.isOpen())
 	{
@@ -990,11 +961,6 @@ void Engine::run()
 		Event event;
 		while (window.pollEvent(event))
 		{
-			// Getting the mouse position and mapping those pixels to coordinates
-			//Vector2i mousePos = Mouse::getPosition(window);
-			//Vector2f worldPos = window.mapPixelToCoords(mousePos);
-			//Moved code to main game loop
-
 			// Zooming in and out using the scroll wheel
 			if (event.type == Event::MouseWheelScrolled)
 			{
@@ -1007,7 +973,6 @@ void Engine::run()
 							mainView.zoom(0.9f);
 							spriteCursor.scale(0.9f, 0.9f);
 						}
-
 					}
 					else if (event.mouseWheelScroll.delta < 0)
 					{
@@ -1134,6 +1099,18 @@ void Engine::run()
 				}
 				else
 				{
+					if (firstTimeInShop)
+					{
+						shopText.setString("Welcome to the shop! \nClick on one of my items up top to buy it.\nClick on one of your own items down below to sell it!");
+						shopKeeperSetEmotion(2);
+						firstTimeInShop = false;
+					}
+					else
+					{
+						shopText.setString("Welcome back!\nIt's always nice to see a familiar face.");
+						shopKeeperSetEmotion(1);
+					}
+					shopKeeperSetEmotion(2);
 					attemptedToSellSentimentalItem = false;
 					drawShop = true;
 				}
@@ -1142,7 +1119,7 @@ void Engine::run()
 			if (event.type == Event::KeyPressed || Mouse::isButtonPressed(Mouse::Left))
 			{
 				// Pause the game if escape key pressed
-				if (event.key.code == Keyboard::Escape && state == State::PLAYING && !drawInventory)
+				if (event.key.code == Keyboard::Escape && state == State::PLAYING && !drawInventory && !drawShop)
 				{
 					state = State::PAUSED;
 				}
@@ -1158,7 +1135,9 @@ void Engine::run()
 				// Player hit the new game button in the main menu
 				else if (newGameButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU && event.mouseButton.button == Mouse::Left)
 				{
+					enemyArr.clear();
 					state = State::STORY_INTRO;
+					timeToBeat.restart();
 
 					skipAnimation = false;
 
@@ -1195,12 +1174,11 @@ void Engine::run()
 					arena.left = 1664;
 					arena.top = 1664;
 
-					// Pass the vertex array by reference 
-					// to the createBackground function
+					// Pass the vertex array by reference to the createBackground function
 					int tileSize = 64;
 
 					// Spawn the player in the middle of the arena
-					player.spawn(resolution, tileSize, player.getPlayerLevel());
+					player.spawn(resolution, tileSize, player.getPlayerLevel(), true);
 				
 					// Reset the clock so there isn't a frame jump
 					clock.restart();
@@ -1228,7 +1206,6 @@ void Engine::run()
 
 					tutorialStage = 0;
 
-					// addItemToInventory("Health_Potion");
 					initializeInventory();
 				}
 
@@ -1248,6 +1225,7 @@ void Engine::run()
 					// Loads player stats from text file
 					if (player.loadSaveFile() == true)
 					{
+						enemyArr.clear();
 						// Player loaded successfully
 
 						// Update equipped item icons
@@ -1275,8 +1253,8 @@ void Engine::run()
 						// Pass the vertex array by reference to the createBackground function
 						int tileSize = 64;
 
-						// Spawn the player in the middle of the arena
-						player.spawn(resolution, tileSize, player.getPlayerLevel());
+						// Spawn the player, don't set their position since it loaded from the save file
+						player.spawn(resolution, tileSize, player.getPlayerLevel(), false);
 
 						// Reset the clock so there isn't a frame jump
 						clock.restart();
@@ -1306,9 +1284,10 @@ void Engine::run()
 							thread worldThread(&Engine::generateWorld, this);
 							worldThread.detach();
 						}
-
+						tutorialStage = 2;
 					}
 					else {
+						enemyArr.clear();
 						// No save file so create a new one with default values and load it	
 						player.createNewSave();
 						player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume(), vSync, fpsLimit);
@@ -1339,9 +1318,7 @@ void Engine::run()
 						int tileSize = 64;
 
 						// Spawn the player in the middle of the arena
-						player.spawn(resolution, tileSize, player.getPlayerLevel());
-
-
+						player.spawn(resolution, tileSize, player.getPlayerLevel(), true);
 
 						// Reset the clock so there isn't a frame jump
 						clock.restart();
@@ -1370,6 +1347,8 @@ void Engine::run()
 							thread worldThread(&Engine::generateWorld, this);
 							worldThread.detach();
 						}
+
+						tutorialStage = 0;
 					}
 				}
 
@@ -1384,8 +1363,6 @@ void Engine::run()
 					float savedVolume = track.getPosition().x + track.getSize().x * (player.getVolume() / 100.0f);
 					handle.setPosition(savedVolume, handle.getPosition().y);
 
-					// Map handle position to global volume
-
 					state = State::OPTIONS_MENU;
 				}
 
@@ -1398,18 +1375,18 @@ void Engine::run()
 				}
 
 				// Player hit the quit game button
-				if (gameOverQuitButton.getGlobalBounds().contains(worldPos) && state == State::GAME_OVER && event.mouseButton.button == Mouse::Left)
+				if (gameOverQuitButton.getGlobalBounds().contains(worldPos) && (state == State::GAME_OVER || state == State::VICTORY) && event.mouseButton.button == Mouse::Left)
 				{
 					sound.playButtonClickSound();
 					// Save info to file before quitting
 					window.close();
 				}
 
-
 				// Player hit the main menu button in the game over screen
-				if (gameOverMainMenuButton.getGlobalBounds().contains(worldPos) && state == State::GAME_OVER && event.mouseButton.button == Mouse::Left)
+				if (gameOverMainMenuButton.getGlobalBounds().contains(worldPos) && (state == State::GAME_OVER || state == State::VICTORY) && event.mouseButton.button == Mouse::Left)
 				{
 					sound.stopGameOverSound();
+					sound.stopVictorySound();
 					sound.playButtonClickSound();
 					world.clearWorld();
 					state = State::MAIN_MENU;
@@ -1550,9 +1527,8 @@ void Engine::run()
 			if (event.type == Event::KeyPressed)
 			{
 				// below are debug functions, comment them out in full build / when needed
-
+				
 				// Debug shop toggle
-				// Shop is still very much WIP
 				if (event.key.code == Keyboard::O && state == State::PLAYING && debugMode)
 				{
 					if (drawShop) {
@@ -1565,39 +1541,79 @@ void Engine::run()
 					}
 				}
 
-				if (event.key.code == Keyboard::Num1 && state == State::PLAYING && debugMode)
+				if (event.key.code == Keyboard::V && state == State::PLAYING && debugMode)
 				{
-					// Increase health
-					player.upgradeHealth();
-					player.switchSpell(1);
+					if (sound.isSoundtrackPlaying()) {
+						sound.stopSoundtrack();
+					}
+					sound.playVictorySound();
+					gameOverText.setString("Victory!");
+					gameOverText.setFillColor(Color::Yellow);
+					textBounds = gameOverText.getLocalBounds();
+					viewCentre = hudView.getCenter();
+					gameOverText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y - gameOverText.getCharacterSize());
 
+					gameOverText2.setString("Insert story stuff here (maybe change if if you sold a sentimental item)");
+					textBounds = gameOverText2.getLocalBounds();
+					viewCentre = hudView.getCenter();
+					gameOverText2.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y - 400 - gameOverText2.getCharacterSize());
+
+					stringstream ssStatText;
+					ssStatText << fixed << setprecision(0) << "Level Reached: " << player.getPlayerLevel() << "\nGold Earned: " << player.getGold()
+						<< "\nEnemies Killed: " << player.getKillCount() << "\nTime Taken: " << timeToBeat.getElapsedTime().asSeconds() << " seconds";
+					statText.setString(ssStatText.str());
+					textBounds = statText.getLocalBounds();	
+					viewCentre = hudView.getCenter();
+					statText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y + 100 - statText.getCharacterSize());
+
+					state = State::VICTORY;
 				}
 
-				if (event.key.code == Keyboard::Num2 && state == State::PLAYING && debugMode)
+				if (event.key.code == Keyboard::Num1 && state == State::PLAYING)
 				{
-					// Increase stamina
-					player.upgradeStamina();
+					if (debugMode)
+					{
+						// Increase health
+						player.upgradeHealth();
+					}
+					player.switchSpell(1);
+				}
+
+				if (event.key.code == Keyboard::Num2 && state == State::PLAYING)
+				{
+					if (debugMode)
+					{
+						// Increase stamina
+						player.upgradeStamina();
+					}
 					player.switchSpell(2);
 				}
 
-				if (event.key.code == Keyboard::Num3 && state == State::PLAYING && debugMode)
+				if (event.key.code == Keyboard::Num3 && state == State::PLAYING)
 				{
-					// Increase health
-					player.upgradeMana();
+					if (debugMode)
+					{
+						// Increase mana
+						player.upgradeMana();
+					}
 					player.switchSpell(3);
 				}
 
-				if (event.key.code == Keyboard::Num4 && state == State::PLAYING && debugMode)
+				if (event.key.code == Keyboard::Num4 && state == State::PLAYING)
 				{
-					if (player.addItemToInventory("Iron_Sword"))
+					if (debugMode)
 					{
-						initializeInventory();
-						cout << "Item added to inventory" << endl;
+						if (player.addItemToInventory("Iron_Sword"))
+						{
+							initializeInventory();
+							cout << "Item added to inventory" << endl;
+						}
+						else
+						{
+							cout << "No space in inventory" << endl;
+						}
 					}
-					else
-					{
-						cout << "No space in inventory" << endl;
-					}
+
 					player.switchSpell(4);
 				}
 
@@ -1642,7 +1658,7 @@ void Engine::run()
 		} // End event polling
 
 		// Handle controls while playing
-		if (state == State::PLAYING && !drawInventory)
+		if (state == State::PLAYING && !drawInventory && !drawShop)
 		{
 			if (Mouse::isButtonPressed(Mouse::Left))
 			{
@@ -1704,7 +1720,6 @@ void Engine::run()
 					cout << "Phasing ended" << endl;
 					phaseTimer.restart();
 				}
-
 			}
 
 			// Handle the pressing and releasing the WASD keys
@@ -1738,7 +1753,6 @@ void Engine::run()
 			if (Keyboard::isKeyPressed(Keyboard::D))
 			{
 				player.moveRight();
-
 			}
 			else
 			{
@@ -1805,15 +1819,14 @@ void Engine::run()
 		if (player.getHealth() <= 0) {
 			player.setHealthValue(0);
 
-			if (state == State::PLAYING) {
-
-			
-
+			if (state == State::PLAYING) 
+			{
 				if (sound.isSoundtrackPlaying()) {
 					sound.stopSoundtrack();
 				}
 				sound.playGameOverSound();	
 				gameOverText.setString("Game Over!");
+				gameOverText.setFillColor(Color::Red);
 				textBounds = gameOverText.getLocalBounds();
 				viewCentre = hudView.getCenter();
 				gameOverText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y - gameOverText.getCharacterSize());
@@ -1822,9 +1835,6 @@ void Engine::run()
 				textBounds = gameOverText2.getLocalBounds();
 				viewCentre = hudView.getCenter();
 				gameOverText2.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y + 100 - gameOverText2.getCharacterSize());
-
-			
-			
 
 				state = State::GAME_OVER;
 			}
@@ -1874,7 +1884,7 @@ void Engine::run()
 			window.setMouseCursorVisible(false);
 			window.setMouseCursorGrabbed(true);
 		}
-		else if (state == State::PAUSED || state == State::MAIN_MENU || state == State::OPTIONS_MENU || state == State::GAME_OVER)
+		else if (state == State::PAUSED || state == State::MAIN_MENU || state == State::OPTIONS_MENU || state == State::GAME_OVER || state == State::VICTORY)
 		{
 			window.setMouseCursorVisible(true);
 			window.setMouseCursorGrabbed(false);
@@ -1938,8 +1948,6 @@ void Engine::loadGameWorld()
 	populateChunkVector();
 	spawnEnemies();
 	state = State::PLAYING;
-
-	
 }
 // Sets the player's difficulty multiplier
 void Engine::setDifficulty()
@@ -1981,6 +1989,7 @@ void Engine::spawnEnemies()
 			auto db = std::make_unique<DragonBoss>();
 			db->spawn(worldEnemyTypes[i], worldEnemyLocations[i], player.getPlayerLevel());
 			enemyArr.push_back(std::move(db));
+
 		}
 	}
 }

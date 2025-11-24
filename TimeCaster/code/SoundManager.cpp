@@ -73,6 +73,10 @@ SoundManager::SoundManager() {
 	gameOverBuffer.loadFromFile("sound/gameOver.mp3");
 	gameOver.setBuffer(gameOverBuffer);
 
+	// Loads victory sound from file into buffer
+	victoryBuffer.loadFromFile("sound/victory.mp3");
+	victory.setBuffer(victoryBuffer);
+
 	// Loads click sound from file into buffer
 	clickBuffer.loadFromFile("sound/buttonClick.wav");
 	buttonClick.setBuffer(clickBuffer);
@@ -90,6 +94,12 @@ SoundManager::SoundManager() {
 
 	goldBuffer.loadFromFile("sound/coin.mp3");
 	gold.setBuffer(goldBuffer);
+
+	dragonRoarBuffer.loadFromFile("sound/dragonRoar.wav");
+	dragonRoar.setBuffer(dragonRoarBuffer);
+
+	dragonBiteBuffer.loadFromFile("sound/dragonBite.wav");
+	dragonBite.setBuffer(dragonBiteBuffer);
 } // End of SoundManager constructor
 
 // Function for placing songs within the soundtrack list
@@ -211,4 +221,20 @@ void SoundManager::playGameOverSound() {
 
 void SoundManager::stopGameOverSound() {
 	gameOver.stop();
+}
+
+void SoundManager::playDragonRoar() {
+	dragonRoar.play();
+}
+
+void SoundManager::playDragonBite() {
+	dragonBite.play();
+}
+
+void SoundManager::playVictorySound() {
+	victory.play();
+}
+
+void SoundManager::stopVictorySound() {
+	victory.stop();
 }
