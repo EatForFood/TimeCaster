@@ -1235,7 +1235,6 @@ void Engine::run()
 				// Player hit the load game button in the main menu
 				else if (loadGameButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU && event.mouseButton.button == Mouse::Left)
 				{
-
 					state = State::LOADING;
 					skipAnimation = false;
 

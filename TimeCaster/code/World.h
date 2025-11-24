@@ -8,7 +8,11 @@ private:
 
 	int WORLD_SIZE;
 	int GRID_SIZE;
-	vector<Chunk> chunks;
+	vector<Chunk> m_Chunks;
+	bool m_BossArenaPlaced = false;
+
+	Vector2i m_BossArenaPos;
+	vector<Vector2i> m_BossCandidates;
 
 	Vector2i m_TileTypeF[50][50];
 	String m_TileEntityF[50][50];
