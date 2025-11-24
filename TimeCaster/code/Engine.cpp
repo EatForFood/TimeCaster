@@ -232,12 +232,12 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	controlsText.setPosition(100, 210);
 
 	// Load game button text
-	creditsText.setString("Credits:\nJoshua Muller\nToby Womack\nJake O'Sullivan\nOpen Assets used\nFound in files\nAnd documentation");  // Set the text
+	creditsText.setString("Credits:\n\nDevelopers:\nJoshua Muller\nToby Womack\nJake O'Sullivan\n\nCredits for open Assets used are located\nIn the Game Files & Documentation");  // Set the text
 	creditsText.setFont(font);           // Set the font
 	creditsText.setCharacterSize(fontSize); // Set the font size
 	creditsText.setFillColor(Color::White);
 	textBounds = creditsText.getLocalBounds();
-	creditsText.setPosition(1600, 210);
+	creditsText.setPosition(1400, 210);
 
 
 	// Load game button
