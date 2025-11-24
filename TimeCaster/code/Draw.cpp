@@ -218,7 +218,6 @@ void Engine::draw()
 			window.draw(filter);
 			window.draw(darkInventoryBackground);
 			window.draw(shopBackground);
-			window.draw(shopText);
 
 			// Draw the shop frames
 			for (int i = 0; i < shopFrames.size(); i++) {
@@ -247,7 +246,11 @@ void Engine::draw()
 			for (auto& icons : m_StoredItems) {
 				window.draw(icons.getIcon());
 			}
+
+			window.draw(portraitWindowSprite);
 			window.draw(shopKeeperSprite);
+			window.draw(dialogueBoxSprite);
+			window.draw(shopText);
 			window.setView(mainView);
 			window.draw(spriteCursor);
 			window.setView(hudView);

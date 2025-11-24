@@ -757,6 +757,16 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	shopKeeperSprite.setScale(3.0f, 3.0f);
 	shopKeeperSprite.setPosition(viewCentre.x + 500, 825);
 
+	dialogueBoxSprite.setTexture(TextureHolder::GetTexture("graphics/UI/dialogueBox.png"));
+	//dialogueBoxSprite.setTexture(shopKeeperHappy);
+	dialogueBoxSprite.setScale(2.25f, 2.25f);
+	dialogueBoxSprite.setPosition(shopText.getPosition().x - 50, shopText.getPosition().y);
+	
+
+	portraitWindowSprite.setTexture(TextureHolder::GetTexture("graphics/UI/portraitWindow.png"));
+	portraitWindowSprite.setScale(1.1f, 1.1f);
+	portraitWindowSprite.setPosition(Vector2f(shopKeeperSprite.getPosition().x + 25, shopKeeperSprite.getPosition().y + 25));
+
 	inventoryBackground.setTexture(&inventoryBackgroundTexture);
 	inventoryBackground.setSize(Vector2f(1000, 800));
 	textBounds = inventoryBackground.getLocalBounds();
@@ -1147,16 +1157,16 @@ void Engine::run()
 					{
 						shopText.setString("Welcome to the shop! \nClick on one of my items up top to buy it.\nClick on one of your own items down below to sell it!");
 						shopKeeperSetEmotion(2);
-						textBounds = shopText.getLocalBounds();
-						shopText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 900);
+					//	textBounds = shopText.getLocalBounds();
+					//	shopText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 900);
 						firstTimeInShop = false;
 					}
 					else
 					{
 						shopText.setString("Welcome back!\nIt's always nice to see a familiar face.");
 						shopKeeperSetEmotion(1);
-						textBounds = shopText.getLocalBounds();
-						shopText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 900);
+						//textBounds = shopText.getLocalBounds();
+					//	shopText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 900);
 					}
 					shopKeeperSetEmotion(2);
 					attemptedToSellSentimentalItem = false;

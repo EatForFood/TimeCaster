@@ -199,6 +199,9 @@ private:
 	Sprite playerInFramePants;
 	Sprite playerInFrameShoes;
 
+	Sprite dialogueBoxSprite;
+	Sprite portraitWindowSprite;
+
 	View hudView;
 
 	Font font;
