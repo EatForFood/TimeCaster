@@ -15,6 +15,7 @@ bool Engine::sellItem(int itemIndex)
 	{
 		stringstream shopStream;
 		shopStream << "I can't buy equipped items.\nYou'll have to equip something else in that slot.";
+		shopKeeperSetEmotion(3);
 		shopText.setString(shopStream.str());
 		return false;
 	}
@@ -22,12 +23,14 @@ bool Engine::sellItem(int itemIndex)
 	{
 		stringstream shopStream;
 		shopStream << "That looks important to you.\nAre you sure you'd like to sell it?\nI can't guarantee you'll be able to get it back.";
+		shopKeeperSetEmotion(3);
 		shopText.setString(shopStream.str());
 		attemptedToSellSentimentalItem = true;
 		return false;
 	}
 	else
 	{
+		string itemName = shopItems[itemIndex].getName();
 		int goldToAdd = m_StoredItems[itemIndex].getValue() * 0.75f; // Sell for 75 percent of the value, But not less than 1 gold
 		if (goldToAdd < 1)
 		{
@@ -38,7 +41,8 @@ bool Engine::sellItem(int itemIndex)
 		if (m_StoredItems[itemIndex].isSentimental())
 		{
 			stringstream shopStream;
-			shopStream << "Alright, if you're sure.\nHere's " << goldToAdd << " gold for it";
+			shopStream << "Alright, if you're sure.\nHere's " << goldToAdd << " gold for your " << cleanItemName(itemName) << ".";
+			shopKeeperSetEmotion(0);
 			shopText.setString(shopStream.str());
 			textWasSet = true;
 			player.setSoldSentimentalItem(true);
@@ -51,7 +55,8 @@ bool Engine::sellItem(int itemIndex)
 		if (!textWasSet)
 		{
 			stringstream shopStream;
-			shopStream << "I'll take it!\nHere's " << goldToAdd << " gold for it.";
+			shopStream << "I'll take it!\nHere's " << goldToAdd << " gold for your " << cleanItemName(itemName) << ".";
+			shopKeeperSetEmotion(1);
 			shopText.setString(shopStream.str());
 		}
 
@@ -66,6 +71,7 @@ int Engine::buyItem(int itemIndex)
 	{
 		stringstream shopStream;
 		shopStream << "I don't have that item.";
+		shopKeeperSetEmotion(0);
 		shopText.setString(shopStream.str());
 		return 0; // 0 means item does not exist
 	}
@@ -74,6 +80,15 @@ int Engine::buyItem(int itemIndex)
 		int itemCost = shopItems[itemIndex].getValue();
 		int playerGold = player.getGold();
 		string itemName = shopItems[itemIndex].getName();
+		string thatThose = "";
+		if (shopItems[itemIndex].useThat())
+		{
+			thatThose = "that ";
+		}
+		else
+		{
+			thatThose = "those ";
+		}
 		if (playerGold >= itemCost)
 		{
 
@@ -82,23 +97,17 @@ int Engine::buyItem(int itemIndex)
 				initializeInventory();
 				player.addGold(-itemCost);
 				stringstream shopStream;
-				string thatThose = "";
-				if (shopItems[itemIndex].useThat())
-									{
-					thatThose = "that ";
-				}
-				else
-				{
-					thatThose = "those ";
-				}
+
 				shopStream << "Thanks for the " << itemCost << " Gold!\nI hope you make good use of " << thatThose << cleanItemName(itemName) << "!";
+				shopKeeperSetEmotion(1);
 				shopText.setString(shopStream.str());
 				return 1; // 1 means success
 			}
 			else
 			{
 				stringstream shopStream;
-				shopStream << "I'd love to sell that to you, but your inventory is full.";
+				shopStream << "I'd love to sell " << thatThose << "to you, but your inventory is full.";
+				shopKeeperSetEmotion(3);
 				shopText.setString(shopStream.str());
 				return 2; // 2 means no space in inventory
 			}
@@ -107,7 +116,8 @@ int Engine::buyItem(int itemIndex)
 		{
 			int difference = itemCost - playerGold;
 			stringstream shopStream;
-			shopStream << "Sorry, you're about " << difference << " Gold short of affording that " << cleanItemName(itemName) << ".";
+			shopStream << "Sorry, you're about " << difference << " Gold short.\nI can't sell you " << thatThose << cleanItemName(itemName) << ".";
+			shopKeeperSetEmotion(3);
 			shopText.setString(shopStream.str());
 			return 3; // 3 means not enough gold
 		}
@@ -126,7 +136,7 @@ void Engine::initializeShop()
 		shopFrames[i].setTexture(&textureEmptyFrame);
 		shopFrames[i].setSize(Vector2f(75, 75));
 		shopFrames[i].setOrigin(shopFrames[i].getSize() / 2.f);
-
+		
 		if (i != 0 && i % 6 == 0) {
 			startY += 100;
 			startX = viewCentre.x - 350;
@@ -205,4 +215,26 @@ void Engine::restockShop(int level)
 
 
 	initializeShop();
+}
+
+void Engine::shopKeeperSetEmotion(int emotionIndex)
+{
+	switch (emotionIndex)
+	{
+	case 0:
+		shopKeeperSprite.setTexture(shopKeeperNeutral);
+		break;
+	case 1:
+		shopKeeperSprite.setTexture(shopKeeperHappy);
+		break;
+	case 2:
+		shopKeeperSprite.setTexture(shopKeeperTalking);
+		break;
+	case 3:
+		shopKeeperSprite.setTexture(shopKeeperUnsure);
+		break;
+	default:
+		shopKeeperSprite.setTexture(shopKeeperNeutral);
+		break;
+	}
 }

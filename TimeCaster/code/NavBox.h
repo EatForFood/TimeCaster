@@ -10,8 +10,8 @@ protected:
 
 	int TILE_SIZE = 64;
 
-	float ix;
-	float iy;
+	int ix;
+	int iy;
 
 	ConvexShape navArea;
 
@@ -20,9 +20,9 @@ protected:
 public:
 	NavBox();
 
-	NavBox(float x, float y, float w, float h);
+	NavBox(int x, int y, int w, int h);
 
-	void SetNavBox(float x, float y, float w, float h);
+	void SetNavBox(int x, int y, int w, int h);
 
 	Vector2f getPosition();
 
