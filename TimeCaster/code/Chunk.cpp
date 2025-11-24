@@ -1126,11 +1126,6 @@ void Chunk::clearChunk() {
 	currentVertexFG = 0;
 	entities.clear();
 	navBoxes.clear();
-	string path = "gamedata/chunks/chunk_" +
-		to_string((int)m_Chunk.x) + "_" +
-		to_string((int)m_Chunk.y) + ".txt";
-	remove(path.c_str());
-
 }
 
 void Chunk::createForest() // create a forest from random tree entities

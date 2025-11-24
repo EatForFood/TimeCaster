@@ -155,8 +155,6 @@ void World::clearWorld()
 		m_Chunks[i].clearChunk();
 	}
     m_Chunks.clear();
-    string path = "gamedata/TCWorld.txt";
-    remove(path.c_str());
 }
 
 int World::getWorldSize()
