@@ -22,8 +22,6 @@
     <ClInclude Include="code\DragonBoss.h" />
     <ClInclude Include="code\Loot.h" />
     <ClInclude Include="code\Particle.h" />
-    <ClInclude Include="code\Pathfinder.h" />
-    <ClInclude Include="code\Pickup.h" />
     <ClInclude Include="code\Spell.h" />
     <ClInclude Include="code\Cell.h" />
     <ClInclude Include="code\Character.h" />
@@ -48,7 +46,6 @@
     <ClCompile Include="code\Inventory.cpp" />
     <ClCompile Include="code\Loot.cpp" />
     <ClCompile Include="code\Particle.cpp" />
-    <ClCompile Include="code\Pathfinder.cpp" />
     <ClCompile Include="code\Shop.cpp" />
     <ClCompile Include="code\Spell.cpp" />
     <ClCompile Include="code\Cell.cpp" />

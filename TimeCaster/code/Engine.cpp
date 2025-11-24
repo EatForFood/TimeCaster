@@ -8,7 +8,6 @@
 #include "Player.h"
 #include "TextureHolder.h"
 #include "Spell.h"
-#include "Pickup.h"
 #include "Decal.h"
 #include "Windows.h"
 #include "World.h"
@@ -1567,7 +1566,30 @@ void Engine::run()
 					viewCentre = hudView.getCenter();
 					gameOverText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y - gameOverText.getCharacterSize());
 
-					gameOverText2.setString("Insert story stuff here (maybe change if if you sold a sentimental item)");
+					int silly = rand() % 100;
+					if (silly == 67)
+					{
+						if (player.soldSentimentalItem()) {
+							gameOverText2.setString("You sold a sentimental item... \nWas it worth it?\nYOU MONSTER!");
+						}
+						else
+						{
+							gameOverText2.setString("You managed to keep all your sentimental items! \nWell done!");
+						}
+					}
+					else
+					{
+						if (!player.soldSentimentalItem()) {
+							gameOverText2.setString("Ignis has been slain.\nYou can finally rest...");
+						}
+						else {
+							gameOverText2.setString("Ignis has been slain.\nBut the locket containing last memories of your family... It's gone.");
+						}
+					}
+
+
+
+
 					textBounds = gameOverText2.getLocalBounds();
 					viewCentre = hudView.getCenter();
 					gameOverText2.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y - 400 - gameOverText2.getCharacterSize());
