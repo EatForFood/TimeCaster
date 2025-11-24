@@ -392,6 +392,7 @@ void Engine::draw()
 		window.clear();
 		window.draw(spriteMainMenu);
 		window.draw(optionsHeadingText);
+		window.draw(controlsText);
 		window.draw(mainMenuButton);
 		window.draw(mainMenuButtonText);
 		window.draw(volumeSliderText);

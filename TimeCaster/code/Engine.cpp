@@ -223,6 +223,14 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	y = loadGameButton.getPosition().y + (loadGameButton.getSize().y / 2.f) - (textBounds.height / 2.f);
 	loadGameButtonText.setPosition(x - textBounds.left, y - textBounds.top);
 
+	// Load game button text
+	controlsText.setString("Controls:\nWASD to move \nTAB to open the inventory\nLeft click to attack\n1-4 to select spell\nF or middle click to switch combat types\nScroll wheel to zoom in or out");  // Set the text
+	controlsText.setFont(font);           // Set the font
+	controlsText.setCharacterSize(fontSize); // Set the font size
+	controlsText.setFillColor(Color::White);
+	textBounds = controlsText.getLocalBounds();
+	controlsText.setPosition(200, 210);
+
 	// Load game button
 	gameOverMainMenuButton.setPosition(viewCentre.x - 400, 900);
 	gameOverMainMenuButton.setSize(Vector2f(300, 80));
