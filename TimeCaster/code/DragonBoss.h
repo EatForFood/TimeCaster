@@ -26,7 +26,7 @@ private:
 	bool m_RequiresAiming = false;
 	bool rageActivated = false;
 	
-	void bite();
+	void bite(const Vector2f& playerPos);
 	void rage();
 
 	Vector2f m_TargetPosition;
@@ -46,4 +46,7 @@ private:
 	void charge();
 
 	Vector2f m_ChargeDirection;
+
+	Clock m_BiteClock;
+	float m_BiteDuration = 5.0f;
 };

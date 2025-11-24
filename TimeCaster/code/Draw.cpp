@@ -127,6 +127,14 @@ void Engine::draw()
 			}
 		}
 
+		for (auto& dragonSpell : dragonSpells)
+		{
+			if (dragonSpell.isInFlight())
+			{
+				drawables.emplace_back(dragonSpell.getSprite().getGlobalBounds().top + dragonSpell.getSprite().getGlobalBounds().height, dragonSpell.getSprite());
+			}
+		}
+
 		for (auto& particle : particles)
 		{
 			if (particle.isPlaying())

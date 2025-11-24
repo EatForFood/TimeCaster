@@ -90,6 +90,12 @@ SoundManager::SoundManager() {
 
 	goldBuffer.loadFromFile("sound/coin.mp3");
 	gold.setBuffer(goldBuffer);
+
+	dragonRoarBuffer.loadFromFile("sound/dragonRoar.wav");
+	dragonRoar.setBuffer(dragonRoarBuffer);
+
+	dragonBiteBuffer.loadFromFile("sound/dragonBite.wav");
+	dragonBite.setBuffer(dragonBiteBuffer);
 } // End of SoundManager constructor
 
 // Function for placing songs within the soundtrack list
@@ -211,4 +217,12 @@ void SoundManager::playGameOverSound() {
 
 void SoundManager::stopGameOverSound() {
 	gameOver.stop();
+}
+
+void SoundManager::playDragonRoar() {
+	dragonRoar.play();
+}
+
+void SoundManager::playDragonBite() {
+	dragonBite.play();
 }

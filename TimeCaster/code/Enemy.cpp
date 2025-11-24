@@ -332,16 +332,13 @@ void Enemy::updateTextRect()
 		}
 		else 
 		{
-
 			m_SpriteWeapon.setPosition(m_Position.x, m_Position.y - 10);
 		}
-	
 	}
 	else 
 	{
 		m_SpriteWeapon.setPosition(m_Position);
 	}
-
 }
 
 int Enemy::loot()
@@ -387,7 +384,7 @@ void Enemy::shotFired() {
 	resetShotCooldown();
 
 	if (shotsFired > 4) {
-		m_IsAttacking = false;
+		state = AttackState::Idle;
 	}
 }
 

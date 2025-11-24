@@ -116,15 +116,15 @@ void Engine::update()
 						{
 							if (enemyPtr->getAttackState() == Enemy::AttackState::Shoot && enemyPtr->getShotsFired() <= 4 && enemyPtr->getShotCooldown() > 0.5)
 							{
-								spells[currentSpell].shoot(enemyPtr->getCenter().x, enemyPtr->getCenter().y, player.getPosition().x, player.getPosition().y, enemyPtr->getDamage());
+								dragonSpells[currentSpell].shoot(enemyPtr->getCenter().x, enemyPtr->getCenter().y, player.getPosition().x, player.getPosition().y, enemyPtr->getDamage());
 
 								// Play fireball sound
 								sound.playFireballSound();
 
-								currentSpell++;
-								if (currentSpell > 99)
+								currentDragonSpell++;
+								if (currentDragonSpell > 99)
 								{
-									currentSpell = 0;
+									currentDragonSpell = 0;
 								}
 
 								enemyPtr->shotFired();
@@ -132,6 +132,28 @@ void Engine::update()
 							else if (enemyPtr->getShotsFired() > 4)
 							{
 								enemyPtr->resetShotsFired();
+							}
+
+							if (enemyPtr->getAttackState() == Enemy::AttackState::Charge && !roarPlayed) {
+								sound.playDragonRoar();
+								roarPlayed = true;
+								cout << "Sound played" << endl;
+							}
+							else if (enemyPtr->getAttackState() != Enemy::AttackState::Charge && roarPlayed) {
+								roarPlayed = false;
+							}
+
+							// Player touches the dragon hitbox
+							if (enemyPtr->getGlobalBounds().intersects(player.getHitBox())) {
+								// Play the blood particle effect
+								if (player.hit(gameTimeTotal, enemyPtr->getAttackDamage(), 1000))
+								{
+									sound.playDragonBite();
+									sound.playHitSound();
+									particles[100].play(player.getCenter().x - 30, player.getCenter().y - 30, 1);
+									decal[currentDecal].spawn("bloodImpact", player.getPosition().x, player.getPosition().y);
+									currentDecal++;
+								}
 							}
 						}
 					}
@@ -166,7 +188,6 @@ void Engine::update()
 								items.emplace_back(item, enemyPtr->getPosition());
 							}
 						}
-
 					}
 				}
 			}
@@ -183,7 +204,6 @@ void Engine::update()
 				timeFrozen = false;
 			}
 		}
-
 
 		if (player.isPhasing())
 		{
@@ -206,8 +226,6 @@ void Engine::update()
 
 		// Make the view centre around the player				
 		mainView.setCenter(player.getCenter().x, player.getCenter().y - 10);
-
-
 
 		// Update any spells that are in-flight
 		if (!timeFrozen) {
@@ -254,6 +272,51 @@ void Engine::update()
 								// Add check for piercing spells later
 								break;
 							}
+						}
+					}
+				}
+			}
+
+			for (int i = 0; i < 100; i++)
+			{
+				if (dragonSpells[i].isInFlight())
+				{
+					dragonSpells[i].update(dtAsSeconds, world.getNavBoxes(player.getChunk()));
+
+					FloatRect spellBounds = dragonSpells[i].getSprite().getGlobalBounds();
+
+					if (!player.isDead())
+					{
+						if (dragonSpells[i].getSprite().getGlobalBounds().intersects(player.getHitBox()))
+						{
+							decal[currentDecal].spawn("bloodImpact", player.getPosition().x, player.getPosition().y);
+							currentDecal++;
+							// Apply damage from spell to enemy
+							player.setHealth(-dragonSpells[i].getSpellDamage());
+							//cout << "Enemy hit for " << spells[i].getSpellDamage() << " damage. Enemy health now " << enemies.getCurrentHP() << endl;
+
+							// Mark enemy as hit
+							player.setWasHit(true);
+
+							// Stop the spell; Add check for piercing spells later
+							dragonSpells[i].stop();
+
+							// Play the sparks particle effect
+							for (int i = 0; i < 100; i++)
+							{
+								if (!particles[i].isPlaying())
+								{
+									particles[i].play(player.getCenter().x - 30, player.getCenter().y - 30, 2);
+									break;
+								}
+							}
+
+							// Play hit sound
+							sound.playHitSound();
+
+							// This spell hit an enemy; stop checking other enemies
+							// Add check for piercing spells later
+							break;
 						}
 					}
 				}

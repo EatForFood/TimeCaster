@@ -85,11 +85,21 @@ private:
 	SoundBuffer storyIntroBuffer;
 	Sound storyIntro;
 
+	// Prepare the sword swing sound
 	SoundBuffer swordSwingBuffer;
 	Sound swordSwing;
 
+	// Prepare the gold sound
 	SoundBuffer goldBuffer;
 	Sound gold;
+
+	// Prepare the dragon roar sound
+	SoundBuffer dragonRoarBuffer;
+	Sound dragonRoar;
+
+	// Prepare the dragon bite sound
+	SoundBuffer dragonBiteBuffer;
+	Sound dragonBite;
 public:
 	// SoundManager constructor
 	SoundManager();
@@ -157,4 +167,8 @@ public:
 	void playSwordSwing();
 
 	void playGoldSound();
+
+	void playDragonRoar();
+
+	void playDragonBite();
 };
