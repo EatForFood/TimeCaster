@@ -15,8 +15,6 @@ Spell::Spell()
 	// Set piercing properties to false for now
 	m_PierceEnemy = false;
 	m_PierceObject = false;
-
-	
 }
 
 void Spell::shoot(float startX, float startY, float targetX, float targetY, float spellDamage)
@@ -146,7 +144,6 @@ void Spell::update(float elapsedTime, const vector<NavBox>& navBox)
 	}
 
 	moveTextureRect();
-
 }
 
 float Spell::bGetX()
@@ -178,15 +175,11 @@ void Spell::setSpriteFromSheet(sf::IntRect textureBox, int tileSize) // set spri
 	else
 		throw std::logic_error("Animation bounding box must contain multiply sprites, setSprite(sf::IntRect )\n");
 
-	//	cout << "setSpriteFromSheet  " << "animation_it limit" << m_Animation_It_Limit << "\n";
-	//	cout << "setSpriteFromSheet func " << "m_Ani_Counter " << m_Ani_Counter << "\n";
-
 	m_Sprite.setTextureRect(sf::IntRect{ sheetCoordinate, spriteSize });
 }
 
 void Spell::moveTextureRect() // animate sprite by moving texRect location
 {
-	//	cout << " Move Texture Rect m_Ani_Counter " << m_Ani_Counter << "\n";
 	// if the animation counter is greater than the animation limit reset to 1;
 	if (m_Ani_Counter == m_Animation_It_Limit)
 	{

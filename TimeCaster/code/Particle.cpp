@@ -10,9 +10,6 @@ Particle::Particle()
 	m_Sprite = Sprite(TextureHolder::GetTexture("graphics/particles/healParticle.png"));
 	m_Sprite.setOrigin(32, 32);
 	m_Sprite.setScale(1, 1);
-
-
-
 }
 
 
@@ -51,12 +48,6 @@ void Particle::play(float startX, float startY, int particleID)
 		break;
 	}
 
-
-
-
-
-
-
 	// Position the Particle ready to be drawn
 	if (particleID == 0)
 	{
@@ -73,17 +64,6 @@ void Particle::play(float startX, float startY, int particleID)
 
 	m_Sprite.setPosition(m_Position);
 }
-
-//
-//void Particle::stop()
-//{
-//	m_InFlight = false;
-//}
-//
-//bool Particle::isInFlight()
-//{
-//	return m_InFlight;
-//}
 
 void Particle::setPosition(float x, float y)
 {
@@ -113,10 +93,6 @@ void Particle::update(float elapsedTime)
 	else {
 		moveTextureRect(elapsedTime);
 	}
-
-
-
-
 }
 
 float Particle::bGetX()
@@ -148,15 +124,11 @@ void Particle::setSpriteFromSheet(sf::IntRect textureBox, int tileSize) // set s
 	else
 		throw std::logic_error("Animation bounding box must contain multiply sprites, setSprite(sf::IntRect )\n");
 
-	//	cout << "setSpriteFromSheet  " << "animation_it limit" << m_Animation_It_Limit << "\n";
-	//	cout << "setSpriteFromSheet func " << "m_Ani_Counter " << m_Ani_Counter << "\n";
-
 	m_Sprite.setTextureRect(sf::IntRect{ sheetCoordinate, spriteSize });
 }
 
 void Particle::moveTextureRect(float elapsedTime) // animate sprite by moving texRect location
 {
-	//	cout << " Move Texture Rect m_Ani_Counter " << m_Ani_Counter << "\n";
 	// if the animation counter is greater than the animation limit reset to 1;
 	if (m_Ani_Counter == m_Animation_It_Limit)
 	{
@@ -172,7 +144,6 @@ void Particle::moveTextureRect(float elapsedTime) // animate sprite by moving te
 	}
 
 	//increment animation counter to point to the next frame
-
 	m_AnimationTimer += elapsedTime;
 	if (m_AnimationTimer > m_TimePerFrame)
 	{
@@ -185,7 +156,6 @@ Sprite Particle::getSprite()
 {
 	return m_Sprite;
 }
-
 
 bool Particle::isPlaying()
 { 

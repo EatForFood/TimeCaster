@@ -25,7 +25,6 @@ NavBox::NavBox(int x, int y, int w, int h) // create navBox at position(x,y) wit
     navArea.setFillColor(Color::Transparent);
     navArea.setOutlineColor(Color::Black);
     navArea.setOutlineThickness(1.f);
-   
 }
 
 void::NavBox::SetNavBox(int x, int y, int w, int h) // create navBox at position(x,y) with width (w) and height (h) in isometric tiles
@@ -47,7 +46,6 @@ void::NavBox::SetNavBox(int x, int y, int w, int h) // create navBox at position
     navArea.setFillColor(Color::Transparent);
     navArea.setOutlineColor(Color::Black);
     navArea.setOutlineThickness(1.f);
-
 }
 
 void NavBox::NavTree() // reduce navBox size for trees

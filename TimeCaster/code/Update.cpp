@@ -1,4 +1,5 @@
 #include "Engine.h"
+#include <iomanip>
 
 using namespace sf;
 using namespace std;
@@ -159,6 +160,30 @@ void Engine::update()
 					}
 					if (enemyPtr->isDead() && !enemyPtr->isLooted())
 					{
+						if (enemyPtr->getType() == "Dragon") {
+							sound.playVictorySound();
+							gameOverText.setString("Victory!");
+							gameOverText.setFillColor(Color::Yellow);
+							textBounds = gameOverText.getLocalBounds();
+							viewCentre = hudView.getCenter();
+							gameOverText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y - gameOverText.getCharacterSize());
+
+							gameOverText2.setString("Insert story stuff here (maybe change if if you sold a sentimental item)");
+							textBounds = gameOverText2.getLocalBounds();
+							viewCentre = hudView.getCenter();
+							gameOverText2.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y - 400 - gameOverText2.getCharacterSize());
+
+							stringstream ssStatText;
+							ssStatText << fixed << setprecision(0) << "Level Reached: " << player.getPlayerLevel() << "\nGold Earned: " << player.getGold()
+								<< "\nEnemies Killed: " << player.getKillCount() << "\nTime Taken: " << timeToBeat.getElapsedTime().asSeconds() << " seconds";
+							statText.setString(ssStatText.str());
+							textBounds = statText.getLocalBounds();
+							viewCentre = hudView.getCenter();
+							statText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y + 100 - statText.getCharacterSize());
+
+							state = State::VICTORY;
+						}
+						
 						if (player.reward(enemyPtr->loot()))
 						{
 							drawInventory = true;
@@ -247,7 +272,6 @@ void Engine::update()
 								currentDecal++;
 								// Apply damage from spell to enemy
 								enemyPtr->setHealth(-spells[i].getSpellDamage());
-								//cout << "Enemy hit for " << spells[i].getSpellDamage() << " damage. Enemy health now " << enemies.getCurrentHP() << endl;
 
 								// Mark enemy as hit
 								enemyPtr->setWasHit(true);
@@ -293,7 +317,6 @@ void Engine::update()
 							currentDecal++;
 							// Apply damage from spell to enemy
 							player.setHealth(-dragonSpells[i].getSpellDamage());
-							//cout << "Enemy hit for " << spells[i].getSpellDamage() << " damage. Enemy health now " << enemies.getCurrentHP() << endl;
 
 							// Mark enemy as hit
 							player.setWasHit(true);
@@ -460,7 +483,6 @@ void Engine::update()
 
 
 			bool draggingFromInventory = false;
-			//int draggedIndex = -1;
 
 			// Check clicks on inventory items
 			for (int i = 0; i < m_StoredItems.size(); i++)
@@ -526,8 +548,6 @@ void Engine::update()
 						break;
 					}
 				}
-
-
 
 				// Try to equip as sword if dropped on sword slot
 				if (clickedItem.getIcon().getGlobalBounds().intersects(weaponFrame.getGlobalBounds())

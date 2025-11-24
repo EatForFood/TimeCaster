@@ -91,7 +91,6 @@ int Engine::buyItem(int itemIndex)
 		}
 		if (playerGold >= itemCost)
 		{
-
 			if (player.addItemToInventory(itemName))
 			{
 				initializeInventory();
@@ -123,7 +122,6 @@ int Engine::buyItem(int itemIndex)
 		}
 	}
 }
-
 
 void Engine::initializeShop()
 {
@@ -158,7 +156,6 @@ void Engine::initializeShop()
 // 0-8 are equipment, 9-10 are potions, 11 is sold item / stamina potion
 void Engine::restockShop(int level)
 {
-	
 	switch (level)
 	{
 	case 4:
@@ -203,16 +200,11 @@ void Engine::restockShop(int level)
 		break;
 	}
 
-	
-
 	// Always have potions in stock
 	shopItems[9] = Item("Mana_Potion", Vector2f(1200, 650));
 	shopItems[10] = Item("Health_Potion", Vector2f(1200, 650));
 	//Stamina potion will overwrite sold item, intentionally
 	shopItems[11] = Item("Stamina_Potion", Vector2f(1200, 650));
-
-	
-
 
 	initializeShop();
 }
