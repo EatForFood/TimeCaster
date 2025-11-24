@@ -22,7 +22,6 @@ Equipment::Equipment(string type, sf::Vector2f position) : Item(type, position) 
 
 		m_Sprite.setOrigin(25, 25);
 		m_That = true;
-
 	}
 	else if (m_Name == "Family_Robe")
 	{
@@ -38,7 +37,6 @@ Equipment::Equipment(string type, sf::Vector2f position) : Item(type, position) 
 		m_Armour = 0;
 		m_ItemType = ChestArmour;
 		m_That = true;
-
 
 		m_Sprite.setOrigin(25, 25);
 	}
