@@ -1967,13 +1967,13 @@ void Engine::loadGameWorld()
 void Engine::setDifficulty()
 {
 	if (difficulty == Difficulty::Easy) {
-		player.setDifficultyMult(0.75f);
+		player.setDifficultyMult(0.33f);
 	}
 	else if (difficulty == Difficulty::Medium) {
-		player.setDifficultyMult(1.0f);
+		player.setDifficultyMult(0.66f);
 	}
 	else if (difficulty == Difficulty::Hard) {
-		player.setDifficultyMult(1.25f);
+		player.setDifficultyMult(1.0f);
 	}
 }
 

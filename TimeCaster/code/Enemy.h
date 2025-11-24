@@ -143,8 +143,8 @@ private:
 	Vector2f m_WanderDirection = { 0.f, 0.f };
 
 	// enemy hit-box size
-	int m_Hitbox_Height = 24;
-	int m_Hitbox_Width = 24;
+	int m_Hitbox_Height = 12;
+	int m_Hitbox_Width = 12;
 
 	int shotsFired = 0;
 	Clock shootingCooldown;

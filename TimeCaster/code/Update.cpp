@@ -72,7 +72,7 @@ void Engine::update()
 							}
 						}
 
-						if (player.getSprite().getGlobalBounds().intersects(enemyPtr->getSprite().getGlobalBounds()))
+						if (player.getWeapon().getGlobalBounds().intersects(enemyPtr->getSprite().getGlobalBounds()))
 						{
 							enemyPtr->Attack();
 							// Handle player getting hit by enemy

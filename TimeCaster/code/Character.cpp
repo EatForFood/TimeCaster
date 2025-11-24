@@ -191,7 +191,7 @@ bool Character::isAttacking()
 
 void Character::setHealth(float health)
 {
-	m_Health = m_Health + health;
+	m_Health = m_Health + health * m_DifficultyMult;
 }
 
 float Character::getAttackDamage()

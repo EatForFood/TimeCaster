@@ -16,38 +16,11 @@ World::World()
     
 }
 
-/*
-void World::newWorld() 
-{
-    int half = GRID_SIZE / 2; 
-    ofstream out("gamedata/TCWorld.txt"); 
-    for (int y = -half; y <= half; y++) 
-    {
-        for (int x = -half; x <= half; x++) {
-            if (x == 0 && y == 0) // center chunk is spawn 
-            { 
-                string type = "spawn"; 
-                out << type << " " << x << " " << y << "\n"; 
-                m_Chunks.emplace_back("spawn", Vector2f(x, y), false); 
-            } 
-            else 
-            { 
-                string type = "forest"; 
-                out << type << " " << x << " " << y << "\n"; 
-                m_Chunks.emplace_back("forest", Vector2f(x, y), false); 
-            } 
-        } 
-    } 
-    out.close(); 
-}
-*/
-
-
 void World::newWorld()
 {
     cout << "new world" << endl;
     m_BossCandidates.clear();
-    GRID_SIZE = WORLD_SIZE;
+    GRID_SIZE = m_WorldSize;
     int halfWorld = GRID_SIZE / 2;
 
     ofstream out("gamedata/TCWorld.txt");
@@ -64,7 +37,7 @@ void World::newWorld()
         {
             int dist = abs(x) + abs(y);
 
-            // Valid “ring” for boss arena
+            // all valid positions for boss arena
             if (dist >= halfWorld / 2 && dist <= halfWorld)
             {
                 m_BossCandidates.emplace_back(Vector2i(x, y));
@@ -72,6 +45,7 @@ void World::newWorld()
         }
     }
 
+    // randomise RNG
     srand(time(NULL));
     int chance = rand() % (m_BossCandidates.size());
     m_BossArenaPos = m_BossCandidates[chance];
@@ -210,5 +184,5 @@ Vector2f World::getChunkCenter(int i)
 
 void World::setWorldSize(int size) 
 {
-    WORLD_SIZE = size;
+    m_WorldSize = size;
 }

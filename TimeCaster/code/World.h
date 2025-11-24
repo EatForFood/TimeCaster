@@ -6,7 +6,7 @@ class World
 {
 private:
 
-	int WORLD_SIZE;
+	int m_WorldSize = 3;
 	int GRID_SIZE;
 	vector<Chunk> m_Chunks;
 	bool m_BossArenaPlaced = false;
