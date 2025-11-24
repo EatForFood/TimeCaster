@@ -1569,38 +1569,51 @@ void Engine::run()
 					state = State::VICTORY;
 				}
 
-				if (event.key.code == Keyboard::Num1 && state == State::PLAYING && debugMode)
+				if (event.key.code == Keyboard::Num1 && state == State::PLAYING)
 				{
-					// Increase health
-					player.upgradeHealth();
+					if (debugMode)
+					{
+						// Increase health
+						player.upgradeHealth();
+					}
 					player.switchSpell(1);
 				}
 
-				if (event.key.code == Keyboard::Num2 && state == State::PLAYING && debugMode)
+				if (event.key.code == Keyboard::Num2 && state == State::PLAYING)
 				{
-					// Increase stamina
-					player.upgradeStamina();
+					if (debugMode)
+					{
+						// Increase stamina
+						player.upgradeStamina();
+					}
 					player.switchSpell(2);
 				}
 
-				if (event.key.code == Keyboard::Num3 && state == State::PLAYING && debugMode)
+				if (event.key.code == Keyboard::Num3 && state == State::PLAYING)
 				{
-					// Increase health
-					player.upgradeMana();
+					if (debugMode)
+					{
+						// Increase mana
+						player.upgradeMana();
+					}
 					player.switchSpell(3);
 				}
 
-				if (event.key.code == Keyboard::Num4 && state == State::PLAYING && debugMode)
+				if (event.key.code == Keyboard::Num4 && state == State::PLAYING)
 				{
-					if (player.addItemToInventory("Iron_Sword"))
+					if (debugMode)
 					{
-						initializeInventory();
-						cout << "Item added to inventory" << endl;
+						if (player.addItemToInventory("Iron_Sword"))
+						{
+							initializeInventory();
+							cout << "Item added to inventory" << endl;
+						}
+						else
+						{
+							cout << "No space in inventory" << endl;
+						}
 					}
-					else
-					{
-						cout << "No space in inventory" << endl;
-					}
+
 					player.switchSpell(4);
 				}
 

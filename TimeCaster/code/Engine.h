@@ -104,7 +104,7 @@ private:
 
 	int fpsLimit = 144;
 
-	bool debugMode = true;	
+	bool debugMode = false;	
 
 	bool drawEKey = false;
 
