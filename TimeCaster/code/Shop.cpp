@@ -30,7 +30,7 @@ bool Engine::sellItem(int itemIndex)
 	}
 	else
 	{
-		string itemName = shopItems[itemIndex].getName();
+		string itemName = m_StoredItems[itemIndex].getName();
 		int goldToAdd = m_StoredItems[itemIndex].getValue() * 0.75f; // Sell for 75 percent of the value, But not less than 1 gold
 		if (goldToAdd < 1)
 		{
@@ -48,8 +48,8 @@ bool Engine::sellItem(int itemIndex)
 			player.setSoldSentimentalItem(true);
 		}
 
-		shopItems[11] = m_StoredItems[itemIndex];
-		m_StoredItems[itemIndex] = Item("null", Vector2f(0, 0));
+
+
 		initializeInventory();
 		initializeShop();
 		if (!textWasSet)
@@ -58,7 +58,9 @@ bool Engine::sellItem(int itemIndex)
 			shopStream << "I'll take it!\nHere's " << goldToAdd << " gold for your " << cleanItemName(itemName) << ".";
 			shopKeeperSetEmotion(1);
 			shopText.setString(shopStream.str());
+			shopItems[11] = m_StoredItems[itemIndex];
 		}
+		m_StoredItems[itemIndex] = Item("null", Vector2f(0, 0));
 
 		return true;
 	}
