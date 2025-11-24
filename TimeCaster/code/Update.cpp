@@ -114,7 +114,7 @@ void Engine::update()
 
 						if (enemyPtr->getType() == "Dragon") 
 						{
-							if (enemyPtr->getAttackState() == Enemy::AttackState::Shoot && enemyPtr->getShotsFired() <= 4 && enemyPtr->getShotCooldown() > 0.5)
+							if (enemyPtr->getAttackState() == Enemy::AttackState::Shoot && enemyPtr->getShotsFired() < 5 && enemyPtr->getShotCooldown() > 0.5)
 							{
 								dragonSpells[currentSpell].shoot(enemyPtr->getCenter().x, enemyPtr->getCenter().y, player.getPosition().x, player.getPosition().y, enemyPtr->getDamage());
 
