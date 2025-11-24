@@ -628,7 +628,7 @@ void Chunk::placeTile(int x, int y, int texX, int texY, bool forGround, bool sav
 	texX *= TILE_SIZE;
 	texY *= TILE_SIZE;
 
-	// Cartesian to isometric
+	// grid coordinates to isometric world coordinates
 	x += offset.x;
 	y += offset.y;
 	float ix = (x - y) * (TILE_SIZE / 2);
@@ -663,22 +663,6 @@ void Chunk::placeTile(int x, int y, int texX, int texY, bool forGround, bool sav
 		rVABG[currentVertexBG + 3].texCoords = sf::Vector2f(texX, texY + TILE_SIZE);
 
 		currentVertexBG += VERTS_IN_QUAD;
-	}
-
-	// show x y position for tile in game for debug
-	if (debug == true && x <= 20 && y <= 20)
-	{
-		Text label;
-		label.setFont(debugFont);
-		label.setString(to_string(x) + "," + to_string(y));
-		label.setCharacterSize(8);       // small size so it fits
-		label.setFillColor(sf::Color::White);
-
-		// position at tile center
-		label.setPosition(ix + TILE_SIZE / 4, iy + TILE_SIZE / 4);
-
-		// store it in vector
-		debugText.push_back(label);
 	}
 }
 
@@ -1073,7 +1057,8 @@ void Chunk::CreateEntity(int type, int x, int y) {
 	float iy = (x + y) * (TILE_SIZE / 4);
 	entity.spawn(type, ix, iy);
 
-	if (type == 1 || type == 2 || type == 3 || type == 4 || type == 5 || type == 6 || type == 31) // if entity requires a navBox for isometric collisions
+	if (type == 1 || type == 2 || type == 3 || type == 4 
+		|| type == 5 || type == 6 || type == 7 || type == 31)         // if entity requires a navBox for isometric collisions
 	{
 		NavBox nav(x, y, 1, 1);
 		nav.NavTree();
@@ -1085,12 +1070,7 @@ void Chunk::CreateEntity(int type, int x, int y) {
 		nav.NavTreeLarge();
 		navBoxes.push_back(nav);
 	}
-	else
-	{
-		NavBox nav(x, y, 1, 1);
-		nav.NavEmpty();
-		navBoxes.push_back(nav);
-	}
+
 
 	entities.push_back(entity);
 }

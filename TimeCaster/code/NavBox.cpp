@@ -6,7 +6,7 @@ NavBox::NavBox()
 
 }
 
-NavBox::NavBox(float x, float y, float w, float h) // create navBox at position(x,y) with width (w) and height (h) in isometric tiles
+NavBox::NavBox(int x, int y, int w, int h) // create navBox at position(x,y) with width (w) and height (h) in isometric tiles
 {
     navArea.setPointCount(4);
 
@@ -21,13 +21,14 @@ NavBox::NavBox(float x, float y, float w, float h) // create navBox at position(
     navArea.setPoint(2, Vector2f((w - h) * (TILE_SIZE / 2), (w + h) * (TILE_SIZE / 4)));
     navArea.setPoint(3, Vector2f(-h * (TILE_SIZE / 2), h * (TILE_SIZE / 4)));
 
+    // set colour for debug
     navArea.setFillColor(Color::Transparent);
     navArea.setOutlineColor(Color::Black);
     navArea.setOutlineThickness(1.f);
    
 }
 
-void::NavBox::SetNavBox(float x, float y, float w, float h) // create navBox at position(x,y) with width (w) and height (h) in isometric tiles
+void::NavBox::SetNavBox(int x, int y, int w, int h) // create navBox at position(x,y) with width (w) and height (h) in isometric tiles
 {
     navArea.setPointCount(4);
 
@@ -42,6 +43,7 @@ void::NavBox::SetNavBox(float x, float y, float w, float h) // create navBox at 
     navArea.setPoint(2, Vector2f((w - h) * (TILE_SIZE / 2), (w + h) * (TILE_SIZE / 4)));
     navArea.setPoint(3, Vector2f(-h * (TILE_SIZE / 2), h * (TILE_SIZE / 4)));
 
+    // set colour for debug
     navArea.setFillColor(Color::Transparent);
     navArea.setOutlineColor(Color::Black);
     navArea.setOutlineThickness(1.f);
