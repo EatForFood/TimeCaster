@@ -1419,7 +1419,6 @@ void Engine::run()
 					world.clearWorld();
 					player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume(), vSync, fpsLimit);
 					state = State::MAIN_MENU;
-					sound.playMainMenuSound();
 				}
 
 				// Player hit the main menu button in the pause menu
