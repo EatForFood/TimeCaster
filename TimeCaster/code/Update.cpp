@@ -168,7 +168,8 @@ void Engine::update()
 							viewCentre = hudView.getCenter();
 							gameOverText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y - gameOverText.getCharacterSize());
 
-							gameOverText2.setString("Insert story stuff here (maybe change if if you sold a sentimental item)");
+
+							gameOverText2.setString("");
 							textBounds = gameOverText2.getLocalBounds();
 							viewCentre = hudView.getCenter();
 							gameOverText2.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y - 400 - gameOverText2.getCharacterSize());

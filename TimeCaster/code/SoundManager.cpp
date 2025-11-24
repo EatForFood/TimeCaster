@@ -89,6 +89,10 @@ SoundManager::SoundManager() {
 	bossIntroBuffer.loadFromFile("sound/bossIntro.wav");
 	bossIntro.setBuffer(bossIntroBuffer);
 
+	// Loads main menu sound from file into buffer
+	mainMenuBuffer.loadFromFile("sound/mainMenu.mp3");
+	mainMenu.setBuffer(mainMenuBuffer);
+
 	swordSwingBuffer.loadFromFile("sound/swordSwing.wav");
 	swordSwing.setBuffer(swordSwingBuffer);
 
@@ -237,4 +241,12 @@ void SoundManager::playVictorySound() {
 
 void SoundManager::stopVictorySound() {
 	victory.stop();
+}
+
+void SoundManager::playMainMenuSound() {
+	mainMenu.play();
+}
+
+void SoundManager::stopMainMenuSound() {
+	mainMenu.stop();
 }

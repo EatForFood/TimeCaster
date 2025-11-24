@@ -282,6 +282,8 @@ private:
 
 	Text windowedModeButtonText;
 
+	Text controlsText;
+
 	// VSync button
 	RectangleShape vSyncButton;
 
