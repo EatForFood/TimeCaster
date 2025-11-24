@@ -27,6 +27,7 @@ using namespace sf;
 
 Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArmour(player.getEquippedArmour()), m_StoredItems(player.getStoredItems())
 {
+	sound.playMainMenuSound();
 	player.loadConfigFile();
 
 	difficulty = stringToDifficulty(player.getdifficultyString());
@@ -1143,6 +1144,7 @@ void Engine::run()
 				// Player hit the new game button in the main menu
 				else if (newGameButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU && event.mouseButton.button == Mouse::Left)
 				{
+					sound.stopMainMenuSound();
 					enemyArr.clear();
 					state = State::STORY_INTRO;
 					timeToBeat.restart();
@@ -1220,6 +1222,7 @@ void Engine::run()
 				// Player hit the load game button in the main menu
 				else if (loadGameButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU && event.mouseButton.button == Mouse::Left)
 				{
+					sound.stopMainMenuSound();
 					state = State::LOADING;
 					skipAnimation = false;
 
@@ -1398,6 +1401,7 @@ void Engine::run()
 					sound.playButtonClickSound();
 					world.clearWorld();
 					state = State::MAIN_MENU;
+					sound.playMainMenuSound();
 				}
 
 				// Player hit the main menu button in the options menu
@@ -1407,6 +1411,7 @@ void Engine::run()
 					world.clearWorld();
 					player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume(), vSync, fpsLimit);
 					state = State::MAIN_MENU;
+					sound.playMainMenuSound();
 				}
 
 				// Player hit the main menu button in the pause menu
@@ -1417,6 +1422,7 @@ void Engine::run()
 					player.updateSaveFile();
 					enemyArr.clear();
 					state = State::MAIN_MENU;
+					sound.playMainMenuSound();
 				}
 
 				// Player hit the display fps button

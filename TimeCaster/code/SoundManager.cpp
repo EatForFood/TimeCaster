@@ -242,3 +242,11 @@ void SoundManager::playVictorySound() {
 void SoundManager::stopVictorySound() {
 	victory.stop();
 }
+
+void SoundManager::playMainMenuSound() {
+	mainMenu.play();
+}
+
+void SoundManager::stopMainMenuSound() {
+	mainMenu.stop();
+}
