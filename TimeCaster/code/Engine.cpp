@@ -1291,6 +1291,7 @@ void Engine::run()
 					// Loads player stats from text file
 					if (player.loadSaveFile() == true)
 					{
+						enemyArr.clear();
 						// Player loaded successfully
 
 						// Update equipped item icons
@@ -2059,6 +2060,7 @@ void Engine::spawnEnemies()
 			auto db = std::make_unique<DragonBoss>();
 			db->spawn(worldEnemyTypes[i], worldEnemyLocations[i], player.getPlayerLevel());
 			enemyArr.push_back(std::move(db));
+
 		}
 	}
 }
