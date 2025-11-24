@@ -104,6 +104,9 @@ SoundManager::SoundManager() {
 
 	dragonBiteBuffer.loadFromFile("sound/dragonBite.wav");
 	dragonBite.setBuffer(dragonBiteBuffer);
+
+	collectBuffer.loadFromFile("sound/collect.wav");
+	collect.setBuffer(collectBuffer);
 } // End of SoundManager constructor
 
 // Function for placing songs within the soundtrack list
@@ -217,6 +220,10 @@ void SoundManager::playPhaseEndSound() {
 
 void SoundManager::playGoldSound() {
 	gold.play();
+}
+
+void SoundManager::playCollectSound() {
+	collect.play();
 }
 
 void SoundManager::playGameOverSound() {

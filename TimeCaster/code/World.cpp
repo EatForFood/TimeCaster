@@ -71,6 +71,7 @@ void World::newWorld()
                 {
                     type = "bossArena";
                     m_BossArenaPlaced = true;
+                    cout << "boss at: (" << x << "," << y << ")" << endl;
                 }
                 // world border chunks
                 else if (x == -halfWorld - 1 || x == halfWorld + 1 || y == -halfWorld - 1 || y == halfWorld + 1)

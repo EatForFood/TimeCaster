@@ -76,7 +76,7 @@ void Engine::update()
 						{
 							enemyPtr->Attack();
 							// Handle player getting hit by enemy
-							if (enemyPtr->getWeapon().getGlobalBounds().intersects(player.getHitBox()) && enemyPtr->isAttacking())
+							if (enemyPtr->getSprite().getGlobalBounds().intersects(player.getHitBox()) && enemyPtr->isAttacking())
 							{
 								// Play the blood particle effect
 								if (player.hit(gameTimeTotal, enemyPtr->getAttackDamage(), 1000))
@@ -334,7 +334,8 @@ void Engine::update()
 							decal[currentDecal].spawn("bloodImpact", player.getPosition().x, player.getPosition().y);
 							currentDecal++;
 							// Apply damage from spell to enemy
-							player.setHealth(-dragonSpells[i].getSpellDamage());
+							//player.setHealth(-dragonSpells[i].getSpellDamage());
+							player.hit(gameTimeTotal, -dragonSpells[i].getSpellDamage(), 1000);
 
 							// Mark enemy as hit
 							player.setWasHit(true);
@@ -856,6 +857,7 @@ void Engine::update()
 					{
 						if (m_StoredItems[j].isNull())
 						{
+							sound.playCollectSound();
 							m_StoredItems[j] = move(items[i]);
 							m_StoredItems[j].getIcon().setPosition(emptyFrames[j].getPosition());
 							currentItems++;

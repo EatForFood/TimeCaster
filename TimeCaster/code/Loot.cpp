@@ -21,15 +21,15 @@ string Loot::getLoot(int maxRarity)
 	// set maximum loot rarity
 	if (maxRarity == 1)
 	{
-		maxRarity = 70;
+		maxRarity = 50;
 	}
 	else if (maxRarity == 2)
 	{
-		maxRarity = 90;
+		maxRarity = 80;
 	}
 	else if (maxRarity == 3)
 	{
-		maxRarity = 98;
+		maxRarity = 95;
 	}
 	else
 	{
@@ -39,22 +39,22 @@ string Loot::getLoot(int maxRarity)
 	int chance = rand() % 100;
 
 	// 50% chance to spawn an item
-	if (chance > 50)
+	if (chance > 70)
 	{
 		int chance = rand() % maxRarity;
 
 		// chance for common item
-		if (chance < 70)
+		if (chance < 50)
 		{
 			return getRandomItem(m_CommonItems);
 		}
 		// chance for rare item
-		else if (chance < 90)
+		else if (chance < 80)
 		{
 			return getRandomItem(m_RareItems);
 		}
 		// chance for epic item
-		else if (chance < 98)
+		else if (chance < 95)
 		{
 			return getRandomItem(m_EpicItems);
 		}
