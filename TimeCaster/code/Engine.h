@@ -215,6 +215,8 @@ private:
 
 	Text shopText;
 
+	Clock timeToBeat;
+
 	Text goldCountText;
 
 	Text expText;

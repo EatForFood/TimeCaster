@@ -1,6 +1,7 @@
 #include <sstream>
 #include <fstream>
 #include <vector>
+#include <iomanip>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include "Engine.h"
@@ -1199,6 +1200,7 @@ void Engine::run()
 				else if (newGameButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU && event.mouseButton.button == Mouse::Left)
 				{
 					state = State::STORY_INTRO;
+					timeToBeat.restart();
 
 					skipAnimation = false;
 
@@ -1625,8 +1627,8 @@ void Engine::run()
 					gameOverText2.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y - 400 - gameOverText2.getCharacterSize());
 
 					stringstream ssStatText;
-					ssStatText << "Level Reached: " << player.getPlayerLevel() << "\nGold Earned: " << player.getGold() 
-						<< "\nEnemies Killed: " << player.getKillCount();
+					ssStatText << fixed << setprecision(0) << "Level Reached: " << player.getPlayerLevel() << "\nGold Earned: " << player.getGold()
+						<< "\nEnemies Killed: " << player.getKillCount() << "\nTime Taken: " << timeToBeat.getElapsedTime().asSeconds() << " seconds";
 					statText.setString(ssStatText.str());
 					textBounds = statText.getLocalBounds();	
 					viewCentre = hudView.getCenter();
