@@ -2,21 +2,28 @@
 #include "Player.h"
 
 
-
 bool Engine::sellItem(int itemIndex)
 {
 	if (m_StoredItems[itemIndex].isNull())
 	{
 		stringstream shopStream;
-		shopStream << "You can't sell nothing.\n I already have enough of that.";
+		shopStream << "You can't sell nothing.\nI already have enough of that.";
 		shopText.setString(shopStream.str());
 		return false;
 	}
 	else if (m_StoredItems[itemIndex].isEquipped())
 	{
 		stringstream shopStream;
-		shopStream << "I can't buy equipped items.\n You'll have to equip something else.";
+		shopStream << "I can't buy equipped items.\nYou'll have to equip something else in that slot.";
 		shopText.setString(shopStream.str());
+		return false;
+	}
+	else if (m_StoredItems[itemIndex].isSentimental() && !attemptedToSellSentimentalItem)
+	{
+		stringstream shopStream;
+		shopStream << "That looks important to you.\nAre you sure you'd like to sell it?\nI can't guarantee you'll be able to get it back.";
+		shopText.setString(shopStream.str());
+		attemptedToSellSentimentalItem = true;
 		return false;
 	}
 	else
@@ -27,13 +34,27 @@ bool Engine::sellItem(int itemIndex)
 			goldToAdd = 1;
 		}
 		player.addGold(goldToAdd);
+		bool textWasSet = false;
+		if (m_StoredItems[itemIndex].isSentimental())
+		{
+			stringstream shopStream;
+			shopStream << "Alright, if you're sure.\nHere's " << goldToAdd << " gold for it";
+			shopText.setString(shopStream.str());
+			textWasSet = true;
+			player.setSoldSentimentalItem(true);
+		}
+
 		shopItems[11] = m_StoredItems[itemIndex];
 		m_StoredItems[itemIndex] = Item("null", Vector2f(0, 0));
 		initializeInventory();
 		initializeShop();
-		stringstream shopStream;
-		shopStream << "I'll take it!\nHere's " << goldToAdd << " gold for it.";
-		shopText.setString(shopStream.str());
+		if (!textWasSet)
+		{
+			stringstream shopStream;
+			shopStream << "I'll take it!\nHere's " << goldToAdd << " gold for it.";
+			shopText.setString(shopStream.str());
+		}
+
 		return true;
 	}
 }
@@ -124,67 +145,61 @@ void Engine::initializeShop()
 		}
 	}
 }
-
+// 0-8 are equipment, 9-10 are potions, 11 is sold item / stamina potion
 void Engine::restockShop(int level)
 {
 	
 	switch (level)
 	{
-	case 3:
+	case 4:
 		shopItems[0] = Weapon("Silver_Wand", Vector2f(300, 650));
 		shopItems[1] = Weapon("Pirate's_Scimitar", Vector2f(450, 650));
-		shopItems[2] = Equipment("Leather_Cap", Vector2f(600, 650));
-		shopItems[3] = Equipment("Leather_Chestplate", Vector2f(750, 950));
-		shopItems[4] = Equipment("Leather_Leggings", Vector2f(900, 650));
-		shopItems[5] = Equipment("Leather_Boots", Vector2f(1050, 650));
+		shopItems[2] = Equipment("Chain_Hood", Vector2f(600, 650));
+		shopItems[3] = Equipment("Chain_Mail", Vector2f(750, 950));
+		shopItems[4] = Equipment("Amulet_of_Mana", Vector2f(900, 650));
+		shopItems[5] = Equipment("Amulet_of_Stamina", Vector2f(1050, 650));
 		shopItems[6] = Equipment("Amulet_of_Shielding", Vector2f(1200, 650));
+		shopItems[7] = Weapon("Short_Spear", Vector2f(1350, 650));
 		break;
-	case 6:
+	case 8:
 		shopItems[0] = Weapon("Reaper's_Scythe", Vector2f(300, 650));
 		shopItems[1] = Weapon("Golden_Wand", Vector2f(450, 650));
 		shopItems[2] = Equipment("Steel_Plate_Helmet", Vector2f(600, 650));
 		shopItems[3] = Equipment("Steel_Plate_Chestplate", Vector2f(750, 950));
 		shopItems[4] = Equipment("Steel_Plate_Pants", Vector2f(1050, 650));
 		shopItems[5] = Equipment("Steel_Plate_Boots", Vector2f(1200, 650));
+		shopItems[6] = Equipment("Amulet_of_Healing", Vector2f(1050, 650));
+		shopItems[7] = Weapon("Long_Spear", Vector2f(1350, 650));
+		break;
+	
+	case 10: 
+		shopItems[7] = Weapon("Trident", Vector2f(300, 650));
+		break;
+	case 12:
+		shopItems[7] = Weapon("Dragon_Spear", Vector2f(300, 650));
+		break;
 	}
 
-	// Additional potions as placeholders for shop iems 7 and 8
-
-	//TODO: Add more unique items for shop slots 7 and 8 (sold items, more random items, etc), add more random items
-	// Items 7 and 8 are random potions for now
-	// TODO: Make last slot the sold item slot instead
 	switch (rand() % 3)
 	{
 	case 0:
-		shopItems[7] = Item("Health_Potion", Vector2f(1350, 650));
+		shopItems[8] = Equipment("Amulet_of_Mana", Vector2f(900, 650));
 		break;
 	case 1:
-		shopItems[7] = Item("Mana_Potion", Vector2f(1350, 650));
+		shopItems[8] = Equipment("Amulet_of_Stamina", Vector2f(1050, 650));
 		break;
 	case 2:
-		shopItems[7] = Item("Stamina_Potion", Vector2f(1350, 650));
-		break;
-	}
-	// TODO: Change shop item 8 to something other than just potions
-	switch (rand() % 3)
-	{
-	case 0:
-		shopItems[8] = Item("Health_Potion", Vector2f(1350, 650));
-		break;
-	case 1:
-		shopItems[8] = Item("Mana_Potion", Vector2f(1350, 650));
-		break;
-	case 2:
-		shopItems[8] = Item("Stamina_Potion", Vector2f(1350, 650));
+		shopItems[8] = Equipment("Amulet_of_Shielding", Vector2f(1200, 650));
 		break;
 	}
 
 	
 
 	// Always have potions in stock
-	shopItems[9] = Item("Stamina_Potion", Vector2f(1200, 650));
+	shopItems[9] = Item("Mana_Potion", Vector2f(1200, 650));
 	shopItems[10] = Item("Health_Potion", Vector2f(1200, 650));
-	//shopItems[11] = Item("Mana_Potion", Vector2f(1350, 650));
+	//Stamina potion will overwrite sold item, intentionally
+	shopItems[11] = Item("Stamina_Potion", Vector2f(1200, 650));
 
 	
 

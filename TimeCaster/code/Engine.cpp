@@ -185,7 +185,7 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	shopItems[5] = Equipment("Leather_Boots", Vector2f(1050, 650));
 	shopItems[9] = Item("Mana_Potion", Vector2f(1200, 650));
 	shopItems[10] = Item("Health_Potion", Vector2f(1200, 650));
-	//shopItems[11] = Item("Mana_Potion", Vector2f(1350, 650));
+	shopItems[11] = Item("Stamina_Potion", Vector2f(1350, 650));
 
 
 	//Item 0 is sword (melee combat), item 1 is wand (magic combat)
@@ -256,6 +256,36 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	x = loadGameButton.getPosition().x + (loadGameButton.getSize().x / 2.f) - (textBounds.width / 2.f);
 	y = loadGameButton.getPosition().y + (loadGameButton.getSize().y / 2.f) - (textBounds.height / 2.f);
 	loadGameButtonText.setPosition(x - textBounds.left, y - textBounds.top);
+
+	// Load game button
+	gameOverMainMenuButton.setPosition(viewCentre.x - 400, 900);
+	gameOverMainMenuButton.setSize(Vector2f(300, 80));
+	gameOverMainMenuButton.setTexture(&textureMainMenuButton2);
+
+	// Load game button text
+	gameOverMainMenuButtonText.setString("Main Menu");  // Set the text
+	gameOverMainMenuButtonText.setFont(font);           // Set the font
+	gameOverMainMenuButtonText.setCharacterSize(fontSize); // Set the font size
+	gameOverMainMenuButtonText.setFillColor(Color::White);
+	textBounds = gameOverMainMenuButtonText.getLocalBounds();
+	x = gameOverMainMenuButton.getPosition().x + (gameOverMainMenuButton.getSize().x / 2.f) - (textBounds.width / 2.f);
+	y = gameOverMainMenuButton.getPosition().y + (gameOverMainMenuButton.getSize().y / 2.f) - (textBounds.height / 2.f);
+	gameOverMainMenuButtonText.setPosition(x - textBounds.left, y - textBounds.top);
+
+	// Load game button
+	gameOverQuitButton.setPosition(viewCentre.x, 900);
+	gameOverQuitButton.setSize(Vector2f(300, 80));
+	gameOverQuitButton.setTexture(&textureMainMenuButton2);
+
+	// Load game button text
+	gameOverQuitButtonText.setString("Quit Game");  // Set the text
+	gameOverQuitButtonText.setFont(font);           // Set the font
+	gameOverQuitButtonText.setCharacterSize(fontSize); // Set the font size
+	gameOverQuitButtonText.setFillColor(Color::White);
+	textBounds = gameOverQuitButtonText.getLocalBounds();
+	x = gameOverQuitButton.getPosition().x + (gameOverQuitButton.getSize().x / 2.f) - (textBounds.width / 2.f);
+	y = gameOverQuitButton.getPosition().y + (gameOverQuitButton.getSize().y / 2.f) - (textBounds.height / 2.f);
+	gameOverQuitButtonText.setPosition(x - textBounds.left, y - textBounds.top);
 
 	// Options button
 	optionsButton.setPosition(200, 430);
@@ -481,7 +511,7 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	fullText = "I was not always a man consumed by vengeance. Once, I had a family-warm laughter by the fire, \n"
 		"the gentle touch of my children's hands, the steady love of my wife. \n"
 		"All of it was torn from me in a single night, \n"
-		"devoured by the fire of (name), a dragon whose name still burns in my mind. \n"
+		"devoured by the fire of Ignis, a dragon whose name still burns in my mind. \n"
 		"Since then, every spell I've mastered, every scar I've earned, has been for one purpose alone: \n"
 		"to bring that beast to its knees. \n"
 		"I do not seek glory, nor the hollow praise of men-I seek redemption. \n"
@@ -493,10 +523,20 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	skipIntroText.setCharacterSize(fontSize - 5); // Slightly smaller text size
 	skipIntroText.setFillColor(Color::White);
 
-	// Skip intro text
+	// Loading text
 	loadWorldText.setFont(font); // Assign the font
 	loadWorldText.setCharacterSize(fontSize + 100); // Large text size
 	loadWorldText.setFillColor(Color::White);
+
+	// Game over text
+	gameOverText.setFont(font); // Assign the font
+	gameOverText.setCharacterSize(fontSize + 100); // Large text size
+	gameOverText.setFillColor(Color::Red);
+
+	// Game over text
+	gameOverText2.setFont(font); // Assign the font
+	gameOverText2.setCharacterSize(fontSize + 20);
+	gameOverText2.setFillColor(Color::White);
 
 	/***********
 	Inventory UI
@@ -529,34 +569,17 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	equippedWandIcon.setOrigin(equippedWandIcon.getSize() / 2.f);
 	equippedWandIcon.setPosition(viewCentre.x - 150, 500);
 
-	equippedHeadArmourIcon.setTexture(&textureItems);
-	equippedHeadArmourIcon.setTextureRect(IntRect(0, 0, 0, 0));
-	equippedHeadArmourIcon.setSize(Vector2f(75, 75));
-	equippedHeadArmourIcon.setOrigin(equippedHeadArmourIcon.getSize() / 2.f);
+
 	equippedHeadArmourIcon.setPosition(viewCentre.x - 150, 300);
 
-	equippedChestArmourIcon.setTexture(&textureItems);
-	equippedChestArmourIcon.setTextureRect(IntRect(0, 0, 0, 0));
-	equippedChestArmourIcon.setSize(Vector2f(75, 75));
-	equippedChestArmourIcon.setOrigin(equippedChestArmourIcon.getSize() / 2.f);
 	equippedChestArmourIcon.setPosition(viewCentre.x - 350, 500);
 
-	equippedTrousersArmourIcon.setTexture(&textureItems);
-	equippedTrousersArmourIcon.setTextureRect(IntRect(0, 0, 0, 0));
-	equippedTrousersArmourIcon.setSize(Vector2f(75, 75));
-	equippedTrousersArmourIcon.setOrigin(equippedTrousersArmourIcon.getSize() / 2.f);
+
 	equippedTrousersArmourIcon.setPosition(viewCentre.x - 350, 400);
 
-	equippedShoeArmourIcon.setTexture(&textureItems);
-	equippedShoeArmourIcon.setTextureRect(IntRect(0, 0, 0, 0));
-	equippedShoeArmourIcon.setSize(Vector2f(75, 75));
-	equippedShoeArmourIcon.setOrigin(equippedShoeArmourIcon.getSize() / 2.f);
+
 	equippedShoeArmourIcon.setPosition(viewCentre.x - 150, 400);
 
-	equippedNeckArmourIcon.setTexture(&textureItems);
-	equippedNeckArmourIcon.setTextureRect(IntRect(0, 0, 0, 0));
-	equippedNeckArmourIcon.setSize(Vector2f(75, 75));
-	equippedNeckArmourIcon.setOrigin(equippedNeckArmourIcon.getSize() / 2.f);
 	equippedNeckArmourIcon.setPosition(viewCentre.x - 350, 300);
 
 	// Player frame
@@ -721,9 +744,9 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	shopText.setFont(font);
 	shopText.setCharacterSize(fontSize);
 	shopText.setFillColor(Color::Green);
-	shopText.setString("Welcome to the shop! \nClick on one of my an items up top to buy it.\nClick on one of your own items down below to sell it!");
+	shopText.setString("Welcome to the shop! \nClick on one of my items up top to buy it.\nClick on one of your own items down below to sell it!");
 	textBounds = shopText.getLocalBounds();
-	shopText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 50);
+	shopText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 900);
 
 	inventoryBackground.setTexture(&inventoryBackgroundTexture);
 	inventoryBackground.setSize(Vector2f(1000, 800));
@@ -889,8 +912,8 @@ string Engine::difficultyToString(Difficulty difficulty)
 // Function to convert difficulty in string form to state
 Engine::Difficulty Engine::stringToDifficulty(string str)
 {
-	if (str == "Easy") {return Difficulty::Easy; }
-	else if (str == "Medium") {return Difficulty::Medium; }
+	if (str == "Easy") { return Difficulty::Easy; }
+	else if (str == "Medium") { return Difficulty::Medium; }
 	else if (str == "Hard") { return Difficulty::Hard; }
 	else return Difficulty::Medium;
 }
@@ -907,11 +930,23 @@ void Engine::populateChunkVector()
 Chunk* Engine::getCurrentChunk(float x, float y) {
 	for (Chunk& chunk : chunks) {
 		FloatRect area = chunk.getChunkArea().getShape().getGlobalBounds();
-		if (collision.pointInShape(Vector2f(x,y), chunk.getChunkArea().getShape())) {
+		if (collision.pointInShape(Vector2f(x, y), chunk.getChunkArea().getShape())) {
 			return &chunk;
 		}
 	}
 	return nullptr;
+}
+
+bool Engine::playerNearShop()
+{
+	// only check for shops in the chunk the player is in
+	Chunk* currentChunk = getCurrentChunk(player.getPosition().x, player.getPosition().y);
+
+	if (currentChunk && currentChunk->playerNearDoor(player.getPosition()))
+	{
+		return true;
+	}
+	return false;
 }
 
 void Engine::run()
@@ -967,14 +1002,19 @@ void Engine::run()
 				{
 					if (event.mouseWheelScroll.delta > 0)
 					{
-						mainView.zoom(0.9f);
-						spriteCursor.scale(0.9f, 0.9f);
+						if (mainView.getSize().x > 250 && mainView.getSize().y > 150 || debugMode)
+						{
+							mainView.zoom(0.9f);
+							spriteCursor.scale(0.9f, 0.9f);
+						}
 
 					}
 					else if (event.mouseWheelScroll.delta < 0)
 					{
-						mainView.zoom(1.1f);
-						spriteCursor.scale(1.1f, 1.1f);
+						if (mainView.getSize().x < 1000 && mainView.getSize().y < 800 || debugMode) {
+							mainView.zoom(1.1f);
+							spriteCursor.scale(1.1f, 1.1f);
+						}
 					}
 				}
 			}
@@ -1067,7 +1107,7 @@ void Engine::run()
 						if (num > 0)
 						{
 							fpsLimit = num;
-							feedbackFps.setString("FPS set to " + to_string(fpsLimit));
+							feedbackFps.setString("FPS limit set to " + to_string(fpsLimit));
 							player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume(), vSync, fpsLimit);
 							window.setFramerateLimit(fpsLimit);
 						}
@@ -1089,11 +1129,12 @@ void Engine::run()
 			if (event.type == Event::KeyPressed && event.key.code == Keyboard::E && drawEKey)
 			{
 				if (drawShop)
-					{
+				{
 					drawShop = false;
 				}
 				else
 				{
+					attemptedToSellSentimentalItem = false;
 					drawShop = true;
 				}
 			}
@@ -1136,11 +1177,16 @@ void Engine::run()
 
 					equippedSwordIcon.setTextureRect(player.getEquippedSword()->getTextureRect());
 					equippedWandIcon.setTextureRect(player.getEquippedWand()->getTextureRect());
-					equippedHeadArmourIcon.setTextureRect(player.getEquippedHeadArmour()->getTextureRect());
-					equippedChestArmourIcon.setTextureRect(player.getEquippedChestArmour()->getTextureRect());
-					equippedTrousersArmourIcon.setTextureRect(player.getEquippedTrouserArmour()->getTextureRect());
-					equippedShoeArmourIcon.setTextureRect(player.getEquippedShoeArmour()->getTextureRect());
-					equippedNeckArmourIcon.setTextureRect(player.getEquippedNeckArmour()->getTextureRect());
+					equippedHeadArmourIcon = (player.getEquippedHeadArmour()->getIcon());
+					equippedHeadArmourIcon.setPosition(headArmourFrame.getPosition());
+					equippedChestArmourIcon = (player.getEquippedChestArmour()->getIcon());
+					equippedChestArmourIcon.setPosition(chestArmourFrame.getPosition());
+					equippedTrousersArmourIcon = (player.getEquippedTrouserArmour()->getIcon());
+					equippedTrousersArmourIcon.setPosition(trousersArmourFrame.getPosition());
+					equippedShoeArmourIcon = (player.getEquippedShoeArmour()->getIcon());
+					equippedShoeArmourIcon.setPosition(bootsArmourFrame.getPosition());
+					equippedNeckArmourIcon = (player.getEquippedNeckArmour()->getIcon());
+					equippedNeckArmourIcon.setPosition(neckFrame.getPosition());
 					equipAllItems();
 
 					// We will modify the next two lines later
@@ -1166,13 +1212,13 @@ void Engine::run()
 					Listener::setGlobalVolume(player.getVolume());
 
 					mainView.setCenter(resolution.x / 2.f, resolution.y / 2.f);
-					
+
 					// Skip intro text
 					skipIntroText.setString("--- Press space to skip ---"); // Set the text content
 					textBounds = skipIntroText.getLocalBounds();
 					viewCentre = mainView.getCenter();
 					skipIntroText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 1030);
-				
+
 					// Loads world using multi-threading
 					worldLoaded = false;
 					thread worldThread(&Engine::generateWorld, this);
@@ -1201,18 +1247,24 @@ void Engine::run()
 					startSoundPlayed = true;
 
 					// Loads player stats from text file
-					if (player.loadSaveFile() == true) 
+					if (player.loadSaveFile() == true)
 					{
 						// Player loaded successfully
 
 						// Update equipped item icons
 						equippedSwordIcon.setTextureRect(player.getEquippedSword()->getTextureRect());
 						equippedWandIcon.setTextureRect(player.getEquippedWand()->getTextureRect());
-						equippedHeadArmourIcon.setTextureRect(player.getEquippedHeadArmour()->getTextureRect());
-						equippedChestArmourIcon.setTextureRect(player.getEquippedChestArmour()->getTextureRect());
-						equippedTrousersArmourIcon.setTextureRect(player.getEquippedTrouserArmour()->getTextureRect());
-						equippedShoeArmourIcon.setTextureRect(player.getEquippedShoeArmour()->getTextureRect());
-						equippedNeckArmourIcon.setTextureRect(player.getEquippedNeckArmour()->getTextureRect());
+
+						equippedHeadArmourIcon = (player.getEquippedHeadArmour()->getIcon());
+						equippedHeadArmourIcon.setPosition(headArmourFrame.getPosition());
+						equippedChestArmourIcon = (player.getEquippedChestArmour()->getIcon());
+						equippedChestArmourIcon.setPosition(chestArmourFrame.getPosition());
+						equippedTrousersArmourIcon = (player.getEquippedTrouserArmour()->getIcon());
+						equippedTrousersArmourIcon.setPosition(trousersArmourFrame.getPosition());
+						equippedShoeArmourIcon = (player.getEquippedShoeArmour()->getIcon());
+						equippedShoeArmourIcon.setPosition(bootsArmourFrame.getPosition());
+						equippedNeckArmourIcon = (player.getEquippedNeckArmour()->getIcon());
+						equippedNeckArmourIcon.setPosition(neckFrame.getPosition());
 						equipAllItems();
 
 						// We will modify the next two lines later
@@ -1241,7 +1293,7 @@ void Engine::run()
 
 						loadWorldText.setString("Loading game..."); 
 						textBounds = loadWorldText.getLocalBounds();
-						viewCentre = mainView.getCenter();
+						viewCentre = hudView.getCenter();
 						loadWorldText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y - loadWorldText.getCharacterSize());
 
 						initializeInventory();
@@ -1265,11 +1317,16 @@ void Engine::run()
 
 						equippedSwordIcon.setTextureRect(player.getEquippedSword()->getTextureRect());
 						equippedWandIcon.setTextureRect(player.getEquippedWand()->getTextureRect());
-						equippedHeadArmourIcon.setTextureRect(player.getEquippedHeadArmour()->getTextureRect());
-						equippedChestArmourIcon.setTextureRect(player.getEquippedChestArmour()->getTextureRect());
-						equippedTrousersArmourIcon.setTextureRect(player.getEquippedTrouserArmour()->getTextureRect());
-						equippedShoeArmourIcon.setTextureRect(player.getEquippedShoeArmour()->getTextureRect());
-						equippedNeckArmourIcon.setTextureRect(player.getEquippedNeckArmour()->getTextureRect());
+						equippedHeadArmourIcon = (player.getEquippedHeadArmour()->getIcon());
+						equippedHeadArmourIcon.setPosition(headArmourFrame.getPosition());
+						equippedChestArmourIcon = (player.getEquippedChestArmour()->getIcon());
+						equippedChestArmourIcon.setPosition(chestArmourFrame.getPosition());
+						equippedTrousersArmourIcon = (player.getEquippedTrouserArmour()->getIcon());
+						equippedTrousersArmourIcon.setPosition(trousersArmourFrame.getPosition());
+						equippedShoeArmourIcon = (player.getEquippedShoeArmour()->getIcon());
+						equippedShoeArmourIcon.setPosition(bootsArmourFrame.getPosition());
+						equippedNeckArmourIcon = (player.getEquippedNeckArmour()->getIcon());
+						equippedNeckArmourIcon.setPosition(neckFrame.getPosition());
 						equipAllItems();
 
 						// We will modify the next two lines later
@@ -1300,7 +1357,7 @@ void Engine::run()
 
 						loadWorldText.setString("Loading game...");
 						textBounds = loadWorldText.getLocalBounds();
-						viewCentre = mainView.getCenter();
+						viewCentre = hudView.getCenter();
 						loadWorldText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y - loadWorldText.getCharacterSize());
 
 						initializeInventory();
@@ -1339,6 +1396,24 @@ void Engine::run()
 					sound.playButtonClickSound();
 					// Save info to file before quitting
 					window.close();
+				}
+
+				// Player hit the quit game button
+				if (gameOverQuitButton.getGlobalBounds().contains(worldPos) && state == State::GAME_OVER && event.mouseButton.button == Mouse::Left)
+				{
+					sound.playButtonClickSound();
+					// Save info to file before quitting
+					window.close();
+				}
+
+
+				// Player hit the main menu button in the game over screen
+				if (gameOverMainMenuButton.getGlobalBounds().contains(worldPos) && state == State::GAME_OVER && event.mouseButton.button == Mouse::Left)
+				{
+					sound.stopGameOverSound();
+					sound.playButtonClickSound();
+					world.clearWorld();
+					state = State::MAIN_MENU;
 				}
 
 				// Player hit the main menu button in the options menu
@@ -1440,7 +1515,7 @@ void Engine::run()
 					y = difficultyButton.getPosition().y + (difficultyButton.getSize().y / 2.f) - (textBounds.height / 2.f);
 					difficultyButtonText.setPosition(x - textBounds.left, y - textBounds.top);
 					difficultyButton.setSize(Vector2f(textBounds.width + 100, 100));
-					difficultyButton.setPosition(viewCentre.x - (difficultyButton.getSize().x /2.f), 400);
+					difficultyButton.setPosition(viewCentre.x - (difficultyButton.getSize().x / 2.f), 400);
 
 					sound.playButtonClickSound();
 				}
@@ -1459,10 +1534,6 @@ void Engine::run()
 						storyIntroText.setString(displayedText);
 						currentChar = 0;
 					}
-					else if (state == State::LOADING && worldLoaded)
-					{
-						state = State::PLAYING;
-					}
 				}
 
 				// Player hit tab while playing
@@ -1480,7 +1551,7 @@ void Engine::run()
 			if (event.type == Event::KeyPressed)
 			{
 				// below are debug functions, comment them out in full build / when needed
-				
+
 				// Debug shop toggle
 				// Shop is still very much WIP
 				if (event.key.code == Keyboard::O && state == State::PLAYING && debugMode)
@@ -1500,7 +1571,7 @@ void Engine::run()
 					// Increase health
 					player.upgradeHealth();
 					player.switchSpell(1);
-			
+
 				}
 
 				if (event.key.code == Keyboard::Num2 && state == State::PLAYING && debugMode)
@@ -1546,7 +1617,6 @@ void Engine::run()
 					}
 				}
 
-
 				if (event.key.code == Keyboard::Num8 && state == State::PLAYING && debugMode)
 				{
 					player.hit(gameTimeTotal, 10, 200);
@@ -1581,7 +1651,7 @@ void Engine::run()
 				if (player.getCombatType() == Melee) {
 					sound.playSwordSwing();
 				}
-				
+
 				if (player.getCombatType() == Magic && !player.isCastingSpell() && player.getSpellType() == Player::SpellType::Fireball)
 				{
 					if (player.useMana(5.0f))
@@ -1618,9 +1688,24 @@ void Engine::run()
 					{
 						sound.playHealSound();
 						player.healHealth(0.25f);
-						particles[100].play(player.getCenter().x -30, player.getCenter().y -30, 0); // 100 is the player's particle, 0-99 for the enemies
-					}		
+						particles[100].play(player.getCenter().x - 30, player.getCenter().y - 30, 0); // 100 is the player's particle, 0-99 for the enemies
+					}
 				}
+				else if (player.getCombatType() == Magic && !player.isCastingSpell() && player.getSpellType() == Player::SpellType::Phase && !player.isPhasing() && phaseTimer.getElapsedTime().asSeconds() > 0.5f)
+				{
+					player.startPhase();
+					sound.playPhaseCastSound();
+					cout << "Phasing started" << endl;
+					phaseTimer.restart();
+				}
+				else if (player.getCombatType() == Magic && !player.isCastingSpell() && player.getSpellType() == Player::SpellType::Phase && player.isPhasing() && phaseTimer.getElapsedTime().asSeconds() > 0.5f)
+				{
+					player.stopPhase();
+					sound.playPhaseEndSound();
+					cout << "Phasing ended" << endl;
+					phaseTimer.restart();
+				}
+
 			}
 
 			// Handle the pressing and releasing the WASD keys
@@ -1662,14 +1747,14 @@ void Engine::run()
 			}
 
 		} // End WASD while playing
-		else if (drawInventory || drawShop)
+		if (drawInventory || drawShop)
 		{
 			player.stopRight();
 			player.stopLeft();
 			player.stopUp();
 			player.stopDown();
 		}
-		
+
 		// Handle the display fps button changing colour based on boolean
 		if (state == State::OPTIONS_MENU)
 		{
@@ -1718,8 +1803,32 @@ void Engine::run()
 		}
 
 		// Sets health to 0 if it goes below 0
-		if (player.getHealth() < 0) {
+		if (player.getHealth() <= 0) {
 			player.setHealthValue(0);
+
+			if (state == State::PLAYING) {
+
+			
+
+				if (sound.isSoundtrackPlaying()) {
+					sound.stopSoundtrack();
+				}
+				sound.playGameOverSound();	
+				gameOverText.setString("Game Over!");
+				textBounds = gameOverText.getLocalBounds();
+				viewCentre = hudView.getCenter();
+				gameOverText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y - gameOverText.getCharacterSize());
+
+				gameOverText2.setString("Your family will be left unavenged.\nIgnis has won...");
+				textBounds = gameOverText2.getLocalBounds();
+				viewCentre = hudView.getCenter();
+				gameOverText2.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y + 100 - gameOverText2.getCharacterSize());
+
+			
+			
+
+				state = State::GAME_OVER;
+			}
 		}
 
 		// Sets stamina to 0 if it goes below 0
@@ -1766,7 +1875,7 @@ void Engine::run()
 			window.setMouseCursorVisible(false);
 			window.setMouseCursorGrabbed(true);
 		}
-		else if (state == State::PAUSED || state == State::MAIN_MENU || state == State::OPTIONS_MENU)
+		else if (state == State::PAUSED || state == State::MAIN_MENU || state == State::OPTIONS_MENU || state == State::GAME_OVER)
 		{
 			window.setMouseCursorVisible(true);
 			window.setMouseCursorGrabbed(false);

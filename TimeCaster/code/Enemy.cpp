@@ -359,3 +359,38 @@ float Enemy::getAttackDamage()
 {
 	return m_AttackDmg;
 }
+
+string Enemy::getType() {
+	return m_Type;
+}
+
+Enemy::AttackState Enemy::getAttackState()
+{
+	return state;
+}
+
+float Enemy::getShotCooldown() {
+	return shootingCooldown.getElapsedTime().asSeconds();
+}
+
+int Enemy::getShotsFired() {
+	return shotsFired;
+}
+
+void Enemy::resetShotsFired() {
+	shotsFired = 0;
+}
+
+void Enemy::shotFired() {
+	cout << "Shot no. " << shotsFired << endl;
+	shotsFired++;
+	resetShotCooldown();
+
+	if (shotsFired > 4) {
+		m_IsAttacking = false;
+	}
+}
+
+void Enemy::resetShotCooldown() {
+	shootingCooldown.restart();
+}

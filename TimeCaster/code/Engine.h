@@ -44,6 +44,8 @@ public:
 
 	Chunk* getCurrentChunk(float x, float y);
 
+	bool playerNearShop();
+
 	void populateChunkVector();
 
 	void generateWorld();
@@ -118,6 +120,8 @@ private:
 
 	// Clock used for tracking fps
 	Clock fpsClock;
+
+	Clock sellClock;
 
 	// How long has the PLAYING state been active
 	Time gameTimeTotal;
@@ -290,6 +294,14 @@ private:
 
 	Text loadWorldText;
 
+	Text gameOverText;
+	Text gameOverText2;
+
+	RectangleShape gameOverMainMenuButton;
+	Text gameOverMainMenuButtonText;
+	RectangleShape gameOverQuitButton;
+	Text gameOverQuitButtonText;
+
 	Texture textureHeadArmourFrame;
 	Texture textureChestArmourFrame;
 	Texture textureTrousersArmourFrame;
@@ -308,11 +320,11 @@ private:
 	RectangleShape playerFrame;
 	RectangleShape equippedSwordIcon;
 	RectangleShape equippedWandIcon;
-	RectangleShape equippedHeadArmourIcon;
-	RectangleShape equippedChestArmourIcon;
-	RectangleShape equippedTrousersArmourIcon;
-	RectangleShape equippedShoeArmourIcon;
-	RectangleShape equippedNeckArmourIcon;
+	Sprite equippedHeadArmourIcon;
+	Sprite equippedChestArmourIcon;
+	Sprite equippedTrousersArmourIcon;
+	Sprite equippedShoeArmourIcon;
+	Sprite equippedNeckArmourIcon;
 	RectangleShape headArmourFrame;
 	RectangleShape chestArmourFrame;
 	RectangleShape trousersArmourFrame;
@@ -323,6 +335,9 @@ private:
 	RectangleShape inventoryBackground;
 	RectangleShape shopBackground;
 	RectangleShape darkInventoryBackground;
+
+	bool attemptedToSellSentimentalItem = false;
+
 
 	// Item tooltip elements
 	RectangleShape itemTooltipBackground;
@@ -445,6 +460,8 @@ private:
 
 	bool timeFrozen;
 	Clock timeFrozenTimer;
+
+	Clock phaseTimer;
 
 	// Textbox logic
 	sf::RectangleShape textBox;

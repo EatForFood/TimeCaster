@@ -104,6 +104,13 @@ public:
 	float getVolume();
 	bool getVSync();
 	int getFpsLimit();
+	void startPhase();
+	void stopPhase();
+	bool isPhasing();
+
+	bool soldSentimentalItem();
+
+	void setSoldSentimentalItem(bool sold);
 
 	void setChunk(int chunk);
 	int getChunk();
@@ -152,6 +159,8 @@ public:
 	void healMana(float manaToRestore);
 	void healStamina(float staminaToRestore);
 
+	float getArmourDamageReductionMult();
+
 	Vector2f worldPosition;
 	Vector2f inventoryPosition = Vector2f(500,500);
 
@@ -185,6 +194,8 @@ private:
 	const string START_SHOE_ARMOUR = "Basic_Shoes";
 	const string START_NECK_ARMOUR = "Family_Locket";
 	void updateTextRect();
+
+	bool m_SoldSentimentalItem = false;
 	
 	// Which directions is the player currently moving in
 	bool m_UpPressed;
@@ -210,6 +221,8 @@ private:
 	string m_EquippedShoeArmourName;
 	string m_EquippedNeckArmourName;
 
+	bool regenHealth = false;
+
 	// Config variables
 	bool m_WindowedMode;
 	string m_DifficultyString;
@@ -228,6 +241,11 @@ private:
 
 	CombatType m_CombatType = Melee;
 	SpellType m_SpellType = Fireball;
+
+	// Is the player currently phasing?
+	bool m_Phasing = false;
+	// Is the player phasing through an object?
+	bool m_InObject = false;
 	
 	// When was the player last hit
 	Time m_LastHit;

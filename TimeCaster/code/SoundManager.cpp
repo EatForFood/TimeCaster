@@ -57,9 +57,21 @@ SoundManager::SoundManager() {
 	timeStopEndBuffer.loadFromFile("sound/timeStopEnd.wav");
 	timeStopEnd.setBuffer(timeStopEndBuffer);
 
+	// Loads the phase cast sound into buffer
+	phaseCastBuffer.loadFromFile("sound/phaseCast.wav");
+	phaseCast.setBuffer(phaseCastBuffer);
+
+	// Loads the phase end sound into buffer
+	phaseEndBuffer.loadFromFile("sound/phaseEnd.wav");
+	phaseEnd.setBuffer(phaseEndBuffer);
+
 	// Loads heal spell sound into buffer
 	healBuffer.loadFromFile("sound/heal.mp3");
 	heal.setBuffer(healBuffer);
+
+	// Loads game over sound from file into buffer
+	gameOverBuffer.loadFromFile("sound/gameOver.mp3");
+	gameOver.setBuffer(gameOverBuffer);
 
 	// Loads click sound from file into buffer
 	clickBuffer.loadFromFile("sound/buttonClick.wav");
@@ -181,6 +193,22 @@ void SoundManager::playHealSound() {
 		heal.play();
 }
 
+void SoundManager::playPhaseCastSound() {
+	phaseCast.play();
+}
+
+void SoundManager::playPhaseEndSound() {
+	phaseEnd.play();
+}
+
 void SoundManager::playGoldSound() {
 	gold.play();
+}
+
+void SoundManager::playGameOverSound() {
+	gameOver.play();
+}
+
+void SoundManager::stopGameOverSound() {
+	gameOver.stop();
 }

@@ -33,7 +33,7 @@ void Engine::draw()
 		{
 			for (int i = 0; i < world.getWorldSize(); i++)
 			{
-				if (collision.distance(player.getCenter(), world.getChunkCenter(i)) < 2000) { // check player distance to chunk
+				if (collision.distance(Vector2f(player.getCenter().x - 50, player.getCenter().y), world.getChunkCenter(i)) < 2200) { // check player distance to chunk
 					Chunk* currentChunk = world.getChunk(i);
 					if (currentChunk && currentChunk->getChunkType() == "goblinVillage")
 					{
@@ -56,11 +56,9 @@ void Engine::draw()
 			}
 		}
 
-		// Ekey prompt in here temporarily
-		// TODO: make ekey prompt draw when near / inside shop instead
 		if (player.getInCell())
 		{
-			drawEKey = true;
+		//	drawEKey = true;
 			Chunk* currentChunk = world.getChunk(player.getChunk());
 			if (currentChunk) {
 				for (auto& cells : currentChunk->getCells()) {
@@ -83,7 +81,7 @@ void Engine::draw()
 
 		if (!player.getInCell())
 		{
-			drawEKey = false;
+			//drawEKey = false;
 			for (int i = 0; i < world.getWorldSize(); i++)
 			{
 				if (collision.distance(player.getCenter(), world.getChunkCenter(i)) < 2000) {
@@ -231,6 +229,16 @@ void Engine::draw()
 			for (auto& icons : shopItems) {
 				window.draw(icons.getIcon());
 			}
+			
+			for (int i = 0; i < emptyFrames.size(); i++) {
+				if (m_StoredItems[i].isEquipped()) {
+					emptyFrames[i].setFillColor(Color::Green);
+				}
+				else {
+					emptyFrames[i].setFillColor(Color::White);
+				}
+			}
+
 
 			for (auto& frame : emptyFrames) {
 				window.draw(frame);
@@ -247,6 +255,14 @@ void Engine::draw()
 		}
 		else if (drawInventory) 
 		{
+			for (int i = 0; i < emptyFrames.size(); i++) {
+				if (m_StoredItems[i].isEquipped()) {
+					emptyFrames[i].setFillColor(Color::Green);
+				}
+				else {
+					emptyFrames[i].setFillColor(Color::White);
+				}
+			}
 			window.draw(filter);
 			window.draw(darkInventoryBackground);
 			window.draw(inventoryBackground);
@@ -409,6 +425,19 @@ void Engine::draw()
 		window.draw(spriteStoryIntro);
 		window.draw(loadWorldText);
 	//	window.draw(skipIntroText);
+	}
+
+	if (state == State::GAME_OVER)
+	{
+		window.clear();
+	//	window.draw(spriteStoryIntro);
+		window.draw(gameOverText);
+		window.draw(gameOverText2);
+		window.draw(gameOverMainMenuButton);
+		window.draw(gameOverMainMenuButtonText);
+		window.draw(gameOverQuitButton);
+		window.draw(gameOverQuitButtonText);
+		//	window.draw(skipIntroText);
 	}
 	window.display();
 }

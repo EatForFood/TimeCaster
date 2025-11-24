@@ -5,7 +5,7 @@
 
 DragonBoss::DragonBoss() 
 {
-    
+    state = AttackState::Idle;
 }
 
 void DragonBoss::spawn(const std::string& type, Vector2i position, int level) {
@@ -44,31 +44,10 @@ void DragonBoss::update(float elapsedTime, const Vector2f& playerPos, Chunk* chu
     if (!m_IsAttacking) {
         m_AttackChoice = rand() % 3;
 
-        while (m_AttackChoice == 0 && m_CooldownClock.getElapsedTime().asSeconds() < m_ChargeCooldown) {
+        while ((m_AttackChoice == 0 && m_CooldownClock.getElapsedTime().asSeconds() < m_ChargeCooldown) || (m_AttackChoice == 2 && getShotsFired() > 4)) {
             m_AttackChoice = rand() % 3;
         }
 
-        switch (m_AttackChoice) {
-        case 0:
-            state = AttackState::Charge;
-            combatType = CombatType::Melee;
-            m_TargetPosition = playerPos;
-            charge(elapsedTime);
-            break;
-
-        case 1:
-            state = AttackState::Bite;
-            combatType = CombatType::Melee;
-            bite();
-            break;
-
-        case 2:
-            state = AttackState::Shoot;
-            combatType = CombatType::Magic;
-            break;
-        }
-    }
-    else {
         Vector2f delta = playerPos - m_Position;
 
         if (std::abs(delta.x) > std::abs(delta.y)) {
@@ -77,7 +56,42 @@ void DragonBoss::update(float elapsedTime, const Vector2f& playerPos, Chunk* chu
         else {
             direction = (delta.y > 0) ? Vector2f(0, -1) : Vector2f(0, 1);
         }
+
+        switch (m_AttackChoice) {
+        case 0:
+            state = AttackState::Charge;
+            m_TargetPosition = playerPos;
+            charge();      
+            cout << "Charging" << endl;
+            break;
+
+        case 1:
+            state = AttackState::Bite;
+            bite();
+            cout << "Biting" << endl;
+            break;
+
+        case 2:
+            state = AttackState::Shoot;
+            m_IsAttacking = true;
+            cout << "Shooting" << endl;
+            break;
+        }
     }
+    else {
+        if (!m_IsCharging) {
+            Vector2f delta = playerPos - m_Position;
+
+            if (std::abs(delta.x) > std::abs(delta.y)) {
+                direction = (delta.x > 0) ? Vector2f(1, 0) : Vector2f(-1, 0);
+            }
+            else {
+                direction = (delta.y > 0) ? Vector2f(0, -1) : Vector2f(0, 1);
+            }
+        }
+    }
+
+    m_Sprite.setPosition(m_Position);
 
     updateTextRect();
     moveTextureRect();
@@ -120,18 +134,23 @@ void DragonBoss::update(float elapsedTime, const Vector2f& playerPos, Chunk* chu
             stopDown(); 
         }
     }
+
+    if (m_IsCharging) {
+        charge();
+    }
 }
 
 void DragonBoss::startCharge() {
-    m_Speed *= 2;
+    m_Speed *= 6;
+    
 }
 
 void DragonBoss::stopCharge() {
-    m_Speed /= 2;
+    m_Speed /= 6;
     m_IsAttacking = false;
 }
 
-void DragonBoss::charge(float elapsedTime)
+void DragonBoss::charge()
 {
     if (m_CanCharge && !m_IsCharging)
     {
@@ -155,7 +174,8 @@ void DragonBoss::charge(float elapsedTime)
     // Move in the charge direction
     if (m_IsCharging)
     {
-        m_Position += m_ChargeDirection * m_Speed * elapsedTime;
+        m_Position += m_ChargeDirection * m_Speed * m_TimeElapsed;
+        m_Sprite.setPosition(m_Position);
     }
     
     // After 500ms stop charging
@@ -180,10 +200,6 @@ void DragonBoss::rage() {
     m_Damage *= 2;
     m_Speed *= 2;
     rageActivated = true;
-}
-
-int DragonBoss::getRangedDamage() {
-    return m_RangedDamage;
 }
 
 void DragonBoss::setSpriteFromSheet(sf::IntRect textureBox) // set sprite
@@ -255,14 +271,4 @@ void DragonBoss::moveTextureRect() // animate sprite by moving texRect location
         m_Ani_Counter++;
         m_AnimationTimer = 0;
     }
-}
-
-DragonBoss::AttackState DragonBoss::getAttackState()
-{
-    return state;
-}
-
-DragonBoss::CombatType DragonBoss::getCombatType()
-{
-    return combatType;
 }

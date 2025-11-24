@@ -8,16 +8,7 @@ void Engine::update()
 	/*********************************************************************
 							   UPDATE THE FRAME
 	**********************************************************************/
-	if (timeFrozen) {
-		if (player.useMana(0.25f))
-			sound.playTimeStopActiveSound();
-		else
-		{
-			sound.playTimeStopEndSound();
-			sound.stopTimeStopActiveSound();
-			timeFrozen = false;
-		}
-	}
+
 
 	if (state == State::PLAYING)
 	{
@@ -39,6 +30,7 @@ void Engine::update()
 		// Set the crosshair to the mouse world location
 		spriteCursor.setPosition(mouseWorldPosition);
 
+
 		for (int i = 0; i < world.getWorldSize(); i++)
 		{
 			if (collision.pointInShape(player.getPosition(), world.getChunkArea(i).getShape())) // find players current chunk
@@ -53,6 +45,14 @@ void Engine::update()
 		}
 
 		if (state == State::PLAYING && !drawInventory && !timeFrozen) {
+
+
+			if (playerNearShop() && tutorialStage != 0) {
+				drawEKey = true;
+			}
+			else {
+				drawEKey = false;
+			}
 
 			// Update the vector of enemies if within player's render area
 			for (auto& enemyPtr : enemyArr)
@@ -85,6 +85,7 @@ void Engine::update()
 									decal[currentDecal].spawn("bloodImpact", player.getPosition().x, player.getPosition().y);
 									currentDecal++;
 								}
+
 							}
 							if (player.getWeapon().getGlobalBounds().intersects(enemyPtr->getHitBox()) && player.isAttacking() && !enemyPtr->wasHit())
 							{
@@ -108,6 +109,29 @@ void Engine::update()
 							else if (!player.isAttacking())
 							{
 								enemyPtr->setWasHit(false);
+							}
+						}
+
+						if (enemyPtr->getType() == "Dragon") 
+						{
+							if (enemyPtr->getAttackState() == Enemy::AttackState::Shoot && enemyPtr->getShotsFired() <= 4 && enemyPtr->getShotCooldown() > 0.5)
+							{
+								spells[currentSpell].shoot(enemyPtr->getCenter().x, enemyPtr->getCenter().y, player.getPosition().x, player.getPosition().y, enemyPtr->getDamage());
+
+								// Play fireball sound
+								sound.playFireballSound();
+
+								currentSpell++;
+								if (currentSpell > 99)
+								{
+									currentSpell = 0;
+								}
+
+								enemyPtr->shotFired();
+							}
+							else if (enemyPtr->getShotsFired() > 4)
+							{
+								enemyPtr->resetShotsFired();
 							}
 						}
 					}
@@ -148,6 +172,32 @@ void Engine::update()
 			}
 		}
 
+		// update the spells that require mana over time
+		if (timeFrozen) {
+			if (player.useMana(15.0f * dtAsSeconds))
+				sound.playTimeStopActiveSound();
+			else
+			{
+				sound.playTimeStopEndSound();
+				sound.stopTimeStopActiveSound();
+				timeFrozen = false;
+			}
+		}
+
+
+		if (player.isPhasing())
+		{
+			if (player.useMana(20.0f * dtAsSeconds)) // use mana while phasing
+			{
+				// player is phasing
+			}
+			else
+			{
+				player.stopPhase();
+				sound.playPhaseEndSound();
+			}
+		}
+
 		filter.setOrigin(player.getPosition());
 		filter.setPosition(player.getPosition().x, player.getPosition().y);
 
@@ -156,6 +206,8 @@ void Engine::update()
 
 		// Make the view centre around the player				
 		mainView.setCenter(player.getCenter().x, player.getCenter().y - 10);
+
+
 
 		// Update any spells that are in-flight
 		if (!timeFrozen) {
@@ -283,10 +335,12 @@ void Engine::update()
 				if (m_StoredItems[i].getIcon().getGlobalBounds().contains(worldPos.x - 25, worldPos.y - 25) &&
 					Mouse::isButtonPressed(Mouse::Left))
 				{
-					if (sellItem(i))
+					if (sellClock.getElapsedTime().asSeconds() > 0.25f && sellItem(i)) // weird solution to prevent multiple sells but it works
 					{
 						m_StoredItems[i] = Item("null", Vector2f(0, 0)); // empty original slot
+						
 					}
+					sellClock.restart();
 					break;
 				}
 			}
@@ -394,6 +448,7 @@ void Engine::update()
 			if (draggingItem && !Mouse::isButtonPressed(Mouse::Left))
 			{
 				bool placed = false;
+				bool itemWasEquipped = false;
 
 				// Try to drop in the first empty slot
 				for (int i = 0; i < m_StoredItems.size(); i++)
@@ -426,7 +481,7 @@ void Engine::update()
 					}
 					// equip new melee weapon
 					if (player.equipWeapon(clickedItem.getName())) equippedSwordIcon.setTextureRect(clickedItem.getTextureRect());
-					m_StoredItems[itemLastIndex].setEquipped(true); 
+					itemWasEquipped = true;
 				}
 
 				// placed is not being made true on purpose, the player will still need to carry the items they equip
@@ -447,7 +502,7 @@ void Engine::update()
 					}
 					// equip new magic weapon
 					if (player.equipWeapon(clickedItem.getName())) equippedWandIcon.setTextureRect(clickedItem.getTextureRect());
-					m_StoredItems[itemLastIndex].setEquipped(true);
+					itemWasEquipped = true;
 				}
 
 				// Try to equip as head armour if dropped on head armour slot
@@ -464,8 +519,12 @@ void Engine::update()
 						}
 					}
 					// equip new head armour
-					if (player.equipArmour(clickedItem.getName())) equippedHeadArmourIcon.setTextureRect(clickedItem.getTextureRect());
-					m_StoredItems[itemLastIndex].setEquipped(true);
+					if (player.equipArmour(clickedItem.getName()))
+					{
+						equippedHeadArmourIcon = clickedItem.getIcon();
+						equippedHeadArmourIcon.setPosition(headArmourFrame.getPosition());
+					}
+					itemWasEquipped = true;
 				}
 
 				// Try to equip as chest armour if dropped on chest armour slot
@@ -482,8 +541,12 @@ void Engine::update()
 						}
 					}
 					// equip new chest armour
-					if (player.equipArmour(clickedItem.getName())) equippedChestArmourIcon.setTextureRect(clickedItem.getTextureRect());
-					m_StoredItems[itemLastIndex].setEquipped(true);
+					if (player.equipArmour(clickedItem.getName()))
+					{
+						equippedChestArmourIcon = clickedItem.getIcon();
+						equippedChestArmourIcon.setPosition(chestArmourFrame.getPosition());
+					}
+					itemWasEquipped = true;
 				}
 
 				// Try to equip as trouser armour if dropped on trouser armour slot
@@ -500,8 +563,12 @@ void Engine::update()
 						}
 					}
 					// equip new trouser armour
-					if (player.equipArmour(clickedItem.getName())) equippedTrousersArmourIcon.setTextureRect(clickedItem.getTextureRect());
-					m_StoredItems[itemLastIndex].setEquipped(true);
+					if (player.equipArmour(clickedItem.getName()))
+					{
+						equippedTrousersArmourIcon = clickedItem.getIcon();
+						equippedTrousersArmourIcon.setPosition(trousersArmourFrame.getPosition());
+					}
+					itemWasEquipped = true;
 				}
 
 				// Try to equip as shoe armour if dropped on shoe armour slot
@@ -518,8 +585,12 @@ void Engine::update()
 						}
 					}
 					// equip new shoe armour
-					if (player.equipArmour(clickedItem.getName())) equippedShoeArmourIcon.setTextureRect(clickedItem.getTextureRect());
-					m_StoredItems[itemLastIndex].setEquipped(true);
+					if (player.equipArmour(clickedItem.getName()))
+					{
+						equippedShoeArmourIcon = clickedItem.getIcon();
+						equippedShoeArmourIcon.setPosition(bootsArmourFrame.getPosition());
+					}
+					itemWasEquipped = true;
 				}
 
 				// Try to equip as neck armour if dropped on neck armour slot
@@ -536,8 +607,12 @@ void Engine::update()
 						}
 					}
 					// equip new neck armour
-					if (player.equipArmour(clickedItem.getName())) equippedNeckArmourIcon.setTextureRect(clickedItem.getTextureRect());
-					m_StoredItems[itemLastIndex].setEquipped(true);
+					if (player.equipArmour(clickedItem.getName()))
+					{
+						equippedNeckArmourIcon = clickedItem.getIcon();
+						equippedNeckArmourIcon.setPosition(neckFrame.getPosition());
+					}
+					itemWasEquipped = true;
 				}
 
 				if (clickedItem.getIcon().getGlobalBounds().intersects(playerInFrame.getGlobalBounds()) && clickedItem.getType() == Item::Consumable)
@@ -571,6 +646,7 @@ void Engine::update()
 					clickedItem.getIcon().setPosition(itemLastX, itemLastY);
 					if (draggingItem && draggedIndex >= 0 && draggedIndex < m_StoredItems.size())
 						m_StoredItems[draggedIndex] = clickedItem; // restore in original slot
+					if (itemWasEquipped) m_StoredItems[draggedIndex].setEquipped(true);
 					placed = true;
 
 				}
