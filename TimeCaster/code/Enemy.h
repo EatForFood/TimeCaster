@@ -135,7 +135,7 @@ private:
 	const float PATH_UPDATE_INTERVAL = 0.2f; // Update path every 0.2s
 	float m_UpdatePathTimer = 0.0f;
 	const float NODE_REACH_THRESHOLD = 32.0f; // pixels
-	const int FOLLOW_DISTANCE = 492;
+	const int FOLLOW_DISTANCE = 240;
 
 	// Wander behaviour
 	float m_WanderTimer = 0.0f;

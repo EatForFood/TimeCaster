@@ -188,6 +188,8 @@ void Engine::draw()
 			}
 		}
 
+		
+
 		/*
 		for (auto& txt : chunks[0].getDebugText()) { // draw debug text showing tile location
 			window.draw(txt);

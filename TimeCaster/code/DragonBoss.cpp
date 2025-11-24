@@ -24,8 +24,8 @@ void DragonBoss::spawn(const std::string& type, Vector2i position, int level) {
     // Hitbox centered on sprite
     m_Hitbox.left = m_Position.x - spriteSize.x / 2.0f;
     m_Hitbox.top = m_Position.y - spriteSize.y / 2.0f;
-    m_Hitbox.width = spriteSize.x;
-    m_Hitbox.height = spriteSize.y;
+    m_Hitbox.width = spriteSize.x / 2;
+    m_Hitbox.height = spriteSize.y / 2;
 
     m_Level = level;
     m_Type = type;
@@ -107,8 +107,8 @@ void DragonBoss::update(float elapsedTime, const Vector2f& playerPos, Chunk* chu
     // Hitbox centered on sprite
     m_Hitbox.left = m_Position.x - spriteSize.x / 2.0f;
     m_Hitbox.top = m_Position.y - spriteSize.y / 2.0f;
-    m_Hitbox.width = spriteSize.x;
-    m_Hitbox.height = spriteSize.y;
+    m_Hitbox.width = spriteSize.x / 2;
+    m_Hitbox.height = spriteSize.y / 2;
 
     if (m_Health < m_MaxHealth / 2 && !rageActivated) {
         state = AttackState::Rage;

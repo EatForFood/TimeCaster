@@ -108,6 +108,10 @@ private:
 	// Prepare the dragon bite sound
 	SoundBuffer dragonBiteBuffer;
 	Sound dragonBite;
+
+	// Prepare collect sound
+	SoundBuffer collectBuffer;
+	Sound collect;
 public:
 	// SoundManager constructor
 	SoundManager();
@@ -191,4 +195,6 @@ public:
 	void playDragonRoar();
 
 	void playDragonBite();
+
+	void playCollectSound();
 };

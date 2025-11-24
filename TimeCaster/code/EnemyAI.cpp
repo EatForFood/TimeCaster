@@ -403,11 +403,21 @@ void Enemy::pickNewWanderDirection()
 	{
 	case 0: m_WanderDirection = Vector2f(1, 0);  break;  // right
 	case 1: m_WanderDirection = Vector2f(-1, 0); break;  // left
-	case 2: m_WanderDirection = Vector2f(0, -1);  break;  // down
-	case 3: m_WanderDirection = Vector2f(0, 1); break;  // up
+	case 2: m_WanderDirection = Vector2f(0, 1);  break;  // down
+	case 3: m_WanderDirection = Vector2f(0, -1); break;  // up
 	}
 
 	direction = m_WanderDirection;
+
+	if (m_WanderDirection == Vector2f(0, -1))
+	{
+		direction = Vector2f(0, 1);
+	}
+
+	if (m_WanderDirection == Vector2f(0, 1))
+	{
+		direction = Vector2f(0, -1);
+	}
 
 	updateTextRect();
 
