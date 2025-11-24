@@ -538,6 +538,11 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	gameOverText2.setCharacterSize(fontSize + 20);
 	gameOverText2.setFillColor(Color::White);
 
+	// Stat text (for victory screen)
+	statText.setFont(font);
+	statText.setCharacterSize(fontSize + 20);
+	statText.setFillColor(Color::White);
+
 	/***********
 	Inventory UI
 	************/
@@ -1434,7 +1439,7 @@ void Engine::run()
 				}
 
 				// Player hit the quit game button
-				if (gameOverQuitButton.getGlobalBounds().contains(worldPos) && state == State::GAME_OVER && event.mouseButton.button == Mouse::Left)
+				if (gameOverQuitButton.getGlobalBounds().contains(worldPos) && (state == State::GAME_OVER || state == State::VICTORY) && event.mouseButton.button == Mouse::Left)
 				{
 					sound.playButtonClickSound();
 					// Save info to file before quitting
@@ -1443,9 +1448,10 @@ void Engine::run()
 
 
 				// Player hit the main menu button in the game over screen
-				if (gameOverMainMenuButton.getGlobalBounds().contains(worldPos) && state == State::GAME_OVER && event.mouseButton.button == Mouse::Left)
+				if (gameOverMainMenuButton.getGlobalBounds().contains(worldPos) && (state == State::GAME_OVER || state == State::VICTORY) && event.mouseButton.button == Mouse::Left)
 				{
 					sound.stopGameOverSound();
+					sound.stopVictorySound();
 					sound.playButtonClickSound();
 					world.clearWorld();
 					state = State::MAIN_MENU;
@@ -1599,6 +1605,36 @@ void Engine::run()
 						drawShop = true;
 						cout << "Opening shop" << endl;
 					}
+				}
+
+				if (event.key.code == Keyboard::V && state == State::PLAYING && debugMode)
+				{
+					if (sound.isSoundtrackPlaying()) {
+						sound.stopSoundtrack();
+					}
+					sound.playVictorySound();
+					gameOverText.setString("Victory!");
+					gameOverText.setFillColor(Color::Yellow);
+					textBounds = gameOverText.getLocalBounds();
+					viewCentre = hudView.getCenter();
+					gameOverText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y - gameOverText.getCharacterSize());
+
+					gameOverText2.setString("Insert story stuff here (maybe change if if you sold a sentimental item)");
+					textBounds = gameOverText2.getLocalBounds();
+					viewCentre = hudView.getCenter();
+					gameOverText2.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y - 400 - gameOverText2.getCharacterSize());
+
+					stringstream ssStatText;
+					ssStatText << "Level Reached: " << player.getPlayerLevel() << "\nGold Earned: " << player.getGold() 
+						<< "\nEnemies Killed: " << player.getKillCount();
+					statText.setString(ssStatText.str());
+					textBounds = statText.getLocalBounds();	
+					viewCentre = hudView.getCenter();
+					statText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y + 100 - statText.getCharacterSize());
+
+					state = State::VICTORY;
+
+
 				}
 
 				if (event.key.code == Keyboard::Num1 && state == State::PLAYING && debugMode)
@@ -1850,6 +1886,7 @@ void Engine::run()
 				}
 				sound.playGameOverSound();	
 				gameOverText.setString("Game Over!");
+				gameOverText.setFillColor(Color::Red);
 				textBounds = gameOverText.getLocalBounds();
 				viewCentre = hudView.getCenter();
 				gameOverText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y - gameOverText.getCharacterSize());
@@ -1910,7 +1947,7 @@ void Engine::run()
 			window.setMouseCursorVisible(false);
 			window.setMouseCursorGrabbed(true);
 		}
-		else if (state == State::PAUSED || state == State::MAIN_MENU || state == State::OPTIONS_MENU || state == State::GAME_OVER)
+		else if (state == State::PAUSED || state == State::MAIN_MENU || state == State::OPTIONS_MENU || state == State::GAME_OVER || state == State::VICTORY)
 		{
 			window.setMouseCursorVisible(true);
 			window.setMouseCursorGrabbed(false);
