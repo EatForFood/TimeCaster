@@ -71,6 +71,7 @@ void DragonBoss::update(float elapsedTime, const Vector2f& playerPos, Chunk* chu
 
         case 1:
             state = AttackState::Bite;
+            m_IsBiting = true;
             m_BiteClock.restart();
             m_Speed *= 3;
             bite(playerPos);
@@ -114,14 +115,14 @@ void DragonBoss::update(float elapsedTime, const Vector2f& playerPos, Chunk* chu
         rage();
     }
 
-    if (state == AttackState::Bite) {
+    if (m_IsBiting) {
         bite(playerPos);
-    }
 
-    if (state == AttackState::Bite && m_BiteClock.getElapsedTime().asSeconds() >= m_BiteDuration) 
-    {
-        m_Speed /= 3;
-        state = AttackState::Idle;
+        if (m_BiteClock.getElapsedTime().asSeconds() >= m_BiteDuration) {
+            m_Speed /= 3;
+            m_IsBiting = false;
+            state = AttackState::Idle;
+        }
     }
 
     if (m_IsCharging) {

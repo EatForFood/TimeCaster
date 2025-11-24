@@ -49,4 +49,6 @@ private:
 
 	Clock m_BiteClock;
 	float m_BiteDuration = 5.0f;
+
+	bool m_IsBiting = false;
 };
