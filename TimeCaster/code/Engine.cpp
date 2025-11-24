@@ -8,7 +8,6 @@
 #include "Player.h"
 #include "TextureHolder.h"
 #include "Spell.h"
-#include "Pickup.h"
 #include "Decal.h"
 #include "Windows.h"
 #include "World.h"

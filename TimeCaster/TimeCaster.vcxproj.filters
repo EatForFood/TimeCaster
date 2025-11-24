@@ -78,9 +78,6 @@
     <ClInclude Include="code\DragonBoss.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="code\Pickup.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="code\Spell.cpp">
