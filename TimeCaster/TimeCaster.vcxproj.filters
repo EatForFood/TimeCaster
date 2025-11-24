@@ -66,9 +66,6 @@
     <ClInclude Include="code\Cell.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="code\Pathfinder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="code\Particle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -135,9 +132,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="code\Draw.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="code\Pathfinder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="code\Update.cpp">
