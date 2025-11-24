@@ -1135,6 +1135,7 @@ void Engine::run()
 				// Player hit the new game button in the main menu
 				else if (newGameButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU && event.mouseButton.button == Mouse::Left)
 				{
+					enemyArr.clear();
 					state = State::STORY_INTRO;
 					timeToBeat.restart();
 
@@ -1286,6 +1287,7 @@ void Engine::run()
 						tutorialStage = 2;
 					}
 					else {
+						enemyArr.clear();
 						// No save file so create a new one with default values and load it	
 						player.createNewSave();
 						player.createConfigFile(difficultyToString(difficulty), windowedMode, displayFps, Listener::getGlobalVolume(), vSync, fpsLimit);
