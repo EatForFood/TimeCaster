@@ -442,6 +442,19 @@ void Engine::draw()
 		window.draw(gameOverQuitButtonText);
 		//	window.draw(skipIntroText);
 	}
+
+	if (state == State::VICTORY)
+	{
+		window.clear();
+		//	window.draw(spriteStoryIntro);
+		window.draw(gameOverText);
+		window.draw(gameOverText2);
+		window.draw(gameOverMainMenuButton);
+		window.draw(gameOverMainMenuButtonText);
+		window.draw(gameOverQuitButton);
+		window.draw(gameOverQuitButtonText);
+		//	window.draw(skipIntroText);
+	}
 	window.display();
 }
 

@@ -73,6 +73,10 @@ SoundManager::SoundManager() {
 	gameOverBuffer.loadFromFile("sound/gameOver.mp3");
 	gameOver.setBuffer(gameOverBuffer);
 
+	// Loads victory sound from file into buffer
+	victoryBuffer.loadFromFile("sound/victory.mp3");
+	victory.setBuffer(victoryBuffer);
+
 	// Loads click sound from file into buffer
 	clickBuffer.loadFromFile("sound/buttonClick.wav");
 	buttonClick.setBuffer(clickBuffer);
@@ -211,4 +215,12 @@ void SoundManager::playGameOverSound() {
 
 void SoundManager::stopGameOverSound() {
 	gameOver.stop();
+}
+
+void SoundManager::playVictorySound() {
+	victory.play();
+}
+
+void SoundManager::stopVictorySound() {
+	victory.stop();
 }

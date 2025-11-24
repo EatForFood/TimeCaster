@@ -86,7 +86,7 @@ private:
 	Texture shopKeeperTalking;
 	Texture shopKeeperUnsure;
 	// The game will always be in one of these states
-	enum State { MAIN_MENU, OPTIONS_MENU, STORY_INTRO, PLAYING, PAUSED, GAME_OVER, LOADING };
+	enum State { MAIN_MENU, OPTIONS_MENU, STORY_INTRO, PLAYING, PAUSED, GAME_OVER, LOADING, VICTORY };
 
 	CollisionDetection collision;
 
