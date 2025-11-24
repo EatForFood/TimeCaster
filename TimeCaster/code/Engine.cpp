@@ -1349,6 +1349,7 @@ void Engine::run()
 							thread worldThread(&Engine::generateWorld, this);
 							worldThread.detach();
 						}
+						tutorialStage = 2;
 
 					}
 					else {
@@ -1413,6 +1414,8 @@ void Engine::run()
 							thread worldThread(&Engine::generateWorld, this);
 							worldThread.detach();
 						}
+
+						tutorialStage = 0;
 					}
 				}
 
