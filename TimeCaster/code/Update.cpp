@@ -40,11 +40,11 @@ void Engine::update()
 		}
 
 		// Update the player
-		if (state == State::PLAYING && !drawInventory) {
+		if (state == State::PLAYING && !drawInventory && !drawShop) {
 			player.update(dtAsSeconds, Mouse::getPosition(), world.getNavBoxes(player.getChunk()));
 		}
 
-		if (state == State::PLAYING && !drawInventory && !timeFrozen) {
+		if (state == State::PLAYING && !drawInventory && !timeFrozen && !drawShop) {
 
 
 			if (playerNearShop() && tutorialStage != 0) {

@@ -1183,7 +1183,7 @@ void Engine::run()
 			if (event.type == Event::KeyPressed || Mouse::isButtonPressed(Mouse::Left))
 			{
 				// Pause the game if escape key pressed
-				if (event.key.code == Keyboard::Escape && state == State::PLAYING && !drawInventory)
+				if (event.key.code == Keyboard::Escape && state == State::PLAYING && !drawInventory && !drawShop)
 				{
 					state = State::PAUSED;
 				}
@@ -1716,7 +1716,7 @@ void Engine::run()
 		} // End event polling
 
 		// Handle controls while playing
-		if (state == State::PLAYING && !drawInventory)
+		if (state == State::PLAYING && !drawInventory && !drawShop)
 		{
 			if (Mouse::isButtonPressed(Mouse::Left))
 			{
