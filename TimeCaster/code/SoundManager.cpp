@@ -230,3 +230,11 @@ void SoundManager::playDragonRoar() {
 void SoundManager::playDragonBite() {
 	dragonBite.play();
 }
+
+void SoundManager::playVictorySound() {
+	victory.play();
+}
+
+void SoundManager::stopVictorySound() {
+	victory.stop();
+}
