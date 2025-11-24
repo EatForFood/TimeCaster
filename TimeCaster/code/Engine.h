@@ -347,6 +347,7 @@ private:
 
 	bool attemptedToSellSentimentalItem = false;
 
+	bool firstTimeInShop = true;
 
 	// Item tooltip elements
 	RectangleShape itemTooltipBackground;

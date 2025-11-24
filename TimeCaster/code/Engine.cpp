@@ -754,6 +754,8 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	shopKeeperUnsure = TextureHolder::GetTexture("graphics/shopKeeper/Unsure.png");
 
 	shopKeeperSprite.setTexture(shopKeeperNeutral);
+	shopKeeperSprite.setScale(3.0f, 3.0f);
+	shopKeeperSprite.setPosition(viewCentre.x + 500, 825);
 
 	inventoryBackground.setTexture(&inventoryBackgroundTexture);
 	inventoryBackground.setSize(Vector2f(1000, 800));
@@ -1141,6 +1143,22 @@ void Engine::run()
 				}
 				else
 				{
+					if (firstTimeInShop)
+					{
+						shopText.setString("Welcome to the shop! \nClick on one of my items up top to buy it.\nClick on one of your own items down below to sell it!");
+						shopKeeperSetEmotion(2);
+						textBounds = shopText.getLocalBounds();
+						shopText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 900);
+						firstTimeInShop = false;
+					}
+					else
+					{
+						shopText.setString("Welcome back!\nIt's always nice to see a familiar face.");
+						shopKeeperSetEmotion(1);
+						textBounds = shopText.getLocalBounds();
+						shopText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, 900);
+					}
+					shopKeeperSetEmotion(2);
 					attemptedToSellSentimentalItem = false;
 					drawShop = true;
 				}

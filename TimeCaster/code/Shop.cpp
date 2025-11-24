@@ -15,6 +15,7 @@ bool Engine::sellItem(int itemIndex)
 	{
 		stringstream shopStream;
 		shopStream << "I can't buy equipped items.\nYou'll have to equip something else in that slot.";
+		shopKeeperSetEmotion(3);
 		shopText.setString(shopStream.str());
 		return false;
 	}
@@ -22,6 +23,7 @@ bool Engine::sellItem(int itemIndex)
 	{
 		stringstream shopStream;
 		shopStream << "That looks important to you.\nAre you sure you'd like to sell it?\nI can't guarantee you'll be able to get it back.";
+		shopKeeperSetEmotion(3);
 		shopText.setString(shopStream.str());
 		attemptedToSellSentimentalItem = true;
 		return false;
@@ -39,6 +41,7 @@ bool Engine::sellItem(int itemIndex)
 		{
 			stringstream shopStream;
 			shopStream << "Alright, if you're sure.\nHere's " << goldToAdd << " gold for it";
+			shopKeeperSetEmotion(0);
 			shopText.setString(shopStream.str());
 			textWasSet = true;
 			player.setSoldSentimentalItem(true);
@@ -52,6 +55,7 @@ bool Engine::sellItem(int itemIndex)
 		{
 			stringstream shopStream;
 			shopStream << "I'll take it!\nHere's " << goldToAdd << " gold for it.";
+			shopKeeperSetEmotion(1);
 			shopText.setString(shopStream.str());
 		}
 
@@ -66,6 +70,7 @@ int Engine::buyItem(int itemIndex)
 	{
 		stringstream shopStream;
 		shopStream << "I don't have that item.";
+		shopKeeperSetEmotion(0);
 		shopText.setString(shopStream.str());
 		return 0; // 0 means item does not exist
 	}
@@ -92,6 +97,7 @@ int Engine::buyItem(int itemIndex)
 					thatThose = "those ";
 				}
 				shopStream << "Thanks for the " << itemCost << " Gold!\nI hope you make good use of " << thatThose << cleanItemName(itemName) << "!";
+				shopKeeperSetEmotion(1);
 				shopText.setString(shopStream.str());
 				return 1; // 1 means success
 			}
@@ -99,6 +105,7 @@ int Engine::buyItem(int itemIndex)
 			{
 				stringstream shopStream;
 				shopStream << "I'd love to sell that to you, but your inventory is full.";
+				shopKeeperSetEmotion(3);
 				shopText.setString(shopStream.str());
 				return 2; // 2 means no space in inventory
 			}
@@ -108,6 +115,7 @@ int Engine::buyItem(int itemIndex)
 			int difference = itemCost - playerGold;
 			stringstream shopStream;
 			shopStream << "Sorry, you're about " << difference << " Gold short of affording that " << cleanItemName(itemName) << ".";
+			shopKeeperSetEmotion(3);
 			shopText.setString(shopStream.str());
 			return 3; // 3 means not enough gold
 		}

@@ -247,7 +247,7 @@ void Engine::draw()
 			for (auto& icons : m_StoredItems) {
 				window.draw(icons.getIcon());
 			}
-
+			window.draw(shopKeeperSprite);
 			window.setView(mainView);
 			window.draw(spriteCursor);
 			window.setView(hudView);
