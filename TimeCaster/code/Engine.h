@@ -309,6 +309,8 @@ private:
 	Text gameOverText;
 	Text gameOverText2;
 
+	Text statText;
+
 	RectangleShape gameOverMainMenuButton;
 	Text gameOverMainMenuButtonText;
 	RectangleShape gameOverQuitButton;

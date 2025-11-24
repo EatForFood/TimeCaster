@@ -538,6 +538,11 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	gameOverText2.setCharacterSize(fontSize + 20);
 	gameOverText2.setFillColor(Color::White);
 
+	// Stat text (for victory screen)
+	statText.setFont(font);
+	statText.setCharacterSize(fontSize + 20);
+	statText.setFillColor(Color::White);
+
 	/***********
 	Inventory UI
 	************/
@@ -1609,6 +1614,7 @@ void Engine::run()
 					}
 					sound.playVictorySound();
 					gameOverText.setString("Victory!");
+					gameOverText.setFillColor(Color::Yellow);
 					textBounds = gameOverText.getLocalBounds();
 					viewCentre = hudView.getCenter();
 					gameOverText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y - gameOverText.getCharacterSize());
@@ -1617,6 +1623,14 @@ void Engine::run()
 					textBounds = gameOverText2.getLocalBounds();
 					viewCentre = hudView.getCenter();
 					gameOverText2.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y - 400 - gameOverText2.getCharacterSize());
+
+					stringstream ssStatText;
+					ssStatText << "Level Reached: " << player.getPlayerLevel() << "\nGold Earned: " << player.getGold() 
+						<< "\nEnemies Killed: " << player.getKillCount();
+					statText.setString(ssStatText.str());
+					textBounds = statText.getLocalBounds();	
+					viewCentre = hudView.getCenter();
+					statText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y + 100 - statText.getCharacterSize());
 
 					state = State::VICTORY;
 
@@ -1872,6 +1886,7 @@ void Engine::run()
 				}
 				sound.playGameOverSound();	
 				gameOverText.setString("Game Over!");
+				gameOverText.setFillColor(Color::Red);
 				textBounds = gameOverText.getLocalBounds();
 				viewCentre = hudView.getCenter();
 				gameOverText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y - gameOverText.getCharacterSize());

@@ -449,6 +449,7 @@ void Engine::draw()
 		//	window.draw(spriteStoryIntro);
 		window.draw(gameOverText);
 		window.draw(gameOverText2);
+		window.draw(statText);
 		window.draw(gameOverMainMenuButton);
 		window.draw(gameOverMainMenuButtonText);
 		window.draw(gameOverQuitButton);
