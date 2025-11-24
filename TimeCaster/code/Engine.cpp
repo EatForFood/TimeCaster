@@ -229,7 +229,16 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	controlsText.setCharacterSize(fontSize); // Set the font size
 	controlsText.setFillColor(Color::White);
 	textBounds = controlsText.getLocalBounds();
-	controlsText.setPosition(200, 210);
+	controlsText.setPosition(100, 210);
+
+	// Load game button text
+	creditsText.setString("Credits:\nJoshua Muller\nToby Womack\nJake O'Sullivan\nOpen Assets used\nFound in files\nAnd documentation");  // Set the text
+	creditsText.setFont(font);           // Set the font
+	creditsText.setCharacterSize(fontSize); // Set the font size
+	creditsText.setFillColor(Color::White);
+	textBounds = creditsText.getLocalBounds();
+	creditsText.setPosition(1600, 210);
+
 
 	// Load game button
 	gameOverMainMenuButton.setPosition(viewCentre.x - 400, 900);

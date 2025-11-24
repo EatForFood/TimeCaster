@@ -283,6 +283,8 @@ private:
 
 	Text controlsText;
 
+	Text creditsText;
+
 	// VSync button
 	RectangleShape vSyncButton;
 
