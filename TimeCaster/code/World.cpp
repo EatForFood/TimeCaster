@@ -13,11 +13,40 @@ using namespace sf;
 
 World::World()
 {
-    WORLD_SIZE = 3;
+    
 }
+
+/*
+void World::newWorld() 
+{
+    int half = GRID_SIZE / 2; 
+    ofstream out("gamedata/TCWorld.txt"); 
+    for (int y = -half; y <= half; y++) 
+    {
+        for (int x = -half; x <= half; x++) {
+            if (x == 0 && y == 0) // center chunk is spawn 
+            { 
+                string type = "spawn"; 
+                out << type << " " << x << " " << y << "\n"; 
+                m_Chunks.emplace_back("spawn", Vector2f(x, y), false); 
+            } 
+            else 
+            { 
+                string type = "forest"; 
+                out << type << " " << x << " " << y << "\n"; 
+                m_Chunks.emplace_back("forest", Vector2f(x, y), false); 
+            } 
+        } 
+    } 
+    out.close(); 
+}
+*/
+
 
 void World::newWorld()
 {
+    cout << "new world" << endl;
+    m_BossCandidates.clear();
     GRID_SIZE = WORLD_SIZE;
     int halfWorld = GRID_SIZE / 2;
 
@@ -43,6 +72,7 @@ void World::newWorld()
         }
     }
 
+    srand(time(NULL));
     int chance = rand() % (m_BossCandidates.size());
     m_BossArenaPos = m_BossCandidates[chance];
 
@@ -88,6 +118,7 @@ void World::newWorld()
 
     out.close();
 }
+
 
 void World::loadWorld() // load world from file
 {
