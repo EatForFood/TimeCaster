@@ -55,9 +55,9 @@ Weapon::Weapon(string type, Vector2f position)
 	else if (m_Name == "Short_Spear")
 	{
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
-		m_Sprite.setTextureRect(IntRect(194, 864, 32, 32));
+		m_Sprite.setTextureRect(IntRect(928, 896, 32, 32));
 		m_Icon.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
-		m_Icon.setTextureRect(IntRect(194, 864, 32, 32));
+		m_Icon.setTextureRect(IntRect(928, 896, 32, 32));
 		FloatRect bounds = m_Icon.getLocalBounds();
 		m_Icon.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
 
@@ -76,9 +76,9 @@ Weapon::Weapon(string type, Vector2f position)
 	else if (m_Name == "Long_Spear")
 	{
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
-		m_Sprite.setTextureRect(IntRect(194, 864, 32, 32));
+		m_Sprite.setTextureRect(IntRect(1376, 896, 32, 32));
 		m_Icon.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
-		m_Icon.setTextureRect(IntRect(194, 864, 32, 32));
+		m_Icon.setTextureRect(IntRect(1376, 896, 32, 32));
 		FloatRect bounds = m_Icon.getLocalBounds();
 		m_Icon.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
 
@@ -97,9 +97,9 @@ Weapon::Weapon(string type, Vector2f position)
 	else if (m_Name == "Trident")
 	{
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
-		m_Sprite.setTextureRect(IntRect(194, 864, 32, 32));
+		m_Sprite.setTextureRect(IntRect(1356, 896, 32, 32));
 		m_Icon.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
-		m_Icon.setTextureRect(IntRect(194, 864, 32, 32));
+		m_Icon.setTextureRect(IntRect(1356, 896, 32, 32));
 		FloatRect bounds = m_Icon.getLocalBounds();
 		m_Icon.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
 
@@ -118,9 +118,9 @@ Weapon::Weapon(string type, Vector2f position)
 	else if (m_Name == "Dragon_Spear")
 	{
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
-		m_Sprite.setTextureRect(IntRect(194, 864, 32, 32));
+		m_Sprite.setTextureRect(IntRect(1408, 896, 32, 32));
 		m_Icon.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
-		m_Icon.setTextureRect(IntRect(194, 864, 32, 32));
+		m_Icon.setTextureRect(IntRect(1408, 896, 32, 32));
 		FloatRect bounds = m_Icon.getLocalBounds();
 		m_Icon.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
 
