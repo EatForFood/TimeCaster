@@ -413,17 +413,17 @@ void Engine::update()
 		// Level up the player
 		if (drawInventory && levelUp)
 		{
-			if (Mouse::isButtonPressed(Mouse::Left) && invHealthBar.getGlobalBounds().contains(worldPos))
+			if (Mouse::isButtonPressed(Mouse::Left) && invHealthBar.getGlobalBounds().contains(Vector2f(worldPos.x -25, worldPos.y -25)))
 			{
 				player.upgradeHealth();
 				levelUp = false;
 			}
-			else if (Mouse::isButtonPressed(Mouse::Left) && invStamBar.getGlobalBounds().contains(worldPos))
+			else if (Mouse::isButtonPressed(Mouse::Left) && invStamBar.getGlobalBounds().contains(Vector2f(worldPos.x - 25, worldPos.y - 25)))
 			{
 				player.upgradeStamina();
 				levelUp = false;
 			}
-			else if (Mouse::isButtonPressed(Mouse::Left) && invManaBar.getGlobalBounds().contains(worldPos))
+			else if (Mouse::isButtonPressed(Mouse::Left) && invManaBar.getGlobalBounds().contains(Vector2f(worldPos.x - 25, worldPos.y - 25)))
 			{
 				player.upgradeMana();
 				levelUp = false;
