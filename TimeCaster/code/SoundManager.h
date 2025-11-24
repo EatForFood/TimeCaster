@@ -38,6 +38,9 @@ private:
 	SoundBuffer gameOverBuffer;
 	Sound gameOver;
 
+	SoundBuffer mainMenuBuffer;
+	Sound mainMenu;
+
 	// Prepare the victory sound
 	SoundBuffer victoryBuffer;
 	Sound victory;
@@ -144,6 +147,12 @@ public:
 
 	// Function to stop the victory sound
 	void stopVictorySound();
+
+	// Function to play the main menu sound
+	void playMainMenuSound();
+
+	// Function to stop the main menu sound
+	void stopMainMenuSound();
 
 	// Function to play the time stop active sound
 	void playTimeStopActiveSound();
