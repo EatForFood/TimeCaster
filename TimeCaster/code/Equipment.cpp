@@ -114,7 +114,7 @@ Equipment::Equipment(string type, sf::Vector2f position) : Item(type, position) 
 		m_Sprite.setTextureRect(IntRect(1608, 1326, 16, 16)); // not the best trouser icon, probably change later, there aren't many on the sheet
 		m_Icon.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
 		m_Icon.setTextureRect(IntRect(1608, 1326, 16, 16));
-		m_Icon.setColor(Color::Red);
+		m_Icon.setColor(Color::Green);
 		FloatRect bounds = m_Icon.getLocalBounds();
 		m_Icon.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
 		m_Icon.setScale(4.625, 4.625);
@@ -123,7 +123,7 @@ Equipment::Equipment(string type, sf::Vector2f position) : Item(type, position) 
 		m_ItemType = TrouserArmour;
 		m_Sprite.setOrigin(25, 25);
 		m_That = false;
-	}
+	}	
 	else if (m_Name == "Leather_Boots")
 	{
 		m_Sprite.setTexture(TextureHolder::GetTexture("graphics/items/DungeonCrawl_ProjectUtumnoTileset.png"));
