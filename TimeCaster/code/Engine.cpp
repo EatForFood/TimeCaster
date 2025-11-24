@@ -1242,7 +1242,7 @@ void Engine::run()
 					int tileSize = 64;
 
 					// Spawn the player in the middle of the arena
-					player.spawn(resolution, tileSize, player.getPlayerLevel());
+					player.spawn(resolution, tileSize, player.getPlayerLevel(), true);
 				
 					// Reset the clock so there isn't a frame jump
 					clock.restart();
@@ -1318,8 +1318,8 @@ void Engine::run()
 						// Pass the vertex array by reference to the createBackground function
 						int tileSize = 64;
 
-						// Spawn the player in the middle of the arena
-						player.spawn(resolution, tileSize, player.getPlayerLevel());
+						// Spawn the player, don't set their position since it loaded from the save file
+						player.spawn(resolution, tileSize, player.getPlayerLevel(), false);
 
 						// Reset the clock so there isn't a frame jump
 						clock.restart();
@@ -1382,7 +1382,7 @@ void Engine::run()
 						int tileSize = 64;
 
 						// Spawn the player in the middle of the arena
-						player.spawn(resolution, tileSize, player.getPlayerLevel());
+						player.spawn(resolution, tileSize, player.getPlayerLevel(), true);
 
 
 

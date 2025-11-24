@@ -17,7 +17,7 @@ public:
 
 	Player();
 
-	void spawn(Vector2f resolution, int tileSize, int level);
+	void spawn(Vector2f resolution, int tileSize, int level, bool setPos);
 
 	enum CombatType { Melee, Magic };
 	enum SpellType { Heal, Fireball, FreezeTime, Phase};

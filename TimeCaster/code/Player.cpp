@@ -60,10 +60,13 @@ Player::Player()
 	m_Clothes.push_back(m_SpriteShoes);
 }
 
-void Player::spawn(Vector2f resolution, int tileSize, int level)
+void Player::spawn(Vector2f resolution, int tileSize, int level, bool setPos)
 {
 
-	m_Position = Vector2f(50,600);
+	if (setPos)
+	{
+		m_Position = Vector2f(50, 600);
+	}
 	// assign player's hitbox
 	m_Hitbox.left = m_Position.x - HITBOX_WIDTH / 2;
 	m_Hitbox.width = HITBOX_WIDTH;
