@@ -48,10 +48,6 @@ bool Engine::sellItem(int itemIndex)
 			player.setSoldSentimentalItem(true);
 		}
 
-
-
-		initializeInventory();
-		initializeShop();
 		if (!textWasSet)
 		{
 			stringstream shopStream;
@@ -61,6 +57,10 @@ bool Engine::sellItem(int itemIndex)
 			shopItems[11] = m_StoredItems[itemIndex];
 		}
 		m_StoredItems[itemIndex] = Item("null", Vector2f(0, 0));
+		initializeInventory();
+		initializeShop();
+
+
 
 		return true;
 	}
