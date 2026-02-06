@@ -112,6 +112,10 @@ private:
 	// Prepare collect sound
 	SoundBuffer collectBuffer;
 	Sound collect;
+
+	// Prepare block sound
+	SoundBuffer blockBuffer;
+	Sound block;
 public:
 	// SoundManager constructor
 	SoundManager();
@@ -197,4 +201,6 @@ public:
 	void playDragonBite();
 
 	void playCollectSound();
+
+	void playBlockSound();
 };

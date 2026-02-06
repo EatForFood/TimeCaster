@@ -28,6 +28,8 @@ public:
 
 	void initializeShop();
 
+	void initializeUI();
+
 	enum Difficulty { Easy, Medium, Hard };
 
 	Difficulty stringToDifficulty(std::string str);
@@ -36,10 +38,11 @@ public:
 
 	void moveDraggedIcon(Sprite& draggedIcon, Vector2f mousePos);
 
-
 	void draw();
 
 	void update();
+
+	void ui();
 
 	Chunk* getCurrentChunk(float x, float y);
 
@@ -72,6 +75,8 @@ public:
 
 	// 0 for neutral, 1 for happy, 2 for talking, 3 for unsure
 	void shopKeeperSetEmotion(int emotionIndex);
+
+	Text makeText(const Font& font, const string& str, int size, Vector2f pos, Color color);
 
 protected: 
 	string cleanItemName(string itemName);

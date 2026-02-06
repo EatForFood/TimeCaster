@@ -25,6 +25,8 @@ protected:
 
 	Sprite m_SpriteWeapon;
 
+	Sprite m_SpriteShield;
+
 	vector<Sprite> m_Clothes;
 
 	// How long does a jump last
@@ -112,6 +114,10 @@ protected:
 	bool m_CastingSpell = false;
 	float m_DifficultyMult = 1.0f;
 
+	bool m_IsSprinting = false;
+
+	bool m_IsBlocking = false;
+
 	int m_WeaponSize = 1;
 
 public:
@@ -124,6 +130,7 @@ public:
 	Sprite getHead();
 	Sprite getTorso();
 	Sprite getShoes();
+	Sprite getShield();
 	Sprite getWeapon();
 
 	//move the rectangle to the next cell in the animation
@@ -176,5 +183,10 @@ public:
 
 	void setDifficultyMult(float mult);
 
+	void sprinting(bool sprinting);
+
+	bool isSprinting();
+
+	bool isBlocking();
 };
 

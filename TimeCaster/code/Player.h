@@ -6,6 +6,7 @@
 #include "Item.h"
 #include "Equipment.h"
 #include "Weapon.h"
+#include "SoundManager.h"
 
 using namespace sf;
 using namespace std;
@@ -279,4 +280,6 @@ private:
 	// player hit-box size
 	const int HITBOX_HEIGHT = 24;
 	const int HITBOX_WIDTH = 12;
+
+	SoundManager sound;
 };

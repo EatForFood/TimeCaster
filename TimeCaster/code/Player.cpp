@@ -52,6 +52,10 @@ Player::Player()
 	m_SpriteWeapon.setOrigin(32, 32);
 	m_SpriteWeapon.setScale(0.75, 0.75);
 
+	m_SpriteShield = Sprite(TextureHolder::GetTexture("graphics/player/armour/shield/Shield.png"));
+	m_SpriteShield.setOrigin(32, 32);
+	m_SpriteShield.setScale(0.75, 0.75);
+
 	m_Clothes.push_back(m_SpriteHead);
 	m_Clothes.push_back(m_SpriteTorso);
 	m_Clothes.push_back(m_SpritePants);
@@ -90,6 +94,14 @@ Time Player::getLastHitTime()
 
 bool Player::hit(Time timeHit, float damage, int iFrames)
 {
+	if (timeHit.asMilliseconds() - m_LastHit.asMilliseconds() > m_IFrames && m_IsBlocking && m_Stamina > 5)
+	{
+		m_Stamina -= 10; // blocking an attack reduces stamina
+		m_LastHit = timeHit; 
+		m_IFrames = iFrames;
+		sound.playBlockSound();
+		return false;
+	}
 	if (timeHit.asMilliseconds() - m_LastHit.asMilliseconds() > m_IFrames && m_IsDodging) // can't be hit while dodging, also checks for i frames
 	{
 		 m_LastHit = timeHit; // if you successfully dodge an attack it resets the hit timer so you can't be hit again straight away
@@ -201,6 +213,20 @@ void Player::update(float elapsedTime, Vector2i mousePosition, const vector<NavB
 		}
 	}
 
+	// reset speed to normal each frame
+	m_Speed = START_SPEED;
+
+	// handle sprinting
+	if (m_IsBlocking)
+	{
+		m_Speed *= 0.5;
+	}
+	else if(m_IsSprinting && m_Stamina > 0)
+	{
+		m_Speed *= 1.5;
+		m_Stamina -= 8 * elapsedTime;
+	}
+
 	if (!m_UpPressed && !m_DownPressed && !m_LeftPressed && !m_RightPressed)
 	{
 		m_IsMoving = false;
@@ -233,6 +259,16 @@ void Player::update(float elapsedTime, Vector2i mousePosition, const vector<NavB
 				setSpriteFromSheet(IntRect(0, 64, 576, 64), 64);
 			}
 		}
+	}
+
+	if (m_UpPressed && m_RightPressed || m_UpPressed && m_LeftPressed ||
+		m_DownPressed && m_RightPressed || m_DownPressed && m_LeftPressed) // player moved too fast diagonally
+	{
+		if (!m_IsDodging)
+		{
+			m_Speed = m_Speed * 0.85;
+		}
+
 	}
 
 	if (!m_IsMoving && m_Stamina < m_MaxStamina  )
@@ -368,15 +404,6 @@ void Player::update(float elapsedTime, Vector2i mousePosition, const vector<NavB
 		m_Speed = START_SPEED;
 	}
 
-	if (m_UpPressed && m_RightPressed || m_UpPressed && m_LeftPressed ||
-		m_DownPressed && m_RightPressed || m_DownPressed && m_LeftPressed) // player moved too fast diagonally
-	{
-		if (!m_IsDodging)
-		{
-			m_Speed = m_Speed * 0.75;
-		}
-	}
-
 	dodge();
 
 	// update player sprite and equipment
@@ -386,6 +413,7 @@ void Player::update(float elapsedTime, Vector2i mousePosition, const vector<NavB
 	m_SpriteShoes.setPosition(m_Position);
 	m_Sprite.setPosition(m_Position);
 	m_SpriteWeapon.setPosition(m_Position);
+	m_SpriteShield.setPosition(m_Position);
 
 	// update collision detection zone
 	m_CollisionBox.left = m_Position.x - 100;
@@ -403,12 +431,21 @@ void Player::update(float elapsedTime, Vector2i mousePosition, const vector<NavB
 	m_RenderArea = FloatRect(m_Position.x - m_Resolution.x / 2, m_Position.y - m_Resolution.y / 2, m_Resolution.x, m_Resolution.y);
 
 	// Calculate the angle between mouse and center of screen
-	float angle = (atan2(mousePosition.y - m_Resolution.y / 2, mousePosition.x - m_Resolution.x / 2) * 180) / 3.141;
+	float angle = (atan2(mousePosition.y - m_Resolution.y / 2 - 50, mousePosition.x - m_Resolution.x / 2) * 180) / 3.141;
 
 	if (angle < 0) angle += 360;
 
 	if (Mouse::isButtonPressed(Mouse::Right)) // make player face mouse when holding right click
 	{
+		if (m_IsAttacking || m_CombatType == Magic)
+		{
+			m_IsBlocking = false;
+		}
+		else
+		{
+			m_IsBlocking = true;
+		}
+
 		if (angle >= 45 && angle < 135)
 		{
 			// facing down
@@ -430,6 +467,10 @@ void Player::update(float elapsedTime, Vector2i mousePosition, const vector<NavB
 			// facing right
 			direction = Vector2f(1, 0);
 		}
+	}
+	else
+	{
+		m_IsBlocking = false;
 	}
 
 	if (m_UpPressed || m_DownPressed || m_LeftPressed || m_RightPressed) // animate sprite if player is moving
@@ -453,6 +494,7 @@ void Player::update(float elapsedTime, Vector2i mousePosition, const vector<NavB
 	m_SpritePants.setColor(Color(255, 255, 255, 128));
 	m_SpriteShoes.setColor(Color(255, 255, 255, 128));
 	m_SpriteWeapon.setColor(Color(255, 255, 255, 128));
+	m_SpriteShield.setColor(Color(255, 255, 255, 128));
 	}
 }
 
@@ -1147,54 +1189,57 @@ void Player::updateTextRect()
 
 void Player::Attack()
 {
-	string attackType;
-	string equippedWeapon;
-
-	if (!m_IsAttacking)
+	if (!m_IsSprinting)
 	{
-		resetAniCounter();
+		string attackType;
+		string equippedWeapon;
+
+		if (!m_IsAttacking)
+		{
+			resetAniCounter();
+		}
+
+		if (m_CombatType == Melee)
+		{
+			attackType = m_EquippedWeapons[0].getAnimType();
+			equippedWeapon = m_EquippedWeapons[0].getName();
+		}
+		else if (m_CombatType == Magic)
+		{
+			attackType = m_EquippedWeapons[1].getAnimType();
+			equippedWeapon = m_EquippedWeapons[1].getName();
+		}
+
+		m_IsAttacking = true;
+
+		// Associate a texture with the body sprite
+		m_SpriteWeapon = Sprite(TextureHolder::GetTexture("graphics/player/weapon/" + attackType + "/" + equippedWeapon + ".png"));
+		m_SpriteWeapon.setOrigin((64 * m_WeaponSize) / 2, (64 * m_WeaponSize) / 2);
+		m_SpriteWeapon.setScale(0.75, 0.75);
+
+		m_Sprite = Sprite(TextureHolder::GetTexture("graphics/player/" + attackType + "/playerAttack.png"));
+		m_Sprite.setOrigin(32, 32);
+		m_Sprite.setScale(0.75, 0.75);
+
+		// manually set armour sprites
+		m_SpriteHead = Sprite(TextureHolder::GetTexture("graphics/player/armour/" + attackType + "/" + m_EquippedArmour[0].getName() + ".png"));
+		m_SpriteHead.setOrigin(32, 32);
+		m_SpriteHead.setScale(0.75, 0.75);
+
+		m_SpriteTorso = Sprite(TextureHolder::GetTexture("graphics/player/armour/" + attackType + "/" + m_EquippedArmour[1].getName() + ".png"));
+		m_SpriteTorso.setOrigin(32, 32);
+		m_SpriteTorso.setScale(0.75, 0.75);
+
+		m_SpritePants = Sprite(TextureHolder::GetTexture("graphics/player/armour/" + attackType + "/" + m_EquippedArmour[2].getName() + ".png"));
+		m_SpritePants.setOrigin(32, 32);
+		m_SpritePants.setScale(0.75, 0.75);
+
+		m_SpriteShoes = Sprite(TextureHolder::GetTexture("graphics/player/armour/" + attackType + "/" + m_EquippedArmour[3].getName() + ".png"));
+		m_SpriteShoes.setOrigin(32, 32);
+		m_SpriteShoes.setScale(0.75, 0.75);
+
+		updateTextRect();
 	}
-
-	if (m_CombatType == Melee)
-	{
-		attackType = m_EquippedWeapons[0].getAnimType();
-		equippedWeapon = m_EquippedWeapons[0].getName();
-	}
-	else if (m_CombatType == Magic)
-	{
-		attackType = m_EquippedWeapons[1].getAnimType();
-		equippedWeapon = m_EquippedWeapons[1].getName();
-	}
-
-	m_IsAttacking = true;
-
-	// Associate a texture with the body sprite
-	m_SpriteWeapon = Sprite(TextureHolder::GetTexture("graphics/player/weapon/" + attackType + "/" + equippedWeapon + ".png"));
-	m_SpriteWeapon.setOrigin((64 * m_WeaponSize) / 2, (64 * m_WeaponSize) / 2);
-	m_SpriteWeapon.setScale(0.75, 0.75);
-	
-	m_Sprite = Sprite(TextureHolder::GetTexture("graphics/player/" + attackType + "/playerAttack.png"));
-	m_Sprite.setOrigin(32, 32);
-	m_Sprite.setScale(0.75, 0.75);
-
-	// manually set armour sprites
-	m_SpriteHead = Sprite(TextureHolder::GetTexture("graphics/player/armour/" + attackType + "/" + m_EquippedArmour[0].getName() + ".png"));
-	m_SpriteHead.setOrigin(32, 32);
-	m_SpriteHead.setScale(0.75, 0.75);
-
-	m_SpriteTorso = Sprite(TextureHolder::GetTexture("graphics/player/armour/" + attackType + "/" + m_EquippedArmour[1].getName() + ".png"));
-	m_SpriteTorso.setOrigin(32, 32);
-	m_SpriteTorso.setScale(0.75, 0.75);
-
-	m_SpritePants = Sprite(TextureHolder::GetTexture("graphics/player/armour/" + attackType + "/" + m_EquippedArmour[2].getName() + ".png"));
-	m_SpritePants.setOrigin(32, 32);
-	m_SpritePants.setScale(0.75, 0.75);
-
-	m_SpriteShoes = Sprite(TextureHolder::GetTexture("graphics/player/armour/" + attackType + "/" + m_EquippedArmour[3].getName() + ".png"));
-	m_SpriteShoes.setOrigin(32, 32);
-	m_SpriteShoes.setScale(0.75, 0.75);
-
-	updateTextRect();
 }
 
 void Player::healHealth(float healthToRestore) {

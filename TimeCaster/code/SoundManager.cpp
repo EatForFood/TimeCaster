@@ -107,6 +107,9 @@ SoundManager::SoundManager() {
 
 	collectBuffer.loadFromFile("sound/collect.wav");
 	collect.setBuffer(collectBuffer);
+
+	blockBuffer.loadFromFile("sound/block.wav");
+	block.setBuffer(blockBuffer);
 } // End of SoundManager constructor
 
 // Function for placing songs within the soundtrack list
@@ -224,6 +227,10 @@ void SoundManager::playGoldSound() {
 
 void SoundManager::playCollectSound() {
 	collect.play();
+}
+
+void SoundManager::playBlockSound() {
+	block.play();
 }
 
 void SoundManager::playGameOverSound() {

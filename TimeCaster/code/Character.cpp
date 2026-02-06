@@ -95,8 +95,9 @@ void Character::setSpriteFromSheet(sf::IntRect textureBox, int tileSize) // set 
 	m_SpriteTorso.setTextureRect(sf::IntRect{ sheetCoordinate, spriteSize });
 	m_SpritePants.setTextureRect(sf::IntRect{ sheetCoordinate, spriteSize });
 	m_SpriteShoes.setTextureRect(sf::IntRect{ sheetCoordinate, spriteSize });
+	m_SpriteShield.setTextureRect(sf::IntRect{ sheetCoordinate, spriteSize });
 
-	m_SpriteWeapon.setTextureRect(sf::IntRect{ Vector2i(sheetCoordinate.x, sheetCoordinate.y * m_WeaponSize), spriteSize * m_WeaponSize});
+	m_SpriteWeapon.setTextureRect(sf::IntRect{ Vector2i(sheetCoordinate.x, sheetCoordinate.y * m_WeaponSize), spriteSize * m_WeaponSize });
 }
 
 void Character::moveTextureRect() // animate sprite by moving texRect location
@@ -108,39 +109,36 @@ void Character::moveTextureRect() // animate sprite by moving texRect location
 		m_Ani_Counter = 0;
 	}
 
-	if (m_Horizontal) {
+	m_Sprite.setTextureRect(sf::IntRect(sheetCoordinate + sf::Vector2i(spriteSize.x * m_Ani_Counter, 0), spriteSize));
 
-		m_Sprite.setTextureRect(sf::IntRect(sheetCoordinate + sf::Vector2i(spriteSize.x * m_Ani_Counter, 0), spriteSize));
+	m_SpriteHead.setTextureRect(sf::IntRect(sheetCoordinate + sf::Vector2i(spriteSize.x * m_Ani_Counter, 0), spriteSize));
+	m_SpriteTorso.setTextureRect(sf::IntRect(sheetCoordinate + sf::Vector2i(spriteSize.x * m_Ani_Counter, 0), spriteSize));
+	m_SpritePants.setTextureRect(sf::IntRect(sheetCoordinate + sf::Vector2i(spriteSize.x * m_Ani_Counter, 0), spriteSize));
+	m_SpriteShoes.setTextureRect(sf::IntRect(sheetCoordinate + sf::Vector2i(spriteSize.x * m_Ani_Counter, 0), spriteSize));
 
-		m_SpriteHead.setTextureRect(sf::IntRect(sheetCoordinate + sf::Vector2i(spriteSize.x * m_Ani_Counter, 0), spriteSize));
-		m_SpriteTorso.setTextureRect(sf::IntRect(sheetCoordinate + sf::Vector2i(spriteSize.x * m_Ani_Counter, 0), spriteSize));
-		m_SpritePants.setTextureRect(sf::IntRect(sheetCoordinate + sf::Vector2i(spriteSize.x * m_Ani_Counter, 0), spriteSize));
-		m_SpriteShoes.setTextureRect(sf::IntRect(sheetCoordinate + sf::Vector2i(spriteSize.x * m_Ani_Counter, 0), spriteSize));
-	}
-	else {
-		m_Sprite.setTextureRect(sf::IntRect(sheetCoordinate + sf::Vector2i(0, spriteSize.y * m_Ani_Counter), spriteSize));
+	m_SpriteShield.setTextureRect(sf::IntRect(sheetCoordinate + sf::Vector2i(spriteSize.x * m_Ani_Counter, 0), spriteSize));
 
-		m_SpriteHead.setTextureRect(sf::IntRect(sheetCoordinate + sf::Vector2i(0, spriteSize.y * m_Ani_Counter), spriteSize));
-		m_SpriteTorso.setTextureRect(sf::IntRect(sheetCoordinate + sf::Vector2i(0, spriteSize.y * m_Ani_Counter), spriteSize));
-		m_SpritePants.setTextureRect(sf::IntRect(sheetCoordinate + sf::Vector2i(0, spriteSize.y * m_Ani_Counter), spriteSize));
-		m_SpriteShoes.setTextureRect(sf::IntRect(sheetCoordinate + sf::Vector2i(0, spriteSize.y * m_Ani_Counter), spriteSize));
-	}
 
 	if (m_IsAttacking)
 	{
-		if (m_Horizontal)
-		{
-			m_SpriteWeapon.setTextureRect(sf::IntRect(Vector2i(sheetCoordinate.x, sheetCoordinate.y * m_WeaponSize) + sf::Vector2i(spriteSize.x * m_WeaponSize * m_Ani_Counter, 0), spriteSize * m_WeaponSize));
-		}
-		else
-		{
-			m_SpriteWeapon.setTextureRect(sf::IntRect(Vector2i(sheetCoordinate.x, sheetCoordinate.y * m_WeaponSize) + sf::Vector2i(0, spriteSize.y * m_WeaponSize * m_Ani_Counter), spriteSize * m_WeaponSize));
-		}
+		m_SpriteWeapon.setTextureRect(sf::IntRect(Vector2i(sheetCoordinate.x, sheetCoordinate.y * m_WeaponSize) + sf::Vector2i(spriteSize.x * m_WeaponSize * m_Ani_Counter, 0), spriteSize * m_WeaponSize));
 	}
 
 	//increment animation counter to point to the next frame
 	double timePerFrame;
-	timePerFrame = 1.0 / 6.0;
+
+	if (m_IsSprinting)
+	{
+		timePerFrame = 0.5 / 6.0;
+	}
+	else if (m_IsBlocking)
+	{
+		timePerFrame = 1.5 / 6.0;
+	}
+	else
+	{
+		timePerFrame = 1.0 / 6.0;
+	}
 	m_AnimationTimer = m_AnimationTimer + m_TimeElapsed;
 	if (m_AnimationTimer > timePerFrame)
 	{
@@ -167,6 +165,11 @@ Sprite Character::getTorso()
 Sprite Character::getShoes()
 {
 	return m_SpriteShoes;
+}
+
+Sprite Character::getShield()
+{
+	return m_SpriteShield;
 }
 
 Sprite Character::getWeapon()
@@ -228,4 +231,19 @@ void Character::castingSpell(bool casting)
 void Character::setDifficultyMult(float mult)
 {
 	m_DifficultyMult = mult;
+}
+
+void Character::sprinting(bool sprinting)
+{
+	m_IsSprinting = sprinting;
+}
+
+bool Character::isSprinting()
+{
+	return m_IsSprinting;
+}
+
+bool Character::isBlocking()
+{
+	return m_IsBlocking;
 }

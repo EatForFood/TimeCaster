@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClInclude Include="code\DragonBoss.h" />
     <ClInclude Include="code\Loot.h" />
+    <ClInclude Include="code\TextHelper.hpp" />
     <ClInclude Include="code\Particle.h" />
     <ClInclude Include="code\Spell.h" />
     <ClInclude Include="code\Cell.h" />
@@ -64,6 +65,7 @@
     <ClCompile Include="code\SoundManager.cpp" />
     <ClCompile Include="code\TextureHolder.cpp" />
     <ClCompile Include="code\Engine.cpp" />
+    <ClCompile Include="code\UI.cpp" />
     <ClCompile Include="code\Update.cpp" />
     <ClCompile Include="code\Weapon.cpp" />
     <ClCompile Include="code\World.cpp" />

@@ -1,6 +1,6 @@
 #include "Engine.h"
 #include "Player.h"
-
+#include "TextHelper.hpp"
 
 bool Engine::sellItem(int itemIndex)
 {
@@ -127,6 +127,37 @@ int Engine::buyItem(int itemIndex)
 
 void Engine::initializeShop()
 {
+	shopText = TextHelper::makeText(font, "Welcome to the shop! \nClick on one of my items up top to buy it.\nClick on one of your own items down below to sell it!", fontSize, Vector2f(viewCentre.x, 900), Color::Green);
+
+	shopKeeperNeutral = TextureHolder::GetTexture("graphics/shopKeeper/Neutral.png");
+	shopKeeperHappy = TextureHolder::GetTexture("graphics/shopKeeper/Happy.png");
+	shopKeeperTalking = TextureHolder::GetTexture("graphics/shopKeeper/Talking.png");
+	shopKeeperUnsure = TextureHolder::GetTexture("graphics/shopKeeper/Unsure.png");
+
+	shopKeeperSprite.setTexture(shopKeeperNeutral);
+	shopKeeperSprite.setScale(3.0f, 3.0f);
+	shopKeeperSprite.setPosition(viewCentre.x + 500, 825);
+
+	dialogueBoxSprite.setTexture(TextureHolder::GetTexture("graphics/UI/dialogueBox.png"));
+	dialogueBoxSprite.setScale(2.25f, 2.25f);
+	dialogueBoxSprite.setOrigin(dialogueBoxSprite.getLocalBounds().width / 2, dialogueBoxSprite.getLocalBounds().height / 2);
+	dialogueBoxSprite.setPosition(shopText.getPosition().x, shopText.getPosition().y + 50);
+
+	portraitWindowSprite.setTexture(TextureHolder::GetTexture("graphics/UI/portraitWindow.png"));
+	portraitWindowSprite.setScale(1.1f, 1.1f);
+	portraitWindowSprite.setPosition(Vector2f(shopKeeperSprite.getPosition().x + 25, shopKeeperSprite.getPosition().y + 25));
+
+	inventoryBackground.setTexture(&inventoryBackgroundTexture);
+	inventoryBackground.setSize(Vector2f(1000, 800));
+	textBounds = inventoryBackground.getLocalBounds();
+	inventoryBackground.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y - (textBounds.height / 2.f) - textBounds.top);
+
+	// Shop inventory background placeholder
+	shopBackground.setTexture(&inventoryBackgroundTexture);
+	shopBackground.setSize(Vector2f(1100, 880));
+	textBounds = shopBackground.getLocalBounds();
+	shopBackground.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y - (textBounds.height / 1.6f) - textBounds.top);
+
 	int startX = viewCentre.x - 350;
 	int startY = 200;
 

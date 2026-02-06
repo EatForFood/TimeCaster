@@ -38,7 +38,7 @@ string Loot::getLoot(int maxRarity)
 
 	int chance = rand() % 100;
 
-	// 50% chance to spawn an item
+	// chance to spawn an item
 	if (chance > 70)
 	{
 		int chance = rand() % maxRarity;
