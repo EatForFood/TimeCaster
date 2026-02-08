@@ -72,13 +72,27 @@ Chunk::Chunk(String type, Vector2f chunk, bool load)
 					{
 						int chance = rand() % 5;
 
-						if (chance <= 2)
+						if (x >= 10 && x < 35 && y >= 15 && y < 18) // create small road with pavestones
 						{
-							placeTile(x, y, 7, 0, false, true);
+							if (chance <= 2)
+							{
+								placeTile(x, y, 8, 1, false, true);
+							}
+							else
+							{
+								placeTile(x, y, 9, 1, false, true);
+							}
 						}
 						else
 						{
-							placeTile(x, y, 8, 0, false, true);
+							if (chance <= 2)
+							{
+								placeTile(x, y, 7, 0, false, true);
+							}
+							else
+							{
+								placeTile(x, y, 8, 0, false, true);
+							}
 						}
 					}
 					else if (x > 7 && x < 38 && y > 2 && y < 37) // create grass that trees cant spawn on 
@@ -115,6 +129,7 @@ Chunk::Chunk(String type, Vector2f chunk, bool load)
 				}
 			}
 
+			/*
 			for (int x = 10; x < 35; x++) // create road with pavestones
 			{
 				for (int y = 15; y < 18; y++)
@@ -131,6 +146,7 @@ Chunk::Chunk(String type, Vector2f chunk, bool load)
 					}
 				}
 			}
+			*/
 
 			// Forground empty
 			for (int x = 0; x < 50; x++)
@@ -567,46 +583,6 @@ Chunk::Chunk(String type, Vector2f chunk, bool load)
 
 		saveChunk();
 	}
-
-	if (m_Type == "spawn")
-	{
-		for (int x = 10; x < 35; x++) // create road with pavestones
-		{
-			for (int y = 15; y < 18; y++)
-			{
-				int chance = rand() % 5;
-
-				if (chance <= 2)
-				{
-					placeTile(x, y, 8, 1, false, false);
-				}
-				else
-				{
-					placeTile(x, y, 9, 1, false, false);
-				}
-			}
-		}
-	}
-
-	/*
-	if (m_Type == "bossArena")
-	{
-		for (int x = 5; x < 45; x++) // create road with pavestones
-		{
-			for (int y = 5; y < 45; y++)
-			{
-				int chance = rand() % 7;
-
-				if (chance <= 1)
-				{
-					CreateEntity(31, x, y);
-				}
-			}
-		}
-	}
-	*/
-
-
 }
 
 

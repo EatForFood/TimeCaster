@@ -214,7 +214,10 @@ void Player::update(float elapsedTime, Vector2i mousePosition, const vector<NavB
 	}
 
 	// reset speed to normal each frame
-	m_Speed = START_SPEED;
+	if(!m_IsSprinting && !m_IsDodging)
+	{
+		m_Speed = START_SPEED;
+	}
 
 	// handle sprinting
 	if (m_IsBlocking)
