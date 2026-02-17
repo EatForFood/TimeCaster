@@ -118,10 +118,35 @@ void Entity::spawn(int type, float x, float y)
         m_Sprite = Sprite(TextureHolder::GetTexture("graphics/foliage/misc/statue.png"));
         m_Sprite.setOrigin(m_Sprite.getTextureRect().width / 2, m_Sprite.getTextureRect().height / 2);
     }
+
     if (type == 33)
     {
 		m_Sprite = Sprite(TextureHolder::GetTexture("graphics/shopSign.png")); 
         m_Sprite.setOrigin(m_Sprite.getTextureRect().width / 2, m_Sprite.getTextureRect().height / 2);
+    }
+
+    if (type == 41)
+    {
+        m_Sprite = Sprite(TextureHolder::GetTexture("graphics/walls/wall1.png"));
+        //m_Sprite.setOrigin(m_Sprite.getTextureRect().width / 2, m_Sprite.getTextureRect().height / 2);
+    }
+
+    if (type == 42)
+    {
+        m_Sprite = Sprite(TextureHolder::GetTexture("graphics/walls/wall2.png"));
+        //m_Sprite.setOrigin(m_Sprite.getTextureRect().width / 2, m_Sprite.getTextureRect().height / 2);
+    }
+
+    if (type == 43)
+    {
+        m_Sprite = Sprite(TextureHolder::GetTexture("graphics/walls/wall3.png"));
+        //m_Sprite.setOrigin(m_Sprite.getTextureRect().width / 2, m_Sprite.getTextureRect().height / 2);
+    }
+
+    if (type == 44)
+    {
+        m_Sprite = Sprite(TextureHolder::GetTexture("graphics/walls/wall4.png"));
+        //m_Sprite.setOrigin(m_Sprite.getTextureRect().width / 2, m_Sprite.getTextureRect().height / 2);
     }
 
     m_Position = Vector2f(x, y);

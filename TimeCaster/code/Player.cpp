@@ -224,7 +224,7 @@ void Player::update(float elapsedTime, Vector2i mousePosition, const vector<NavB
 	{
 		m_Speed *= 0.5;
 	}
-	else if(m_IsSprinting && m_Stamina > 0)
+	else if(m_IsSprinting && m_Stamina > 1)
 	{
 		m_Speed *= 1.5;
 		m_Stamina -= 8 * elapsedTime;

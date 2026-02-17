@@ -58,6 +58,10 @@ protected:
 	float m_Health;
 	float m_MaxHealth;
 
+	// How much health the character can have & does have
+	float m_Stamina;
+	float m_MaxStamina;
+
 	// Character level
 	int m_Level;
 

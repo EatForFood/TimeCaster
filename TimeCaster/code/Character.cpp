@@ -127,7 +127,7 @@ void Character::moveTextureRect() // animate sprite by moving texRect location
 	//increment animation counter to point to the next frame
 	double timePerFrame;
 
-	if (m_IsSprinting)
+	if (m_IsSprinting && m_Stamina > 1)
 	{
 		timePerFrame = 0.5 / 6.0;
 	}

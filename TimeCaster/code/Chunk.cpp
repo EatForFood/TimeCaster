@@ -659,12 +659,16 @@ void Chunk::placeHouse1(int sx, int sy) { // sx 15, sy 18
 		m_Walkable[x][sy] = false;
 	}
 
+	CreateEntity(41, sx, sy); // create wall entity for rendering in front of player
+
 	// House east wall 
 	for (int y = sy - 3; y < sy + 1; y++)
 	{
 		placeTile(sx + 4, y, 1, 14, false, false);
 		m_Walkable[sx][y] = false;
 	}
+
+	CreateEntity(42, sx + 4, sy - 3); 
 
 	// House 2nd floor east wall
 	for (int y = sy - 3; y < sy - 1; y++)
@@ -709,6 +713,8 @@ void Chunk::placeHouse2(int sx, int sy) { // sx 15, sy 18
 		m_Walkable[x][sy] = false;
 	}
 
+	CreateEntity(41, sx, sy);
+
 	// House east wall 
 	for (int y = sy - 2; y < sy + 1; y++)
 	{
@@ -725,6 +731,9 @@ void Chunk::placeHouse2(int sx, int sy) { // sx 15, sy 18
 		}
 		m_Walkable[sx][y] = false;
 	}
+
+	CreateEntity(42, sx + 1, sy - 2);
+
 	// roof
 	placeTile(sx - 1, sy - 1, 5, 13, true, false);
 
@@ -762,12 +771,16 @@ void Chunk::placeHouse3(int sx, int sy) { // sx 15, sy 18
 		m_Walkable[x][sy] = false;
 	}
 
+	CreateEntity(41, sx, sy);
+
 	// House east wall 
 	for (int y = sy - 1; y < sy + 1; y++)
 	{
 		placeTile(sx + 2, y, 1, 14, false, false);
 		m_Walkable[sx][y] = false;
 	}
+
+	CreateEntity(42, sx + 2, sy - 1);
 
 	placeTile(sx + 1, sy - 2, 7, 13, true, false);
 
@@ -797,6 +810,8 @@ void Chunk::placeHouse4(int sx, int sy) { // sx 15, sy 18
 		placeTile(x, sy, 1, 14, false, false);
 		m_Walkable[x][sy] = false;
 	}
+
+	CreateEntity(41, sx, sy);
 
 	// House east wall 
 	for (int y = sy - 2; y < sy + 1; y++)
@@ -832,6 +847,8 @@ void Chunk::placeHouse4(int sx, int sy) { // sx 15, sy 18
 		placeTile(sx + 4, y, 1, 14, false, false); // 64/64 = 1, 896/64 = 14
 		m_Walkable[sx][y] = false;
 	}
+
+	CreateEntity(42, sx + 4, sy - 3);
 
 	placeTile(sx + 3, sy - 4, 7, 13, true, false); // 448/64 = 7, 832/64 = 13
 
@@ -879,6 +896,9 @@ void Chunk::placeCastle(int sx, int sy) { // sx 15, sy 18
 		}
 	}
 
+	CreateEntity(44, sx, 18);
+	CreateEntity(43, sx, 14);
+
 	// Castle north wall
 	for (int x = sx + 1; x < sx + 25; x++)
 	{
@@ -895,6 +915,9 @@ void Chunk::placeCastle(int sx, int sy) { // sx 15, sy 18
 			m_Walkable[sx + 24][y] = false;
 		}
 	}
+
+	CreateEntity(44, sx + 24, 18);
+	CreateEntity(43, sx + 24, 14);
 
 	// Castle south wall
 	for (int x = sx; x < sx + 25; x++)
