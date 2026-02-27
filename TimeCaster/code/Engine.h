@@ -90,7 +90,7 @@ private:
 	Texture shopKeeperTalking;
 	Texture shopKeeperUnsure;
 	// The game will always be in one of these states
-	enum State { MAIN_MENU, OPTIONS_MENU, STORY_INTRO, PLAYING, PAUSED, GAME_OVER, LOADING, VICTORY };
+	enum State { MAIN_MENU, CONTROLS_MENU, OPTIONS_MENU, CREDITS_MENU, STORY_INTRO, PLAYING, PAUSED, GAME_OVER, LOADING, VICTORY };
 
 	CollisionDetection collision;
 
@@ -185,7 +185,6 @@ private:
 	Texture textureCursorOpen;
 	Texture textureCursorClosed;
 
-
 	// Integer used to set all text font sizes
 	int fontSize = 35;
 
@@ -246,62 +245,56 @@ private:
 
 	Text mainHeadingText;
 
-	// New game button
+	// Main menu buttons and text
 	RectangleShape newGameButton;
-
-	// New game button text
 	Text newGameButtonText;
 
-	// Load game button
 	RectangleShape loadGameButton;
+	Text loadGameButtonText;
 
-	Text loadGameButtonText; // Create the Text object first
+	RectangleShape controlsButton;
+	Text controlsButtonText;
 
+	Text controlsHeadingText;
+	
 	RectangleShape optionsButton;
+	Text optionsButtonText;
 
-	Text optionsButtonText; // Create the Text object
+	Text optionsHeadingText;
 
 	RectangleShape quitGameButton;
+	Text quitGameButtonText;
 
-	Text quitGameButtonText; // Create the Text object
+	RectangleShape creditsButton;
+	Text creditsButtonText;
 
-	Text optionsHeadingText; // Create the Text object
+	Text creditsHeadingText;
 
 	RectangleShape mainMenuButton;
-
-	Text mainMenuButtonText; // Create the Text object
+	Text mainMenuButtonText;
 
 	Text volumeSliderText;
-
 	RectangleShape track;
-
 	CircleShape handle;
 
 	RectangleShape displayFPSButton;
-
 	Text displayFPSButtonText;
 
-	// Windowed mode button 
 	RectangleShape windowedModeButton;
-
 	Text windowedModeButtonText;
-
+	
 	Text controlsText;
-
 	Text creditsText;
+	Text developersText;
 
-	// VSync button
 	RectangleShape vSyncButton;
-
 	Text vSyncButtonText;
 
 	RectangleShape difficultyButton;
-
-	Text difficultyButtonText; // Create the Text object
+	Text difficultyButtonText;
 
 	RectangleShape debugModeButton;
-
-	Text debugModeButtonText; // Create the Text object
+	Text debugModeButtonText;
 
 	Text storyIntroText;
 	string fullText;
@@ -312,13 +305,10 @@ private:
 	float delay = 0.05f; // seconds between characters
 	int currentChar = 0;
 
-	Text skipIntroText; // Create the Text object
-
+	Text skipIntroText;
 	Text loadWorldText;
-
 	Text gameOverText;
 	Text gameOverText2;
-
 	Text statText;
 
 	RectangleShape gameOverMainMenuButton;
@@ -497,7 +487,6 @@ private:
 	std::string userInputString;
 	bool textBoxActive;
 
-
 	// Textbox logic
 	sf::RectangleShape textBoxFps;
 	sf::Text feedbackFps;
@@ -510,4 +499,8 @@ private:
 	Loot loot;
 
 	bool roarPlayed = false;
+
+	int valueYLevel = 75;
+	int itemYLevel = 37;
+	int statYLevel = 57;
 };

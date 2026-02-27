@@ -421,6 +421,15 @@ void Engine::update()
 				}
 			}
 
+			// Player hit the controls button
+			if (controlsButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU && event.mouseButton.button == Mouse::Left)
+			{
+				sound.playButtonClickSound();
+				world.clearWorld();
+
+				state = State::CONTROLS_MENU;
+			}
+			
 			// Player hit the options button
 			if (optionsButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU && event.mouseButton.button == Mouse::Left)
 			{
@@ -435,6 +444,14 @@ void Engine::update()
 				state = State::OPTIONS_MENU;
 			}
 
+			// Player hit the credits button
+			if (creditsButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU && event.mouseButton.button == Mouse::Left)
+			{
+				sound.playButtonClickSound();
+				world.clearWorld();
+				state = State::CREDITS_MENU;
+			}
+
 			// Player hit the quit game button
 			if (quitGameButton.getGlobalBounds().contains(worldPos) && state == State::MAIN_MENU && event.mouseButton.button == Mouse::Left)
 			{
@@ -443,7 +460,7 @@ void Engine::update()
 				window.close();
 			}
 
-			// Player hit the quit game button
+			// Player hit the game over quit game button
 			if (gameOverQuitButton.getGlobalBounds().contains(worldPos) && (state == State::GAME_OVER || state == State::VICTORY) && event.mouseButton.button == Mouse::Left)
 			{
 				sound.playButtonClickSound();
@@ -473,6 +490,22 @@ void Engine::update()
 				sound.playMainMenuSound();
 			}
 
+			// Player hit the main menu button in the controls menu
+			if (mainMenuButton.getGlobalBounds().contains(worldPos) && state == State::CONTROLS_MENU && event.mouseButton.button == Mouse::Left)
+			{
+				sound.playButtonClickSound();
+				world.clearWorld();
+				state = State::MAIN_MENU;
+			}
+
+			// Player hit the main menu button in the credits menu
+			if (mainMenuButton.getGlobalBounds().contains(worldPos) && state == State::CREDITS_MENU && event.mouseButton.button == Mouse::Left)
+			{
+				sound.playButtonClickSound();
+				world.clearWorld();
+				state = State::MAIN_MENU;
+			}
+			
 			// Player hit the main menu button in the options menu
 			if (mainMenuButton.getGlobalBounds().contains(worldPos) && state == State::OPTIONS_MENU && event.mouseButton.button == Mouse::Left)
 			{
@@ -643,9 +676,6 @@ void Engine::update()
 						gameOverText2.setString("Ignis has been slain.\nBut the locket containing last memories of your family... It's gone.");
 					}
 				}
-
-
-
 
 				textBounds = gameOverText2.getLocalBounds();
 				viewCentre = hudView.getCenter();
@@ -875,7 +905,6 @@ void Engine::update()
 	**********************************************************************/
 	if (state == State::PLAYING)
 	{
-
 		// Update the delta time
 		Time dt = clock.restart();
 
@@ -901,8 +930,6 @@ void Engine::update()
 				player.setChunk(i);
 			}
 		}
-
-
 
 		// Update the player
 		if (state == State::PLAYING && !drawInventory && !drawShop) {
@@ -1033,7 +1060,6 @@ void Engine::update()
 							viewCentre = hudView.getCenter();
 							gameOverText.setPosition(viewCentre.x - (textBounds.width / 2.f) - textBounds.left, viewCentre.y - gameOverText.getCharacterSize());
 
-
 							int silly = rand() % 100;
 							if (silly == 67)
 							{
@@ -1054,7 +1080,6 @@ void Engine::update()
 									gameOverText2.setString("Ignis has been slain.\nBut the locket containing last memories of your family... It's gone!");
 								}
 							}
-
 
 							stringstream ssStatText;
 							ssStatText << fixed << setprecision(0) << "Level Reached: " << player.getPlayerLevel() << "\nGold Earned: " << player.getGold()
@@ -1278,8 +1303,6 @@ void Engine::update()
 			break;
 		}
 
-
-
 		if (drawShop)
 		{
 			for (int i = 0; i < shopItems.size(); i++)
@@ -1314,7 +1337,6 @@ void Engine::update()
 					break;
 				}
 			}
-
 		}
 
 		// Level up the player
@@ -1808,8 +1830,8 @@ void Engine::update()
 		}
 	}
 
-	// Stops sound track in options and main menus
-	if (state == State::MAIN_MENU || state == State::OPTIONS_MENU)
+	// Stops sound track in options, main and controls menus
+	if (state == State::MAIN_MENU || state == State::OPTIONS_MENU || state == State::CONTROLS_MENU || state == State::CREDITS_MENU)
 	{
 		if (sound.isSoundtrackPlaying()) {
 			sound.stopSoundtrack();
@@ -1821,7 +1843,7 @@ void Engine::update()
 		window.setMouseCursorVisible(false);
 		window.setMouseCursorGrabbed(true);
 	}
-	else if (state == State::PAUSED || state == State::MAIN_MENU || state == State::OPTIONS_MENU || state == State::GAME_OVER || state == State::VICTORY)
+	else if (state == State::PAUSED || state == State::MAIN_MENU || state == State::OPTIONS_MENU || state == State::GAME_OVER || state == State::VICTORY || state == State::CONTROLS_MENU)
 	{
 		window.setMouseCursorVisible(true);
 		window.setMouseCursorGrabbed(false);

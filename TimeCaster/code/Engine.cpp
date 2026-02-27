@@ -27,7 +27,6 @@ using namespace sf;
 
 Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArmour(player.getEquippedArmour()), m_StoredItems(player.getStoredItems())
 {
-
 	sound.playMainMenuSound();
 	player.loadConfigFile();
 
@@ -52,14 +51,7 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 		window.setFramerateLimit(fpsLimit);
 	}
 
-	if (vSync == true)
-	{
-		window.setVerticalSyncEnabled(true);
-	}
-	else {
-		window.setVerticalSyncEnabled(false);
-	}
-
+	window.setVerticalSyncEnabled(vSync);
 	window.setFramerateLimit(fpsLimit);
 
 	filter.setSize(resolution);
@@ -79,7 +71,6 @@ Engine::Engine() : m_EquippedWeapons(player.getEquippedWeapons()), m_EquippedArm
 	textureBackground2 = TextureHolder::GetTexture("graphics/landscape2.png");
 	textureBackground3 = TextureHolder::GetTexture("graphics/landscape3.png");
 	textureBackground4 = TextureHolder::GetTexture("graphics/landscape4.png");
-
 }
 
 // Function to convert difficulty state to string

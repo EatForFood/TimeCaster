@@ -126,12 +126,6 @@ void Engine::initializeUI()
 	// Load game button text
 	loadGameButtonText = TextHelper::makeText(font, "Load Game", fontSize, Vector2f(loadGameButton.getPosition().x + (loadGameButton.getSize().x / 2.f), loadGameButton.getPosition().y + (loadGameButton.getSize().y / 2.f) - 10), Color::White);
 
-	// Controls Text
-	controlsText = TextHelper::makeText(font, "Controls:\nWASD to move \nTAB to open the inventory\nLeft click to attack\n1-4 to select spell\nF or middle click to switch combat types\nScroll wheel to zoom in or out", fontSize, Vector2f(350, 300), Color::White);
-
-	// Credits text
-	creditsText = TextHelper::makeText(font, "Credits:\n\nDevelopers:\nJoshua Muller\nToby Womack\nJake O'Sullivan\n\nCredits for open Assets used are located\nIn the Game Files & Documentation", fontSize, Vector2f(1600, 210), Color::White);
-
 	// Game over button
 	gameOverMainMenuButton.setPosition(viewCentre.x - 400, 900);
 	gameOverMainMenuButton.setSize(Vector2f(300, 80));
@@ -148,8 +142,16 @@ void Engine::initializeUI()
 	// Game over quit button text
 	gameOverQuitButtonText = TextHelper::makeText(font, "Quit Game", fontSize, Vector2f(gameOverQuitButton.getPosition().x + (gameOverQuitButton.getSize().x / 2.f), gameOverQuitButton.getPosition().y + (gameOverQuitButton.getSize().y / 2.f) - 10), Color::White);
 
+	// Controls button
+	controlsButton.setPosition(200, 430);
+	controlsButton.setSize(Vector2f(300, 80));
+	controlsButton.setTexture(&textureMainMenuButton2);
+
+	// Controls button text
+	controlsButtonText = TextHelper::makeText(font, "Controls", fontSize, Vector2f(controlsButton.getPosition().x + (controlsButton.getSize().x / 2.f), controlsButton.getPosition().y + (controlsButton.getSize().y / 2.f) - 10), Color::White);
+
 	// Options button
-	optionsButton.setPosition(200, 430);
+	optionsButton.setPosition(200, 540);
 	optionsButton.setSize(Vector2f(300, 80));
 	optionsButton.setTexture(&textureMainMenuButton2);
 
@@ -157,16 +159,44 @@ void Engine::initializeUI()
 	optionsButtonText = TextHelper::makeText(font, "Options", fontSize, Vector2f(optionsButton.getPosition().x + (optionsButton.getSize().x / 2.f), optionsButton.getPosition().y + (optionsButton.getSize().y / 2.f) - 10), Color::White);
 
 	// Quit game button
-	quitGameButton.setPosition(200, 540);
+	quitGameButton.setPosition(200, 950);
 	quitGameButton.setSize(Vector2f(300, 80));
 	quitGameButton.setTexture(&textureMainMenuButton2);
 
 	// Quit game button text
 	quitGameButtonText = TextHelper::makeText(font, "Quit Game", fontSize, Vector2f(quitGameButton.getPosition().x + (quitGameButton.getSize().x / 2.f), quitGameButton.getPosition().y + (quitGameButton.getSize().y / 2.f) - 10), Color::White);
 
-	/**************
-	Options Menu UI
-	***************/
+	// Credits button
+	creditsButton.setPosition(200, 650);
+	creditsButton.setSize(Vector2f(300, 80));
+	creditsButton.setTexture(&textureMainMenuButton2);
+
+	// Quit game button text
+	creditsButtonText = TextHelper::makeText(font, "Credits", fontSize, Vector2f(creditsButton.getPosition().x + (creditsButton.getSize().x / 2.f), creditsButton.getPosition().y + (creditsButton.getSize().y / 2.f) - 10), Color::White);
+
+	// Credits text
+	developersText = TextHelper::makeText(font, "Developers:\nJoshua Muller\nToby Womack\nJake O'Sullivan", fontSize, Vector2f(viewCentre.x, viewCentre.y - 200), Color::White);
+	creditsText = TextHelper::makeText(font, "Credits for open Assets used are located\nin the Game Files & Documentation", fontSize, Vector2f(viewCentre.x, viewCentre.y), Color::White);
+
+	textBounds = creditsText.getLocalBounds();
+	creditsText.setOrigin(textBounds.left + textBounds.width / 2.f, textBounds.top + textBounds.height / 2.f);
+	creditsText.setPosition(viewCentre);
+
+	creditsHeadingText = TextHelper::makeText(font, "Credits", fontSize + 15, Vector2f(viewCentre.x, 50), Color::White);
+
+	/*************************
+	Controls & options Menu UI
+	**************************/
+
+	// Controls Text
+	controlsText = TextHelper::makeText(font, "Controls:\nWASD to move \nTAB to open the inventory\nLeft click to attack\nRight click to block\n1-4 to select spell\nF or middle mouse button to switch combat types\nScroll wheel to zoom in and out", fontSize, Vector2f(viewCentre.x, viewCentre.y), Color::White);
+
+	textBounds = controlsText.getLocalBounds();
+	controlsText.setOrigin(textBounds.left + textBounds.width / 2.f, textBounds.top + textBounds.height / 2.f);
+	controlsText.setPosition(viewCentre);
+	
+	// Controls heading text
+	controlsHeadingText = TextHelper::makeText(font, "Controls", fontSize + 15, Vector2f(viewCentre.x, 50), Color::White);
 
 	// Options heading text
 	optionsHeadingText = TextHelper::makeText(font, "Options", fontSize + 15, Vector2f(viewCentre.x, 50), Color::White);
@@ -195,8 +225,23 @@ void Engine::initializeUI()
 	handle.setFillColor(Color::Red);
 	handle.setOrigin(10, 10); // Centre the circle
 	textBounds = handle.getLocalBounds();
-	x = track.getPosition().x + (track.getSize().x / 2.f) - (textBounds.width / 2.f);
-	handle.setPosition(x - textBounds.left, trackY + 2); // Slider start at 50% volume
+
+	// Determine initial volume: load from config if present, otherwise default to 50%
+	float initialVolume = 50.f;
+	if (player.loadConfigFile())
+	{
+		initialVolume = player.getVolume();
+		if (initialVolume < 0.f) initialVolume = 0.f;
+		if (initialVolume > 100.f) initialVolume = 100.f;
+	}
+
+	// Apply global volume
+	Listener::setGlobalVolume(initialVolume);
+
+	// Position handle along the track based on initialVolume (0-100)
+	float handleCenterX = track.getPosition().x + track.getSize().x * (initialVolume / 100.0f);
+	float handleX = handleCenterX - (textBounds.width / 2.f) - textBounds.left;
+	handle.setPosition(handleX, trackY + 2); // slider handle vertically aligned with track
 
 	// Display FPS button
 	if (displayFps) {
@@ -435,9 +480,6 @@ void Engine::initializeUI()
 
 	// Display invManaBar text
 	invManaBarText = TextHelper::makeText(font, "0 / 0", fontSize - 5, Vector2f(20, 20), Color::White);
-
-	// Setting volume to 50 by default
-	Listener::setGlobalVolume(50);
 
 	// Populate soundtrack
 	sound.populateSoundtrack();
