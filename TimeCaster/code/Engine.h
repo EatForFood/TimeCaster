@@ -272,6 +272,7 @@ private:
 
 	RectangleShape mainMenuButton;
 	Text mainMenuButtonText;
+	Text backButtonText;
 
 	Text volumeSliderText;
 	RectangleShape track;

@@ -1843,7 +1843,7 @@ void Engine::update()
 		window.setMouseCursorVisible(false);
 		window.setMouseCursorGrabbed(true);
 	}
-	else if (state == State::PAUSED || state == State::MAIN_MENU || state == State::OPTIONS_MENU || state == State::GAME_OVER || state == State::VICTORY || state == State::CONTROLS_MENU)
+	else if (state == State::PAUSED || state == State::MAIN_MENU || state == State::OPTIONS_MENU || state == State::GAME_OVER || state == State::VICTORY || state == State::CONTROLS_MENU || state == State::CREDITS_MENU)
 	{
 		window.setMouseCursorVisible(true);
 		window.setMouseCursorGrabbed(false);

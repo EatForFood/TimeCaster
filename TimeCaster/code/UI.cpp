@@ -176,7 +176,7 @@ void Engine::initializeUI()
 
 	// Credits text
 	developersText = TextHelper::makeText(font, "Developers:\nJoshua Muller\nToby Womack\nJake O'Sullivan", fontSize, Vector2f(viewCentre.x, viewCentre.y - 200), Color::White);
-	creditsText = TextHelper::makeText(font, "Credits for open Assets used are located\nin the Game Files & Documentation", fontSize, Vector2f(viewCentre.x, viewCentre.y), Color::White);
+	creditsText = TextHelper::makeText(font, "Credits for assets used are located\nin the game files and documentation", fontSize, Vector2f(viewCentre.x, viewCentre.y), Color::White);
 
 	textBounds = creditsText.getLocalBounds();
 	creditsText.setOrigin(textBounds.left + textBounds.width / 2.f, textBounds.top + textBounds.height / 2.f);
@@ -189,7 +189,7 @@ void Engine::initializeUI()
 	**************************/
 
 	// Controls Text
-	controlsText = TextHelper::makeText(font, "Controls:\nWASD to move \nTAB to open the inventory\nLeft click to attack\nRight click to block\n1-4 to select spell\nF or middle mouse button to switch combat types\nScroll wheel to zoom in and out", fontSize, Vector2f(viewCentre.x, viewCentre.y), Color::White);
+	controlsText = TextHelper::makeText(font, "Controls:\nWASD: Movement \nTAB: Open inventory\nE: Interact\nLeft click: Attack\nRight click: Block\nShift: Sprint\n1-4: Select spell\nF / middle mouse button: Switch combat types\nScroll wheel: Zoom in and out\nEsc: Pause", fontSize, Vector2f(viewCentre.x, viewCentre.y), Color::White);
 
 	textBounds = controlsText.getLocalBounds();
 	controlsText.setOrigin(textBounds.left + textBounds.width / 2.f, textBounds.top + textBounds.height / 2.f);
@@ -208,6 +208,7 @@ void Engine::initializeUI()
 
 	// Main menu button text
 	mainMenuButtonText = TextHelper::makeText(font, "Save & Exit", fontSize, Vector2f(mainMenuButton.getPosition().x + (mainMenuButton.getSize().x / 2.f), mainMenuButton.getPosition().y + (mainMenuButton.getSize().y / 2.f) - 10), Color::White);
+	backButtonText = TextHelper::makeText(font, "Back", fontSize, Vector2f(mainMenuButton.getPosition().x + (mainMenuButton.getSize().x / 2.f), mainMenuButton.getPosition().y + (mainMenuButton.getSize().y / 2.f) - 10), Color::White);
 
 	// Volume slider text
 	volumeSliderText = TextHelper::makeText(font, "Volume", fontSize, Vector2f(viewCentre.x, 190), Color::White);

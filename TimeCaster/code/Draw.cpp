@@ -402,7 +402,7 @@ void Engine::draw()
 		window.draw(controlsHeadingText);
 		window.draw(controlsText);
 		window.draw(mainMenuButton);
-		window.draw(mainMenuButtonText);
+		window.draw(backButtonText);
 	}
 
 	if (state == State::OPTIONS_MENU)
@@ -441,7 +441,7 @@ void Engine::draw()
 		window.draw(developersText);
 		window.draw(creditsText);
 		window.draw(mainMenuButton);
-		window.draw(mainMenuButtonText);
+		window.draw(backButtonText);
 	}
 
 	if (state == State::STORY_INTRO)
