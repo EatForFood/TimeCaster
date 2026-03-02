@@ -60,8 +60,6 @@ bool Engine::sellItem(int itemIndex)
 		initializeInventory();
 		initializeShop();
 
-
-
 		return true;
 	}
 }
@@ -83,6 +81,7 @@ int Engine::buyItem(int itemIndex)
 		int playerGold = player.getGold();
 		string itemName = shopItems[itemIndex].getName();
 		string thatThose = "";
+		
 		if (shopItems[itemIndex].useThat())
 		{
 			thatThose = "that ";
@@ -91,6 +90,7 @@ int Engine::buyItem(int itemIndex)
 		{
 			thatThose = "those ";
 		}
+
 		if (playerGold >= itemCost)
 		{
 			if (player.addItemToInventory(itemName))

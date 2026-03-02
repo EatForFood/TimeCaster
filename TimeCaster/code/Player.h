@@ -15,7 +15,6 @@ class Player : public Character
 {
 
 public:
-
 	Player();
 
 	void spawn(Vector2f resolution, int tileSize, int level, bool setPos);
@@ -46,17 +45,10 @@ public:
 	// We will call this function once every frame
 	void update(float elapsedTime, Vector2i mousePosition, const vector<NavBox>& navBox);
 
-	// Give player a speed boost
-	void upgradeSpeed();
-
-	// Give the player a health upgrade
-	void upgradeHealth();
-
-	// Give the player a Stamina upgrade
-	void upgradeStamina();
-
-	// Give the player a Mana upgrades
-	void upgradeMana();
+	void upgradeSpeed(); // Give player a speed boost
+	void upgradeHealth(); // Give the player a health upgrade
+	void upgradeStamina(); // Give the player a Stamina upgrade
+	void upgradeMana(); // Give the player a Mana upgrade
 
 	// Increase the maximum amount of health the player can have
 	void increaseHealthLevel(int amount);
@@ -70,7 +62,6 @@ public:
 	void stopDodge();
 
 	void increaseManaLevel(int amount);
-
 	void increaseStaminaLevel(int amount);
 
 	float getStamina();
@@ -183,10 +174,12 @@ private:
 	const float START_MANA_RECHARGE = 3;
 	const float START_STAMINA = 100;
 	const float START_STAMINA_RECHARGE = 5;
+
 	const int START_GOLD = 0;
 	const int START_KILLS = 0;
 	const int START_LEVEL = 1;
 	const int START_EXP = 0;
+
 	const string START_SWORD = "Iron_Sword";
 	const string START_WAND = "Wooden_Staff";
 	const string START_HEAD_ARMOUR = "Family_Hood";
@@ -194,6 +187,7 @@ private:
 	const string START_TROUSER_ARMOUR = "Robe_Leggings";	
 	const string START_SHOE_ARMOUR = "Basic_Shoes";
 	const string START_NECK_ARMOUR = "Family_Locket";
+
 	void updateTextRect();
 
 	bool m_SoldSentimentalItem = false;

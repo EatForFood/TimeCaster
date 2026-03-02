@@ -284,7 +284,6 @@ private:
 	RectangleShape windowedModeButton;
 	Text windowedModeButtonText;
 	
-	Text controlsText;
 	Text creditsText;
 	Text developersText;
 
@@ -362,6 +361,9 @@ private:
 	Text valueTooltipText;
 
 	Text tutorialText;
+
+	Texture textureControlsGraphic;
+	Sprite spriteControlsGraphic;
 
 	//RectangleShape emptyFrames[16];
 	int draggedIndex = -1;

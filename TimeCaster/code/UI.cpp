@@ -31,6 +31,9 @@ void Engine::initializeUI()
 	spriteStoryIntro.setTexture(textureStoryIntro);
 	spriteStoryIntro.setPosition(0, 0);
 
+	textureControlsGraphic = TextureHolder::GetTexture("graphics/UI/timeCasterControls.png");
+	spriteControlsGraphic.setTexture(textureControlsGraphic);
+
 	// Create a view for the HUD
 	FloatRect hudRect(0, 0, resolution.x, resolution.y);
 	hudView.reset(hudRect);
@@ -40,6 +43,13 @@ void Engine::initializeUI()
 
 	textBounds = pausedText.getLocalBounds();
 	viewCentre = mainView.getCenter();
+
+	if (spriteControlsGraphic.getTexture())
+	{
+		sf::Vector2u texSize = spriteControlsGraphic.getTexture()->getSize();
+		spriteControlsGraphic.setOrigin(texSize.x / 2.f, (texSize.y / 2.f) + 50);
+		spriteControlsGraphic.setPosition(viewCentre.x, viewCentre.y);
+	}
 
 	// Paused text
 	pausedText = TextHelper::makeText(font, "Press escape \nto continue", 160, Vector2f(viewCentre.x + 50, viewCentre.y - 150), Color::White);
@@ -187,13 +197,6 @@ void Engine::initializeUI()
 	/*************************
 	Controls & options Menu UI
 	**************************/
-
-	// Controls Text
-	controlsText = TextHelper::makeText(font, "Controls:\nWASD: Movement \nTAB: Open inventory\nE: Interact\nLeft click: Attack\nRight click: Block\nShift: Sprint\n1-4: Select spell\nF / middle mouse button: Switch combat types\nScroll wheel: Zoom in and out\nEsc: Pause", fontSize, Vector2f(viewCentre.x, viewCentre.y), Color::White);
-
-	textBounds = controlsText.getLocalBounds();
-	controlsText.setOrigin(textBounds.left + textBounds.width / 2.f, textBounds.top + textBounds.height / 2.f);
-	controlsText.setPosition(viewCentre);
 	
 	// Controls heading text
 	controlsHeadingText = TextHelper::makeText(font, "Controls", fontSize + 15, Vector2f(viewCentre.x, 50), Color::White);

@@ -6,14 +6,13 @@ using namespace std;
 void Engine::draw()
 {
 	/*************
-		Draw the scene
-		**************/
+	Draw the scene
+	**************/
 	if (state == State::PLAYING)
 	{
 		window.clear();
 
-		// set the mainView to be displayed in the window
-		// And draw everything related to it
+		// Set the mainView to be displayed in the window and draw everything related to it
 		window.setView(mainView);
 
 		if (world.getChunk(player.getChunk())->getChunkType() == "skeletonRuins")
@@ -58,7 +57,6 @@ void Engine::draw()
 
 		if (player.getInCell())
 		{
-		//	drawEKey = true;
 			Chunk* currentChunk = world.getChunk(player.getChunk());
 			if (currentChunk) {
 				for (auto& cells : currentChunk->getCells()) {
@@ -67,13 +65,11 @@ void Engine::draw()
 			}
 		}
 
-
 		// DRAW EFFECTS
 		for (int i = 0; i < 249; i++) // draw decals
 		{
 			window.draw(decal[i].getSprite());
 		}
-
 
 		for (auto& item : items) {
 			window.draw(item.getSprite());
@@ -81,12 +77,14 @@ void Engine::draw()
 
 		if (!player.getInCell())
 		{
-			//drawEKey = false;
 			for (int i = 0; i < world.getWorldSize(); i++)
 			{
-				if (collision.distance(player.getCenter(), world.getChunkCenter(i)) < 2000) {
-					for (auto& entity : world.getEntities(i)) {
-						if (player.getRenderArea().intersects(entity.getSprite().getGlobalBounds())) {
+				if (collision.distance(player.getCenter(), world.getChunkCenter(i)) < 2000) 
+				{
+					for (auto& entity : world.getEntities(i)) 
+					{
+						if (player.getRenderArea().intersects(entity.getSprite().getGlobalBounds())) 
+						{
 							drawables.emplace_back(entity.getSprite().getGlobalBounds().top + entity.getSprite().getGlobalBounds().height, entity.getSprite());
 						}
 					}
@@ -98,25 +96,27 @@ void Engine::draw()
 		{
 			if (player.getRenderArea().intersects(enemyPtr->getSprite().getGlobalBounds()) && !enemyPtr->isDead())
 			{
-	
-				drawables.emplace_back(enemyPtr->getSprite().getGlobalBounds().top + enemyPtr->getSprite().getGlobalBounds().height, enemyPtr->getSpriteFromSheet()); // place enemy into drawables if in RenderArea
-				if (enemyPtr->isAttacking())
+				if (enemyPtr->getType() != "Dragon")
 				{
-					drawables.emplace_back(enemyPtr->getSprite().getGlobalBounds().top + enemyPtr->getSprite().getGlobalBounds().height + 0.05f, enemyPtr->getWeapon());
+					drawables.emplace_back(enemyPtr->getSprite().getGlobalBounds().top + enemyPtr->getSprite().getGlobalBounds().height, enemyPtr->getSpriteFromSheet()); // place enemy into drawables if in RenderArea
+					if (enemyPtr->isAttacking())
+					{
+						drawables.emplace_back(enemyPtr->getSprite().getGlobalBounds().top + enemyPtr->getSprite().getGlobalBounds().height + 0.05f, enemyPtr->getWeapon());
+					}
 				}
-		
 			}
 		}
 
-			drawables.emplace_back(player.getSprite().getGlobalBounds().top + player.getSprite().getGlobalBounds().height, player.getSpriteFromSheet()); // place player armour into drawables
-			drawables.emplace_back(player.getSprite().getGlobalBounds().top + player.getSprite().getGlobalBounds().height + 0.01, player.getHead());
-			drawables.emplace_back(player.getSprite().getGlobalBounds().top + player.getSprite().getGlobalBounds().height + 0.02, player.getTorso());
-			drawables.emplace_back(player.getSprite().getGlobalBounds().top + player.getSprite().getGlobalBounds().height + 0.03, player.getPants());
-			drawables.emplace_back(player.getSprite().getGlobalBounds().top + player.getSprite().getGlobalBounds().height + 0.04, player.getShoes());
-			if (player.isBlocking())
-			{
-				drawables.emplace_back(player.getSprite().getGlobalBounds().top + player.getSprite().getGlobalBounds().height + 0.05, player.getShield());
-			}
+		drawables.emplace_back(player.getSprite().getGlobalBounds().top + player.getSprite().getGlobalBounds().height, player.getSpriteFromSheet()); // place player armour into drawables
+		drawables.emplace_back(player.getSprite().getGlobalBounds().top + player.getSprite().getGlobalBounds().height + 0.01, player.getHead());
+		drawables.emplace_back(player.getSprite().getGlobalBounds().top + player.getSprite().getGlobalBounds().height + 0.02, player.getTorso());
+		drawables.emplace_back(player.getSprite().getGlobalBounds().top + player.getSprite().getGlobalBounds().height + 0.03, player.getPants());
+		drawables.emplace_back(player.getSprite().getGlobalBounds().top + player.getSprite().getGlobalBounds().height + 0.04, player.getShoes());
+		
+		if (player.isBlocking())
+		{
+			drawables.emplace_back(player.getSprite().getGlobalBounds().top + player.getSprite().getGlobalBounds().height + 0.05, player.getShield());
+		}
 		
 		if (player.isAttacking())
 		{
@@ -192,6 +192,15 @@ void Engine::draw()
 			}
 		}
 
+		// Draw dragon boss on top of the scene (but before HUD/cursor)
+		for (auto& enemyPtr : enemyArr)
+		{
+			if (enemyPtr->getType() == "Dragon" && !enemyPtr->isDead() && player.getRenderArea().intersects(enemyPtr->getSprite().getGlobalBounds()))
+			{
+				window.draw(enemyPtr->getSpriteFromSheet());
+			}
+		}
+
 		/*
 		for (auto& txt : chunks[0].getDebugText()) { // draw debug text showing tile location
 			window.draw(txt);
@@ -249,7 +258,6 @@ void Engine::draw()
 					emptyFrames[i].setFillColor(Color::White);
 				}
 			}
-
 
 			for (auto& frame : emptyFrames) {
 				window.draw(frame);
@@ -400,9 +408,9 @@ void Engine::draw()
 		window.clear();
 		window.draw(spriteMainMenu);
 		window.draw(controlsHeadingText);
-		window.draw(controlsText);
 		window.draw(mainMenuButton);
 		window.draw(backButtonText);
+		window.draw(spriteControlsGraphic);
 	}
 
 	if (state == State::OPTIONS_MENU)
@@ -464,26 +472,22 @@ void Engine::draw()
 		window.clear();
 		window.draw(spriteStoryIntro);
 		window.draw(loadWorldText);
-	//	window.draw(skipIntroText);
 	}
 
 	if (state == State::GAME_OVER)
 	{
 		window.clear();
-	//	window.draw(spriteStoryIntro);
 		window.draw(gameOverText);
 		window.draw(gameOverText2);
 		window.draw(gameOverMainMenuButton);
 		window.draw(gameOverMainMenuButtonText);
 		window.draw(gameOverQuitButton);
 		window.draw(gameOverQuitButtonText);
-		//	window.draw(skipIntroText);
 	}
 
 	if (state == State::VICTORY)
 	{
 		window.clear();
-		//	window.draw(spriteStoryIntro);
 		window.draw(gameOverText);
 		window.draw(gameOverText2);
 		window.draw(statText);
@@ -491,7 +495,6 @@ void Engine::draw()
 		window.draw(gameOverMainMenuButtonText);
 		window.draw(gameOverQuitButton);
 		window.draw(gameOverQuitButtonText);
-		//	window.draw(skipIntroText);
 	}
 	window.display();
 }
@@ -772,7 +775,6 @@ void Engine::displayInventoryTooltips()
 
 void Engine::displayShopTooltips()
 {
-
 	for (int i = 0; i < shopItems.size(); i++)
 	{
 		if (shopItems[i].getIcon().getGlobalBounds().contains(worldPos) && !Mouse::isButtonPressed(Mouse::Left) && !draggingItem)
