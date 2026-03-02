@@ -723,7 +723,10 @@ void Chunk::placeHouse2(int sx, int sy) { // sx 15, sy 18
 			placeTile(sx + 1, y, 4, 14, false, false); 
 			// Save position of the door
 			saveDoorLocation(Vector2f(sx +1, y));
-			CreateEntity(33, sx + 4, y);
+			if (m_Type == "spawn")
+			{
+				CreateEntity(33, sx + 4, y);
+			}
 		}
 		else
 		{
