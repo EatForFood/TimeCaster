@@ -118,7 +118,7 @@ bool Engine::playerNearShop()
 	// only check for shops in the chunk the player is in
 	Chunk* currentChunk = getCurrentChunk(player.getPosition().x, player.getPosition().y);
 
-	if (currentChunk && currentChunk->playerNearDoor(player.getPosition()))
+	if (currentChunk && currentChunk->playerNearDoor(player.getPosition()) && currentChunk->getChunkType() == "spawn")
 	{
 		return true;
 	}
