@@ -113,7 +113,13 @@ bool Player::hit(Time timeHit, float damage, int iFrames)
 	{
 		m_IFrames = iFrames;
 		m_LastHit = timeHit;
-		m_Health -= (damage * m_DifficultyMult) * getArmourDamageReductionMult(); 
+		m_Health -= (damage * m_DifficultyMult) * getArmourDamageReductionMult();
+
+		// Start flicker
+		m_IsFlickering = true;
+		m_FlickerTimer = 0.0f;
+		m_FlickerDuration = iFrames / 1000.0f; // convert ms to seconds
+
 		return true;
 	}
 	else
@@ -498,6 +504,48 @@ void Player::update(float elapsedTime, Vector2i mousePosition, const vector<NavB
 	m_SpriteShoes.setColor(Color(255, 255, 255, 128));
 	m_SpriteWeapon.setColor(Color(255, 255, 255, 128));
 	m_SpriteShield.setColor(Color(255, 255, 255, 128));
+	}
+
+	// make player flicker if they have been hit and are still in the i frames time
+	if (m_IsFlickering)
+	{
+		m_FlickerTimer += m_TimeElapsed;
+
+		// toggle visibility
+		if (static_cast<int>(m_FlickerTimer / m_FlickerInterval) % 2 == 0)
+		{
+			m_Sprite.setColor(Color(255, 255, 255, 100)); 
+			m_SpriteHead.setColor(Color(255, 255, 255, 100)); 
+			m_SpriteTorso.setColor(Color(255, 255, 255, 100)); 
+			m_SpritePants.setColor(Color(255, 255, 255, 100)); 
+			m_SpriteShoes.setColor(Color(255, 255, 255, 100)); 
+			m_SpriteWeapon.setColor(Color(255, 255, 255, 100)); 
+			m_SpriteShield.setColor(Color(255, 255, 255, 100)); 
+		}
+		  
+		else
+		{
+			m_Sprite.setColor(Color(255, 255, 255, 255)); 
+			m_SpriteHead.setColor(Color(255, 255, 255, 255));
+			m_SpriteTorso.setColor(Color(255, 255, 255, 255));
+			m_SpritePants.setColor(Color(255, 255, 255, 255));
+			m_SpriteShoes.setColor(Color(255, 255, 255, 255));
+			m_SpriteWeapon.setColor(Color(255, 255, 255, 255));
+			m_SpriteShield.setColor(Color(255, 255, 255, 255));
+		}
+
+		// stop flickering after flicker duration
+		if (m_FlickerTimer >= m_FlickerDuration)
+		{
+			m_IsFlickering = false;
+			m_Sprite.setColor(Color::White);
+			m_SpriteHead.setColor(Color::White);
+			 m_SpriteTorso.setColor(Color::White);
+			 m_SpritePants.setColor(Color::White);
+			 m_SpriteShoes.setColor(Color::White);
+			 m_SpriteWeapon.setColor(Color::White);
+			 m_SpriteShield.setColor(Color::White);
+		}
 	}
 }
 

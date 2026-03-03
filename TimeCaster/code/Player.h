@@ -276,4 +276,10 @@ private:
 	const int HITBOX_WIDTH = 12;
 
 	SoundManager sound;
+
+	// player flicker variables
+	bool m_IsFlickering = false;
+	float m_FlickerTimer = 0.0f;
+	float m_FlickerDuration = 0.0f;
+	float m_FlickerInterval = 0.1f; 
 };
